@@ -1,0 +1,26 @@
+<div class="authContent">
+  <div class="cardsComponent">
+
+    <h1 style="color: white;">LOGO DE LA APLICACION</h1>
+    <mat-card class="logInCard">
+      <mat-card-title> Bienvenido</mat-card-title>
+      <mat-card-content>
+        <div>
+          <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
+            <mat-label>Usuario:</mat-label>
+            <input matInput required formControlName="user">
+          </mat-form-field>
+
+          <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
+            <mat-label>Contraseña:</mat-label>
+            <input type="password" matInput required formControlName="pass">
+          </mat-form-field>
+
+          <mat-card-actions align="end">
+            <button mat-raised-button color="primary">Iniciar Seccion</button>
+          </mat-card-actions>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

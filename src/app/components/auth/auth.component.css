@@ -1,0 +1,23 @@
+.authContent {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  place-items: center;
+  background-color: #004b8d;
+}
+
+.cardsComponent{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.logInCard{
+  margin-left: 3px;
+  padding: 20px 15px 0px 15px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.inputLogIn{
+  width: 100%;
+}

@@ -1,0 +1,10 @@
+.appWrapper{
+  display: grid;
+  grid-template-rows: 9vh 91vh;
+}
+
+.navbar {
+  justify-content: space-between;
+  background-color: #004b8d;
+  color: white;
+}

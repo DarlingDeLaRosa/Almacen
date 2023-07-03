@@ -1,0 +1,21 @@
+.logout{
+  text-align: end;
+}
+
+a{
+  cursor: pointer;
+  padding-right: 1rem;
+}
+
+mat-sidenav-container{
+  height: 100%;
+}
+
+mat-sidenav, mat-sidenav-content {
+  padding: 16px;
+}
+
+mat-sidenav {
+  background-color: #004b8d;
+  width: 200px;
+}
