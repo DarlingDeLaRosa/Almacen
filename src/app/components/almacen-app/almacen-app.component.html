@@ -1,7 +1,38 @@
+<div class="appWrapper">
+
 
   <mat-sidenav-container>
-    <mat-sidenav [(opened)]="opened"> SideNav </mat-sidenav>
+    <mat-sidenav mode="side" [(opened)]="opened">
+      <div class="logoAlmacen">
+        LogoAlmacen
+      </div>
+      <div class="almacenOptions">
+        <span>
+        <a [routerLink]="['/almacen/entrada']"><mat-icon>input</mat-icon>Entradas</a>
+        </span>
+        <a [routerLink]="['/almacen/salida']"><mat-icon></mat-icon>Salidas</a>
+        <a [routerLink]="['/almacen/articulo']"><mat-icon></mat-icon>Articulos</a>
+        <a [routerLink]="['/almacen/proveedores']">Proveeedores</a>
+        <a [routerLink]="['/almacen/reportes']">Reportes</a>
+        <a [routerLink]="['/almacen/configuraciones']">configuraciones</a>
+      </div>
+    </mat-sidenav>
+
     <mat-sidenav-content>
-      <button (click)="opened = !opened">icono de menu</button>
+      <div class="componentsContent">
+        <mat-toolbar class="navbar">
+
+          <button mat-raised-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>
+
+          <div class="logout">
+            <span>Hola Persona</span> &nbsp;
+            <span>Cerrar Seccion</span>
+          </div>
+        </mat-toolbar>
+
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+</div>

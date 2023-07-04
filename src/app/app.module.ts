@@ -12,6 +12,10 @@ import { appReducer } from './store/reducer';
 import { AlmacenAppComponent } from './components/almacen-app/almacen-app.component';
 import { EntradasComponent } from './components/entradas/entradas.component';
 import { SalidasComponent } from './components/salidas/salidas.component';
+import { ArticuloComponent } from './components/articulo/articulo.component';
+import { ProveedoresComponent } from './components/proveedores/proveedores.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
+import { ConfiguracionesComponent } from './components/configuraciones/configuraciones.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,11 @@ import { SalidasComponent } from './components/salidas/salidas.component';
     AuthComponent,
     AlmacenAppComponent,
     EntradasComponent,
-    SalidasComponent
+    SalidasComponent,
+    ArticuloComponent,
+    ProveedoresComponent,
+    ReportesComponent,
+    ConfiguracionesComponent
   ],
   imports: [
     BrowserModule,
