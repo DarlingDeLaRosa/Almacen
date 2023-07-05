@@ -12,10 +12,11 @@ import { appReducer } from './store/reducer';
 import { AlmacenAppComponent } from './components/almacen-app/almacen-app.component';
 import { EntradasComponent } from './components/entradas/entradas.component';
 import { SalidasComponent } from './components/salidas/salidas.component';
-import { ArticuloComponent } from './components/articulo/articulo.component';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { ConfiguracionesComponent } from './components/configuraciones/configuraciones.component';
+import { ProductosComponent } from './components/productos/productos.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -24,10 +25,11 @@ import { ConfiguracionesComponent } from './components/configuraciones/configura
     AlmacenAppComponent,
     EntradasComponent,
     SalidasComponent,
-    ArticuloComponent,
     ProveedoresComponent,
     ReportesComponent,
-    ConfiguracionesComponent
+    ConfiguracionesComponent,
+    ProductosComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

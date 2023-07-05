@@ -41,6 +41,7 @@ mat-sidenav {
 .navbar {
   height: 9vh;
   justify-content: space-between;
-  background-color: #c7d1ea;
+  background-color: rgb(212, 212, 218);
   color: white;
 }
+/*#c7d1ea*/

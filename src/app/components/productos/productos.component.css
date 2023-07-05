@@ -1,0 +1,10 @@
+.ProductContent {
+  display: grid;
+  grid-template-rows: 8vh auto;
+  padding: 16px;
+}
+
+.fuctions{
+  text-align: center;
+  padding: 0;
+}
