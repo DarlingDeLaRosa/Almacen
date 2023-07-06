@@ -9,30 +9,16 @@ import { MaterialModule } from './material/material.module';
 import { AuthComponent } from './components/auth/auth.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './store/reducer';
-import { AlmacenAppComponent } from './components/almacen-app/almacen-app.component';
-import { EntradasComponent } from './components/entradas/entradas.component';
-import { SalidasComponent } from './components/salidas/salidas.component';
-import { ProveedoresComponent } from './components/proveedores/proveedores.component';
-import { ReportesComponent } from './components/reportes/reportes.component';
-import { ConfiguracionesComponent } from './components/configuraciones/configuraciones.component';
-import { ProductosComponent } from './components/productos/productos.component';
-import { ModalComponent } from './components/modal/modal.component';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    AlmacenAppComponent,
-    EntradasComponent,
-    SalidasComponent,
-    ProveedoresComponent,
-    ReportesComponent,
-    ConfiguracionesComponent,
-    ProductosComponent,
-    ModalComponent
   ],
   imports: [
     BrowserModule,
+    AdminModule,
     AppRoutingModule,
     MaterialModule ,
     BrowserAnimationsModule,

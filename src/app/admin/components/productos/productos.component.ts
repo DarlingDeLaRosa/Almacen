@@ -9,7 +9,6 @@ import { ModalComponent } from '../modal/modal.component';
 })
 export class ProductosComponent {
 
-
   displayedColumns: string[] = ['Nombre', 'Descripcion', 'Marca', 'Modelo', 'Serial', 'Condicion', 'Precio', 'Stock', 'Editar', 'Eliminar'];
   data = [
     {

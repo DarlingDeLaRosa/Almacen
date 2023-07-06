@@ -1,0 +1,15 @@
+.modal{
+  width: 720px;
+}
+
+.modal-title{
+  padding: 0px 16px;
+}
+
+.modal-content{
+  padding: 0px 16px;
+}
+
+.form-actions{
+  justify-content: end;
+}

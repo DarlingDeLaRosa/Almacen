@@ -1,0 +1,5 @@
+.entryContent{
+  display: grid;
+  grid-template-rows: 8vh auto;
+  padding: 16px;
+}

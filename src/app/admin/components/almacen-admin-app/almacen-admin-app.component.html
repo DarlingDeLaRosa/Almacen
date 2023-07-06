@@ -1,0 +1,50 @@
+<div class="appWrapper">
+
+
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" [(opened)]="opened">
+      <div class="logoAlmacen">
+        LogoAlmacen
+      </div>
+
+      <div class="almacenOptions">
+        <a class="item-menu" [routerLink]="['/admin-almacen/entrada']">Entradas</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/salida']">Salidas</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/productos']">Productos</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/proveedores']">Proveeedores</a>
+        <a class="item-menu" >Reportes</a>
+        <div class="submenu">
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Inventario Existente</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Entrada</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Salida</a>
+        </div>
+        <!--NGModule-->
+        <a class="item-menu" [routerLink]="['/admin-almacen/configuraciones']">configuraciones</a>
+        <div class="submenu">
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Unidad de medida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrada</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de producto</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrega</a>
+        </div>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="componentsContent">
+        <mat-toolbar class="navbar">
+
+          <button mat-raised-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>
+
+          <div class="logout">
+            <span>Hola Persona</span> &nbsp;
+            <span>Cerrar Seccion</span>
+          </div>
+        </mat-toolbar>
+
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>
