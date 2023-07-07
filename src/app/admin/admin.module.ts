@@ -5,7 +5,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AlmacenAdminAppComponent } from './components/almacen-admin-app/almacen-admin-app.component';
 import { ConfiguracionesComponent } from './components/configuraciones/configuraciones.component';
 import { EntradasComponent } from './components/entradas/entradas.component';
-import { ModalComponent } from './components/modal/modal.component';
+import { ModalComponent } from './components/Modals/product-modal/modal.component';
 import { ProductosComponent } from './components/productos/productos.component';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { ReportesComponent } from './components/reportes/reportes.component';

@@ -1,10 +1,32 @@
-.ProductContent {
+.productContent {
   display: grid;
   grid-template-rows: 8vh auto;
+  min-height: 40vh;
   padding: 16px;
 }
 
 .fuctions{
   text-align: center;
-  padding: 0;
+}
+
+.fuctionContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnEdit {
+  background-color: #C7D1EA;
+}
+
+.btnDelete{
+  background-color: #C7D1EA;
+}
+
+.btnCreate{
+  background-color: #C7D1EA;
+}
+
+.filtrarContent{
+  justify-self: end;
 }

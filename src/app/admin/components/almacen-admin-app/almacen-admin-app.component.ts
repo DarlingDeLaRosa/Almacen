@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./almacen-admin-app.component.css']
 })
 export class AlmacenAdminAppComponent {
-  opened = false
+  sidenavOpened: boolean = false;
+
+  submenu: boolean = false;
+  submenuConfig:  boolean = false;
+
+  constructor(){}
+
+  toggleSubmenu(){ this.submenu = !this.submenu }
+  toggleSubmenuConfig(){ this.submenuConfig = !this.submenuConfig }
 }

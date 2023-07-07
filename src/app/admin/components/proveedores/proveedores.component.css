@@ -1,10 +1,40 @@
-.ProveedoresContent {
+.proveedoresContent {
   display: grid;
   grid-template-rows: 8vh auto;
-  padding: 16px;
+  padding: 16px ;
+}
+
+.fuctionContent{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .fuctions{
   text-align: center;
-  padding: 0;
 }
+
+.filtrarContent{
+  justify-self: end;
+}
+
+.btnCreate{
+  background-color: #C7D1EA;
+}
+
+.btnEdit{
+  background-color: #C7D1EA;
+}
+
+.btnDelete{
+  background-color: #C7D1EA;
+}
+
+th{
+  border-bottom: 1px solid #ccc;
+}
+
+mat-paginator{
+  border-top: 1px solid #ccc;
+}
+

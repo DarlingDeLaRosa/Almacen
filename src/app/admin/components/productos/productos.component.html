@@ -1,63 +1,77 @@
-<div class="ProductContent">
+<div class="productContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button color="primary" (click)="openModal()">Crear Nuevo Producto</button> &nbsp;
-    <button class="btnImprimir" mat-raised-button>Imprimir</button>
-    <button class="btnExportar" mat-raised-button>Exportar</button>
+    <button mat-raised-button class="btnCreate" (click)="openModal()">Crear Nuevo Producto</button>
+    <span>
+      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
+      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+    </span>
   </div>
 
-  <!--<button mat-raised-button > algo hare </button>-->
+  <div class="filtrarContent">
+    <mat-form-field>
+      <mat-label>Filtrar</mat-label>
+      <input matInput type="search" (keyup)="applyFilter($event)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
 
-  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+  <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="Nombre">
-      <th mat-header-cell *matHeaderCellDef> Nombre </th>
-      <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre"> Nombre </th>
+      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Descripcion">
-      <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-      <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by descripcion"> Descripcion </th>
+      <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Marca">
-      <th mat-header-cell *matHeaderCellDef> Marca </th>
-      <td mat-cell *matCellDef="let element"> {{element.Marca}} </td>
+    <ng-container matColumnDef="marca" >
+      <th mat-header-cell  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by marca"> Marca </th>
+      <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Modelo">
-      <th mat-header-cell *matHeaderCellDef> Modelo </th>
-      <td mat-cell *matCellDef="let element"> {{element.Modelo}} </td>
+    <ng-container matColumnDef="modelo">
+      <th mat-header-cell  *matHeaderCellDef > Modelo </th>
+      <td mat-cell *matCellDef="let element"> {{element.modelo}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Serial">
+    <ng-container matColumnDef="serial">
       <th mat-header-cell *matHeaderCellDef> Serial </th>
-      <td mat-cell *matCellDef="let element"> {{element.Serial}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.serial}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Condicion">
-      <th mat-header-cell *matHeaderCellDef> Condicion </th>
-      <td mat-cell *matCellDef="let element"> {{element.Condicion}} </td>
+    <ng-container matColumnDef="condicion">
+      <th mat-header-cell  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by condicion"> Condicion </th>
+      <td mat-cell *matCellDef="let element"> {{element.condicion}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Precio">
-      <th mat-header-cell *matHeaderCellDef> Precio </th>
-      <td mat-cell *matCellDef="let element"> {{element.Precio}} </td>
+    <ng-container matColumnDef="precio" >
+      <th mat-header-cell  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by precio"> Precio </th>
+      <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Stock">
-      <th mat-header-cell *matHeaderCellDef> Stock </th>
-      <td mat-cell *matCellDef="let element"> {{element.Stock}} </td>
+    <ng-container matColumnDef="stock">
+      <th mat-header-cell  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by stock"> Stock </th>
+      <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Editar" >
+    <ng-container matColumnDef="editar">
       <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-      <td mat-cell *matCellDef="let element" class="fuctions"> <button mat-raised-button (click)="openModal()">Editar</button> </td>
+      <td mat-cell *matCellDef="let element" class="fuctions">
+        <button class="btnEdit" mat-raised-button (click)="openModal()">
+          <mat-icon>edit</mat-icon> Editar
+        </button> </td>
     </ng-container>
 
-    <ng-container matColumnDef="Eliminar" >
+    <ng-container matColumnDef="eliminar">
       <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-      <td mat-cell *matCellDef="let element" class="fuctions"> <button mat-raised-button>Eliminar</button> </td>
+      <td mat-cell *matCellDef="let element" class="fuctions">
+        <button class="btnDelete" mat-raised-button>
+          <mat-icon>delete</mat-icon> Eliminar
+        </button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

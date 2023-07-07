@@ -2,7 +2,7 @@
 
 
   <mat-sidenav-container>
-    <mat-sidenav mode="side" [(opened)]="opened">
+    <mat-sidenav mode="side" [(opened)]="sidenavOpened">
       <div class="logoAlmacen">
         LogoAlmacen
       </div>
@@ -12,21 +12,22 @@
         <a class="item-menu" [routerLink]="['/admin-almacen/salida']">Salidas</a>
         <a class="item-menu" [routerLink]="['/admin-almacen/productos']">Productos</a>
         <a class="item-menu" [routerLink]="['/admin-almacen/proveedores']">Proveeedores</a>
-        <a class="item-menu" >Reportes</a>
-        <div class="submenu">
+        <a class="item-menu" (click)="toggleSubmenu()">Reportes</a>
+        <div class="submenu" *ngIf="submenu else submenuClosed">
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Inventario Existente</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Entrada</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Salida</a>
         </div>
-        <!--NGModule-->
-        <a class="item-menu" [routerLink]="['/admin-almacen/configuraciones']">configuraciones</a>
-        <div class="submenu">
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Unidad de medida</a>
+        <ng-template #submenuClosed></ng-template>
+        <a class="item-menu" (click)="toggleSubmenuConfig()" >configuraciones</a>
+        <div class="submenu" *ngIf="submenuConfig else submenuClosedConfig">
+          <a class="item-submenu" [routerLink]="['/admin-almacen/configuraciones']">Unidad de medida</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrada</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de salida</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de producto</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrega</a>
         </div>
+        <ng-template #submenuClosedConfig></ng-template>
       </div>
     </mat-sidenav>
 
@@ -34,7 +35,7 @@
       <div class="componentsContent">
         <mat-toolbar class="navbar">
 
-          <button mat-raised-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>
+          <button mat-raised-button (click)="sidenavOpened = !sidenavOpened"><mat-icon>menu</mat-icon></button>
 
           <div class="logout">
             <span>Hola Persona</span> &nbsp;

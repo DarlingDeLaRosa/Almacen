@@ -20,7 +20,7 @@ const materialComponents = [
   MatIconModule,
   MatCardModule,
   MatToolbarModule,
-  MatSidenavModule
+  MatSidenavModule,
 ]
 
 @NgModule({
