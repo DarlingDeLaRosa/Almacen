@@ -7,7 +7,6 @@ import { EntradasComponent } from './components/entradas/entradas.component';
 import { ModalComponent } from './components/Modals/product-modal/modal.component';
 import { ProductosComponent } from './components/productos/productos.component';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
-import { ReportesComponent } from './components/reportes/reportes.component';
 import { SalidasComponent } from './components/salidas/salidas.component';
 import { MaterialAdminModule } from './material/material.module';
 import { TipoMedidaComponent } from './components/tipo-medida/tipo-medida.component';
@@ -15,6 +14,9 @@ import { TipoEntradaComponent } from './components/tipo-entrada/tipo-entrada.com
 import { TipoSalidaComponent } from './components/tipo-salida/tipo-salida.component';
 import { TipoProductoComponent } from './components/tipo-producto/tipo-producto.component';
 import { TipoEntregaComponent } from './components/tipo-entrega/tipo-entrega.component';
+import { InventarioExistenteComponent } from './components/inventario-existente/inventario-existente.component';
+import { ReporteEntradaComponent } from './components/reporte-entrada/reporte-entrada.component';
+import { ReporteSalidaComponent } from './components/reporte-salida/reporte-salida.component';
 
 
 @NgModule({
@@ -24,13 +26,15 @@ import { TipoEntregaComponent } from './components/tipo-entrega/tipo-entrega.com
     ModalComponent,
     ProductosComponent,
     ProveedoresComponent,
-    ReportesComponent,
     SalidasComponent,
     TipoMedidaComponent,
     TipoEntradaComponent,
     TipoSalidaComponent,
     TipoProductoComponent,
-    TipoEntregaComponent
+    TipoEntregaComponent,
+    InventarioExistenteComponent,
+    ReporteEntradaComponent,
+    ReporteSalidaComponent
   ],
   imports: [
     CommonModule,

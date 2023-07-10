@@ -1,0 +1,98 @@
+<div class="reporteEntradaContent">
+
+  <h1>Reportes de Entradas</h1>
+
+  <div class="fuctionContent">
+    <div class="filtrarContent">
+
+      <mat-form-field>
+        <mat-label>Filtrar</mat-label>
+        <input matInput type="search" (keyup)="applyFilter($event)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field>
+        <mat-label>Rango de fecha de entradas</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <span>
+      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
+      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+    </span>
+  </div>
+
+  <div class="mat-elevation-z8">
+
+    <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
+
+      <ng-container matColumnDef="fechaFactura">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fechaFactura"> Fecha </th>
+        <td mat-cell *matCellDef="let element"> {{element.fechaFactura}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idProveedor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idProveedor"> Proveedor
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.idProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idRecinto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idRecinto"> Recinto </th>
+        <td mat-cell *matCellDef="let element"> {{element.idRecinto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idTipoAlm">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoAlm"> Tipo de Almacen
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.idTipoAlm}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idTipoEntrada">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoEntrada"> Tipo de
+          Entrada </th>
+        <td mat-cell *matCellDef="let element"> {{element.idTipoEntrada}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idTipoEntrega">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoEntrega"> Tipo de
+          Entrega </th>
+        <td mat-cell *matCellDef="let element"> {{element.idTipoEntrega}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="numOrden">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by numOrden"> Numero de orden
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.numOrden}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="observacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by observacion"> Observacion
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.observacion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by total"> Total </th>
+        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>

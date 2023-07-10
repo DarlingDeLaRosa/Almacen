@@ -3,3 +3,34 @@
   grid-template-rows: 8vh auto;
   padding: 16px;
 }
+
+.form{
+  text-align: justify;
+}
+
+.comment{
+  width: 400px;
+}
+
+.ITBIS{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 400px;
+  place-items: center;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.ITBIS h3 {
+  margin: 0;
+}
+
+.entryTable{
+  margin-top: 30px;
+}
+
+mat-paginator{
+  border-top: 1px solid #ccc;
+}
+
+

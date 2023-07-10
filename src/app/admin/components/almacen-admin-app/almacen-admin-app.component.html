@@ -14,9 +14,9 @@
         <a class="item-menu" [routerLink]="['/admin-almacen/proveedores']">Proveeedores</a>
         <a class="item-menu" (click)="toggleSubmenu()">Reportes</a>
         <div class="submenu" *ngIf="submenu else submenuClosed">
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Inventario Existente</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Entrada</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteInventario']">Inventario Existente</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteEntrada']">Entrada</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteSalida']">Salida</a>
         </div>
         <ng-template #submenuClosed></ng-template>
         <a class="item-menu" (click)="toggleSubmenuConfig()" >configuraciones</a>
