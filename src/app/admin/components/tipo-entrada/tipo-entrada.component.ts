@@ -1,32 +1,31 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-proveedores',
-  templateUrl: './proveedores.component.html',
-  styleUrls: ['./proveedores.component.css']
+  selector: 'app-tipo-entrada',
+  templateUrl: './tipo-entrada.component.html',
+  styleUrls: ['./tipo-entrada.component.css']
 })
-export class ProveedoresComponent implements AfterViewInit {
+export class TipoEntradaComponent implements AfterViewInit{
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['nombre', 'rnc', 'representante', 'editar', 'eliminar'];
+  displayedColumns: string[] = ['nombre', 'descripcion', 'editar', 'eliminar'];
   data = new MatTableDataSource([
     {
-      nombre: 'Azucar', rnc: 'azucar blanca', representante: 'Lider',
+      nombre: 'Azucar', descripcion: 'azucar blanca'
     },
     {
-      nombre: 'Cafe', rnc: 'Negro', representante: 'santo Domingo',
+      nombre: 'Cafe', descripcion: 'santo Domingo',
     }
+  ])
 
-  ]);
-
-  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) { }
+  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) {}
 
   ngAfterViewInit(): void {
     this.data.sort = this.sort
@@ -41,11 +40,12 @@ export class ProveedoresComponent implements AfterViewInit {
     }
   }
 
+  applyFilter(event: Event) {
+    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  }
+
   openModal() {
     //this.dialog.open(ModalComponent)
   }
 
-  applyFilter(event: Event) {
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
-  }
 }

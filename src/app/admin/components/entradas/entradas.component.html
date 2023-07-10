@@ -2,8 +2,73 @@
   <h2 class="title" mat-dialog-title> Crear una nueva entrada</h2>
 
   <div>
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Recinto</mat-label>
+      <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+      <mat-autocomplete #auto='matAutocomplete'>
+        <!--
+      <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+        {{option.nombre}}
+      </mat-option>
+    -->
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Tipo de Entrada</mat-label>
+      <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+      <mat-autocomplete #auto='matAutocomplete'>
+        <!--
+      <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+        {{option.nombre}}
+      </mat-option>
+    -->
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Tipo de Almacen</mat-label>
+      <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+      <mat-autocomplete #auto='matAutocomplete'>
+        <!--
+      <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+        {{option.nombre}}
+      </mat-option>
+    -->
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Tipo de Entrega</mat-label>
+      <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+      <mat-autocomplete #auto='matAutocomplete'>
+        <!--
+      <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+        {{option.nombre}}
+      </mat-option>
+    -->
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Proveedor</mat-label>
+      <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+      <mat-autocomplete #auto='matAutocomplete'>
+        <!--
+      <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+        {{option.nombre}}
+      </mat-option>
+    -->
+      </mat-autocomplete>
+    </mat-form-field>
+
     <mat-form-field hideRequiredMarker appearance="fill">
-      <mat-label>Nombre</mat-label>
+      <mat-label>Num. De orden</mat-label>
+      <input matInput required formControlName="nombre">
+    </mat-form-field>&nbsp;
+
+    <mat-form-field hideRequiredMarker appearance="fill">
+      <mat-label>Observacion</mat-label>
       <input matInput required formControlName="nombre">
     </mat-form-field>&nbsp;
 
@@ -11,6 +76,8 @@
       <mat-label>Nombre</mat-label>
       <input matInput required formControlName="nombre">
     </mat-form-field>&nbsp;
+
+
 
   </div>
 </div>

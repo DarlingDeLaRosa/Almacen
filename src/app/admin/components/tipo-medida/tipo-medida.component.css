@@ -1,4 +1,4 @@
-.proveedoresContent {
+.tipoMedidaContent{
   display: grid;
   grid-template-rows: 8vh auto;
   padding: 16px ;
@@ -33,4 +33,3 @@
 mat-paginator{
   border-top: 1px solid #ccc;
 }
-

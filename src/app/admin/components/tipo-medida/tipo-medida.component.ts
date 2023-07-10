@@ -1,32 +1,31 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-proveedores',
-  templateUrl: './proveedores.component.html',
-  styleUrls: ['./proveedores.component.css']
+  selector: 'app-tipo-medida',
+  templateUrl: './tipo-medida.component.html',
+  styleUrls: ['./tipo-medida.component.css']
 })
-export class ProveedoresComponent implements AfterViewInit {
+export class TipoMedidaComponent implements AfterViewInit{
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['nombre', 'rnc', 'representante', 'editar', 'eliminar'];
+  displayedColumns: string[] = ['unidad', 'descripcion', 'editar', 'eliminar'];
   data = new MatTableDataSource([
     {
-      nombre: 'Azucar', rnc: 'azucar blanca', representante: 'Lider',
+      unidad: 'unidad', descripcion: 'azucar blanca'
     },
     {
-      nombre: 'Cafe', rnc: 'Negro', representante: 'santo Domingo',
+      unidad: 'Cafe', descripcion: 'santo Domingo',
     }
+  ])
 
-  ]);
-
-  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) { }
+  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer){}
 
   ngAfterViewInit(): void {
     this.data.sort = this.sort
@@ -41,11 +40,11 @@ export class ProveedoresComponent implements AfterViewInit {
     }
   }
 
-  openModal() {
-    //this.dialog.open(ModalComponent)
-  }
-
   applyFilter(event: Event) {
     this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  }
+
+  openModal() {
+    //this.dialog.open(ModalComponent)
   }
 }

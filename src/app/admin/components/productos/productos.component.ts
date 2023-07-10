@@ -4,6 +4,7 @@ import { ModalComponent } from '../Modals/product-modal/modal.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 export class ProductosComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'editar', 'eliminar'];
   data = new MatTableDataSource(
     [
@@ -40,6 +43,7 @@ export class ProductosComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.data.sort = this.sort
+    this.data.paginator = this.paginator
   }
 
   announceSortChange(sortState: Sort) {

@@ -30,3 +30,7 @@
 .filtrarContent{
   justify-self: end;
 }
+mat-paginator{
+  border-top: 1px solid #ccc;
+}
+

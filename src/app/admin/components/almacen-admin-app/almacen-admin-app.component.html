@@ -21,11 +21,11 @@
         <ng-template #submenuClosed></ng-template>
         <a class="item-menu" (click)="toggleSubmenuConfig()" >configuraciones</a>
         <div class="submenu" *ngIf="submenuConfig else submenuClosedConfig">
-          <a class="item-submenu" [routerLink]="['/admin-almacen/configuraciones']">Unidad de medida</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrada</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de salida</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de producto</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reportes']">Tipo de entrega</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/unidad-medida']">Unidad de medida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-entrada']">Tipo de entrada</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-salida']">Tipo de salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-producto']">Tipo de producto</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-entrega']">Tipo de entrega</a>
         </div>
         <ng-template #submenuClosedConfig></ng-template>
       </div>
@@ -42,7 +42,6 @@
             <span>Cerrar Seccion</span>
           </div>
         </mat-toolbar>
-
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
