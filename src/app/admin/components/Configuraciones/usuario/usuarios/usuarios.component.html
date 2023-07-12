@@ -1,0 +1,101 @@
+
+<div class="entryContent">
+  <div class="fuctionContent">
+    <h2 class="title" mat-dialog-title> Crear un nuevo usuario</h2>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-usuarios']">Administrar usuarios</button>
+  </div>
+
+  <div class="form">
+    <div class="entryInfo">
+
+      <h4>Informacion de usuario</h4>
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Rol</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRol">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Recinto</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRecinto">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Num. De orden</mat-label>
+        <input matInput required formControlName="usuario1">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Apellido</mat-label>
+        <input matInput required formControlName="apellido">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Cargo</mat-label>
+        <input matInput required formControlName="cargo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Constraseña</mat-label>
+        <input type="password" matInput required formControlName="contrasena">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Correo</mat-label>
+        <input type="email" matInput required formControlName="correo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Cedula</mat-label>
+        <input matInput required formControlName="cedula">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>telefono</mat-label>
+        <input matInput required formControlName="telefono">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Extencion</mat-label>
+        <input matInput required formControlName="ext">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Celular</mat-label>
+        <input matInput required formControlName="celular">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Creado por</mat-label>
+        <input readonly matInput required formControlName="usuario">
+      </mat-form-field>&nbsp;
+
+      <span class="btnContainer">
+        <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
+      </span>
+
+    </div>
+
+  </div>
+</div>

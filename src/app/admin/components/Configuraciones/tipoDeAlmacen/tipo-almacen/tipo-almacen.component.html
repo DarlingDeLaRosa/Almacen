@@ -1,0 +1,26 @@
+<div class="administrarTipoAlmacenContent">
+  <div class="fuctionContent">
+    <h2 class="title" mat-dialog-title> Crear una nuevo tipo de almacen</h2>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-tipo-almacen']">Administrar tipos de almacen</button>
+  </div>
+
+  <div class="form">
+    <div class="almacenInfo">
+
+      <h4>Informacion de tipo de almacen</h4>
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <span class="btnContainer">
+        <button class="btnSend" mat-raised-button>
+          <mat-icon>send</mat-icon>Enviar
+        </button>
+      </span>
+
+    </div>
+  </div>
+
+</div>

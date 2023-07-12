@@ -1,0 +1,31 @@
+.productContent {
+  display: grid;
+  grid-template-rows: 9vh auto;
+  min-height: 40vh;
+  padding: 16px;
+}
+
+.fuctions{
+  text-align: center;
+}
+
+.fuctionContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnEdit {
+  background-color: #C7D1EA;
+}
+
+.btnDelete{
+  background-color: #C7D1EA;
+}
+
+.btnCreate{
+  background-color: #C7D1EA;
+}
+
+mat-paginator{
+  border-top: 1px solid #ccc;
+}

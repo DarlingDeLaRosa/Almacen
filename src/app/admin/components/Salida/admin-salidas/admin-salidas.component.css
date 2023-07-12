@@ -1,0 +1,14 @@
+.administrarSalidaContent{
+  display: grid;
+  grid-template-rows: 8vh auto;
+  padding: 16px;
+}
+
+.fuctionContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnCreate{
+  background-color: #C7D1EA;
+}

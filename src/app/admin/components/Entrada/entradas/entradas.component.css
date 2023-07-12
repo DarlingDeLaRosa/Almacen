@@ -1,0 +1,84 @@
+.entryContent{
+  display: grid;
+  grid-template-rows: 8vh auto;
+  padding: 16px;
+}
+
+.fuctionContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnNavigate{
+  background-color: #C7D1EA;
+}
+
+.title{
+  padding: 0px;
+}
+
+.form{
+  text-align: justify;
+}
+
+.comment{
+  width: 370px;
+}
+
+.entryInfo{
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom:5px;
+}
+
+.ITBIS{
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  width: 370px;
+  padding-left: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.ITBIS h3 {
+  margin: 0;
+}
+
+.productInfo{
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.entryTable{
+  margin-top: 30px;
+}
+
+.btnEdit{
+  background-color: #C7D1EA;
+}
+
+.btnDelete{
+  background-color: #C7D1EA;
+}
+
+.btnContainer{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btnAdd{
+  margin-right: 10px;
+  color:white;
+  background-color: #35a6b7;
+}
+
+.btnSend{
+  color:white;
+  background-color: #35a6b7;
+}
+
+mat-paginator{
+  border-top: 1px solid #ccc;
+}

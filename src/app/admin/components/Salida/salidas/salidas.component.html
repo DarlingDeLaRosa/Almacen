@@ -1,0 +1,166 @@
+<div class="departuresContent">
+  <div class="fuctionContent">
+    <h2 class="title" mat-dialog-title> Crear una nueva salida</h2>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-salida']">Administrar
+      salidas</button>
+  </div>
+
+  <div class="form">
+    <div class="entryInfo">
+
+      <h4>Informacion de salidas</h4>
+
+      <mat-form-field>
+        <mat-label>Fecha</mat-label>
+        <input matInput [matDatepicker]="date">
+        <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #date></mat-datepicker>
+      </mat-form-field> &nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Recinto</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRecinto">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Tipo de Salida</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipo_salida">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Tipo de almacen</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipo_alm">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Tipo de departamento</mat-label>
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar">
+        <mat-autocomplete #auto='matAutocomplete'>
+          <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field class="comment" hideRequiredMarker appearance="fill">
+        <mat-label>Observacion</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field class="comment" hideRequiredMarker appearance="fill">
+        <mat-label>Creado por</mat-label>
+        <input readonly matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+    </div>
+
+
+
+    <div class="productInfo">
+
+      <h4>Informacion de producto</h4>
+      <div>
+
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Producto</mat-label>
+          <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+          <mat-autocomplete #auto='matAutocomplete'>
+            <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+          </mat-autocomplete>
+          <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Cantidad</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
+        <span class="btnContainer">
+          <button mat-raised-button class="btnAdd"><mat-icon>add</mat-icon>Agregar</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 entryTable">
+
+      <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)">
+
+        <ng-container matColumnDef="producto">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by producto">Producto</th>
+          <td mat-cell *matCellDef="let element"> {{element.producto}} </td>
+          <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+        </ng-container>
+
+        <ng-container matColumnDef="cantidad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cantidad">Cantidad</th>
+          <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="editar">
+          <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
+          <td mat-cell *matCellDef="let element" class="fuctions">
+            <button class="btnEdit" mat-raised-button>
+              <mat-icon>edit</mat-icon>Editar
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
+          <td mat-cell *matCellDef="let element" class="fuctions">
+            <button class="btnDelete" mat-raised-button>
+              <mat-icon>delete</mat-icon>Remover
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            <span class="btnContainer">
+              <button class="btnSend" mat-raised-button>
+                <mat-icon>send</mat-icon>Enviar
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+      </table>
+      <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+    </div>
+
+  </div>
+</div>

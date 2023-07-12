@@ -8,24 +8,27 @@
       </div>
 
       <div class="almacenOptions">
-        <a class="item-menu" [routerLink]="['/admin-almacen/entrada']">Entradas</a>
-        <a class="item-menu" [routerLink]="['/admin-almacen/salida']">Salidas</a>
-        <a class="item-menu" [routerLink]="['/admin-almacen/productos']">Productos</a>
-        <a class="item-menu" [routerLink]="['/admin-almacen/proveedores']">Proveeedores</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/administrar-entrada']">Entradas</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/administrar-salida']">Salidas</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/administrar-producto']">Productos</a>
+        <a class="item-menu" [routerLink]="['/admin-almacen/administrar-proveedores']">Proveeedores</a>
         <a class="item-menu" (click)="toggleSubmenu()">Reportes</a>
         <div class="submenu" *ngIf="submenu else submenuClosed">
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteInventario']">Inventario Existente</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteEntrada']">Entrada</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteSalida']">Salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteProveedor']">Proveedor</a>
         </div>
         <ng-template #submenuClosed></ng-template>
         <a class="item-menu" (click)="toggleSubmenuConfig()" >configuraciones</a>
         <div class="submenu" *ngIf="submenuConfig else submenuClosedConfig">
-          <a class="item-submenu" [routerLink]="['/admin-almacen/unidad-medida']">Unidad de medida</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-entrada']">Tipo de entrada</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-salida']">Tipo de salida</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-producto']">Tipo de producto</a>
-          <a class="item-submenu" [routerLink]="['/admin-almacen/tipo-entrega']">Tipo de entrega</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-usuarios']">Usuarios</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-almacen']">Tipo de almacen</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-entrada']">Tipo de entrada</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-medida']">Unidad de medida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-salida']">Tipo de salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-producto']">Tipo de producto</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/administrar-tipo-entrega']">Tipo de entrega</a>
         </div>
         <ng-template #submenuClosedConfig></ng-template>
       </div>
