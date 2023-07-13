@@ -17,10 +17,10 @@ export class AdminTipoSalidaComponent implements AfterViewInit{
   displayedColumns: string[] = ['nombre', 'descripcion', 'editar', 'eliminar'];
   data = new MatTableDataSource([
     {
-      nombre: 'Azucar', descripcion: 'azucar blanca'
+      nombre: 'Donacion', descripcion: 'Cedido a un particular'
     },
     {
-      nombre: 'Cafe', descripcion: 'santo Domingo',
+      nombre: 'Asignado', descripcion: 'Entregado a un departamento para su uso',
     }
   ])
 

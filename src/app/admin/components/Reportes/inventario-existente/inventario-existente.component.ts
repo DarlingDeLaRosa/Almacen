@@ -23,13 +23,13 @@ export class InventarioExistenteComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['fechaFactura', 'idProveedor', 'idRecinto', 'idTipoAlm', 'idTipoEntrada', 'idTipoEntrega', 'numOrden', 'observacion', 'total',];
+  displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'unidadMedida', 't_producto'];
   data = new MatTableDataSource(
 
     [
       {
-        fechaFactura: 'Azucar', idProveedor: 'azucar blanca', idRecinto: 'Lider', idTipoAlm: 'Sacarosa',
-        idTipoEntrada: '100010023', idTipoEntrega: 'Nuevo', numOrden: 2000, observacion: 'Esta muy bien', total: 78
+        nombre: 'Azucar', descripcion: 'azucar blanca', marca: 'Lider', modelo: 'Sacarosa',
+        serial: '100010023', condicion: 'Nuevo', precio: 2000, stock: 78, unidadMedida: 'libra', t_producto: 'cocina'
       },
 
     ]

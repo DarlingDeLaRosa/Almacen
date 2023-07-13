@@ -82,3 +82,21 @@
 mat-paginator{
   border-top: 1px solid #ccc;
 }
+
+.rowTable:nth-child(even) {
+  background-color: rgb(250, 250, 250);
+}
+
+.rowTable:nth-child(even):hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.headTable{
+  background-color: #C7D1EA;
+}
+.footerTable{
+  background-color: rgb(250, 250, 250);
+}
+.footerTable:hover{
+  background-color: rgb(250, 250, 250);
+}

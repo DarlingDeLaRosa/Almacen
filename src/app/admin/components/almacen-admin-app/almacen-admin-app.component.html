@@ -38,11 +38,14 @@
       <div class="componentsContent">
         <mat-toolbar class="navbar">
 
-          <button mat-raised-button (click)="sidenavOpened = !sidenavOpened"><mat-icon>menu</mat-icon></button>
+          <div class="btnMenuContainer">
+            <button class="btnMenu" (click)="sidenavOpened = !sidenavOpened"><mat-icon>menu</mat-icon></button>&nbsp;
+            <h2 class="recinto">FEM</h2>
+          </div>
 
           <div class="logout">
-            <span>Hola Persona</span> &nbsp;
-            <span>Cerrar Seccion</span>
+            <span>Biemvenido Usuario</span> &nbsp;
+            <button class="closeAccount"></button>
           </div>
         </mat-toolbar>
         <router-outlet></router-outlet>

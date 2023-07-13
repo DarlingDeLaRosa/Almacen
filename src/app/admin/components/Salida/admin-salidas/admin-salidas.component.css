@@ -12,3 +12,15 @@
 .btnCreate{
   background-color: #C7D1EA;
 }
+
+.rowTable:nth-child(even) {
+  background-color: rgb(250, 250, 250);
+}
+
+.rowTable:nth-child(even):hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.headTable{
+  background-color: #C7D1EA;
+}

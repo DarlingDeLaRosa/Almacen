@@ -1,8 +1,10 @@
 .logout {
+  display: flex;
+  align-items: center;
   text-align: end;
 }
 
-.logoAlmacen{
+.logoAlmacen {
   height: 9vh;
   background-color: #004b8d;
   text-align: center;
@@ -25,16 +27,16 @@
   padding-left: 16px;
 }
 
-.item-menu:hover{
+.item-menu:hover {
   background-color: #49aa42;
 }
 
-.submenu{
+.submenu {
   width: 167px;
   padding-left: 16px;
 }
 
-.item-submenu{
+.item-submenu {
   width: 167px;
   height: 35px;
   padding-left: 16px;
@@ -45,7 +47,7 @@
   color: white;
 }
 
-.item-submenu:hover{
+.item-submenu:hover {
   background-color: #49aa42;
 }
 
@@ -67,4 +69,25 @@ mat-sidenav {
   justify-content: space-between;
   background-color: #C7D1EA;
 }
+
 /*#c7d1ea*/
+
+.btnMenu {
+  background-color: #C7D1EA;
+  border: none;
+}
+
+.btnMenuContainer {
+  display: flex;
+}
+
+.recinto {
+  margin: 0;
+}
+
+.closeAccount {
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+  border: none;
+}

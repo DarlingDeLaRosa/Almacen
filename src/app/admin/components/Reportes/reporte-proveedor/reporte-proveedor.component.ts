@@ -24,13 +24,12 @@ export class ReporteProveedorComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['fechaFactura', 'idProveedor', 'idRecinto', 'idTipoAlm', 'idTipoEntrada', 'idTipoEntrega', 'numOrden', 'observacion', 'total',];
+  displayedColumns: string[] = ['nombre', 'rnc', 'representante'];
   data = new MatTableDataSource(
 
     [
       {
-        fechaFactura: 'Azucar', idProveedor: 'azucar blanca', idRecinto: 'Lider', idTipoAlm: 'Sacarosa',
-        idTipoEntrada: '100010023', idTipoEntrega: 'Nuevo', numOrden: 2000, observacion: 'Esta muy bien', total: 78
+        nombre: 'Bravo', rnc: '18745891964', representante: 'Juan Perez'
       },
 
     ]

@@ -1,7 +1,7 @@
 <div class="administrarEntradaContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnCreate" [routerLink]="['/admin-almacen/entrada']">Crear Nueva Entrada</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/entrada']">Crear nueva entrada</button>
     <div>
       <mat-form-field>
         <mat-label>Filtrar</mat-label>
@@ -74,8 +74,8 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
   </div>

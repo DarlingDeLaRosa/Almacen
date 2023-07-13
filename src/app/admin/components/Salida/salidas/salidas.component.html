@@ -154,9 +154,9 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row class="footerTable" *matFooterRowDef="displayedColumns"></tr>
 
       </table>
       <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
