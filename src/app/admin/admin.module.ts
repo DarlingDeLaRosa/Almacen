@@ -31,6 +31,7 @@ import { AdminTipoProductoComponent } from './components/Configuraciones/tipoDeP
 import { AdminTipoEntregaComponent } from './components/Configuraciones/tipoDeEntrega/admin-tipo-entrega/admin-tipo-entrega.component';
 import { ReporteProveedorComponent } from './components/Reportes/reporte-proveedor/reporte-proveedor.component';
 import { AdminSalidasComponent } from './components/Salida/admin-salidas/admin-salidas.component';
+import { EntradaModalComponent } from './components/Modals/entrada-modal/entrada-modal.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { AdminSalidasComponent } from './components/Salida/admin-salidas/admin-s
     AdminTipoProductoComponent,
     AdminTipoEntregaComponent,
     ReporteProveedorComponent,
-    AdminSalidasComponent
+    AdminSalidasComponent,
+    EntradaModalComponent
   ],
   imports: [
     CommonModule,

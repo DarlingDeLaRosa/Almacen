@@ -11,49 +11,49 @@
     </div>
   </div>
 
-  <div class="mat-elevation-z8">
+  <div class="mat-elevation-z8 tableContainer" >
 
-    <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
+    <table mat-table matSort  [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre"> Nombre </th>
-        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+      <ng-container matColumnDef="recinto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by recinto"> Recinto </th>
+        <td mat-cell *matCellDef="let element"> {{element.recinto}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by descripcion"> Descripcion
+      <ng-container matColumnDef="t_entrada">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by t_entrada"> T.Entrada
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.t_entrada}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="marca">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by marca"> Marca </th>
-        <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
+      <ng-container matColumnDef="t_almacen">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by t_almacen">T.Almacen</th>
+        <td mat-cell *matCellDef="let element"> {{element.t_almacen}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="modelo">
-        <th mat-header-cell *matHeaderCellDef> Modelo </th>
-        <td mat-cell *matCellDef="let element"> {{element.modelo}} </td>
+      <ng-container matColumnDef="t_entrega">
+        <th mat-header-cell *matHeaderCellDef> T.entrega </th>
+        <td mat-cell *matCellDef="let element"> {{element.t_entrega}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="serial">
-        <th mat-header-cell *matHeaderCellDef> Serial </th>
-        <td mat-cell *matCellDef="let element"> {{element.serial}} </td>
+      <ng-container matColumnDef="proveedor">
+        <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+        <td mat-cell *matCellDef="let element"> {{element.proveedor}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="condicion">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by condicion"> Condicion </th>
-        <td mat-cell *matCellDef="let element"> {{element.condicion}} </td>
+      <ng-container matColumnDef="fechaCreacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fechaCreacion"> Fecha creacion </th>
+        <td mat-cell *matCellDef="let element"> {{element.fechaCreacion}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="precio">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by precio"> Precio </th>
-        <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by total"> total </th>
+        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="stock">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by stock"> Stock </th>
-        <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
+      <ng-container matColumnDef="detalles">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by detalles">Num.Productos</th>
+        <td mat-cell *matCellDef="let element"> {{element.detalles}} </td>
       </ng-container>
 
       <ng-container matColumnDef="editar">

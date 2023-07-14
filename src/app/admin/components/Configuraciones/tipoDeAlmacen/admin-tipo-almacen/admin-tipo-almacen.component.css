@@ -17,12 +17,8 @@
   background-color: #C7D1EA;
 }
 
-.btnEdit{
-  background-color: #C7D1EA;
-}
-
 .btnDelete{
-  background-color: #C7D1EA;
+  color: red;
 }
 
 mat-paginator{

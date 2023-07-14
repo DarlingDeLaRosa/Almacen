@@ -2,40 +2,98 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort, Sort } from '@angular/material/sort';
-import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { EntradaModalComponent } from '../../Modals/entrada-modal/entrada-modal.component';
 
 @Component({
   selector: 'app-admin-entradas',
   templateUrl: './admin-entradas.component.html',
   styleUrls: ['./admin-entradas.component.css']
 })
-export class AdminEntradasComponent implements AfterViewInit{
+export class AdminEntradasComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'editar', 'eliminar'];
+  info = {
+    success: true,
+    message: "La operación se realizó con éxito.  ",
+    data: {
+      idEntrada: 4,
+      recinto: {
+        idRecinto: 1,
+        nombre: "FEM"
+      },
+      tipoEntrada: {
+        idTipoEntrada: 1,
+        nombre: "Requisicion",
+        descripcion: "Entrada por defecto Update"
+      },
+      tipoAlm: {
+        idTipoAlm: 1,
+        nombre: "Almacen de toner"
+      },
+      tipoEntrega: {
+        idTipoEntrega: 2,
+        nombre: "Entrega parcial",
+        descripcion: "Por lotes"
+      },
+      proveedor: {
+        idProveedor: 3,
+        nombre: "Ing. Jonas Diaz"
+      },
+      numOrden: "OR03",
+      fechaFactura: "2023-07-05T00:00:00",
+      fechaCreacion: "2023-07-11T08:23:47.087",
+      total: 5000,
+      observacion: "Esro prueba para rastrear la insertcion del producto",
+      fechaModif: null,
+      creadoPor: {
+        idUsuario: 109,
+        nombre: "Jonas",
+        apellido: "admin",
+        cargo: "Software Developer"
+      },
+      detalles: [
+        {
+          idEntradaDet: 11,
+          idEntrada: 4,
+          producto: {
+            idProducto: 7,
+            nombre: "cpu",
+            descripcion: "computadora",
+            marca: "dell",
+            modelo: "i5 5ta generacion",
+            serial: "cpu01",
+            condicion: "nueva",
+            precio: 500,
+            stock: 10
+          },
+          precio: 500,
+          cantidad: 10,
+          subTotal: 5000
+        }
+      ]
+    }
+  }
+
+  displayedColumns: string[] = ['recinto', 't_entrada', 't_almacen', 't_entrega', 'proveedor', 'fechaCreacion', 'total', 'detalles', 'editar', 'eliminar'];
   data = new MatTableDataSource(
     [
       {
-        nombre: 'Azucar', descripcion: 'azucar blanca', marca: 'Lider', modelo: 'Sacarosa',
-        serial: '100010023', condicion: 'Nuevo', precio: 2000, stock: 78
+        recinto: this.info.data.recinto.nombre ,
+        t_entrada: this.info.data.tipoEntrada.nombre,
+        t_almacen: this.info.data.tipoAlm.nombre,
+        t_entrega: this.info.data.tipoEntrega.nombre,
+        proveedor: this.info.data.proveedor.nombre,
+        fechaCreacion: this.info.data.fechaCreacion,
+        total: this.info.data.total,
+        creadoPor: `${this.info.data.creadoPor.nombre} ${this.info.data.creadoPor.apellido}`,
+        detalles: this.info.data.detalles.length
       },
-      {
-        nombre: 'Cafe', descripcion: 'Cafe arabica', marca: 'Cafe Santo Domingo', modelo: 'Caturra',
-        serial: '100012294', condicion: 'Nuevo', precio: 4000, stock: 91
-      },
-      {
-        nombre: 'Monitor', descripcion: '24 Pulgadas', marca: 'Dell', modelo: 's21sh2a',
-        serial: '108992371', condicion: 'Usado', precio: 7500, stock: 4
-      },
-      {
-        nombre: 'teclado', descripcion: '60%', marca: 'Logitec', modelo: 'RedM2593',
-        serial: '966318874', condicion: 'reparado', precio: 2700, stock: 7
-      }
+
     ]
-  ) ;
+  );
 
   constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) { }
 
@@ -53,10 +111,10 @@ export class AdminEntradasComponent implements AfterViewInit{
   }
 
   openModal() {
-    this.dialog.open(ModalComponent)
+    this.dialog.open(EntradaModalComponent)
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event) {
     this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
   }
 }

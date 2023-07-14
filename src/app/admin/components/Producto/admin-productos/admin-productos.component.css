@@ -14,15 +14,12 @@
   justify-content: space-between;
 }
 
-.btnEdit {
-  background-color: #C7D1EA;
-}
 
 .btnDelete{
-  background-color: #C7D1EA;
+  color: red;
 }
 
-.btnCreate{
+.btnNavigate{
   background-color: #C7D1EA;
 }
 

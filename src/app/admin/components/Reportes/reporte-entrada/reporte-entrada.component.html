@@ -32,67 +32,91 @@
     </span>
   </div>
 
-  <div class="mat-elevation-z8">
+  <div class="mat-elevation-z8" ><!--*ngFor="let item of info.data"-->
+    <!--
+    <div *ngFor="let item of item.detalles">
+      {{item.producto.nombre}}
+    </div>
+    -->
 
+    <div class="entradaHeader">
+      <span>
+        <b>Fecha</b>: 20/06/2021
+      </span>
+      <span>
+        <b>Recinto</b>: FEM
+      </span>
+      <span>
+        <b>Proveedor</b>: Darling De la Rosa
+      </span>
+      <span>
+        <b>Tipo de Almacen</b> Cocina
+      </span>
+      <span>
+        <b>Tipo de entrada</b> Adquisicion
+      </span>
+      <span>
+        <b>Tipo de Entrega</b> En las manos
+      </span>
+      <span>
+        <b>numero de orden</b> 8554626912
+      </span>
+      <span>
+        <b>Observacion</b> Todo Bien todo correcto
+      </span>
+    </div>
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
-      <ng-container matColumnDef="fechaFactura">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fechaFactura"> Fecha </th>
-        <td mat-cell *matCellDef="let element"> {{element.fechaFactura}} </td>
+      <ng-container matColumnDef="idProducto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idProducto"> idProducto </th>
+        <td mat-cell *matCellDef="let element"> {{element.idProducto}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="idProveedor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idProveedor"> Proveedor
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.idProveedor}} </td>
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre"> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="idRecinto">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idRecinto"> Recinto </th>
-        <td mat-cell *matCellDef="let element"> {{element.idRecinto}} </td>
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by descripcion"> Descripcion </th>
+        <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="idTipoAlm">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoAlm"> Tipo de Almacen
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.idTipoAlm}} </td>
+      <ng-container matColumnDef="marca">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by marca"> Marca </th>
+        <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="idTipoEntrada">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoEntrada"> Tipo de
-          Entrada </th>
-        <td mat-cell *matCellDef="let element"> {{element.idTipoEntrada}} </td>
+      <ng-container matColumnDef="modelo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by modelo"> Modelo </th>
+        <td mat-cell *matCellDef="let element"> {{element.modelo}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="idTipoEntrega">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idTipoEntrega"> Tipo de
-          Entrega </th>
-        <td mat-cell *matCellDef="let element"> {{element.idTipoEntrega}} </td>
+      <ng-container matColumnDef="serial">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by serial"> Serial</th>
+        <td mat-cell *matCellDef="let element"> {{element.serial}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="numOrden">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by numOrden"> Numero de orden
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.numOrden}} </td>
+      <ng-container matColumnDef="condicion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by condicion"> Condicion </th>
+        <td mat-cell *matCellDef="let element"> {{element.condicion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="precio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by precio"> Precio </th>
+        <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
       </ng-container>
 
 
-      <ng-container matColumnDef="observacion">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by observacion"> Observacion
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.observacion}} </td>
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by stock"> stock </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
       </ng-container>
-
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by total"> Total </th>
-        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
-      </ng-container>
-
 
       <tr class="headTable" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr class="rowTable" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+
   </div>
 
 </div>

@@ -26,3 +26,12 @@ mat-paginator{
 .headTable{
   background-color: #C7D1EA;
 }
+
+.entradaHeader{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr ;
+  background-color:#C7D1EA;
+  padding: 10px;
+  height: 50px;
+  border-bottom: 1px solid #ccc;
+}

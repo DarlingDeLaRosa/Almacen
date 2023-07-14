@@ -1,7 +1,7 @@
 <div class="administrarSalidaContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnCreate" [routerLink]="['/admin-almacen/salida']">Crear nueva salida</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/salida']">Crear nueva salida</button>
     <div>
       <mat-form-field>
         <mat-label>Filtrar</mat-label>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="mat-elevation-z8">
+  <div class="tableContainer">
 
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 

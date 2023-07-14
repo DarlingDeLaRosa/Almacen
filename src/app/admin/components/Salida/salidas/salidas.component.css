@@ -55,12 +55,8 @@
   margin-top: 30px;
 }
 
-.btnEdit{
-  background-color: #C7D1EA;
-}
-
 .btnDelete{
-  background-color: #C7D1EA;
+  color:red;
 }
 
 .btnContainer{
@@ -70,13 +66,11 @@
 
 .btnAdd{
   margin-right: 10px;
-  color:white;
-  background-color: #35a6b7;
+  background-color: #C7D1EA;
 }
 
 .btnSend{
-  color:white;
-  background-color: #35a6b7;
+  background-color: #C7D1EA;
 }
 
 mat-paginator{

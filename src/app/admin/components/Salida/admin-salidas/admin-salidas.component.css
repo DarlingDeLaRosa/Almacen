@@ -9,7 +9,7 @@
   justify-content: space-between;
 }
 
-.btnCreate{
+.btnNavigate{
   background-color: #C7D1EA;
 }
 
@@ -23,4 +23,12 @@
 
 .headTable{
   background-color: #C7D1EA;
+}
+
+.btnDelete {
+  color: red;
+}
+
+.tableContainer{
+  margin-top: 5px;
 }

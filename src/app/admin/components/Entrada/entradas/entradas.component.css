@@ -1,103 +1,59 @@
-.entryContent{
-  display: grid;
-  grid-template-rows: 8vh auto;
-  padding: 16px;
-}
-
-.fuctionContent {
-  display: flex;
-  justify-content: space-between;
-}
-
-.btnNavigate{
-  background-color: #C7D1EA;
-}
-
-.title{
-  padding: 0px;
-}
-
-.form{
-  text-align: justify;
-}
-
-.comment{
-  width: 370px;
-}
-
-.entryInfo{
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin-bottom:5px;
-}
-
 .ITBIS{
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr;
   width: 370px;
   padding-left: 5px;
-  border: 1px solid #ccc;
   margin-bottom: 10px;
 }
 
-.ITBIS h3 {
+.ITBIS h4{
+  font-weight: 200;
   margin: 0;
 }
 
-.productInfo{
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin-bottom: 5px;
+table{
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.entryTable{
-  margin-top: 30px;
+.headerTable{
+  height: 8vh;
 }
 
-.btnEdit{
+.headerCell{
+  text-align: start;
+  font-weight: 400;
+  padding-left: 15px;
+}
+
+.headerRow{
   background-color: #C7D1EA;
 }
 
-.btnDelete{
-  color:red;
-  background-color: #C7D1EA;
-}
-
-.btnContainer{
-  display: flex;
-  justify-content: flex-end;
-}
-
-.btnAdd{
-  margin-right: 10px;
-  color:white;
-  background-color: #C7D1EA;
-}
-
-.btnSend{
-  color:white;
-  background-color: #C7D1EA;
-}
-
-mat-paginator{
+.dataCell{
   border-top: 1px solid #ccc;
+  padding-left: 15px;
 }
 
-.rowTable:nth-child(even) {
-  background-color: rgb(250, 250, 250);
+.dataRow{
+  height: 8vh;
 }
 
-.rowTable:nth-child(even):hover {
-  background-color: rgb(250, 250, 250);
+.fuctionCell{
+  width: 60px;
 }
 
-.headTable{
-  background-color: #C7D1EA;
+.fucEdit, .fucRem{
+  padding: 5px 10px;
+  border: solid 1px #CCC;
+  border-radius: 5px;
+  color: green;
 }
-.footerTable{
-  background-color: rgb(250, 250, 250);
+.fucEdit, .fucRem:hover{
+  cursor: pointer;
 }
-.footerTable:hover{
-  background-color: rgb(250, 250, 250);
+
+.fucRem{
+  color: red;
 }
