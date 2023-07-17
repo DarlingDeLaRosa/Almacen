@@ -47,6 +47,8 @@ const routes: Routes = [
       { path: 'administrar-proveedores', component: AdminProveedoresComponent },
 
       { path: 'usuarios', component: UsuariosComponent },
+      { path: 'administrar-usuarios', component: AdminUsuariosComponent },
+
       { path: 'tipo-medida', component: TipoMedidaComponent },
       { path: 'tipo-entrada', component: TipoEntradaComponent },
       { path: 'tipo-salida', component: TipoSalidaComponent },
@@ -54,7 +56,6 @@ const routes: Routes = [
       { path: 'tipo-entrega', component: TipoEntregaComponent },
       { path: 'tipo-almacen', component: TipoAlmacenComponent },
 
-      { path: 'administrar-usuarios', component: AdminUsuariosComponent },
       { path: 'administrar-tipo-almacen', component: AdminTipoAlmacenComponent },
       { path: 'administrar-tipo-entrada', component: AdminTipoEntradaComponent },
       { path: 'administrar-tipo-medida', component: AdminTipoMedidaComponent },

@@ -2,7 +2,7 @@
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/entrada']">Crear nueva entrada</button>
     <div>
-      <mat-form-field>
+      <mat-form-field >
         <mat-label>Filtrar</mat-label>
         <input matInput type="search" (keyup)="applyFilter($event)">
         <mat-icon matSuffix>search</mat-icon>
@@ -79,7 +79,7 @@
     <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
   </div>
 -->
-  <div class="entryTable">
+  <div>
 
     <table>
       <thead class="headerTable">

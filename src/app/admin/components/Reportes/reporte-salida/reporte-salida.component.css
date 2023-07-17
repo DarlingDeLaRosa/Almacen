@@ -1,28 +1,3 @@
-.reporteSalidaContent {
-  display: grid;
-  grid-template-rows: 8vh auto;
-  min-height: 40vh;
-  padding: 16px;
-}
-
-.fuctionContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-mat-paginator{
-  border-top: 1px solid #ccc;
-}
-
-.rowTable:nth-child(even) {
-  background-color: rgb(250, 250, 250);
-}
-
-.rowTable:nth-child(even):hover {
-  background-color: rgb(250, 250, 250);
-}
-
-.headTable{
-  background-color: #C7D1EA;
+.dataRow{
+  height: 6vh;
 }

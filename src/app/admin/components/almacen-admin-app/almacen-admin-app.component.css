@@ -20,7 +20,8 @@
 .item-menu {
   width: 183px;
   height: 40px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 30px 153px;
   align-items: center;
   text-decoration: none;
   cursor: pointer;
@@ -33,12 +34,12 @@
 }
 
 .submenu {
-  width: 167px;
-  padding-left: 16px;
+  width: 153px;
+  padding-left: 30px;
 }
 
 .item-submenu {
-  width: 167px;
+  width: 153px;
   height: 35px;
   padding-left: 16px;
   text-decoration: none;
@@ -95,4 +96,13 @@ mat-sidenav {
   height: 50px;
   border-radius: 100px;
   border: 1px solid #ccc;
+}
+
+.almacenOptions mat-icon{
+  font-weight: 300;
+  font-size: 21px;
+}
+
+.click{
+  background-color: red;
 }

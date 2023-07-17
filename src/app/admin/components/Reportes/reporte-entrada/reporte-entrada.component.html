@@ -1,4 +1,4 @@
-<div class="reporteEntradaContent">
+<div class="viewContent">
 
   <h1>Reportes de Entradas</h1>
 
@@ -32,39 +32,97 @@
     </span>
   </div>
 
-  <div class="mat-elevation-z8" ><!--*ngFor="let item of info.data"-->
+  <div ><!--*ngFor="let item of info.data"-->
     <!--
     <div *ngFor="let item of item.detalles">
       {{item.producto.nombre}}
     </div>
     -->
 
-    <div class="entradaHeader">
+    <div class="reporteHeader">
       <span>
-        <b>Fecha</b>: 20/06/2021
+        <b class="itemReporte">Fecha:</b> 20/06/2021
       </span>
       <span>
-        <b>Recinto</b>: FEM
+        <b class="itemReporte">Recinto</b>: FEM
       </span>
       <span>
-        <b>Proveedor</b>: Darling De la Rosa
+        <b class="itemReporte">Proveedor</b>: Darling De la Rosa
       </span>
       <span>
-        <b>Tipo de Almacen</b> Cocina
+        <b class="itemReporte">Tipo de Almacen</b> Cocina
       </span>
       <span>
-        <b>Tipo de entrada</b> Adquisicion
+        <b class="itemReporte">Tipo de entrada</b> Adquisicion
       </span>
       <span>
-        <b>Tipo de Entrega</b> En las manos
+        <b class="itemReporte">Tipo de Entrega</b> En las manos
       </span>
       <span>
-        <b>numero de orden</b> 8554626912
+        <b class="itemReporte">numero de orden</b> 8554626912
       </span>
       <span>
-        <b>Observacion</b> Todo Bien todo correcto
+        <b class="itemReporte">Observacion</b> Todo Bien todo correcto
+      </span>
+      <span>
+        <b class="itemReporte">Creado por</b> Juan Perez
       </span>
     </div>
+
+
+    <table class="tableReporte">
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Producto</th>
+          <th class="headerCell">Descripcion</th>
+          <th class="headerCell">Marca</th>
+          <th class="headerCell">Modelo</th>
+          <th class="headerCell">Serial</th>
+          <th class="headerCell">Condicion</th>
+          <th class="headerCell">Precio</th>
+          <th class="headerCell">T.Almacen</th>
+          <th class="headerCell">Entrada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">Azucar</td>
+          <td class="dataCell">crema</td>
+          <td class="dataCell">Lider</td>
+          <td class="dataCell">azuCrem</td>
+          <td class="dataCell">178776716</td>
+          <td class="dataCell">Nuevo</td>
+          <td class="dataCell">400</td>
+          <td class="dataCell">Cocina</td>
+          <td class="dataCell">40</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">Cafe</td>
+          <td class="dataCell">arabigo</td>
+          <td class="dataCell">Santo Domingo</td>
+          <td class="dataCell">cafAra</td>
+          <td class="dataCell">122263488</td>
+          <td class="dataCell">Nuevo</td>
+          <td class="dataCell">600</td>
+          <td class="dataCell">Cocina</td>
+          <td class="dataCell">21</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">Monitor</td>
+          <td class="dataCell">24 Pulgadas</td>
+          <td class="dataCell">Dell</td>
+          <td class="dataCell">Dell24</td>
+          <td class="dataCell">114257895</td>
+          <td class="dataCell">Usado</td>
+          <td class="dataCell">5600</td>
+          <td class="dataCell">Tecnologia</td>
+          <td class="dataCell">4</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <!--
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
       <ng-container matColumnDef="idProducto">
@@ -116,6 +174,7 @@
       <tr class="headTable" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr class="rowTable" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    -->
 
   </div>
 
