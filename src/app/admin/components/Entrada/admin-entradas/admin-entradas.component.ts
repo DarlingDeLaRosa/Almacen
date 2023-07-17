@@ -5,6 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { EntradaModalComponent } from '../../Modals/entrada-modal/entrada-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-entradas',
@@ -112,6 +113,15 @@ export class AdminEntradasComponent implements AfterViewInit {
 
   openModal() {
     this.dialog.open(EntradaModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Esta seguro que desea eliminar la entrada',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
   applyFilter(event: Event) {

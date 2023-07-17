@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="">
+  <div class="entryTable">
     <!--
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
@@ -114,8 +114,8 @@
           <td class="dataCell">Manzana</td>
           <td class="dataCell">Manzana</td>
           <td class="dataCell">Manzana</td>
-          <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"> <button (click)="openModal()" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button (click)="removeAlert()" class="fucRem"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 

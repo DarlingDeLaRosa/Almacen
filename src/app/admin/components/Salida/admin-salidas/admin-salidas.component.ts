@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-salidas',
@@ -53,6 +54,15 @@ export class AdminSalidasComponent implements AfterViewInit{
 
   openModal() {
     //this.dialog.open(ModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Esta seguro que desea eliminar la salida',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
   applyFilter(event: Event){

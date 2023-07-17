@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-productos',
@@ -54,6 +55,15 @@ export class AdminProductosComponent implements AfterViewInit {
 
   openModal() {
     this.dialog.open(ModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Esta seguro que desea eliminar el producto',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
   applyFilter(event: Event){
