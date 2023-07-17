@@ -1,5 +1,4 @@
-<div class="administrarEntradaContent">
-
+<div class="viewContent">
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/entrada']">Crear nueva entrada</button>
     <div>
@@ -10,7 +9,7 @@
       </mat-form-field>
     </div>
   </div>
-
+  <!--
   <div class="mat-elevation-z8 tableContainer" >
 
     <table mat-table matSort  [dataSource]="data" (matSortChange)="announceSortChange($event)">
@@ -79,5 +78,43 @@
     </table>
     <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
   </div>
+-->
+  <div class="entryTable">
 
+    <table>
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Nombre</th>
+          <th class="headerCell">Descripcion</th>
+          <th class="headerCell">Marca</th>
+          <th class="headerCell">Modelo</th>
+          <th class="headerCell">Serial</th>
+          <th class="headerCell">Condicion</th>
+          <th class="headerCell">Precio</th>
+          <th class="headerCell">Unidad de medida</th>
+          <th class="headerCell">T.producto</th>
+          <th class="headerCell">Stock</th>
+          <th class="fuctionCell"></th>
+          <th class="fuctionCell"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">Jugo</td>
+          <td class="dataCell">Mango</td>
+          <td class="dataCell">Kawai</td>
+          <td class="dataCell">Pera</td>
+          <td class="dataCell">Pera</td>
+          <td class="dataCell">Pera</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell"> <button [routerLink]="['/admin-almacen/entrada']" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
 </div>

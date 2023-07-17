@@ -1,5 +1,5 @@
 
-<div class="tipoEntradaContent">
+<div class="viewContent">
 
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/tipo-entrada']">Crear nuevo tipo de entrada</button>
@@ -12,8 +12,8 @@
     </div>
   </div>
 
-  <div class="mat-elevation-z8">
-
+  <div class="">
+    <!--
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
       <ng-container matColumnDef="nombre">
@@ -49,7 +49,26 @@
 
     </table>
     <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+    -->
+    <table>
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Nombre</th>
+          <th class="headerCell">Descripcion</th>
+          <th class="fuctionCell"></th>
+          <th class="fuctionCell"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">Jugo</td>
+          <td class="dataCell">Mango</td>
+          <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+        </tr>
+      </tbody>
 
+    </table>
   </div>
 
 </div>

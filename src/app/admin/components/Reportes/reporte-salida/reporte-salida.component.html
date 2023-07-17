@@ -32,7 +32,7 @@
     </span>
   </div>
 
-  <div class="mat-elevation-z8">
+  <div class="">
 
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
@@ -92,7 +92,6 @@
       <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
   </div>
 
 </div>

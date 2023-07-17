@@ -11,12 +11,11 @@ body { margin: 0; font-family: 'Roboto', "Helvetica Neue", sans-serif; }
 }
 
 .btnSend{
-  background-color: #C7D1EA;
+  background-color: #C7D1EA !important;
 }
 
 .btnNavigate{
   font-weight: 400;
-  background-color: #C7D1EA;
 }
 
 .btnContainer{
@@ -24,10 +23,6 @@ body { margin: 0; font-family: 'Roboto', "Helvetica Neue", sans-serif; }
   justify-content: flex-end;
 }
 
-.btnContainer button{
-  font-weight: 400;
-  background-color: #C7D1EA;
-}
 
 /* ------------------------------------------------------------------*/
 /* ------------------------------------------------------------------*/
@@ -41,7 +36,7 @@ body { margin: 0; font-family: 'Roboto', "Helvetica Neue", sans-serif; }
 }
 */
 .entryTable{
-  margin-top: 30px;
+  margin-top: 20px;
 }
 /*
 .entryTable {
@@ -94,3 +89,66 @@ body { margin: 0; font-family: 'Roboto', "Helvetica Neue", sans-serif; }
 }
 
 
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerTable{
+  height: 6vh;
+}
+
+.headerCell{
+  text-align: start;
+  font-weight: 400;
+  padding-left: 15px;
+}
+
+.headerRow{
+  background-color: #C7D1EA;
+}
+
+.dataCell{
+  border-top: 1px solid #ccc;
+  padding-left: 15px;
+}
+
+.dataRow{
+  height: 5vh;
+}
+
+.dataRow:nth-child(even) {
+  background-color: rgb(245, 245, 245);
+}
+
+.fuctionCell{
+  width: 60px;
+}
+
+.fucEdit, .fucRem{
+  padding: 5px 10px;
+  border: solid 1px #CCC;
+  border-radius: 5px;
+  color: green;
+}
+.fucEdit, .fucRem, .fucSend:hover{
+  cursor: pointer;
+}
+
+.fucRem{
+  color: red;
+}
+
+.footerCell{
+  height: 6vh;
+  border-top: 2px solid #C7D1EA;
+  border-bottom: 2px solid #C7D1EA;
+  padding-left: 15px;
+}
+
+.fucSend{
+  padding: 5px 10px;
+  color: blue;
+  border-radius: 5px;
+  border: solid 1px #CCC;
+}

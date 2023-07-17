@@ -5,9 +5,10 @@
 }
 
 .logoAlmacen {
+  display: grid;
+  place-items: center;
   height: 9vh;
   background-color: #004b8d;
-  text-align: center;
   color: white;
 }
 
@@ -70,8 +71,6 @@ mat-sidenav {
   background-color: #C7D1EA;
 }
 
-/*#c7d1ea*/
-
 .btnMenu {
   background-color: #C7D1EA;
   border: none;
@@ -82,6 +81,12 @@ mat-sidenav {
 }
 
 .recinto {
+  font-weight: 300;
+  margin: 0;
+}
+
+.userName{
+  font-weight: 300;
   margin: 0;
 }
 
@@ -89,5 +94,5 @@ mat-sidenav {
   width: 50px;
   height: 50px;
   border-radius: 100px;
-  border: none;
+  border: 1px solid #ccc;
 }

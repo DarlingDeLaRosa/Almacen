@@ -1,4 +1,4 @@
-<div class="productContent">
+<div class="viewContent">
 
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/productos']">Crear Nuevo Producto</button>
@@ -11,8 +11,8 @@
     </div>
   </div>
 
-  <div class="mat-elevation-z8">
-
+  <div class="">
+    <!--
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
       <ng-container matColumnDef="nombre">
@@ -87,6 +87,39 @@
       <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+    -->
+
+    <table>
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Recinto</th>
+          <th class="headerCell">T.Entrada</th>
+          <th class="headerCell">T.Almacen</th>
+          <th class="headerCell">T.entrega</th>
+          <th class="headerCell">Proveedor</th>
+          <th class="headerCell">Fecha creacion</th>
+          <th class="headerCell">Total</th>
+          <th class="headerCell">Num.Productos</th>
+          <th class="fuctionCell"></th>
+          <th class="fuctionCell"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">Jugo</td>
+          <td class="dataCell">Mango</td>
+          <td class="dataCell">Kawai</td>
+          <td class="dataCell">Pera</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell">Manzana</td>
+          <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+        </tr>
+      </tbody>
+
+    </table>
   </div>
 
 </div>
