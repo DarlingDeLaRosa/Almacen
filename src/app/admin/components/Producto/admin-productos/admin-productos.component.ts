@@ -60,7 +60,7 @@ export class AdminProductosComponent implements AfterViewInit {
   removeAlert(){
     Swal.fire({
       title: '¡Alerta!',
-      text: 'Esta seguro que desea eliminar el producto',
+      text: 'Está seguro que desea eliminar el producto',
       icon: 'warning',
       confirmButtonText: 'Aceptar'
     });

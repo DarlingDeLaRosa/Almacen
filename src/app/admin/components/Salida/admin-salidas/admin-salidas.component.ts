@@ -59,7 +59,7 @@ export class AdminSalidasComponent implements AfterViewInit{
   removeAlert(){
     Swal.fire({
       title: '¡Alerta!',
-      text: 'Esta seguro que desea eliminar la salida',
+      text: 'Está seguro que desea eliminar la salida',
       icon: 'warning',
       confirmButtonText: 'Aceptar'
     });

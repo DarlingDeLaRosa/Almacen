@@ -14,9 +14,9 @@
         <a class="item-menu" [routerLink]="['/admin-almacen/administrar-usuarios']"><mat-icon>person</mat-icon>Usuarios</a>
         <a class="item-menu" (click)="toggleSubmenu()"><mat-icon>summarize</mat-icon>Reportes</a>
         <div class="submenu" *ngIf="submenu else submenuClosed">
-          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteInventario']">Inventario</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteEntrada']">Entrada</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteSalida']">Salida</a>
+          <a class="item-submenu" [routerLink]="['/admin-almacen/reporteInventario']">Inventario</a>
           <a class="item-submenu" [routerLink]="['/admin-almacen/reporteProveedor']">Proveedor</a>
         </div>
         <ng-template #submenuClosed></ng-template>
