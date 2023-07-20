@@ -1,0 +1,53 @@
+<div class="appWrapper">
+
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" [(opened)]="sidenavOpened">
+      <div class="logoAlmacen">
+        LOGO_ALMACEN
+      </div>
+
+      <div class="almacenOptions">
+
+        <a class="item-menu" [routerLink]="['/almacen/inicio']" routerLinkActive="active">
+          <mat-icon>home</mat-icon>Inicio
+        </a>
+        <a class="item-menu" [routerLink]="['/almacen/administrar-entrada']" routerLinkActive="active">
+          <mat-icon>add_box</mat-icon>Entradas
+        </a>
+        <a class="item-menu" [routerLink]="['/almacen/administrar-salida']" routerLinkActive="active">
+          <mat-icon>indeterminate_check_box</mat-icon>Salidas
+        </a>
+
+        <a class="item-menu" (click)="toggleSubmenu()"><mat-icon>summarize</mat-icon>Reportes</a>
+        <div class="submenu" *ngIf="submenu else submenuClosed">
+          <a class="item-submenu" [routerLink]="['/almacen/reporteEntrada']" routerLinkActive="active">Entrada</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteSalida']" routerLinkActive="active">Salida</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteInventario']" routerLinkActive="active">Inventario</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteProveedor']" routerLinkActive="active">Proveedor</a>
+        </div>
+        <ng-template #submenuClosed></ng-template>
+
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="componentsContent">
+        <mat-toolbar class="navbar">
+
+          <div class="btnMenuContainer">
+            <button class="btnMenu" (click)="sidenavOpened = !sidenavOpened"><mat-icon>menu</mat-icon></button>&nbsp;
+            <h2 class="recinto">FEM</h2>
+          </div>
+
+          <div class="logout">
+            <h3 class="userName">Bienvenido Usuario</h3> &nbsp;
+            <button class="closeAccount"></button>
+          </div>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>
+

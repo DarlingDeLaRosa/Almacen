@@ -1,7 +1,8 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Crear nueva entrada</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
@@ -91,7 +92,17 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Num. De orden</mat-label>
+        <mat-label>Num. Entrada</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>NUm. Contrato</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Num. Factura</mat-label>
         <input matInput required formControlName="nombre">
       </mat-form-field>&nbsp;
 
@@ -110,7 +121,10 @@
 
     <div class="formInfo">
 
-      <h2>Informacion de producto</h2>
+      <div class="fuctionContent newProduct">
+        <h2>Informacion de producto</h2>
+        <button mat-raised-button class="btnNavigate">Crear nuevo producto</button>
+      </div>
       <div>
 
         <mat-form-field hideRequiredMarker>
@@ -140,7 +154,6 @@
           <mat-label>ITBIS por articulo</mat-label>
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
-
         <ng-template #noGeneralItbis></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -161,7 +174,7 @@
 
     <!--*ngFor="let item of info.data"-->
 
-      <!--
+    <!--
 
       <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)">
 

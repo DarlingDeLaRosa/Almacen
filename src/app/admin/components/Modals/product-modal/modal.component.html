@@ -1,7 +1,7 @@
 <div class="modal">
-  <h2 class="modal-title" mat-dialog-title> Nuevo Producto </h2>
+  <h2 class="modal-title" mat-dialog-title> Editar Producto </h2>
   <mat-dialog-content class="modal-content">
-    <div class="form">
+    <div class="formInfo">
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Nombre</mat-label>
         <input matInput required formControlName="nombre">
@@ -10,43 +10,6 @@
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Descripcion</mat-label>
         <input matInput required formControlName="descripcion">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Marca</mat-label>
-        <input matInput required formControlName="marca">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Modelo</mat-label>
-        <input matInput required formControlName="modelo">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Serial</mat-label>
-        <input matInput required formControlName="serial">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Condicion</mat-label>
-        <input matInput required formControlName="condicion">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Precio</mat-label>
-        <input type="number" matInput required formControlName="precio">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Proveedor</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idProveedor">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-        -->
-        </mat-autocomplete>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
@@ -59,12 +22,44 @@
         </mat-option>
       -->
         </mat-autocomplete>
-      </mat-form-field>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Tipo de articulo</mat-label>
+        <input matInput required formControlName="descripcion">
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Producto presupuestario</mat-label>
+        <input matInput required formControlName="marca">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Marca</mat-label>
+        <input matInput required formControlName="modelo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Modelo</mat-label>
+        <input matInput required formControlName="serial">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Precio</mat-label>
+        <input matInput required formControlName="condicion">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Cantidad minima requerida</mat-label>
+        <input type="number" matInput required formControlName="precio">
+      </mat-form-field>&nbsp;
 
     </div>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-raised-button>Cancelar</button>
-    <button mat-raised-button color="primary">Guardar</button>
+    <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
   </mat-dialog-actions>
 </div>

@@ -1,7 +1,7 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nuevo producto</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-producto']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-producto']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
@@ -15,47 +15,8 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Descripcion</mat-label>
+        <mat-label>Descripción</mat-label>
         <input matInput required formControlName="descripcion">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Marca</mat-label>
-        <input matInput required formControlName="marca">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Modelo</mat-label>
-        <input matInput required formControlName="modelo">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Serial</mat-label>
-        <input matInput required formControlName="serial">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Condicion</mat-label>
-        <input matInput required formControlName="condicion">
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Precio</mat-label>
-        <input type="number" matInput required formControlName="precio">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Proveedor</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idProveedor">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-        -->
-        </mat-autocomplete>
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
@@ -83,6 +44,31 @@
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Producto presupuestario</mat-label>
+        <input matInput required formControlName="precio">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Marca</mat-label>
+        <input matInput required formControlName="marca">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Modelo</mat-label>
+        <input matInput required formControlName="modelo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Precio</mat-label>
+        <input type="number" matInput required formControlName="precio">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Cantidad minima requerida</mat-label>
+        <input type="number" matInput required formControlName="precio">
+      </mat-form-field>&nbsp;
 
       <span class="btnContainer">
         <button class="btnSend" mat-raised-button>

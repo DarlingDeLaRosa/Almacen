@@ -1,7 +1,7 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nuevo proveedor</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-proveedores']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-proveedores']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
@@ -10,23 +10,39 @@
       <h2>Informacion de proveedor</h2>
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Nombre</mat-label>
-        <input matInput required formControlName="nombre">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>RNC</mat-label>
         <input matInput required formControlName="rnc">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Razon social</mat-label>
+        <input matInput required formControlName="rnc">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Nombre comercial</mat-label>
+        <input matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Representante</mat-label>
-        <input matInput required formControlName="representante">
+        <input readonly matInput required formControlName="representante">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Contacto del Representante</mat-label>
+        <input readonly matInput required formControlName="representante">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Estado</mat-label>
+        <input readonly matInput required formControlName="nombre">
       </mat-form-field>&nbsp;
 
       <span class="btnContainer">
         <button class="btnSend" mat-raised-button>
-          <mat-icon>send</mat-icon>Enviar
+          <mat-icon>send</mat-icon>
+          Enviar
         </button>
       </span>
     </div>

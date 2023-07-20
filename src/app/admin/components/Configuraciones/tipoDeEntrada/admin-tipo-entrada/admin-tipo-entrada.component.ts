@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
+import { TipoDeEntradaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-entrada-modal/tipo-de-entrada-modal.component';
 
 @Component({
   selector: 'app-admin-tipo-entrada',
@@ -44,7 +46,17 @@ export class AdminTipoEntradaComponent implements AfterViewInit {
   }
 
   openModal() {
-    //this.dialog.open(ModalComponent)
+    this.dialog.open(TipoDeEntradaModalComponent)
   }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el tipo de entrada.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+
 
 }

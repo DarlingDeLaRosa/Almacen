@@ -5,6 +5,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalComponent } from '../../../Modals/product-modal/modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import Swal from 'sweetalert2';
+import { UsuarioModalComponent } from '../../../Modals/usuario-modal/usuario-modal.component';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -41,7 +43,16 @@ export class AdminUsuariosComponent implements AfterViewInit{
   }
 
   openModal() {
-    this.dialog.open(ModalComponent)
+    this.dialog.open(UsuarioModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el usuario.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
   applyFilter(event: Event){

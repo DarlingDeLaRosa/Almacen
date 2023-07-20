@@ -1,7 +1,7 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/tipo-entrega']">Crear nuevo tipo de entrega</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-entrega']">Crear nuevo tipo de entrega</button>
     <div class="filtrarContent">
       <mat-form-field>
         <mat-label>Filtrar</mat-label>
@@ -53,16 +53,18 @@
     <table>
       <thead class="headerTable">
         <tr class="headerRow">
-          <th class="headerCell">Unidad de Medida</th>
+          <th class="headerCell">Nombre</th>
+          <th class="headerCell">Descripción</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
         </tr>
       </thead>
       <tbody>
         <tr class="dataRow">
-          <td class="dataCell">Manzana</td>
-          <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell">Bien</td>
+          <td class="dataCell">Fue entregado bien</td>
+          <td class="dataCell"> <button class="fucEdit" (click)="openModal()"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem" (click)="removeAlert()"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 

@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
+import { TipoDeSalidaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-salida-modal/tipo-de-salida-modal.component';
 
 @Component({
   selector: 'app-admin-tipo-salida',
@@ -44,6 +46,15 @@ export class AdminTipoSalidaComponent implements AfterViewInit{
   }
 
   openModal() {
-    //this.dialog.open(ModalComponent)
+    this.dialog.open(TipoDeSalidaModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el tipo de salida.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 }

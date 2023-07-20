@@ -1,0 +1,7 @@
+.form-actions{
+  justify-content: end;
+}
+
+.formInfo mat-form-field{
+  width: 32%;
+}

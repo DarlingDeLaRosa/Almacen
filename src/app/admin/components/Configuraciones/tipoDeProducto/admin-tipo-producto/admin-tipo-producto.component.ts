@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
+import { TipoDeProductoModalComponent } from '../../../Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
 
 @Component({
   selector: 'app-admin-tipo-producto',
@@ -44,6 +46,15 @@ export class AdminTipoProductoComponent implements AfterViewInit{
   }
 
   openModal() {
-    //this.dialog.open(ModalComponent)
+    this.dialog.open(TipoDeProductoModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el tipo de producto.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 }

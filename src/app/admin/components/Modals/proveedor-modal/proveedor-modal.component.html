@@ -1,0 +1,42 @@
+<div class="modal">
+  <h2 class="modal-title" mat-dialog-title> Editar Proveedor </h2>
+  <mat-dialog-content class="modal-content">
+    <div class="formInfo">
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>RNC</mat-label>
+        <input readonly matInput required formControlName="nombre">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Razon social</mat-label>
+        <input readonly matInput required formControlName="descripcion">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Nombre Comercial</mat-label>
+        <input readonly matInput required formControlName="marca">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Representante</mat-label>
+        <input matInput required formControlName="descripcion">
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Contacto</mat-label>
+        <input matInput required formControlName="modelo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Estado</mat-label>
+        <input readonly matInput required formControlName="serial">
+      </mat-form-field>&nbsp;
+
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="form-actions">
+    <button mat-raised-button>Cancelar</button>
+    <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
+  </mat-dialog-actions>
+</div>

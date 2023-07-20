@@ -1,7 +1,7 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/usuarios']">Crear nuevo usuario</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/usuarios']">Crear nuevo usuario</button>
     <div>
       <mat-form-field>
         <mat-label>Filtrar</mat-label>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="entryTable">
+  <div >
     <!--
     <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
 
@@ -100,36 +100,38 @@
     <tr class="headerRow">
       <th class="headerCell">Rol</th>
       <th class="headerCell">Recinto</th>
+      <th class="headerCell">Cedula</th>
+      <th class="headerCell">Correo</th>
       <th class="headerCell">Num. Orden</th>
       <th class="headerCell">Nombre</th>
       <th class="headerCell">Apellido</th>
       <th class="headerCell">Cargo</th>
-      <th class="headerCell">Cedula</th>
-      <th class="headerCell">Correo</th>
       <th class="headerCell">Telefono</th>
       <th class="headerCell">EXT</th>
       <th class="headerCell">Celular</th>
       <th class="headerCell">Creado por</th>
+      <th class="headerCell">Supervisor</th>
       <th class="fuctionCell"></th>
       <th class="fuctionCell"></th>
     </tr>
   </thead>
   <tbody>
     <tr class="dataRow">
-      <td class="dataCell">Jugo</td>
-      <td class="dataCell">Mango</td>
-      <td class="dataCell">Mango</td>
-      <td class="dataCell">Kawai</td>
-      <td class="dataCell">Kawai</td>
-      <td class="dataCell">Pera</td>
-      <td class="dataCell">Pera</td>
-      <td class="dataCell">Pera</td>
-      <td class="dataCell">Manzana</td>
-      <td class="dataCell">Manzana</td>
-      <td class="dataCell">Manzana</td>
-      <td class="dataCell">Manzana</td>
-      <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-      <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+      <td class="dataCell">Auxiliar</td>
+      <td class="dataCell">FEM</td>
+      <td class="dataCell">402-0914486-0</td>
+      <td class="dataCell">jupe@gmail.com</td>
+      <td class="dataCell">788944522</td>
+      <td class="dataCell">Juan</td>
+      <td class="dataCell">Perez</td>
+      <td class="dataCell">Auxiliar de Almacen</td>
+      <td class="dataCell">8596332144</td>
+      <td class="dataCell">785</td>
+      <td class="dataCell">8294563321</td>
+      <td class="dataCell">Julio Vargas</td>
+      <td class="dataCell">Ramon Baltazar</td>
+      <td class="dataCell"> <button class="fucEdit" (click)="openModal()"><mat-icon>edit</mat-icon></button></td>
+      <td class="dataCell"> <button class="fucRem" (click)="removeAlert()"><mat-icon>delete</mat-icon></button></td>
     </tr>
   </tbody>
 

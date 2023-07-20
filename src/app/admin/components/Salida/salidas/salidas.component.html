@@ -1,7 +1,7 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nueva salida</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/admin-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
@@ -100,10 +100,22 @@
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
 
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Existencia</mat-label>
+          <input type="number" readonly matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Valor</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
 
         <span class="btnContainer">
           <button mat-raised-button class="btnAdd"><mat-icon>add</mat-icon>Agregar</button>
@@ -165,15 +177,19 @@
         <thead class="headerTable">
           <tr class="headerRow">
             <th class="headerCell">Producto</th>
-            <th class="headerCell">Cantidad</th>
+            <th class="headerCell">Cantidad saliente</th>
+            <th class="headerCell">Cantidad restante</th>
+            <th class="headerCell">Valor</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
           </tr>
         </thead>
         <tbody>
           <tr class="dataRow">
-            <td class="dataCell">Jugo</td>
             <td class="dataCell">Mango</td>
+            <th class="headerCell">20</th>
+            <th class="headerCell">25</th>
+            <td class="dataCell">200</td>
             <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
           </tr>
@@ -183,6 +199,8 @@
           <tr>
             <td class="footerCell">Total</td>
             <td class="footerCell"></td>
+            <td class="footerCell"></td>
+            <td class="footerCell">Valor total</td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend"><mat-icon>send</mat-icon></button></td>
           </tr>

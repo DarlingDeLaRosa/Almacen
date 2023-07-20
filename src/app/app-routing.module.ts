@@ -5,9 +5,9 @@ import { AuthComponent } from './components/auth/auth.component';
 const routes: Routes = [
   { path: 'login', component: AuthComponent  },
   {
-    path: 'admin-almacen',
+    path: 'almacen',
     loadChildren: ()=>
-    import('./admin/admin-routing.module').then((m)=>m.AdminRoutingModule)
+    import('./admin/superAdmin-routing.module').then((m)=>m.AdminRoutingModule)
   },
   {
     path: 'user-almacen',

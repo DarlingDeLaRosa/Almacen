@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { TipoDeAlmacenModalComponent } from '../../../Modals/configuracion-modal/tipo-de-almacen-modal/tipo-de-almacen-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-tipo-almacen',
@@ -42,7 +44,16 @@ export class AdminTipoAlmacenComponent implements AfterViewInit {
   }
 
   openModal() {
-    //this.dialog.open(ModalComponent)
+    this.dialog.open(TipoDeAlmacenModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el tipo de almacen.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
   applyFilter(event: Event) {

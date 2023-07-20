@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
+import { TipoDeEntregaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-entrega-modal/tipo-de-entrega-modal.component';
 
 @Component({
   selector: 'app-admin-tipo-entrega',
@@ -44,7 +46,16 @@ export class AdminTipoEntregaComponent  implements AfterViewInit{
   }
 
   openModal() {
-    //this.dialog.open(ModalComponent)
+    this.dialog.open(TipoDeEntregaModalComponent)
+  }
+
+  removeAlert(){
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Está seguro que desea eliminar el tipo de entrega.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
   }
 
 }

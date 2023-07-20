@@ -1,8 +1,8 @@
 import { NgModule, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AdminRoutingModule } from './admin-routing.module';
-import { AlmacenAdminAppComponent } from './components/almacen-admin-app/almacen-admin-app.component';
+import { AdminRoutingModule } from './superAdmin-routing.module';
+import { AlmacenAdminAppComponent } from './components/almacen-superAdmin-app/almacen-admin-app.component';
 import { EntradasComponent } from './components/Entrada/entradas/entradas.component';
 import { ModalComponent } from './components/Modals/product-modal/modal.component';
 import { ProductosComponent } from './components/Producto/productos/productos.component';
@@ -32,6 +32,17 @@ import { AdminTipoEntregaComponent } from './components/Configuraciones/tipoDeEn
 import { ReporteProveedorComponent } from './components/Reportes/reporte-proveedor/reporte-proveedor.component';
 import { AdminSalidasComponent } from './components/Salida/admin-salidas/admin-salidas.component';
 import { EntradaModalComponent } from './components/Modals/entrada-modal/entrada-modal.component';
+import { EditEntradasComponent } from './components/Entrada/edit-entradas/edit-entradas.component';
+import { EditSalidasComponent } from './components/Salida/edit-salidas/edit-salidas.component';
+import { ProveedorModalComponent } from './components/Modals/proveedor-modal/proveedor-modal.component';
+import { UsuarioModalComponent } from './components/Modals/usuario-modal/usuario-modal.component';
+import { TipoDeAlmacenModalComponent } from './components/Modals/configuracion-modal/tipo-de-almacen-modal/tipo-de-almacen-modal.component';
+import { TipoDeEntradaModalComponent } from './components/Modals/configuracion-modal/tipo-de-entrada-modal/tipo-de-entrada-modal.component';
+import { TipoDeMedidaModalComponent } from './components/Modals/configuracion-modal/tipo-de-medida-modal/tipo-de-medida-modal.component';
+import { TipoDeEntregaModalComponent } from './components/Modals/configuracion-modal/tipo-de-entrega-modal/tipo-de-entrega-modal.component';
+import { TipoDeProductoModalComponent } from './components/Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
+import { TipoDeSalidaModalComponent } from './components/Modals/configuracion-modal/tipo-de-salida-modal/tipo-de-salida-modal.component';
+import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
 
 
 @NgModule({
@@ -64,13 +75,26 @@ import { EntradaModalComponent } from './components/Modals/entrada-modal/entrada
     AdminTipoEntregaComponent,
     ReporteProveedorComponent,
     AdminSalidasComponent,
-    EntradaModalComponent
+    EntradaModalComponent,
+    EditEntradasComponent,
+    EditSalidasComponent,
+    ProveedorModalComponent,
+    UsuarioModalComponent,
+    TipoDeAlmacenModalComponent,
+    TipoDeEntradaModalComponent,
+    TipoDeMedidaModalComponent,
+    TipoDeEntregaModalComponent,
+    TipoDeProductoModalComponent,
+    TipoDeSalidaModalComponent,
+    VistaInicialComponent
   ],
   imports: [
     CommonModule,
     MaterialAdminModule,
     AdminRoutingModule,
   ],
+  exports:[
+  ]
 })
 export class AdminModule implements OnInit{
 
