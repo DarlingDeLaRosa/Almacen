@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -7,13 +9,15 @@ import { Component } from '@angular/core';
 })
 export class AlmacenAdminAppComponent {
   sidenavOpened: boolean = false;
+  userName$ = this.store.select(state => state.app.user.name)
 
   submenu: boolean = false;
   submenuConfig:  boolean = false;
 
-  constructor(){}
+  constructor(private store: Store< {app: AppState}>){}
 
   toggleSubmenu(){
+    console.log(this.userName$)
     this.submenu = !this.submenu
     if(this.submenu){
       this.submenuConfig = false;

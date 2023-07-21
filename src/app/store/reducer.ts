@@ -1,13 +1,18 @@
-import { Action } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
+import { AppState } from './state';
+import * as AppActions from './actions';
 
-export function appReducer(){
-  //switch (){
-  //  case AppActionsTypes.LoadUserp:
-  //    return {
-  //      ...state,
-  //      user: action.payload
-  //    };
-  //}
-  //default:
-  //  return state
+
+export const inicialState: AppState ={
+  path: '',
+  user: {
+    rol: '',
+    name: ''
+  }
 }
+
+export const appReducer = createReducer(
+  inicialState,
+  on(AppActions.logIn, (state, {user}) => ({...state, user})),
+
+)

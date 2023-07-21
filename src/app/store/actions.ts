@@ -1,9 +1,4 @@
-import { Action } from "@ngrx/store";
+import { createAction, props } from "@ngrx/store";
+import { User,} from "./state";
 
-export enum actionsTypes {
-  LoadUser = '[app] Load User'
-}
-
-export class LoadUser implements Action{
-  readonly type = actionsTypes.LoadUser;
-}
+export const logIn = createAction('[login] login user', props<{user: User}>())
