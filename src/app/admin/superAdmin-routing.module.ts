@@ -31,6 +31,8 @@ import { AdminSalidasComponent } from './components/Salida/admin-salidas/admin-s
 import { EditEntradasComponent } from './components/Entrada/edit-entradas/edit-entradas.component';
 import { EditSalidasComponent } from './components/Salida/edit-salidas/edit-salidas.component';
 import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
+import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
+import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
 
 const routes: Routes = [
   {
@@ -74,6 +76,8 @@ const routes: Routes = [
       { path: 'reporteEntrada', component: ReporteEntradaComponent },
       { path: 'reporteSalida', component: ReporteSalidaComponent },
       { path: 'reporteProveedor', component: ReporteProveedorComponent },
+      { path: 'reporteProductoEntrada', component: ReporteEntradaProductoComponent},
+      { path: 'reporteProductoSalida', component: ReporteSalidaProductoComponent},
     ]
   },
 ];

@@ -1,0 +1,103 @@
+<div class="viewContent">
+
+  <h1>Reportes de entradas por producto</h1>
+
+  <div class="fuctionContent">
+    <div class="filtrarContent">
+
+      <mat-form-field>
+        <mat-label>Filtrar</mat-label>
+        <input matInput type="search" (keyup)="applyFilter($event)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field>
+        <mat-label>Rango de fecha</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <span>
+      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
+      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+    </span>
+  </div>
+
+  <div>
+
+    <table>
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Fecha</th>
+          <th class="headerCell">Producto</th>
+          <th class="headerCell">No. Entrada</th>
+          <th class="headerCell">Descripcion</th>
+          <th class="headerCell">Marca</th>
+          <th class="headerCell">Modelo</th>
+          <th class="headerCell">Serial</th>
+          <th class="headerCell">Condicion</th>
+          <th class="headerCell">T.Almacen</th>
+          <th class="headerCell">Cantidad</th>
+          <th class="headerCell">Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">20/12/20</td>
+          <td class="dataCell">Azucar</td>
+          <td class="dataCell">785457895</td>
+          <td class="dataCell">crema</td>
+          <td class="dataCell">Lider</td>
+          <td class="dataCell">azuCrem</td>
+          <td class="dataCell">----</td>
+          <td class="dataCell">Nuevo</td>
+          <td class="dataCell">Cocina</td>
+          <td class="dataCell">40</td>
+          <td class="dataCell">400</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">30/1/21</td>
+          <td class="dataCell">Cafe</td>
+          <td class="dataCell">635425595</td>
+          <td class="dataCell">arabigo</td>
+          <td class="dataCell">Santo Domingo</td>
+          <td class="dataCell">cafAra</td>
+          <td class="dataCell">----</td>
+          <td class="dataCell">Nuevo</td>
+          <td class="dataCell">Cocina</td>
+          <td class="dataCell">21</td>
+          <td class="dataCell">600</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">4/10/23</td>
+          <td class="dataCell">Monitor</td>
+          <td class="dataCell">786123456</td>
+          <td class="dataCell">24 Pulgadas</td>
+          <td class="dataCell">Dell</td>
+          <td class="dataCell">Dell24</td>
+          <td class="dataCell">114257895</td>
+          <td class="dataCell">Usado</td>
+          <td class="dataCell">Tecnologia</td>
+          <td class="dataCell">4</td>
+          <td class="dataCell">5600</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+
+
+
+
+  </div>
+
+</div>

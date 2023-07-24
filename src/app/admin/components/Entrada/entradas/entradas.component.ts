@@ -1,8 +1,10 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nuevo-product-modal.component';
 
 @Component({
   selector: 'app-entradas',
@@ -10,7 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./entradas.component.css']
 })
 export class EntradasComponent implements AfterViewInit {
-  generalITBIS: boolean = true;
+  generalITBIS: boolean = false;
+  serial: boolean = false;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -32,10 +35,19 @@ export class EntradasComponent implements AfterViewInit {
 
   dataSource = new MatTableDataSource(this.data)
 
-  constructor(private _liveAnnouncer: LiveAnnouncer){}
+  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer){}
+
+
+  openModal() {
+    this.dialog.open(NuevoProductModalComponent)
+  }
 
   itbisOption(event : any){
     this.generalITBIS = event.value;
+  }
+
+  serialOption(event : any){
+    this.serial =  event.value
   }
 
   ngAfterViewInit(): void {

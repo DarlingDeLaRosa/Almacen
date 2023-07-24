@@ -92,17 +92,17 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Num. Entrada</mat-label>
+        <mat-label>No. Entrada</mat-label>
         <input matInput required formControlName="nombre">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>NUm. Contrato</mat-label>
+        <mat-label>No. Contrato</mat-label>
         <input matInput required formControlName="nombre">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Num. Factura</mat-label>
+        <mat-label>No. Factura</mat-label>
         <input matInput required formControlName="nombre">
       </mat-form-field>&nbsp;
 
@@ -123,9 +123,17 @@
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
-        <button mat-raised-button class="btnNavigate">Crear nuevo producto</button>
+        <button mat-raised-button (click)="openModal()">Crear nuevo producto</button>
       </div>
       <div>
+
+        <div class="ITBIS">
+          <h4>Es un equipo electronico?</h4>
+          <mat-radio-group (change)="serialOption($event)">
+            <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
+            <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
 
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
@@ -145,8 +153,21 @@
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
 
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Condición</mat-label>
+          <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+          <mat-autocomplete #auto='matAutocomplete'>
+            <!--
+        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
+          {{option.nombre}}
+        </mat-option>
+      -->
+          </mat-autocomplete>
+          <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+        </mat-form-field>&nbsp;
+
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Precio</mat-label>
+          <mat-label>Precio / Valor</mat-label>
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
 
@@ -155,6 +176,12 @@
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
         <ng-template #noGeneralItbis></ng-template>
+
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
+          <mat-label>Serial</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+        <ng-template #noElectronicProduct></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>

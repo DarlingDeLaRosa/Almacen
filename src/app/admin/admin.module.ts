@@ -43,6 +43,9 @@ import { TipoDeEntregaModalComponent } from './components/Modals/configuracion-m
 import { TipoDeProductoModalComponent } from './components/Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
 import { TipoDeSalidaModalComponent } from './components/Modals/configuracion-modal/tipo-de-salida-modal/tipo-de-salida-modal.component';
 import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
+import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
+import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
+import { NuevoProductModalComponent } from './components/Modals/nuevo-product-modal/nuevo-product-modal.component';
 
 
 @NgModule({
@@ -86,7 +89,10 @@ import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-i
     TipoDeEntregaModalComponent,
     TipoDeProductoModalComponent,
     TipoDeSalidaModalComponent,
-    VistaInicialComponent
+    VistaInicialComponent,
+    ReporteEntradaProductoComponent,
+    ReporteSalidaProductoComponent,
+    NuevoProductModalComponent
   ],
   imports: [
     CommonModule,
