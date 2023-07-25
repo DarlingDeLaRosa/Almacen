@@ -1,5 +1,6 @@
 import { NgModule, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './superAdmin-routing.module';
 import { AlmacenAdminAppComponent } from './components/almacen-superAdmin-app/almacen-admin-app.component';
@@ -98,6 +99,8 @@ import { NuevoProductModalComponent } from './components/Modals/nuevo-product-mo
     CommonModule,
     MaterialAdminModule,
     AdminRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports:[
   ]

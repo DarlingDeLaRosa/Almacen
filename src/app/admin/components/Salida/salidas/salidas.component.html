@@ -112,6 +112,26 @@
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Marca</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Modelo</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Serial</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Condición</mat-label>
+          <input type="number" matInput required formControlName="nombre">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
@@ -179,6 +199,10 @@
             <th class="headerCell">Producto</th>
             <th class="headerCell">Cantidad saliente</th>
             <th class="headerCell">Cantidad restante</th>
+            <th class="headerCell">Condición</th>
+            <th class="headerCell">Marca</th>
+            <th class="headerCell">Modelo</th>
+            <th class="headerCell">Serial</th>
             <th class="headerCell">Valor</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
@@ -186,10 +210,14 @@
         </thead>
         <tbody>
           <tr class="dataRow">
-            <td class="dataCell">Mango</td>
-            <th class="headerCell">20</th>
-            <th class="headerCell">25</th>
-            <td class="dataCell">200</td>
+            <td class="dataCell">CPU</td>
+            <th class="headerCell">1</th>
+            <th class="headerCell">9</th>
+            <td class="dataCell">Bueno</td>
+            <td class="dataCell">Dell</td>
+            <td class="dataCell">pc-02445</td>
+            <td class="dataCell">144789654</td>
+            <td class="dataCell">3900</td>
             <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
           </tr>
@@ -198,6 +226,10 @@
         <tfoot>
           <tr>
             <td class="footerCell">Total</td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell">Valor total</td>

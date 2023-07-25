@@ -2,6 +2,12 @@
   <h2 class="modal-title" mat-dialog-title>Crear nuevo producto </h2>
   <mat-dialog-content class="modal-content">
     <div class="formInfo">
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Codigo de producto</mat-label>
+        <input matInput required formControlName="modelo">
+      </mat-form-field>&nbsp;
+
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Nombre</mat-label>
         <input matInput required formControlName="nombre">
@@ -37,17 +43,12 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Marca</mat-label>
-        <input matInput required formControlName="modelo">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Modelo</mat-label>
+        <mat-label>Auxiliar</mat-label>
         <input matInput required formControlName="serial">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Precio</mat-label>
+        <mat-label>Denominación</mat-label>
         <input matInput required formControlName="condicion">
       </mat-form-field>&nbsp;
 

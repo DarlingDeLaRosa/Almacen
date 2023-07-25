@@ -5,7 +5,7 @@
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="form" class="formInfo">
 
       <h2>Informacion de tipo de entrega</h2>
 
@@ -20,7 +20,7 @@
       </mat-form-field>&nbsp;
 
       <span class="btnContainer">
-        <button class="btnSend" mat-raised-button>
+        <button class="btnSend" mat-raised-button (click)="sendData()">
           <mat-icon>send</mat-icon>Enviar
         </button>
       </span>

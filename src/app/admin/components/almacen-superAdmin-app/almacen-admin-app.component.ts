@@ -17,7 +17,6 @@ export class AlmacenAdminAppComponent {
   constructor(private store: Store< {app: AppState}>){}
 
   toggleSubmenu(){
-    console.log(this.userName$)
     this.submenu = !this.submenu
     if(this.submenu){
       this.submenuConfig = false;
