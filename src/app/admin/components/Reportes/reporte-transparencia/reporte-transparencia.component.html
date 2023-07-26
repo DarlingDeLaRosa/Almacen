@@ -1,0 +1,78 @@
+<div class="viewContent">
+
+  <h1>Reporte de Transparencia</h1>
+
+  <div class="fuctionContent">
+    <div class="filtrarContent">
+
+      <mat-form-field>
+        <mat-label>Filtrar</mat-label>
+        <input matInput type="search" (keyup)="applyFilter($event)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>&nbsp;
+
+      <mat-form-field>
+        <mat-label>Rango de fecha </mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <span>
+      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
+      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+    </span>
+  </div>
+
+  <div>
+
+    <table>
+      <thead class="headerTable">
+        <tr class="headerRow">
+          <th class="headerCell">Fecha de adquisición</th>
+          <th class="headerCell">Fecha de registro</th>
+          <th class="headerCell">Codigo institucional</th>
+          <th class="headerCell">Descripción del bien</th>
+          <th class="headerCell">Valor RD$</th>
+          <th class="headerCell">Existencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dataRow">
+          <td class="dataCell">19/6/2012</td>
+          <td class="dataCell">19/6/2012</td>
+          <td class="dataCell">FEM-001</td>
+          <td class="dataCell">Monitor negro, curvo de 24 pulgadas</td>
+          <td class="dataCell">7900.99</td>
+          <td class="dataCell">3</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">17/2/2020</td>
+          <td class="dataCell">17/2/2020</td>
+          <td class="dataCell">FEM-002</td>
+          <td class="dataCell">Teclado negro 100%</td>
+          <td class="dataCell">1200.89</td>
+          <td class="dataCell">8</td>
+        </tr>
+        <tr class="dataRow">
+          <td class="dataCell">20/12/1999</td>
+          <td class="dataCell">20/12/1999</td>
+          <td class="dataCell">UM-001</td>
+          <td class="dataCell">Mouse negro 2 botones  </td>
+          <td class="dataCell">850.12</td>
+          <td class="dataCell">11</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+</div>

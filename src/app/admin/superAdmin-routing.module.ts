@@ -33,6 +33,7 @@ import { EditSalidasComponent } from './components/Salida/edit-salidas/edit-sali
 import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
 import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
+import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 
 const routes: Routes = [
   {
@@ -78,6 +79,7 @@ const routes: Routes = [
       { path: 'reporteProveedor', component: ReporteProveedorComponent },
       { path: 'reporteProductoEntrada', component: ReporteEntradaProductoComponent},
       { path: 'reporteProductoSalida', component: ReporteSalidaProductoComponent},
+      { path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
     ]
   },
 ];

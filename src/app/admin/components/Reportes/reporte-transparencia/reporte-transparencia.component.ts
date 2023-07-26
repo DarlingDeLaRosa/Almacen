@@ -1,16 +1,16 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-inventario-existente',
-  templateUrl: './inventario-existente.component.html',
-  styleUrls: ['./inventario-existente.component.css']
+  selector: 'app-reporte-transparencia',
+  templateUrl: './reporte-transparencia.component.html',
+  styleUrls: ['./reporte-transparencia.component.css']
 })
-export class InventarioExistenteComponent implements AfterViewInit{
+export class ReporteTransparenciaComponent implements AfterViewInit{
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),

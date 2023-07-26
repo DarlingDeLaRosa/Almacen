@@ -47,6 +47,7 @@ import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-i
 import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
 import { NuevoProductModalComponent } from './components/Modals/nuevo-product-modal/nuevo-product-modal.component';
+import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { NuevoProductModalComponent } from './components/Modals/nuevo-product-mo
     VistaInicialComponent,
     ReporteEntradaProductoComponent,
     ReporteSalidaProductoComponent,
-    NuevoProductModalComponent
+    NuevoProductModalComponent,
+    ReporteTransparenciaComponent
   ],
   imports: [
     CommonModule,

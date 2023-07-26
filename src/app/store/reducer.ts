@@ -8,11 +8,13 @@ export const inicialState: AppState ={
   user: {
     rol: '',
     name: ''
-  }
+  },
+  edit: ''
 }
 
 export const appReducer = createReducer(
   inicialState,
   on(AppActions.logIn, (state, {user}) => ({...state, user})),
+  on(AppActions.EditData, (state, {edit}) => ({...state, edit})),
 
 )

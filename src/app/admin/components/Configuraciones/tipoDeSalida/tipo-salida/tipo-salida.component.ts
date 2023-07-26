@@ -6,11 +6,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   templateUrl: './tipo-salida.component.html',
   styleUrls: ['./tipo-salida.component.css']
 })
-export class TipoSalidaComponent {
+export class TipoSalidaComponent  {
   form: FormGroup;
 
   constructor(public fb: FormBuilder){
-    this.form = new FormGroup({
+    this.form = this.fb.group({
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
     })

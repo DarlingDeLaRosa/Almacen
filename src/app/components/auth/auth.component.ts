@@ -10,11 +10,10 @@ import { AppState, User } from 'src/app/store/state';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
-  app$ = this.store.select((state)=> state.app.user)
 
   constructor(private store: Store<{app: AppState}>){}
 
-  mirando(){
+  logIn(){
     const user: User = {rol: 'Dueño', name: 'Darling'}
     this.store.dispatch(logIn({user}))
   }

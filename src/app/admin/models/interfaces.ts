@@ -1,12 +1,5 @@
-export interface producto {
+export interface tipoSalida {
+  id:  number
   nombre: string
-  descripcion : string
-  marca : string
-  modelo : string
-  serial : string
-  condicion : string
-  precio: number
-  idProveedor: number
-  stock: number
-  idUnidadMe: number
+  descripcion: string
 }

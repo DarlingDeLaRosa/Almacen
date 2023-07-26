@@ -10,7 +10,9 @@ export interface User {
 
 }
 
+
 export interface AppState {
   path: ''
   user:  User;
+  edit: any
 }
