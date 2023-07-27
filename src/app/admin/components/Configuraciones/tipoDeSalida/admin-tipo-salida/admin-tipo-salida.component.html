@@ -1,12 +1,11 @@
-
 <div class="viewContent">
 
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-salida']">Crear Nuevo tipo de salida</button>
-    <div [formGroup]="form">
+    <div [formGroup]="filterTipoSalida">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput formControlName="filter" (input)="onInputChange($event)">
+        <input matInput formControlName="filter" (input)="onInputFilterChange($event)">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>

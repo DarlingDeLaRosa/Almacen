@@ -1,9 +1,8 @@
 import { Component, Inject, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tipoSalida } from 'src/app/admin/models/interfaces';
-import { AppState } from 'src/app/store/state';
+import { resSameData, resSuccess } from '../../../Helpers/helperFunction';
 
 @Component({
   selector: 'app-tipo-de-salida-modal',
@@ -13,7 +12,7 @@ import { AppState } from 'src/app/store/state';
 export class TipoDeSalidaModalComponent implements AfterViewInit{
   formEditTipoSalida: FormGroup;
 
-  constructor(public fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public item: tipoSalida){
+  constructor(public fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public item: tipoSalida, private dialogRef: MatDialogRef<TipoDeSalidaModalComponent>){
     this.formEditTipoSalida = this.fb.group({
       nombre: new FormControl('', Validators.required) ,
       descripcion: new FormControl('', Validators.required),
@@ -25,7 +24,18 @@ export class TipoDeSalidaModalComponent implements AfterViewInit{
   }
 
   editData(){
-    console.log(this.formEditTipoSalida.value)
+    const respuesta: boolean = true;
+
+    if(this.formEditTipoSalida.value.nombre !== this.item.nombre || this.formEditTipoSalida.value.descripcion !== this.item.descripcion)
+    {
+      resSuccess(respuesta)
+      this.dialogRef.close()
+      console.log(this.formEditTipoSalida.value.nombre , this.item.nombre)
+      console.log(this.formEditTipoSalida.value.descripcion , this.item.descripcion)
+    }else{
+      resSameData()
+      this.dialogRef.close()
+    }
     //console.log(this.values$)
   }
 }

@@ -3,3 +3,8 @@ export interface tipoSalida {
   nombre: string
   descripcion: string
 }
+
+export interface tipoProducto {
+  id: number
+  nombre: string
+}
