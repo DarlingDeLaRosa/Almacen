@@ -48,6 +48,7 @@ import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-e
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
 import { NuevoProductModalComponent } from './components/Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -102,7 +103,8 @@ import { ReporteTransparenciaComponent } from './components/Reportes/reporte-tra
     MaterialAdminModule,
     AdminRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   exports:[
   ]

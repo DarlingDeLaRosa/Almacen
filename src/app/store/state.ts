@@ -12,7 +12,7 @@ export interface User {
 
 
 export interface AppState {
-  path: ''
+  path: string
   user:  User;
   edit: any
 }

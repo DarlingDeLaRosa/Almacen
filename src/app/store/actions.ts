@@ -3,4 +3,4 @@ import { User,} from "./state";
 
 export const logIn = createAction('[login] login user', props<{user: User}>())
 
-export const EditData = createAction('[edit] Edit Data', props<{edit: any}>())
+export const Path = createAction('[edit] path', props<{path: string}>())

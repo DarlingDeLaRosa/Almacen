@@ -15,6 +15,6 @@ export const inicialState: AppState ={
 export const appReducer = createReducer(
   inicialState,
   on(AppActions.logIn, (state, {user}) => ({...state, user})),
-  on(AppActions.EditData, (state, {edit}) => ({...state, edit})),
+  on(AppActions.Path, (state, {path}) => ({...state, path})),
 
 )

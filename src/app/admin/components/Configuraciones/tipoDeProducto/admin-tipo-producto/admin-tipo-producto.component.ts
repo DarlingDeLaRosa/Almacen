@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { TipoDeProductoModalComponent } from '../../../Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
 import { tipoProducto } from 'src/app/admin/models/interfaces';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { alertIsSuccess } from '../../../../Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-tipo-producto',
@@ -50,6 +51,8 @@ export class AdminTipoProductoComponent {
   }
 
   removeAlert(){
+    const respuesta: boolean = true;
+
     Swal.fire({
       title: '¡Alerta!',
       text: 'Está seguro que desea eliminar el tipo de producto.',
@@ -60,8 +63,9 @@ export class AdminTipoProductoComponent {
       confirmButtonColor: '#004b8d',
       cancelButtonColor: '#aaa',
     }).then((result)=> {
-      if(result.isConfirmed)console.log('Eliminalo')
-      else console.log('No, Mala mia')
+      if(result.isConfirmed){
+        alertIsSuccess(respuesta)
+      }
     });
   }
 }
