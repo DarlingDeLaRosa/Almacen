@@ -3,21 +3,22 @@
 
     <h1 style="color: white;">LOGO DE LA APLICACION</h1>
     <mat-card class="logInCard">
-      <mat-card-title> Bienvenido</mat-card-title>
+      <mat-card-title>Bienvenido</mat-card-title>
       <mat-card-content>
-        <div>
+        <div [formGroup]="formUserLogIn">
           <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
-            <mat-label>Usuario:</mat-label>
-            <input matInput required formControlName="user">
+            <mat-label>Usuario</mat-label>
+            <input matInput required formControlName="usuario">
           </mat-form-field>
 
           <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
             <mat-label>Contraseña:</mat-label>
-            <input type="password" matInput required formControlName="pass">
+            <input type="password" matInput required formControlName="contrasena">
           </mat-form-field>
 
           <mat-card-actions align="end">
-            <button mat-raised-button class="logIn" [routerLink]="['/almacen/inicio']" (click)="logIn()">Iniciar Sesion</button>
+            <!--[routerLink]="['/almacen/inicio']"-->
+            <button mat-raised-button class="logIn" (click)="logIn()">Iniciar Sesion</button>
           </mat-card-actions>
         </div>
       </mat-card-content>

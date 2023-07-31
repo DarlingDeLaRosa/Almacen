@@ -9,7 +9,7 @@ import { AppState } from 'src/app/store/state';
 })
 export class AlmacenAdminAppComponent {
   sidenavOpened: boolean = false;
-  userName$ = this.store.select(state => state.app.user.name)
+  userName$ = this.store.select(state => state.app.user.nombre)
 
   submenu: boolean = false;
   submenuConfig:  boolean = false;

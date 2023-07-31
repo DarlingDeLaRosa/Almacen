@@ -27,7 +27,7 @@
           <td class="dataCell">{{item.nombre}}</td>
           <td class="dataCell">{{item.descripcion}}</td>
           <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem" (click)="removeAlert()"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem" (click)="removeAlert(item.idTipoSalida)"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 

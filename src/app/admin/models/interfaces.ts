@@ -18,6 +18,12 @@ export interface postTipoSalida {
   descripcion: string
 }
 
+export interface editTipoSalida {
+  id: number
+  nombre: string
+  descripcion: string
+}
+
 export interface removeTipoSalida {
   id: number
 }
@@ -26,7 +32,6 @@ export interface tipoProducto {
   id: number
   nombre: string
 }
-
 
 /*RESPUESTA GET*/
 export interface GET {

@@ -23,5 +23,10 @@
 }
 
 .logIn{
-  background-color: #C7D1EA;
+  color: white !important;
+  background-color: #004b8d !important;
+}
+
+mat-card-title{
+  margin-bottom: 15px;
 }

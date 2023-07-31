@@ -31,6 +31,7 @@ export class TipoDeSalidaModalComponent implements AfterViewInit {
     const respuesta: boolean = true;
     if (this.formEditTipoSalida.valid) {
       if (this.formEditTipoSalida.value.nombre !== this.item.nombre || this.formEditTipoSalida.value.descripcion !== this.item.descripcion) {
+
         alertIsSuccess(respuesta)
         this.closeModal();
       }else {

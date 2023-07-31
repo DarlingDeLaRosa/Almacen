@@ -5,7 +5,7 @@ import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-d
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { GET } from 'src/app/admin/models/interfaces';
-import { HttpErrorResponse } from '@angular/common/http';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-tipo-salida',
@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class TipoSalidaComponent implements OnInit {
   formTipoSalida: FormGroup;
   url!: string;
+  token!: string
 
   constructor(public fb: FormBuilder, private api: TipoDeSalidaService, private store: Store<{ app: AppState }>) {
     this.formTipoSalida = this.fb.group({
@@ -24,9 +25,8 @@ export class TipoSalidaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => {
-      this.url = path;
-    });
+    this.store.select(state => state.app.path).subscribe((path: string) => {this.url = path;});
+    this.store.select(state => state.app.token).subscribe((token: string) => {this.token = token;});
   }
 
   sendData() {
@@ -34,13 +34,12 @@ export class TipoSalidaComponent implements OnInit {
 
     if (this.formTipoSalida.valid) {
 
-      this.api.postTipoSalida(this.url, this.formTipoSalida.value)
+      this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
         .subscribe((res: any) => {
 
           dataTipoSalida = res
 
           if (dataTipoSalida.success) {
-            console.log(dataTipoSalida.data)
             alertIsSuccess(true)
             this.formTipoSalida.reset()
           } else {

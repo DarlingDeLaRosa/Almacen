@@ -12,6 +12,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './store/reducer';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,8 @@ import { UserModule } from './user/user.module';
     AuthComponent,
   ],
   imports: [
+    ReactiveFormsModule,
+    HttpClientModule,
     BrowserModule,
     AdminModule,
     UserModule,
