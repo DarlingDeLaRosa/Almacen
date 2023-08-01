@@ -1,7 +1,8 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-salida']">Crear Nuevo tipo de salida</button>
+    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-salida']">Crear Nuevo tipo de
+      salida</button>
     <div [formGroup]="filterTipoSalida">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -20,18 +21,25 @@
           <th class="headerCell">Descripcion</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
+          <th class="fuctionCell"></th>
         </tr>
       </thead>
       <tbody>
         <tr class="dataRow" *ngFor="let item of dataFiltered">
           <td class="dataCell">{{item.nombre}}</td>
           <td class="dataCell">{{item.descripcion}}</td>
-          <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem" (click)="removeAlert(item.idTipoSalida)"><mat-icon>delete</mat-icon></button></td>
-        </tr>
+          <td class="dataCell"></td>
+          <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button> </td>
+          <td class="dataCell"> <button class="fucRem"(click)="removeAlert(item.idTipoSalida)"><mat-icon>delete</mat-icon></button></td> </tr>
       </tbody>
 
     </table>
+
+    <div class="pagination">
+      <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+      <div style="display: grid; place-items: center;">{{pagina}}</div>
+      <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+    </div>
   </div>
 
 </div>

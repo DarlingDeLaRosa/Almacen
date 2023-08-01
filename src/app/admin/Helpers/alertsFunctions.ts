@@ -13,7 +13,7 @@ export function alertIsSuccess(respuesta: boolean) {
   } else {
     Swal.fire({
       icon: 'error',
-      title: 'Ocurrio un error, No se pudo guardar.',
+      title: 'Ocurrio un error, No se pudo guardar el cambio.',
       text: 'Intente nuevamente.',
       showConfirmButton: true,
       confirmButtonColor: 'red',
@@ -32,7 +32,6 @@ export function alertSameData() {
 
 export function alertRemoveSure(): Promise<boolean> {
   return new Promise((resolve) => {
-
     Swal.fire({
       title: '¡Alerta!',
       text: 'Estas seguro que deseas eliminar el tipo de salida.',
@@ -69,6 +68,24 @@ export function alertServerDown() {
 export function alertWelcome(name: string) {
   Swal.fire({
     title: `Bienvenido ${name}`,
+    timer: 2000
+  })
+}
+
+export function alertRemoveSuccess(){
+  Swal.fire({
+    icon: 'success',
+    title: 'Eliminado correctamente.',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
+export function alerUserWrong(){
+  Swal.fire({
+    icon: 'error',
+    title: 'Usuario o constraseña incorrectos.',
+    showConfirmButton: false,
     timer: 2000
   })
 }

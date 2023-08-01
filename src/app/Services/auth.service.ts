@@ -7,6 +7,8 @@ import { userAccount } from '../models/interfaces';
 })
 export class AuthService {
 
+  LoggedIn: boolean = false;
+
   constructor(private http: HttpClient) { }
 
   public logIn(url: string, data: userAccount) {
@@ -14,4 +16,7 @@ export class AuthService {
     return this.http.post(getUser, data)
   }
 
+  IsLoggedIn(state: boolean){
+    this.LoggedIn  = state;
+  }
 }

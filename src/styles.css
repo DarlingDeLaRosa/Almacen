@@ -153,6 +153,7 @@ table{
   padding-left: 15px;
 }
 
+
 .fucSend{
   color: #004b8d;
 }
@@ -295,4 +296,24 @@ mat-sidenav {
 
 .active{
   background-color: #49aa42;
+}
+
+.pagination{
+  width: 100%;
+  height: 6vh;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #C7D1EA;
+  border-bottom: 2px solid #C7D1EA;
+}
+
+.btnPag{
+  margin: 0px 15px;
+  width: 50px;
+  border: none;
+  background-color: transparent;
+}
+
+.btnPag:hover{
+  cursor: pointer;
 }

@@ -45,9 +45,9 @@ export class TipoSalidaComponent implements OnInit {
           } else {
             alertIsSuccess(false)
           }
-        },()=> {
-          alertServerDown();
-        })
+          ()=> {
+            alertServerDown();
+          }})
 
     }
   }

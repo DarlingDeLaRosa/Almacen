@@ -24,7 +24,6 @@ export class TipoDeSalidaService {
 
     const postTipoSalida = `${url}/TipoSalida`
     return this.http.post(postTipoSalida, data, tipoSalidaHeader)
-
   }
 
   public editTipoSalida(url: string, data: editTipoSalida, token: string) {
@@ -32,8 +31,8 @@ export class TipoDeSalidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoSalidaHeader = {headers: headers}
 
-    const editTipoSalida = `${url}/TipoSalida/${data.id}`
-    return this.http.post(editTipoSalida, data, tipoSalidaHeader)
+    const editTipoSalida = `${url}/TipoSalida`
+    return this.http.put(editTipoSalida, data, tipoSalidaHeader)
   }
 
   public removeTipoSalida(url: string, id: number, token: string) {
