@@ -7,8 +7,14 @@ export const inicialState: AppState = {
   path: '',
   user: {
     idUsuario: '',
-    idRol: 0,
-    idRecinto: 0,
+    role: {
+      idRol: 0,
+      descripcion: ''
+    },
+    recinto:{
+      idRecinto: 0,
+      nombre: ''
+    },
     nombre: '',
     apellido: '',
     cargo: '',

@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './components/auth/auth.component';
-import { authGuard } from './guards/auth-guard.guard';
+import { authGuard, authGuardBackToLogIn } from './guards/auth-guard';
 
 const routes: Routes = [
-  { path: 'login', component: AuthComponent, canActivate: [authGuard]  },
+  { path: 'login', component: AuthComponent, canActivate: [authGuardBackToLogIn]},
   {
     path: 'almacen',
+    canActivate: [authGuard] ,
     loadChildren: ()=>
     import('./admin/superAdmin-routing.module').then((m)=>m.AdminRoutingModule)
   },

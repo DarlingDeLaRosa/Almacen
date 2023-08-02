@@ -42,7 +42,6 @@ export function alertRemoveSure(): Promise<boolean> {
       confirmButtonColor: '#004b8d',
       cancelButtonColor: '#aaa',
     }).then((result) => {
-      let value: boolean
 
       if (result.isConfirmed) {
         resolve(true)
@@ -51,7 +50,28 @@ export function alertRemoveSure(): Promise<boolean> {
       }
     });
   })
+}
 
+export function alertLogOut(): Promise<boolean> {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title: '¡Alerta!',
+      text: 'Estas seguro que deseas cerrar la sesion.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#004b8d',
+      cancelButtonColor: '#aaa',
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    });
+  })
 }
 
 export function alertServerDown() {

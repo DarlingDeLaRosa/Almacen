@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { alerUserWrong, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { Token, logIn } from 'src/app/store/actions';
 import { AppState, GETUser, User } from 'src/app/store/state';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 
 @Component({
@@ -18,7 +19,13 @@ export class AuthComponent implements OnInit {
   formUserLogIn: FormGroup;
   url!: string;
 
-  constructor(public fb: FormBuilder, private api: AuthService, private store: Store<{ app: AppState }>, private router: Router) {
+  constructor(
+    public fb: FormBuilder,
+    private api: AuthService,
+    private store: Store<{ app: AppState }>,
+    private router: Router,
+    private localStore: LocalStorageService
+    ){
     this.formUserLogIn = this.fb.group({
       usuario: new FormControl('', Validators.required),
       contrasena: new FormControl('', Validators.required),
@@ -44,8 +51,10 @@ export class AuthComponent implements OnInit {
           if (userResponse.data !== null && userResponse.token !== null) {
 
             this.api.IsLoggedIn(true)
+            this.router.navigate(['/almacen/inicio'])
 
-            //this.router.navigate(['/almacen/inicio'])
+            this.localStore.saveDataLocalStorage('token', userResponse.token)
+            this.localStore.saveDataLocalStorage('userData', userData)
 
             this.store.dispatch(logIn({ user: userData }))
             this.store.dispatch(Token({ token: userResponse.token }))

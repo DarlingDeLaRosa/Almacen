@@ -1,8 +1,14 @@
 
 export interface User {
   idUsuario: string
-  idRol: number
-  idRecinto: number
+  role:{
+    idRol: number
+    descripcion: string
+  }
+  recinto: {
+    idRecinto: number
+    nombre: string
+  }
   nombre: string
   apellido: string
   cargo: string
