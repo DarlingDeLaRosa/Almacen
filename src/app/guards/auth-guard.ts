@@ -25,6 +25,7 @@ export const authGuardBackToLogIn: CanActivateFn = (route, state) => {
   auth.checkIsLoggedIn()
 
   if(auth.LoggedIn){
+    console.log('Guardian del login')
     router.navigate(['/almacen/inicio'])
     return false
   }else{

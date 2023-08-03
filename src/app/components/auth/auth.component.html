@@ -18,7 +18,7 @@
 
           <mat-card-actions align="end">
             <!--[routerLink]="['/almacen/inicio']"-->
-            <button mat-raised-button class="logIn" (click)="logIn()">Iniciar Sesion</button>
+            <button mat-raised-button class="logIn" (click)="logIn()" [disabled]="disableBtn" >Iniciar Sesion</button>
           </mat-card-actions>
         </div>
       </mat-card-content>

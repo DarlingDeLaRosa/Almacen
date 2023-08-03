@@ -107,6 +107,12 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   exports:[
+    AdminEntradasComponent,
+    EditEntradasComponent,
+    EntradasComponent,
+    SalidasComponent,
+    AdminSalidasComponent,
+    EditSalidasComponent
   ]
 })
 export class AdminModule implements OnInit{

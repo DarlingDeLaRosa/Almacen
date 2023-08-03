@@ -15,6 +15,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatStepperModule} from '@angular/material/stepper';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 const materialComponents = [
@@ -33,7 +34,9 @@ const materialComponents = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatRadioModule,
-  MatStepperModule
+  MatStepperModule,
+  MatMenuModule
+
 ]
 
 @NgModule({

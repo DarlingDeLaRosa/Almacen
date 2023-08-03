@@ -2,6 +2,7 @@ import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './components/auth/auth.component';
 import { authGuard, authGuardBackToLogIn } from './guards/auth-guard';
+import { roleSuperAdminGuard } from './guards/role-guards';
 
 const routes: Routes = [
   { path: 'login', component: AuthComponent, canActivate: [authGuardBackToLogIn]},

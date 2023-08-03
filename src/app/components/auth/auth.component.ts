@@ -18,6 +18,7 @@ export class AuthComponent implements OnInit {
 
   formUserLogIn: FormGroup;
   url!: string;
+  disableBtn: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -39,10 +40,11 @@ export class AuthComponent implements OnInit {
   }
 
   logIn() {
-    console.log(this.formUserLogIn.value)
-    if (this.formUserLogIn.valid) {
+    this.disableBtn = true;
 
+    if (this.formUserLogIn.valid) {
       this.api.logIn(this.url, this.formUserLogIn.value)
+
         .subscribe((res: any) => {
 
           let userResponse: GETUser = res
@@ -51,13 +53,24 @@ export class AuthComponent implements OnInit {
           if (userResponse.data !== null && userResponse.token !== null) {
 
             this.api.IsLoggedIn(true)
-            this.router.navigate(['/almacen/inicio'])
+            this.api.IsAdminRole(userResponse.data.role.idRol)
+            console.log(userResponse.data.role.idRol)
 
             this.localStore.saveDataLocalStorage('token', userResponse.token)
             this.localStore.saveDataLocalStorage('userData', userData)
 
             this.store.dispatch(logIn({ user: userData }))
             this.store.dispatch(Token({ token: userResponse.token }))
+
+            if( userResponse.data.role.idRol === 1){
+              this.router.navigate(['/almacen/inicio'])
+
+            }else if(userResponse.data.role.idRol === 3){
+              this.router.navigate(['/user-almacen/inicio'])
+
+            }else{
+              this.router.navigate(['/login'])
+            }
 
             this.formUserLogIn.reset()
           } else {
@@ -69,6 +82,7 @@ export class AuthComponent implements OnInit {
           }
         })
     }
+    this.disableBtn = false;
   }
 }
 

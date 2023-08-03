@@ -12,6 +12,7 @@ import { Token, logIn } from '../store/actions';
 export class AuthService {
 
   LoggedIn: boolean = false;
+  idRol: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -32,13 +33,22 @@ export class AuthService {
     if(token && userData){
       this.store.dispatch(logIn({ user: userData }))
       this.store.dispatch(Token({ token: token }))
+
+      console.log(userData.role)
+
       this.IsLoggedIn(true)
+      this.IsAdminRole(userData.role.idRole)
     }else{
       this.IsLoggedIn(false)
+      this.IsAdminRole(9)
     }
   }
 
   IsLoggedIn(confirmation: boolean){
-    this.LoggedIn  = confirmation;
+    this.LoggedIn = confirmation;
+  }
+
+  IsAdminRole(id: number){
+    this.idRol = id;
   }
 }
