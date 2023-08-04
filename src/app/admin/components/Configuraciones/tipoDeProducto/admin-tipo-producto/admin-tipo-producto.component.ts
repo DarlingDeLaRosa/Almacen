@@ -1,71 +1,92 @@
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { TipoDeProductoModalComponent } from '../../../Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
 import { tipoProducto } from 'src/app/admin/models/interfaces';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { alertIsSuccess } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSure } from '../../../../Helpers/alertsFunctions';
+import { AppState } from 'src/app/store/state';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-admin-tipo-producto',
   templateUrl: './admin-tipo-producto.component.html',
   styleUrls: ['./admin-tipo-producto.component.css']
 })
-export class AdminTipoProductoComponent {
+export class AdminTipoProductoComponent implements OnInit {
 
-  data = [
-    {
-      id: 1,
-      nombre: 'Azucar'
-    },
-    {
-      id:2,
-      nombre: 'Cafe'
-    }
-  ]
-
-  dataFiltered: tipoProducto[] = this.data;
+  dataFiltered: tipoProducto[] = [];
   filterTipoProducto: FormGroup;
+  url: string = ''
+  token: string = ''
+  pagina: number = 0
 
-  constructor(public dialog: MatDialog, public fb: FormBuilder) {
+  constructor(
+    public dialog: MatDialog,
+    public fb: FormBuilder,
+    private store: Store<{ app: AppState }>
+  ) {
     this.filterTipoProducto = new FormGroup({
       filter: new FormControl(''),
     })
   }
 
+  ngOnInit(): void {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+
+      //this.getTipoSalida()
+    })
+  }
+
+  getTipoProducto() {
+
+  }
+
   onInputFilterChange(event: Event) {
     const searchTerm = event.target as HTMLInputElement;
     if (searchTerm.value.length >= 2) {
-      this.dataFiltered = this.data;
+      //this.dataFiltered = this.data;
       this.dataFiltered = this.dataFiltered.filter(item => {
         return item.nombre.toLowerCase().includes(searchTerm.value.toLowerCase());
       })
 
     } else {
-      this.dataFiltered = this.data;
+      //this.dataFiltered = this.data;
     }
   }
 
   openModal(item: tipoProducto) {
-    this.dialog.open(TipoDeProductoModalComponent, {data: item})
+    let dialogRef = this.dialog.open(TipoDeProductoModalComponent, { data: item })
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getTipoProducto()
+    })
   }
 
-  removeAlert(){
-    const respuesta: boolean = true;
+  async removeAlert(item: number) {
+    let removeChoise: boolean = await alertRemoveSure()
 
-    Swal.fire({
-      title: '¡Alerta!',
-      text: 'Está seguro que desea eliminar el tipo de producto.',
-      icon: 'warning',
-      confirmButtonText: 'Aceptar',
-      showCancelButton: true,
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#004b8d',
-      cancelButtonColor: '#aaa',
-    }).then((result)=> {
-      if(result.isConfirmed){
-        alertIsSuccess(respuesta)
-      }
-    });
+    //if (removeChoise) {
+    //  this.api.removeTipoSalida(this.url, item, this.token)
+    //    .subscribe((res: any) => {
+    //
+    //      if (res) {
+    //        alertRemoveSuccess()
+    //        this.getTipoSalida()
+    //      } else {
+    //        alertIsSuccess(false)
+    //      }
+    //      () => {
+    //        alertServerDown();
+    //      }
+    //    })
+    //}
   }
 }

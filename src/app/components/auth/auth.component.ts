@@ -65,6 +65,9 @@ export class AuthComponent implements OnInit {
             if( userResponse.data.role.idRol === 1){
               this.router.navigate(['/almacen/inicio'])
 
+            }else if(userResponse.data.role.idRol === 2){
+              //this.router.navigate(['/user-almacen/inicio'])
+
             }else if(userResponse.data.role.idRol === 3){
               this.router.navigate(['/user-almacen/inicio'])
 

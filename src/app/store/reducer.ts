@@ -26,7 +26,7 @@ export const inicialState: AppState = {
     usuario1: ''
   },
   edit: '',
-  token: ''
+  token: '',
 }
 
 export const appReducer = createReducer(
@@ -34,5 +34,8 @@ export const appReducer = createReducer(
   on(AppActions.logIn, (state, { user }) => ({ ...state, user })),
   on(AppActions.Path, (state, { path }) => ({ ...state, path })),
   on(AppActions.Token, (state, { token }) => ({ ...state, token})),
+
+
+  on(AppActions.App, (state, { app }) => ({ ...state = app})),
 
 )

@@ -37,10 +37,9 @@ export class AuthService {
       console.log(userData.role)
 
       this.IsLoggedIn(true)
-      this.IsAdminRole(userData.role.idRole)
+      this.IsAdminRole(userData.role.idRol)
     }else{
       this.IsLoggedIn(false)
-      this.IsAdminRole(9)
     }
   }
 

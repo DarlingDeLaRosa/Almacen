@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { editTipoSalida, postTipoSalida } from '../../models/interfaces';
+import { postTipoSalida, tipoSalida } from '../../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class TipoDeSalidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoSalidaHeader = {headers: headers}
 
-    const getTipoSalida = `${url}/TipoSalida`
+    const getTipoSalida = `${url}/TipoSalida?page=2`
     return this.http.get(getTipoSalida, tipoSalidaHeader)
   }
 
@@ -26,7 +26,7 @@ export class TipoDeSalidaService {
     return this.http.post(postTipoSalida, data, tipoSalidaHeader)
   }
 
-  public editTipoSalida(url: string, data: editTipoSalida, token: string) {
+  public editTipoSalida(url: string, data: tipoSalida, token: string) {
 
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoSalidaHeader = {headers: headers}

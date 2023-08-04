@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store';
 import { alertLogOut } from 'src/app/admin/Helpers/alertsFunctions';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { App } from 'src/app/store/actions';
+import { inicialState } from 'src/app/store/reducer';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -46,12 +48,13 @@ export class AlmacenUserComponent {
   async logOut(){
 
     let closeAccount: boolean = await alertLogOut()
+
     if(closeAccount){
       this.local.removeDataLocalStorage('token')
       this.local.removeDataLocalStorage('userData')
 
       this.api.IsLoggedIn(false)
-
+      this.store.dispatch(App({app: inicialState}))
       this.router.navigate(['/login'])
     }
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/state';
-import { Path } from './store/actions';
+import { Path, logIn } from './store/actions';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,14 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     const path = 'http://172.25.4.24:81'
+    const userData = localStorage.getItem('userData')
+
     this.store.dispatch(Path({path}))
+
+    if(userData !== null){
+      let dataParse = JSON.parse(userData)
+      this.store.dispatch(logIn({user: dataParse }))
+    }
+
   }
 }

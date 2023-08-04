@@ -1,14 +1,13 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
 import { TipoDeSalidaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-salida-modal/tipo-de-salida-modal.component';
-import { GET, getTipoSalida, removeTipoSalida, tipoSalida } from 'src/app/admin/models/interfaces';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from '../../../../Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
+import { tipoSalida } from 'src/app/admin/models/interfaces';
 
 @Component({
   selector: 'app-admin-tipo-salida',
@@ -17,7 +16,7 @@ import { combineLatest } from 'rxjs';
 })
 export class AdminTipoSalidaComponent implements OnInit {
 
-  dataFiltered!: getTipoSalida[]
+  dataFiltered!: tipoSalida[]
   filterTipoSalida: FormGroup;
   url: string = ''
   token: string = ''
@@ -25,7 +24,6 @@ export class AdminTipoSalidaComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public fb: FormBuilder,
     private api: TipoDeSalidaService,
     private store: Store<{ app: AppState }>
     ){
@@ -70,7 +68,7 @@ export class AdminTipoSalidaComponent implements OnInit {
     }
   }
 
-  openModal(item: getTipoSalida) {
+  openModal(item: tipoSalida) {
     let dialogRef = this.dialog.open(TipoDeSalidaModalComponent, { data: item })
 
     dialogRef.afterClosed().subscribe(()=> {

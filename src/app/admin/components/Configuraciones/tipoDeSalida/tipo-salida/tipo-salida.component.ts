@@ -5,7 +5,6 @@ import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-d
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { GET } from 'src/app/admin/models/interfaces';
-import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-tipo-salida',
@@ -17,7 +16,11 @@ export class TipoSalidaComponent implements OnInit {
   url!: string;
   token!: string
 
-  constructor(public fb: FormBuilder, private api: TipoDeSalidaService, private store: Store<{ app: AppState }>) {
+  constructor(
+    public fb: FormBuilder,
+    private api: TipoDeSalidaService,
+    private store: Store<{ app: AppState }>
+    ) {
     this.formTipoSalida = this.fb.group({
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
@@ -30,7 +33,7 @@ export class TipoSalidaComponent implements OnInit {
   }
 
   sendData() {
-    let dataTipoSalida: GET = { data: [], message: '', success: false };
+    let dataTipoSalida: GET = { data: [], message: '', success: false,  cantItem: 0, cantPage: 0, currentPage:0 };
 
     if (this.formTipoSalida.valid) {
 
