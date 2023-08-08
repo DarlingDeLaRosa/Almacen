@@ -2,53 +2,17 @@
 
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-entrega']">Crear nuevo tipo de entrega</button>
-    <div class="filtrarContent">
-      <mat-form-field>
+
+    <div [formGroup]="filterTipoEntrega" class="filtrarContent">
+      <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput type="search" (keyup)="applyFilter($event)">
+        <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
   </div>
 
   <div class="entryTable">
-    <!--
-    <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
-
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre"> Nombre </th>
-        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-        <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="editar">
-        <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-        <td mat-cell *matCellDef="let element" class="fuctions">
-          <button class="btnEdit" mat-raised-button (click)="openModal()">
-            <mat-icon>edit</mat-icon> Editar
-          </button>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="eliminar">
-        <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-        <td mat-cell *matCellDef="let element" class="fuctions">
-          <button class="btnDelete" mat-raised-button>
-            <mat-icon>delete</mat-icon>Eliminar
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-    <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
-    -->
 
     <table>
       <thead class="headerTable">
@@ -60,15 +24,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">Bien</td>
-          <td class="dataCell">Fue entregado bien</td>
-          <td class="dataCell"> <button class="fucEdit" (click)="openModal()"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem" (click)="removeAlert()"><mat-icon>delete</mat-icon></button></td>
+        <tr class="dataRow" *ngFor="let item of dataFiltered">
+          <td class="dataCell">{{item.nombre}}</td>
+          <td class="dataCell">{{item.descripcion}}</td>
+          <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem" (click)="removeAlert(item.idTipoEntrega)"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 
     </table>
+
+    <div class="pagination">
+      <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+      <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+      <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+  </div>
   </div>
 
 </div>

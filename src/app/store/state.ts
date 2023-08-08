@@ -1,6 +1,6 @@
 
 export interface User {
-  idUsuario: string
+  idUsuario: number
   role:{
     idRol: number
     descripcion: string
@@ -18,6 +18,7 @@ export interface User {
   ext: string
   celular: string
   usuario1: string
+  creadoPor: string
 }
 
 export interface AppState {

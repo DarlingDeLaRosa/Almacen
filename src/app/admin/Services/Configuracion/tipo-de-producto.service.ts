@@ -7,13 +7,22 @@ import { postTipoProducto, tipoProducto } from '../../models/interfaces';
 })
 export class TipoDeProductoService {
 
+  cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoProducto(url: string, token: string) {
+  public getTipoProducto(url: string, token: string, page: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoProductoHeader = {headers: headers}
 
-    const getTipoProducto = `${url}/TipoArticulo`
+    const getTipoProducto = `${url}/TipoArticulo?page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getTipoProducto, tipoProductoHeader)
+  }
+
+  public filterTipoProducto(url: string, token: string, page: number, data: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const tipoProductoHeader = {headers: headers}
+
+    const getTipoProducto = `${url}/TipoArticulo/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
     return this.http.get(getTipoProducto, tipoProductoHeader)
   }
 
@@ -27,7 +36,6 @@ export class TipoDeProductoService {
   }
 
   public editTipoProducto(url: string, data: tipoProducto, token: string) {
-
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoProductoHeader = {headers: headers}
 

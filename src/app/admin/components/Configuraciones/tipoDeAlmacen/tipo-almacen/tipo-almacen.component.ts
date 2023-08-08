@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
+import { GET } from 'src/app/admin/models/interfaces';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-tipo-almacen',
@@ -7,15 +12,46 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./tipo-almacen.component.css']
 })
 export class TipoAlmacenComponent {
-  form: FormGroup;
+  formTipoAlmacen: FormGroup;
+  url!: string;
+  token!: string
 
-  constructor(public fb: FormBuilder){
-    this.form = new FormGroup({
+  constructor(
+    public fb: FormBuilder,
+    private api: TipoDeAlmacenService,
+    private store: Store<{ app: AppState }>
+  ) {
+    this.formTipoAlmacen = this.fb.group({
       nombre: new FormControl('', Validators.required),
     })
   }
 
+  ngOnInit(): void {
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+  }
+
   sendData() {
-    console.log(this.form.value)
+    let dataTipoAlmacen: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
+
+    if (this.formTipoAlmacen.valid) {
+
+      this.api.postTipoAlmacen(this.url, this.formTipoAlmacen.value, this.token)
+        .subscribe((res: any) => {
+
+          dataTipoAlmacen = res
+
+          if (dataTipoAlmacen.success) {
+            alertIsSuccess(true)
+            this.formTipoAlmacen.reset()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+
+    }
   }
 }

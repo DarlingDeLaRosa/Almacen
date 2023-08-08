@@ -6,7 +6,7 @@
     <div [formGroup]="filterTipoProducto">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput formControlName="filter" (input)="onInputFilterChange($event)">
+        <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
@@ -34,7 +34,7 @@
 
     <div class="pagination">
       <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-      <div style="display: grid; place-items: center;">{{pagina}}</div>
+      <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
       <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
   </div>

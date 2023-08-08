@@ -1,37 +1,37 @@
-
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear un nuevo usuario</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-usuarios']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-usuarios']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="formUser" class="formInfo">
 
       <h2>Informacion de usuario</h2>
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Rol</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRol">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="rol" appearance="fill" formControlName="idRol">
+        <mat-autocomplete #rol='matAutocomplete'>
+
+          <mat-option *ngFor="let option of roles" [value]="[option.descripcion]">
+            {{option.descripcion}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Recinto</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRecinto">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="recinto" appearance="fill" formControlName="idRecinto">
+        <mat-autocomplete #recinto='matAutocomplete'>
+
+          <mat-option *ngFor="let item of roles" [value]="[item]"> <!--Hacer esto no entiendo == con recinto-->
+            {{item}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
@@ -53,12 +53,17 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Supervisor Inmediato</mat-label>
-        <input type="password" matInput required formControlName="contrasena">
+        <input type="password" matInput required formControlName="supervisorInmediato">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Correo</mat-label>
         <input type="email" matInput required formControlName="correo">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Constraseña</mat-label>
+        <input readonly matInput required formControlName="constrasena">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
@@ -81,13 +86,8 @@
         <input matInput required formControlName="celular">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Creado por</mat-label>
-        <input readonly matInput required formControlName="creadoPor">
-      </mat-form-field>&nbsp;
-
       <span class="btnContainer">
-        <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
+        <button mat-raised-button class="btnSend" (click)="sendData()"><mat-icon>send</mat-icon>Enviar</button>
       </span>
 
     </div>

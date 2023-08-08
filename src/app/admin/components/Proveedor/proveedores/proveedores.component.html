@@ -1,11 +1,12 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nuevo proveedor</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-proveedores']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-proveedores']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="formProveedor" class="formInfo">
 
       <h2>Informacion de proveedor</h2>
 
@@ -14,14 +15,27 @@
         <input matInput required formControlName="rnc">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
+      <mat-form-field hideRequiredMarker>
         <mat-label>Razon social</mat-label>
-        <input matInput required formControlName="rnc">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (keydown.enter)="findByName()">
+        <mat-autocomplete #auto='matAutocomplete' > <!--[displayWith]="displayFn"-->
+
+          <mat-option *ngFor="let option of filterOptions" [value]="[option]">
+            {{option}}
+          </mat-option>
+
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Nombre comercial</mat-label>
-        <input matInput required formControlName="nombre">
+        <input matInput required formControlName="nombreComercial">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Estado</mat-label>
+        <input readonly matInput [disabled]="true" required formControlName="estadoProveedor">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
@@ -31,16 +45,13 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Contacto del Representante</mat-label>
-        <input readonly matInput required formControlName="representante">
+        <input readonly matInput required formControlName="telRepresentante">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Estado</mat-label>
-        <input readonly matInput required formControlName="nombre">
-      </mat-form-field>&nbsp;
+
 
       <span class="btnContainer">
-        <button class="btnSend" mat-raised-button>
+        <button class="btnSend" mat-raised-button (click)="sendData()">
           <mat-icon>send</mat-icon>
           Enviar
         </button>

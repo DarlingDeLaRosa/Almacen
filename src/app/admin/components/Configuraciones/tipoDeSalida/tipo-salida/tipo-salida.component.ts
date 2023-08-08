@@ -20,7 +20,7 @@ export class TipoSalidaComponent implements OnInit {
     public fb: FormBuilder,
     private api: TipoDeSalidaService,
     private store: Store<{ app: AppState }>
-    ) {
+  ) {
     this.formTipoSalida = this.fb.group({
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
@@ -28,12 +28,12 @@ export class TipoSalidaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => {this.url = path;});
-    this.store.select(state => state.app.token).subscribe((token: string) => {this.token = token;});
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
   }
 
   sendData() {
-    let dataTipoSalida: GET = { data: [], message: '', success: false,  cantItem: 0, cantPage: 0, currentPage:0 };
+    let dataTipoSalida: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formTipoSalida.valid) {
 
@@ -48,9 +48,10 @@ export class TipoSalidaComponent implements OnInit {
           } else {
             alertIsSuccess(false)
           }
-          ()=> {
+          () => {
             alertServerDown();
-          }})
+          }
+        })
 
     }
   }

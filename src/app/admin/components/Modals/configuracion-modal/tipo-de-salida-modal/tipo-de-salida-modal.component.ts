@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewInit, OnInit } from '@angular/core';
+ import { Component, Inject, AfterViewInit, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tipoSalida } from 'src/app/admin/models/interfaces';
@@ -51,7 +51,6 @@ export class TipoDeSalidaModalComponent implements OnInit {
           .subscribe((res: any) => {
 
             let dataTipoSalida = res;
-            console.log(dataTipoSalida)
 
             if (dataTipoSalida.success) {
               alertIsSuccess(true)

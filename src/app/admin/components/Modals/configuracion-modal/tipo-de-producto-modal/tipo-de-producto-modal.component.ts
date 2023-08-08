@@ -2,9 +2,10 @@ import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tipoProducto } from 'src/app/admin/models/interfaces';
-import { alertSameData, alertIsSuccess } from '../../../../Helpers/alertsFunctions';
+import { alertSameData, alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
+import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
 
 @Component({
   selector: 'app-tipo-de-producto-modal',
@@ -19,19 +20,20 @@ export class TipoDeProductoModalComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA)
-    public item: tipoProducto,
+    @Inject(MAT_DIALOG_DATA) public item: tipoProducto,
+    private api: TipoDeProductoService,
     private dialogRef: MatDialogRef<TipoDeProductoModalComponent>,
     private store: Store<{ app: AppState }>
   ) {
     this.formEditTipoProducto = this.fb.group({
       nombre: new FormControl('', Validators.required),
-      id: 0
+      idTipoArt: 0
     })
   }
 
   ngOnInit() {
-    this.formEditTipoProducto.setValue({ nombre: `${this.item.nombre}`, id:`${this.item.idTipoArt}` })
+    console.log(this.item)
+    this.formEditTipoProducto.setValue({ nombre: `${this.item.nombre}`, idTipoArt:`${this.item.idTipoArt}` })
 
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
@@ -43,31 +45,30 @@ export class TipoDeProductoModalComponent implements OnInit {
 
   editData() {
 
-    //if (this.formEditTipoSalida.valid) {
-    //  if (this.formEditTipoSalida.value.nombre !== this.item.nombre || this.formEditTipoSalida.value.descripcion !== this.item.descripcion) {
-    //
-    //    this.api.editTipoSalida(this.url, this.formEditTipoSalida.value, this.token)
-    //      .subscribe((res: any) => {
-    //
-    //        let dataTipoSalida = res;
-    //        console.log(dataTipoSalida)
-    //
-    //        if (dataTipoSalida.success) {
-    //          alertIsSuccess(true)
-    //          this.closeModal();
-    //        } else {
-    //          alertIsSuccess(false)
-    //          this.closeModal();
-    //        }
-    //        () => {
-    //          alertServerDown();
-    //        }
-    //      })
-    //
-    //  } else {
-    //    alertSameData()
-    //    this.closeModal();
-    //  }
-    //}
+    if (this.formEditTipoProducto.valid) {
+      if (this.formEditTipoProducto.value.nombre !== this.item.nombre ) {
+
+        this.api.editTipoProducto(this.url, this.formEditTipoProducto.value, this.token)
+        .subscribe((res: any) => {
+
+            let dataTipoProducto = res;
+
+            if (dataTipoProducto.success) {
+              alertIsSuccess(true)
+              this.closeModal();
+            } else {
+              alertIsSuccess(false)
+              this.closeModal();
+            }
+            () => {
+              alertServerDown();
+            }
+          })
+
+      } else {
+        alertSameData()
+        this.closeModal();
+      }
+    }
   }
 }

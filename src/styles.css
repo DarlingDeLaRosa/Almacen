@@ -141,6 +141,11 @@ table{
   width: 60px;
 }
 
+.NoItems{
+  margin: 0 !important;
+  font-weight: 300;
+}
+
 .fucEdit, .fucRem, .fucSend{
   padding: 5px 10px;
   border: none;

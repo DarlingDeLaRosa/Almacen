@@ -7,13 +7,22 @@ import { postTipoSalida, tipoSalida } from '../../models/interfaces';
 })
 export class TipoDeSalidaService {
 
+  cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoSalida(url: string, token: string) {
+  public getTipoSalida(url: string, token: string, page: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoSalidaHeader = {headers: headers}
 
-    const getTipoSalida = `${url}/TipoSalida?page=2`
+    const getTipoSalida = `${url}/TipoSalida?page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getTipoSalida, tipoSalidaHeader)
+  }
+
+  public filterTipoSalida(url: string, token: string, page: number, data: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const tipoSalidaHeader = {headers: headers}
+
+    const getTipoSalida = `${url}/TipoSalida/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
     return this.http.get(getTipoSalida, tipoSalidaHeader)
   }
 
@@ -27,7 +36,6 @@ export class TipoDeSalidaService {
   }
 
   public editTipoSalida(url: string, data: tipoSalida, token: string) {
-
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoSalidaHeader = {headers: headers}
 

@@ -7,7 +7,7 @@ import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-d
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { tipoSalida } from 'src/app/admin/models/interfaces';
+import { GET, tipoSalida } from 'src/app/admin/models/interfaces';
 
 @Component({
   selector: 'app-admin-tipo-salida',
@@ -19,8 +19,10 @@ export class AdminTipoSalidaComponent implements OnInit {
   dataFiltered!: tipoSalida[]
   filterTipoSalida: FormGroup;
   url: string = ''
+  noPage: number = 1
   token: string = ''
-  pagina: number = 0
+  pagina: number = 1
+
 
   constructor(
     public dialog: MatDialog,
@@ -48,23 +50,23 @@ export class AdminTipoSalidaComponent implements OnInit {
   }
 
   getTipoSalida() {
-    this.api.getTipoSalida(this.url, this.token)
+    this.api.getTipoSalida(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
-        console.log(res)
       });
   }
 
-  onInputFilterChange(event: Event) {
-    const searchTerm = event.target as HTMLInputElement;
-    if (searchTerm.value.length >= 2) {
-      //this.dataFiltered = this.data;
-      this.dataFiltered = this.dataFiltered.filter(item => {
-        return item.nombre.toLowerCase().includes(searchTerm.value.toLowerCase());
+  dataFilter() {
+    if (this.filterTipoSalida.value.filter.length >= 3) {
+
+      this.api.filterTipoSalida(this.url, this.token, this.pagina, this.filterTipoSalida.value.filter)
+      .subscribe((res: any)=> {
+        this.dataFiltered = res.data
       })
 
     } else {
-      //this.dataFiltered = this.data;
+      this.getTipoSalida()
     }
   }
 
@@ -94,6 +96,20 @@ export class AdminTipoSalidaComponent implements OnInit {
             alertServerDown();
           }
         })
+    }
+  }
+
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getTipoSalida()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getTipoSalida()
     }
   }
 }

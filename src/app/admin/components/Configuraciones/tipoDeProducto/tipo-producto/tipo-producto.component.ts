@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { alertIsSuccess } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
+import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
+import { GET } from 'src/app/admin/models/interfaces';
 
 @Component({
   selector: 'app-tipo-producto',
@@ -16,7 +18,7 @@ export class TipoProductoComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    //private api: TipoDeSalidaService,
+    private api: TipoDeProductoService,
     private store: Store<{ app: AppState }>
   ) {
     this.formTipoProducto = new FormGroup({
@@ -31,35 +33,27 @@ export class TipoProductoComponent implements OnInit {
 
 
   sendData() {
-    const respuesta: boolean = true;
+    let dataTipoProducto: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formTipoProducto.valid) {
-      console.log(this.formTipoProducto.value)
 
-      alertIsSuccess(respuesta)
-      this.formTipoProducto.reset()
+      this.api.postTipoProducto(this.url, this.formTipoProducto.value, this.token)
+        .subscribe((res: any) => {
+
+          dataTipoProducto = res
+
+          if (dataTipoProducto.success) {
+            alertIsSuccess(true)
+            this.formTipoProducto.reset()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+
     }
   }
 
-  //let dataTipoSalida: GET = { data: [], message: '', success: false };
-  //
-  //  if (this.formTipoSalida.valid) {
-  //
-  //    this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
-  //      .subscribe((res: any) => {
-  //
-  //        dataTipoSalida = res
-  //
-  //        if (dataTipoSalida.success) {
-  //          alertIsSuccess(true)
-  //          this.formTipoSalida.reset()
-  //        } else {
-  //          alertIsSuccess(false)
-  //        }
-  //        ()=> {
-  //          alertServerDown();
-  //        }})
-  //
-  //  }
-  //}
 }

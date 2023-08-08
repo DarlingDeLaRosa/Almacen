@@ -6,7 +6,7 @@ import * as AppActions from './actions';
 export const inicialState: AppState = {
   path: '',
   user: {
-    idUsuario: '',
+    idUsuario: 0,
     role: {
       idRol: 0,
       descripcion: ''
@@ -23,7 +23,9 @@ export const inicialState: AppState = {
     telefono: '',
     ext: '',
     celular: '',
-    usuario1: ''
+    usuario1: '',
+    creadoPor: ''
+
   },
   edit: '',
   token: '',

@@ -6,7 +6,7 @@
     <div [formGroup]="filterTipoSalida">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput formControlName="filter" (input)="onInputFilterChange($event)">
+        <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
@@ -21,6 +21,7 @@
           <th class="headerCell">Descripcion</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
+          <!--<h3 class="NoItems">{{respuesta.cantItem}}</h3>-->
         </tr>
       </thead>
       <tbody>
@@ -34,9 +35,9 @@
     </table>
 
     <div class="pagination">
-      <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-      <div style="display: grid; place-items: center;">{{pagina}}</div>
-      <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+        <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+        <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+        <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
   </div>
 

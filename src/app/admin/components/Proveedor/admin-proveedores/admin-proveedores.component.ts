@@ -1,61 +1,119 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProveedorModalComponent } from '../../Modals/proveedor-modal/proveedor-modal.component';
 import Swal from 'sweetalert2';
+import { proveedor } from 'src/app/admin/models/interfaces';
+import { FormControl, FormGroup } from '@angular/forms';
+import { proveedorService } from 'src/app/admin/Services/proveedor.service';
+import { AppState } from 'src/app/store/state';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-proveedores',
   templateUrl: './admin-proveedores.component.html',
   styleUrls: ['./admin-proveedores.component.css']
 })
-export class AdminProveedoresComponent implements AfterViewInit{
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class AdminProveedoresComponent implements OnInit{
 
-  displayedColumns: string[] = ['nombre', 'rnc', 'representante', 'editar', 'eliminar'];
-  data = new MatTableDataSource([
-    {
-      nombre: 'Azucar', rnc: 'azucar blanca', representante: 'Lider',
-    },
-    {
-      nombre: 'Cafe', rnc: 'Negro', representante: 'santo Domingo',
-    }
+  dataFiltered!: proveedor[]
+  filterProveedor: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
 
-  ]);
-
-  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) { }
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+  constructor(
+    public dialog: MatDialog,
+    private api: proveedorService,
+    private store: Store<{ app: AppState }>
+    ){
+    this.filterProveedor = new FormGroup({
+      filter: new FormControl(''),
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  ngOnInit() {
+
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+
+      this.getProveedor()
+    })
+  }
+
+  getProveedor() {
+    this.api.getProveedor(this.url, this.token, this.pagina,)
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  dataFilter() {
+    if (this.filterProveedor.value.filter.length >= 3) {
+
+      this.api.filterProveedor(this.url, this.token, this.pagina, this.filterProveedor.value.filter)
+      .subscribe((res: any)=> {
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getProveedor()
     }
   }
 
-  openModal() {
-    this.dialog.open(ProveedorModalComponent)
+  openModal(item: proveedor) {
+    let dialogRef = this.dialog.open(ProveedorModalComponent, { data: item })
+
+    dialogRef.afterClosed().subscribe(()=> {
+      this.getProveedor()
+    })
   }
 
-  removeAlert(){
-    Swal.fire({
-      title: '¡Alerta!',
-      text: 'Está seguro que desea eliminar el producto.',
-      icon: 'warning',
-      confirmButtonText: 'Aceptar'
-    });
+  async removeAlert(item: number) {
+
+    let removeChoise: boolean = await alertRemoveSure()
+
+    if (removeChoise) {
+      this.api.removeProveedor(this.url, item, this.token)
+        .subscribe((res: any) => {
+
+          if (res) {
+            alertRemoveSuccess()
+            this.getProveedor()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+    }
   }
 
-  applyFilter(event: Event) {
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getProveedor()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getProveedor()
+    }
   }
 }

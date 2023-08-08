@@ -1,61 +1,112 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import Swal from 'sweetalert2';
 import { TipoDeMedidaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-medida-modal/tipo-de-medida-modal.component';
+import { tipoMedida } from 'src/app/admin/models/interfaces';
+import { FormControl, FormGroup } from '@angular/forms';
+import { AppState } from 'src/app/store/state';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 
 @Component({
   selector: 'app-admin-tipo-medida',
   templateUrl: './admin-tipo-medida.component.html',
   styleUrls: ['./admin-tipo-medida.component.css']
 })
-export class AdminTipoMedidaComponent implements AfterViewInit{
+export class AdminTipoMedidaComponent implements OnInit {
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataFiltered!: tipoMedida[]
+  filterTipoMedida: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
 
-  displayedColumns: string[] = [ 'descripcion', 'editar', 'eliminar'];
-  data = new MatTableDataSource([
-    {
-      descripcion: 'azucar blanca'
-    },
-    {
-       descripcion: 'santo Domingo',
-    }
-  ])
-
-  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer){}
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+  constructor(
+    public dialog: MatDialog,
+    private api: TipoDeMedidaService,
+    private store: Store<{ app: AppState }>
+  ) {
+    this.filterTipoMedida = new FormGroup({
+      filter: new FormControl(''),
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  ngOnInit(): void {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+
+      this.getTipoMedida()
+    })
+  }
+
+  getTipoMedida(){
+    this.api.getTipoMedida(this.url, this.token, this.pagina,)
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  dataFilter() {
+    if (this.filterTipoMedida.value.filter.length >= 3) {
+
+      this.api.filterTipoMedida(this.url, this.token, this.pagina, this.filterTipoMedida.value.filter)
+      .subscribe((res: any)=> {
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getTipoMedida()
     }
   }
 
-  applyFilter(event: Event) {
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  openModal(item: tipoMedida) {
+    let dialogRef = this.dialog.open(TipoDeMedidaModalComponent, { data: item })
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getTipoMedida()
+    })
   }
 
-  openModal() {
-    this.dialog.open(TipoDeMedidaModalComponent)
+  async removeAlert(item: number) {
+
+    let removeChoise: boolean = await alertRemoveSure()
+
+    if (removeChoise) {
+      this.api.removeTipoMedida(this.url, item, this.token)
+        .subscribe((res: any) => {
+
+          if (res) {
+            alertRemoveSuccess()
+            this.getTipoMedida()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+    }
   }
 
-  removeAlert(){
-    Swal.fire({
-      title: '¡Alerta!',
-      text: 'Está seguro que desea eliminar el tipo de Medida.',
-      icon: 'warning',
-      confirmButtonText: 'Aceptar'
-    });
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getTipoMedida()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getTipoMedida()
+    }
   }
 }

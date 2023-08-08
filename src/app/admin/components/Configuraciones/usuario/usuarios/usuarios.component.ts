@@ -1,62 +1,98 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import {Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
+import { GET, recinto, rol } from 'src/app/admin/models/interfaces';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css']
 })
-export class UsuariosComponent implements AfterViewInit{
+export class UsuariosComponent implements OnInit{
   generalITBIS: boolean = true;
+  formUser: FormGroup;
+  url!: string;
+  token!: string
+  roles: rol[] = []
+  recinto: recinto[] = []
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  constructor(
+    public fb: FormBuilder,
+    private api: UserService,
+    private store: Store<{ app: AppState }>
+  ) {
+    this.formUser = this.fb.group({
+      idRol: new FormControl('', Validators.required),
+      usuario1: '',
+      idRecinto: new FormControl('', Validators.required),
+      nombre: new FormControl('', Validators.required),
+      apellido: new FormControl('', Validators.required),
+      cargo: new FormControl('', Validators.required),
+      supervisorInmediato: new FormControl('', Validators.required),
+      correo: new FormControl('', Validators.required),
+      constrasena: new FormControl('', Validators.required),
+      cedula: new FormControl('', Validators.required),
+      telefono: new FormControl('', Validators.required),
+      ext: new FormControl('', Validators.required),
+      celular: new FormControl('', Validators.required),
+    })
+  }
 
-  displayedColumns: string[] = [
-    'producto', 'cantidad', 'precio', 'itbis', 'subtotal', 'editar', 'eliminar'
-  ];
-  data = [
-    {
-      producto: 'azucar', cantidad: 10, precio: 200, itbis: 32, subtotal: 2320
-    },
-    {
-      producto: 'azucar', cantidad: 10, precio: 200, itbis: 32, subtotal: 2320
-    },
-    {
-      producto: 'azucar', cantidad: 10, precio: 200, itbis: 32, subtotal: 2320
-    }
-  ];
+  ngOnInit(): void {
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
 
-  dataSource = new MatTableDataSource(this.data)
-
-
-
-  constructor(private _liveAnnouncer: LiveAnnouncer){}
+    this.getRol();
+    this.getRecinto();
+  }
 
   itbisOption(event : any){
     this.generalITBIS = event.value;
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort
-    this.dataSource.paginator = this.paginator
+  getRol(){
+    this.api.getRol(this.url, this.token)
+    .subscribe((res: any)=> {
+      if(res){
+        this.roles = res.data
+      }
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+  getRecinto(){
+    this.api.getRecinto(this.url, this.token)
+    .subscribe((res: any)=> {
+      if(res){
+        this.recinto = res.data
+      }
+    })
+  }
+
+  sendData() {
+    let dataUser: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
+
+    if (this.formUser.valid) {
+
+      this.api.postUser(this.url, this.formUser.value, this.token)
+        .subscribe((res: any) => {
+
+          dataUser = res
+
+          if (dataUser.success) {
+            alertIsSuccess(true)
+            this.formUser.reset()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+
     }
   }
 
-  getItbis(){
-    return this.data.map((item)=> item.itbis).reduce((acc, value) => acc + value, 0)
-  }
-  getSubtotal(){
-    return this.data.map((item)=> item.subtotal).reduce((acc, value) => acc + value, 0)
-  }
 }

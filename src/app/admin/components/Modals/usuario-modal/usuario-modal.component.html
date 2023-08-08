@@ -1,24 +1,24 @@
 <div class="modal">
   <h2 class="modal-title" mat-dialog-title> Editar Usuario </h2>
   <mat-dialog-content class="modal-content">
-    <div class="formInfo">
+    <div [formGroup]="formEditUser" class="formInfo">
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Rol</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
         <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+
+          <mat-option *ngFor="let option of roles" [value]="[option.idRol, option.descripcion]">
+            {{option.descripcion}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Recinto</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRecinto">
         <mat-autocomplete #auto='matAutocomplete'>
           <!--
         <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
@@ -69,20 +69,20 @@
         <input matInput required formControlName="condicion">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Celular</mat-label>
         <input type="number" matInput required formControlName="precio">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Creado por</mat-label>
-        <input type="number" matInput required formControlName="precio">
+        <input type="number" matInput required formControlName="creado_por">
       </mat-form-field>&nbsp;
 
     </div>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
-    <button mat-raised-button>Cancelar</button>
-    <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
+    <button mat-raised-button class="btnCancel" (click)="closeModal()">Cancelar</button>
+    <button mat-raised-button class="btnSend" (click)="editData()"><mat-icon>send</mat-icon>Enviar</button>
   </mat-dialog-actions>
 </div>
