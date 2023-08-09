@@ -10,6 +10,16 @@ export class UserService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
+  //Obtener Persona
+
+  public getPersonByName(url: string, token: string, page: number, cantItem: number, name: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const personHeader = {headers: headers}
+
+    const getPerson = `${url}/Persona/getbyname?name=${name}&page=${page}&CantItems=${cantItem}`
+    return this.http.get(getPerson, personHeader)
+  }
+
   //Obtener Rol
 
   public getRol(url: string, token: string,) {
@@ -42,7 +52,7 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const userHeader = {headers: headers}
 
-    const getUser = `${url}/usuario/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
+    const getUser = `${url}/Usuario/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
     return this.http.get(getUser, userHeader)
   }
 
@@ -51,7 +61,7 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const userHeader = {headers: headers}
 
-    const postUser = `${url}/usuario`
+    const postUser = `${url}/Usuario`
     return this.http.post(postUser, data, userHeader)
   }
 
@@ -59,7 +69,7 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const userHeader = {headers: headers}
 
-    const editUser = `${url}/usuario`
+    const editUser = `${url}/Usuario`
     return this.http.put(editUser, data, userHeader)
   }
 
@@ -68,7 +78,7 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const userHeader = {headers: headers}
 
-    const removeUser = `${url}/User/${id}`
+    const removeUser = `${url}/Usuario/${id}`
     return this.http.delete(removeUser, userHeader)
   }
 }

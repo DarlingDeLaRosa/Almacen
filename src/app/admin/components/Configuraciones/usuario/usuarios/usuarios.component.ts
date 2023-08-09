@@ -1,9 +1,9 @@
-import {Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
-import { GET, recinto, rol } from 'src/app/admin/models/interfaces';
+import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -11,13 +11,17 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css']
 })
-export class UsuariosComponent implements OnInit{
+export class UsuariosComponent implements OnInit {
+
   generalITBIS: boolean = true;
   formUser: FormGroup;
   url!: string;
   token!: string
-  roles: rol[] = []
-  recinto: recinto[] = []
+
+  rolesList: rol[] = []
+  recintoList: recinto[] = []
+  supInmediatoList: persona[] = []
+  supervisorIdMap: { [displayValue: string]: number } = {};
 
   constructor(
     public fb: FormBuilder,
@@ -26,14 +30,13 @@ export class UsuariosComponent implements OnInit{
   ) {
     this.formUser = this.fb.group({
       idRol: new FormControl('', Validators.required),
-      usuario1: '',
       idRecinto: new FormControl('', Validators.required),
       nombre: new FormControl('', Validators.required),
       apellido: new FormControl('', Validators.required),
       cargo: new FormControl('', Validators.required),
       supervisorInmediato: new FormControl('', Validators.required),
       correo: new FormControl('', Validators.required),
-      constrasena: new FormControl('', Validators.required),
+      contrasena: new FormControl('', Validators.required),
       cedula: new FormControl('', Validators.required),
       telefono: new FormControl('', Validators.required),
       ext: new FormControl('', Validators.required),
@@ -49,30 +52,55 @@ export class UsuariosComponent implements OnInit{
     this.getRecinto();
   }
 
-  itbisOption(event : any){
+  itbisOption(event: any) {
     this.generalITBIS = event.value;
   }
 
-  getRol(){
+  getRol() {
     this.api.getRol(this.url, this.token)
-    .subscribe((res: any)=> {
-      if(res){
-        this.roles = res.data
-      }
-    })
+      .subscribe((res: any) => {
+        if (res) {
+          this.rolesList = res.data
+        }
+      })
   }
 
-  getRecinto(){
+  getRecinto() {
     this.api.getRecinto(this.url, this.token)
-    .subscribe((res: any)=> {
-      if(res){
-        this.recinto = res.data
-      }
-    })
+      .subscribe((res: any) => {
+        if (res) {
+          this.recintoList = res.data
+        }
+      })
+  }
+
+  findSupInmediatoByName() {
+    if (this.formUser.value.supervisorInmediato.length >= 4) {
+
+      this.api.getPersonByName(this.url, this.token, 1, 10, this.formUser.value.supervisorInmediato)
+        .subscribe((res: any) => {
+          let options = res.data
+          this.supInmediatoList = []
+          options.forEach((item: any) => {
+
+            this.supInmediatoList.push(item)
+            this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
+
+          });
+        })
+    }
   }
 
   sendData() {
     let dataUser: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
+
+    let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)
+    let recinto = this.recintoList.filter(item => item.nombre === this.formUser.value.idRecinto)
+    let selectedId = this.supervisorIdMap[this.formUser.value.supervisorInmediato];
+
+    this.formUser.value.supervisorInmediato = selectedId
+    this.formUser.value.idRecinto = recinto[0].idRecinto
+    this.formUser.value.idRol = id[0].idRol
 
     if (this.formUser.valid) {
 

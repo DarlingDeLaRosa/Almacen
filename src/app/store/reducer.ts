@@ -23,9 +23,8 @@ export const inicialState: AppState = {
     telefono: '',
     ext: '',
     celular: '',
-    usuario1: '',
-    creadoPor: ''
-
+    creadoPor: '',
+    supervisorInmediato: ''
   },
   edit: '',
   token: '',
