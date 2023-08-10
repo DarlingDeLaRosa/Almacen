@@ -54,7 +54,6 @@ export class AuthComponent implements OnInit {
 
             this.api.IsLoggedIn(true)
             this.api.IsAdminRole(userResponse.data.role.idRol)
-            console.log(userResponse.data.role.idRol)
 
             this.localStore.saveDataLocalStorage('token', userResponse.token)
             this.localStore.saveDataLocalStorage('userData', userData)

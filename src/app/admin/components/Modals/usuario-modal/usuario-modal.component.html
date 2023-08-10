@@ -5,11 +5,11 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Rol</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
+        <input matInput [matAutocomplete]="rol" appearance="fill" formControlName="idRol">
+        <mat-autocomplete #rol='matAutocomplete'>
 
-          <mat-option *ngFor="let option of roles" [value]="[option.idRol, option.descripcion]">
-            {{option.descripcion}}
+          <mat-option *ngFor="let roles of rolesList" [value]="roles.descripcion">
+            {{roles.descripcion}}
           </mat-option>
 
         </mat-autocomplete>
@@ -18,13 +18,13 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Recinto</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idRecinto">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="rec" appearance="fill" formControlName="idRecinto">
+        <mat-autocomplete #rec='matAutocomplete'>
+
+          <mat-option *ngFor="let recinto of recintoList" [value]="recinto.nombre">
+            {{recinto.nombre}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
@@ -36,47 +36,51 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Apellido</mat-label>
-        <input matInput required formControlName="descripcion">
+        <input matInput required formControlName="apellido">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Cargo</mat-label>
-        <input matInput required formControlName="descripcion">
+        <input matInput required formControlName="cargo">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Supervisor inmediato</mat-label>
-        <input matInput required formControlName="descripcion">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Supervisor Inmediato</mat-label>
+        <input matInput [matAutocomplete]="sup" appearance="fill" formControlName="supervisorInmediato" (keydown.enter)="findSupInmediatoByName()">
+        <mat-autocomplete #sup='matAutocomplete'>
+
+          <mat-option *ngFor="let supInmediato of supInmediatoList" [value]="supInmediato.nombre + ' ' + supInmediato.apellido" >
+            {{supInmediato.nombre}} {{supInmediato.apellido}} <br>
+            <span class="emailSupInmediato">{{supInmediato.correo}}</span>
+          </mat-option>
+
+        </mat-autocomplete>
+        <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Correo</mat-label>
-        <input matInput required formControlName="marca">
+        <input matInput required formControlName="correo">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Cedula</mat-label>
-        <input matInput required formControlName="modelo">
+        <input matInput required formControlName="cedula">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Telefono</mat-label>
-        <input matInput required formControlName="serial">
+        <input matInput required formControlName="telefono">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Extención</mat-label>
-        <input matInput required formControlName="condicion">
+        <input matInput required formControlName="ext">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Celular</mat-label>
-        <input type="number" matInput required formControlName="precio">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Creado por</mat-label>
-        <input type="number" matInput required formControlName="creado_por">
+        <input type="number" matInput required formControlName="celular">
       </mat-form-field>&nbsp;
 
     </div>

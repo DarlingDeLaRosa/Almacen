@@ -135,23 +135,6 @@ export interface postUser {
   supervisorInmediato: number
 }
 
-export interface putUser {
-  idUsuario: number,
-  idRol: number,
-  idRecinto: number,
-  usuario1: string,
-  nombre: string,
-  apellido: string,
-  cargo: string,
-  correo: string,
-  contrasena: string,
-  cedula: string,
-  telefono: string,
-  ext: string,
-  celular: string,
-  supervisorInmediato: number
-}
-
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////

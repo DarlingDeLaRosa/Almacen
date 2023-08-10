@@ -17,8 +17,8 @@ export interface User {
   telefono: string
   ext: string
   celular: string
-  creadoPor: string
-  supervisorInmediato: string
+  creadoPor: any
+  supervisor: any
 }
 
 export interface AppState {

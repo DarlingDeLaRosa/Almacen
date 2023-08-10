@@ -1,3 +1,4 @@
+import { Portal } from '@angular/cdk/portal';
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -12,11 +13,11 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './proveedores.component.html',
   styleUrls: ['./proveedores.component.css']
 })
-export class ProveedoresComponent implements OnInit{
+export class ProveedoresComponent implements OnInit {
   formProveedor: FormGroup;
   url!: string;
   token!: string
-  filterOptions: string[] = []
+  filterOptions: any = []
 
   constructor(
     public fb: FormBuilder,
@@ -25,73 +26,64 @@ export class ProveedoresComponent implements OnInit{
   ) {
     this.formProveedor = this.fb.group({
       rnc: new FormControl('', Validators.required),
-      razonSocial: new FormControl('', [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
+      razonSocial: new FormControl('', [Validators.required]),
       nombreComercial: new FormControl('', Validators.required),
-      estadoProveedor: new FormControl('', Validators.required),
       representante: new FormControl('', Validators.required),
       telRepresentante: new FormControl('', Validators.required),
     })
   }
 
   ngOnInit(): void {
-    //console.log(this.formProveedor.value.razonSocial)
-    //this.formProveedor.controls['razonSocial'].valueChanges.pipe(
-    //  startWith(''),
-    //  map(value => this._filter(value))
-    //)
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
   }
 
-  findByName(){
+  findByName() {
     if (this.formProveedor.value.razonSocial.length >= 5) {
 
       this.api.findProveedorByRS(this.url, this.token, this.formProveedor.value.razonSocial)
-      .subscribe((res: any)=> {
-        let options = res.data
-        this.filterOptions = []
-        options.forEach((item: any) => {
-          this.filterOptions.push(item.razonSocial)
-          console.log(this.filterOptions)
-        });
-      })
-    } else {}
+        .subscribe((res: any) => {
+          let options = res.data
+          this.filterOptions = []
+          options.forEach((item: any) => {
+            this.filterOptions.push(item)
+          });
+        })
+    } else { }
   }
 
-  findByRNC(){
+  findByRNC() {
     if (this.formProveedor.value.rnc.valid) {
 
       this.api.findProveedorByRS(this.url, this.token, this.formProveedor.value.rnc)
-      .subscribe((res: any)=> {
-        console.log(res)
-        this.filterOptions = res
-      })
-    } else {}
+        .subscribe((res: any) => {
+          this.filterOptions = res
+        })
+    } else { }
   }
-  //private _filter(value: string): any {
-  //  console.log(value)
-  //  const filterValue = value.toLowerCase();
-  //  this.api.findProveedorByRS(this.url, this.token, filterValue)
-  //  .subscribe((res: any)=>{
-//
-  //    res.filter((item: any) => {
-  //      item.razonSocial.toLowercase().includes(filterValue)
-  //    })
-  //  })
-  //}
 
-  //displayFn(subject: any){
-  //  return subject ? subject.name : undefined;
-  //}
+  setValueFormProveedores(proveedor: any) {
+    let setValuesform = this.filterOptions.filter((proveedorEspecifico: any) => {
+      return proveedorEspecifico.razonSocial == proveedor
+    });
+
+    this.formProveedor.patchValue({
+      rnc: setValuesform[0].rnc,
+      nombreComercial: setValuesform[0].nombreComercial,
+    })
+  }
 
   sendData() {
     let dataTipoSalida: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
+
+    console.log(this.formProveedor.valid)
+    console.log(this.formProveedor.value)
 
     if (this.formProveedor.valid) {
 
       this.api.postProveedor(this.url, this.formProveedor.value, this.token)
         .subscribe((res: any) => {
-
+          console.log(res)
           dataTipoSalida = res
 
           if (dataTipoSalida.success) {

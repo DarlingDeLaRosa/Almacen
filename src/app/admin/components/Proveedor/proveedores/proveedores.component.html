@@ -18,10 +18,10 @@
       <mat-form-field hideRequiredMarker>
         <mat-label>Razon social</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (keydown.enter)="findByName()">
-        <mat-autocomplete #auto='matAutocomplete' > <!--[displayWith]="displayFn"-->
+        <mat-autocomplete #auto='matAutocomplete' (optionSelected)="setValueFormProveedores($event.option.value)">
 
-          <mat-option *ngFor="let option of filterOptions" [value]="[option]">
-            {{option}}
+          <mat-option *ngFor="let option of filterOptions" [value]="option.razonSocial">
+            {{option.razonSocial}}
           </mat-option>
 
         </mat-autocomplete>
@@ -34,18 +34,13 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Estado</mat-label>
-        <input readonly matInput [disabled]="true" required formControlName="estadoProveedor">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Representante</mat-label>
-        <input readonly matInput required formControlName="representante">
+        <input matInput required formControlName="representante">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Contacto del Representante</mat-label>
-        <input readonly matInput required formControlName="telRepresentante">
+        <input matInput required formControlName="telRepresentante">
       </mat-form-field>&nbsp;
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { alertLogOut } from '../../Helpers/alertsFunctions';
@@ -11,8 +11,10 @@ import { Router } from '@angular/router';
   templateUrl: './almacen-admin-app.component.html',
   styleUrls: ['./almacen-admin-app.component.css']
 })
-export class AlmacenAdminAppComponent {
+export class AlmacenAdminAppComponent implements OnInit{
 
+  url!: string;
+  token!: string
   sidenavOpened: boolean = false;
   userName$ = this.store.select(state => state.app.user.nombre)
   userEmail$ = this.store.select(state => state.app.user.correo)
@@ -43,6 +45,11 @@ export class AlmacenAdminAppComponent {
     }
   }
 
+  ngOnInit() {
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+  }
+
   async logOut(){
 
     let closeAccount: boolean = await alertLogOut()
@@ -51,7 +58,7 @@ export class AlmacenAdminAppComponent {
       this.local.removeDataLocalStorage('userData')
 
       this.api.IsLoggedIn(false)
-
+      this.api.logOut(this.url, this.token)
       this.router.navigate(['/login'])
     }
   }

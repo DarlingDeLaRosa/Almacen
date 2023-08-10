@@ -44,7 +44,7 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const userHeader = {headers: headers}
 
-    const getUser = `${url}/Usuario?page=${page}&CantItems=${this.cantidadItems}`
+    const getUser = `${url}/Usuario/${page}/${this.cantidadItems}`
     return this.http.get(getUser, userHeader)
   }
 

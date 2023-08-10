@@ -1,11 +1,5 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ModalComponent } from '../../../Modals/product-modal/modal.component';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
 import { UsuarioModalComponent } from '../../../Modals/usuario-modal/usuario-modal.component';
 import { AppState, User } from 'src/app/store/state';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -65,6 +59,7 @@ export class AdminUsuariosComponent implements OnInit{
 
       this.api.filterUser(this.url, this.token, this.pagina, this.filterUser.value.filter)
       .subscribe((res: any)=> {
+        console.log(res)
         this.dataFiltered = res.data
       })
 
@@ -74,6 +69,7 @@ export class AdminUsuariosComponent implements OnInit{
   }
 
   openModal(item: User) {
+    console.log(item)
     let dialogRef = this.dialog.open(UsuarioModalComponent, { data: item })
 
     dialogRef.afterClosed().subscribe(()=> {

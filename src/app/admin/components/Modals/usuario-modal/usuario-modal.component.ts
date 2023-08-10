@@ -4,8 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
-import { GET, putUser, rol } from 'src/app/admin/models/interfaces';
-import { AppState } from 'src/app/store/state';
+import { persona, recinto, rol } from 'src/app/admin/models/interfaces';
+import { AppState, User } from 'src/app/store/state';
 
 @Component({
   selector: 'app-usuario-modal',
@@ -16,11 +16,15 @@ export class UsuarioModalComponent implements OnInit {
   formEditUser: FormGroup;
   url!: string;
   token!: string
-  roles: rol[] = []
+  rolesList: rol[] = []
+  recintoList: recinto[] = []
+  supInmediatoList: persona[] = []
+  supervisorIdMap: { [displayValue: string]: number } = {};
+
 
   constructor(
     public fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public item: putUser,
+    @Inject(MAT_DIALOG_DATA) public item: User,
     private api: UserService,
     private dialogRef: MatDialogRef<UsuarioModalComponent>,
     private store: Store<{ app: AppState }>
@@ -32,67 +36,104 @@ export class UsuarioModalComponent implements OnInit {
       nombre: new FormControl('', Validators.required),
       apellido: new FormControl('', Validators.required),
       cargo: new FormControl('', Validators.required),
+      supervisorInmediato: new FormControl('', Validators.required),
       correo: new FormControl('', Validators.required),
-      contrasena: new FormControl('', Validators.required),
       cedula: new FormControl('', Validators.required),
       telefono: new FormControl('', Validators.required),
       ext: new FormControl('', Validators.required),
       celular: new FormControl('', Validators.required),
-      supervisorInmediato: new FormControl('', Validators.required)
     })
   }
 
   ngOnInit() {
-    this.getRol()
-
     this.formEditUser.setValue({
       idUsuario: this.item.idUsuario,
-      idRol: `${this.item.idRol}`,
-      idRecinto: `${this.item.idRecinto}`,
-      nombre: `${this.item.usuario1}`,
+      idRol: `${this.item.role.descripcion}`,
+      idRecinto: `${this.item.recinto.nombre}`,
+      nombre: `${this.item.nombre}`,
       apellido: `${this.item.apellido}`,
       cargo: `${this.item.cargo}`,
       correo: `${this.item.correo}`,
-      contrasena: `${this.item.contrasena}`,
       cedula: `${this.item.cedula}`,
       telefono: `${this.item.telefono}`,
       ext: `${this.item.ext}`,
       celular: `${this.item.celular}`,
-      supervisorInmediato: `${this.item.supervisorInmediato}`,
+      supervisorInmediato: `${this.item.supervisor.nombre}`,
     })
 
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+
+    this.getRol();
+    this.getRecinto();
   }
 
   closeModal() {
     this.dialogRef.close()
   }
 
-  getRol(){
+  getRol() {
     this.api.getRol(this.url, this.token)
-    .subscribe((res: any)=> {
-      this.roles = res
-    })
+      .subscribe((res: any) => {
+        if (res) {
+          this.rolesList = res.data
+        }
+      })
+  }
+
+  getRecinto() {
+    this.api.getRecinto(this.url, this.token)
+      .subscribe((res: any) => {
+        if (res) {
+          this.recintoList = res.data
+        }
+      })
+  }
+
+  findSupInmediatoByName() {
+    if (this.formEditUser.value.supervisorInmediato.length >= 4) {
+
+      this.api.getPersonByName(this.url, this.token, 1, 10, this.formEditUser.value.supervisorInmediato)
+        .subscribe((res: any) => {
+          let options = res.data
+          this.supInmediatoList = []
+          options.forEach((item: any) => {
+
+            this.supInmediatoList.push(item)
+            this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
+
+          });
+        })
+    }
   }
 
   editData() {
+    let id = this.rolesList.filter(item => item.descripcion === this.formEditUser.value.idRol)
+    let recinto = this.recintoList.filter(item => item.nombre === this.formEditUser.value.idRecinto)
+    let selectedId = this.supervisorIdMap[this.formEditUser.value.supervisorInmediato];
+
+    console.log(selectedId)
+    this.formEditUser.value.supervisorInmediato = selectedId
+    this.formEditUser.value.idRecinto = recinto[0].idRecinto
+    this.formEditUser.value.idRol = id[0].idRol
+
+    console.log(this.formEditUser.value)
+    let hola = JSON.stringify(this.formEditUser.value)
+    console.log(hola)
 
     if (this.formEditUser.valid) {
       if (
-        this.formEditUser.value.idRol !== this.item.idRol ||
-        this.formEditUser.value.idRecinto !== this.item.idRecinto ||
-        this.formEditUser.value.usuario1 !== this.item.usuario1 ||
+        this.formEditUser.value.idRol !== this.item.role.descripcion ||
+        this.formEditUser.value.idRecinto !== this.item.recinto.nombre ||
         this.formEditUser.value.nombre !== this.item.nombre ||
         this.formEditUser.value.apellido !== this.item.apellido ||
         this.formEditUser.value.cargo !== this.item.cargo ||
         this.formEditUser.value.correo !== this.item.correo ||
-        this.formEditUser.value.contrasena !== this.item.contrasena ||
         this.formEditUser.value.cedula !== this.item.cedula ||
         this.formEditUser.value.telefono !== this.item.telefono ||
         this.formEditUser.value.ext !== this.item.ext ||
         this.formEditUser.value.celular !== this.item.celular ||
-        this.formEditUser.value.supervisorInmediato !== this.item.supervisorInmediato
+        this.formEditUser.value.supervisorInmediato !== this.item.supervisor
         ) {
 
         this.api.editUser(this.url, this.formEditUser.value, this.token)

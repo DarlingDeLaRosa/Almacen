@@ -25,6 +25,11 @@ export class AuthService {
     return this.http.post(getUser, data)
   }
 
+  public logOut(url: string, token: string) {
+    const getUser = `${url}/Usuario/logout`
+    return this.http.post(getUser, token)
+  }
+
   public checkIsLoggedIn() {
 
     let token = this.local.getDataLocalStorage('token')
