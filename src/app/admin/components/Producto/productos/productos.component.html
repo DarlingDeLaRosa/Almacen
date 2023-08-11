@@ -1,17 +1,18 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nuevo producto</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-producto']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-producto']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="formProducto" class="formInfo">
 
       <h2>Informacion de producto</h2>
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Codigo de producto</mat-label>
-        <input matInput required formControlName="precio">
+        <input matInput required formControlName="idCatalogo" (keydown.enter)="findByCodeProduct()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
@@ -26,38 +27,40 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Unidad de medida</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="unitM" appearance="fill" formControlName="idUnidadMe"
+          (input)="findTipoMedidaByName()">
+        <mat-autocomplete #unitM='matAutocomplete'>
+
+          <mat-option *ngFor="let unidadMedida of unidadMedidaList" [value]="unidadMedida.descripcion">
+            {{unidadMedida.descripcion}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Articulo</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="tipoP" appearance="fill" formControlName="idTipoArt"
+          (input)="findTipoProductoByName()">
+        <mat-autocomplete #tipoP='matAutocomplete'>
+
+          <mat-option *ngFor="let tipoProducto of tipoProductoList" [value]="tipoProducto.nombre">
+            {{tipoProducto.nombre}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Auxiliar</mat-label>
-        <input matInput required formControlName="precio">
+        <input matInput required formControlName="auxiliar">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Denominación</mat-label>
-        <input matInput required formControlName="precio">
+        <input matInput required formControlName="denominacion">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
@@ -67,15 +70,15 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Cantidad minima requerida</mat-label>
-        <input type="number" matInput required formControlName="precio">
+        <input type="number" matInput required formControlName="stockMinimo">
       </mat-form-field>&nbsp;
 
       <span class="btnContainer">
-        <button class="btnSend" mat-raised-button>
+        <button class="btnSend" mat-raised-button (click)="sendData()">
           <mat-icon>send</mat-icon>Enviar
         </button>
       </span>
     </div>
-    </div>
+  </div>
 
 </div>

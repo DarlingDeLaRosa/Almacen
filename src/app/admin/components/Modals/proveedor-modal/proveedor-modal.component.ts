@@ -16,6 +16,7 @@ export class ProveedorModalComponent {
   formEditProveedor: FormGroup;
   url!: string;
   token!: string
+  filterOptions: any = []
 
   constructor(
     public fb: FormBuilder,
@@ -29,7 +30,6 @@ export class ProveedorModalComponent {
       rnc: new FormControl('', Validators.required),
       razonSocial: new FormControl('', Validators.required),
       nombreComercial: new FormControl('', Validators.required),
-      estadoProveedor: new FormControl('', Validators.required),
       representante: new FormControl('', Validators.required),
       telRepresentante: new FormControl('', Validators.required)
     })
@@ -41,7 +41,6 @@ export class ProveedorModalComponent {
       rnc: `${this.item.rnc}`,
       razonSocial: `${this.item.razonSocial}`,
       nombreComercial: `${this.item.nombreComercial}`,
-      estadoProveedor: `${this.item.estadoProveedor}`,
       representante: `${this.item.representante}`,
       telRepresentante: `${this.item.telRepresentante}`,
      })
@@ -54,6 +53,45 @@ export class ProveedorModalComponent {
     this.dialogRef.close()
   }
 
+  findByName() {
+    if (this.formEditProveedor.value.razonSocial.length >= 5) {
+
+      this.api.findProveedorByRS(this.url, this.token, this.formEditProveedor.value.razonSocial)
+        .subscribe((res: any) => {
+          let options = res.data
+          this.filterOptions = []
+          options.forEach((item: any) => {
+            this.filterOptions.push(item)
+          });
+        })
+    } else { }
+  }
+
+  findByRNC() {
+
+    this.api.findProveedorByRNC(this.url, this.token, this.formEditProveedor.value.rnc)
+      .subscribe((res: any) => {
+        if (res.data !== null) {
+
+          this.formEditProveedor.patchValue({
+            razonSocial: res.data.razonSocial,
+            nombreComercial: res.data.nombreComercial,
+          })
+
+        }
+      })
+  }
+
+  setValueformEditProveedores(proveedor: any) {
+    let setValuesform = this.filterOptions.filter((proveedorEspecifico: any) => {
+      return proveedorEspecifico.razonSocial == proveedor
+    });
+
+    this.formEditProveedor.patchValue({
+      rnc: setValuesform[0].rnc,
+      nombreComercial: setValuesform[0].nombreComercial,
+    })
+  }
 
   editData() {
 
@@ -62,7 +100,6 @@ export class ProveedorModalComponent {
            this.formEditProveedor.value.rnc !== this.item.rnc
         || this.formEditProveedor.value.razonSocial !== this.item.razonSocial
         || this.formEditProveedor.value.nombreComercial !== this.item.nombreComercial
-        || this.formEditProveedor.value.estadoProveedor !== this.item.estadoProveedor
         || this.formEditProveedor.value.representante !== this.item.representante
         || this.formEditProveedor.value.telRepresentante !== this.item.telRepresentante
         ) {

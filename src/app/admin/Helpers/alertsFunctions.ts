@@ -30,6 +30,24 @@ export function alertSameData() {
   })
 }
 
+export function alertRncNoFound() {
+  Swal.fire({
+    icon: 'info',
+    title: 'No se encontro RNC que coincida.',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
+export function alertProductCodeNoFound() {
+  Swal.fire({
+    icon: 'info',
+    title: 'No se encontro codigo de producto que coincida.',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertRemoveSure(): Promise<boolean> {
   return new Promise((resolve) => {
     Swal.fire({

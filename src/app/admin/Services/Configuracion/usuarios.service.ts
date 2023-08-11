@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { postUser } from '../../models/interfaces';
+import { changePassword } from 'src/app/models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -80,5 +81,15 @@ export class UserService {
 
     const removeUser = `${url}/Usuario/${id}`
     return this.http.delete(removeUser, userHeader)
+  }
+
+  // cambiar contraseña
+
+  changePassword( url: string, data: changePassword, token: string){
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const changePassHeader = {headers: headers}
+
+    const editPassword = `${url}/Usuario/UpdatePassword`
+    return this.http.post(editPassword, data, changePassHeader)
   }
 }

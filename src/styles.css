@@ -19,6 +19,15 @@ h1{
   background-color: #004b8d !important;
 }
 
+.titleLogIn{
+  font-weight: 400 !important;
+  font-size: 30px !important;
+}
+
+.logoAlmacen{
+  width: 80% !important;
+}
+
 .btnNavigate{
   font-weight: 400;
 }
@@ -31,6 +40,7 @@ h1{
 .profile{
   height: 75px !important;
   cursor: auto !important;
+  background-color: #ddd !important;
 }
 
 .email{
@@ -40,6 +50,10 @@ h1{
 .viewContent{
   display: grid;
   grid-template-rows: 8vh auto;
+  padding: 16px;
+}
+
+.viewInitContent{
   padding: 16px;
 }
 
@@ -174,11 +188,11 @@ table{
   text-align: end;
 }
 
-.logoAlmacen {
+.logoAlmacenContainer {
   display: grid;
   place-items: center;
   height: 9vh;
-  background-color: #004b8d;
+  background-color: #004b8d ;
   color: white;
 }
 

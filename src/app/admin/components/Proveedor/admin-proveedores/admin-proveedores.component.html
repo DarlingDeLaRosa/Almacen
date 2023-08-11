@@ -6,14 +6,13 @@
     <div [formGroup]="filterProveedor" class="filtrarContent">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput type="search" (input)="dataFilter()">
+        <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
   </div>
 
   <div>
-
     <table>
       <thead class="headerTable">
         <tr class="headerRow">
@@ -22,7 +21,6 @@
           <th class="headerCell">Nombre comercial</th>
           <th class="headerCell">Representante</th>
           <th class="headerCell">Contacto</th>
-          <th class="headerCell">Estado</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
         </tr>
@@ -32,7 +30,6 @@
           <td class="dataCell">{{item.rnc}}</td>
           <td class="dataCell">{{item.razonSocial}}</td>
           <td class="dataCell">{{item.nombreComercial}}</td>
-          <td class="dataCell">{{item.estadoProveedor}}</td>
           <td class="dataCell">{{item.representante}}</td>
           <td class="dataCell">{{item.telRepresentante}}</td>
           <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button>

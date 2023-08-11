@@ -3,7 +3,7 @@ import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, map, startWith } from 'rxjs';
-import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRncNoFound, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -26,7 +26,7 @@ export class ProveedoresComponent implements OnInit {
   ) {
     this.formProveedor = this.fb.group({
       rnc: new FormControl('', Validators.required),
-      razonSocial: new FormControl('', [Validators.required]),
+      razonSocial: new FormControl('', Validators.required),
       nombreComercial: new FormControl('', Validators.required),
       representante: new FormControl('', Validators.required),
       telRepresentante: new FormControl('', Validators.required),
@@ -49,17 +49,24 @@ export class ProveedoresComponent implements OnInit {
             this.filterOptions.push(item)
           });
         })
-    } else { }
+    }
   }
 
   findByRNC() {
-    if (this.formProveedor.value.rnc.valid) {
 
-      this.api.findProveedorByRS(this.url, this.token, this.formProveedor.value.rnc)
-        .subscribe((res: any) => {
-          this.filterOptions = res
-        })
-    } else { }
+    this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
+      .subscribe((res: any) => {
+        if (res.data !== null) {
+
+          this.formProveedor.patchValue({
+            razonSocial: res.data.razonSocial,
+            nombreComercial: res.data.nombreComercial,
+          })
+        }else{
+          alertRncNoFound()
+          this.formProveedor.get('rnc')?.reset()
+        }
+      })
   }
 
   setValueFormProveedores(proveedor: any) {
@@ -74,19 +81,15 @@ export class ProveedoresComponent implements OnInit {
   }
 
   sendData() {
-    let dataTipoSalida: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
-
-    console.log(this.formProveedor.valid)
-    console.log(this.formProveedor.value)
+    let dataProveedor: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formProveedor.valid) {
 
       this.api.postProveedor(this.url, this.formProveedor.value, this.token)
         .subscribe((res: any) => {
-          console.log(res)
-          dataTipoSalida = res
+          dataProveedor = res
 
-          if (dataTipoSalida.success) {
+          if (dataProveedor.success) {
             alertIsSuccess(true)
             this.formProveedor.reset()
           } else {

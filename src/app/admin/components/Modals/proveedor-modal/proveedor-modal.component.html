@@ -5,36 +5,36 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>RNC</mat-label>
-        <input readonly matInput required formControlName="rnc">
+        <input matInput required formControlName="rnc" (keydown.enter)="findByRNC()">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
+      <mat-form-field hideRequiredMarker>
         <mat-label>Razon social</mat-label>
-        <input readonly matInput required formControlName="razonSocial">
-      </mat-form-field>&nbsp;
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (keydown.enter)="findByName()">
+        <mat-autocomplete #auto='matAutocomplete' (optionSelected)="setValueformEditProveedores($event.option.value)">
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Nombre Comercial</mat-label>
-        <input readonly matInput required formControlName="nombreComercial">
-      </mat-form-field>&nbsp;
+          <mat-option *ngFor="let option of filterOptions" [value]="option.razonSocial">
+            {{option.razonSocial}}
+          </mat-option>
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Estado</mat-label>
-        <input readonly matInput required formControlName="telRepresentante">
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Representante</mat-label>
-        <input matInput required formControlName="estadoProveedor">
+        </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Contacto</mat-label>
+        <mat-label>Nombre Comercial</mat-label>
+        <input matInput required formControlName="nombreComercial">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Representante</mat-label>
         <input matInput required formControlName="representante">
       </mat-form-field>&nbsp;
 
-
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Contacto</mat-label>
+        <input matInput required formControlName="telRepresentante">
+      </mat-form-field>&nbsp;
 
     </div>
   </mat-dialog-content>

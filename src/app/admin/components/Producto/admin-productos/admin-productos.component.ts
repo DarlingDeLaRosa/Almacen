@@ -1,72 +1,120 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import Swal from 'sweetalert2';
+import { producto } from 'src/app/admin/models/interfaces';
+import { FormControl, FormGroup } from '@angular/forms';
+import { productoService } from 'src/app/admin/Services/producto.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/state';
+import { combineLatest } from 'rxjs';
+import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nuevo-product-modal.component';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-productos',
   templateUrl: './admin-productos.component.html',
   styleUrls: ['./admin-productos.component.css']
 })
-export class AdminProductosComponent implements AfterViewInit {
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class AdminProductosComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'unidadMedida', 't_producto', 'editar', 'eliminar',];
-  data = new MatTableDataSource(
-    [
-      {
-        nombre: 'Azucar', descripcion: 'azucar blanca', marca: 'Lider', modelo: 'Sacarosa',
-        serial: '100010023', condicion: 'Nuevo', precio: 2000, stock: 78, unidadMedida: 'libra', t_producto: 'cocina'
-      },
-      {
-        nombre: 'Cafe', descripcion: 'Cafe arabica', marca: 'Cafe Santo Domingo', modelo: 'Caturra',
-        serial: '100012294', condicion: 'Nuevo', precio: 4000, stock: 91, unidadMedida: 'libra', t_producto: 'cocina'
-      },
-      {
-        nombre: 'Monitor', descripcion: '24 Pulgadas', marca: 'Dell', modelo: 's21sh2a',
-        serial: '108992371', condicion: 'Usado', precio: 7500, stock: 4, unidadMedida: 'unidad', t_producto: 'tecnologia'
-      },
-      {
-        nombre: 'teclado', descripcion: '60%', marca: 'Logitec', modelo: 'RedM2593',
-        serial: '966318874', condicion: 'reparado', precio: 2700, stock: 7, unidadMedida: 'unidad', t_producto: 'tecnologia'
-      }
-    ]
-  ) ;
+  dataFiltered!: producto[]
+  filterProducto: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
 
-  constructor(public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer) { }
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+  constructor(
+    public dialog: MatDialog,
+    private api: productoService,
+    private store: Store<{ app: AppState }>
+    ){
+    this.filterProducto = new FormGroup({
+      filter: new FormControl(''),
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  ngOnInit() {
+
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+
+      this.getProducto()
+    })
+  }
+
+  getProducto() {
+    this.api.getProducto(this.url, this.token, this.pagina,)
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  dataFilter() {
+    console.log(this.filterProducto.value.filter)
+    if (this.filterProducto.value.filter.length >= 3) {
+
+      this.api.filterProducto(this.url, this.token, this.pagina, this.filterProducto.value.filter)
+      .subscribe((res: any)=> {
+        console.log(res)
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getProducto()
     }
   }
 
-  openModal() {
-    this.dialog.open(ModalComponent)
+  openModal(item: producto) {
+    let dialogRef = this.dialog.open(NuevoProductModalComponent, { data: item })
+
+    dialogRef.afterClosed().subscribe(()=> {
+      this.getProducto()
+    })
   }
 
-  removeAlert(){
-    Swal.fire({
-      title: '¡Alerta!',
-      text: 'Está seguro que desea eliminar el producto',
-      icon: 'warning',
-      confirmButtonText: 'Aceptar'
-    });
+  async removeAlert(item: number) {
+    let removeChoise: boolean = await alertRemoveSure()
+
+    if (removeChoise) {
+      this.api.removeProducto(this.url, item, this.token)
+        .subscribe((res: any) => {
+
+          if (res) {
+            alertRemoveSuccess()
+            this.getProducto()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
+    }
   }
 
-  applyFilter(event: Event){
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getProducto()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getProducto()
+    }
   }
 }

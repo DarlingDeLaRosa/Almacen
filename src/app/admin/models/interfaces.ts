@@ -166,6 +166,46 @@ export interface postProveedor {
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+export interface producto {
+  idProducto: number,
+  codProducto: string,
+  codInstitucional: string,
+  auxiliar: {
+    id: number,
+    denominacion: string
+  },
+  nombre: string,
+  descripcion: string,
+  precio: number,
+  stock: number,
+  stockMinimo: number,
+  unidadMedida: {
+    idUnidadMe: number,
+    descripcion: string
+  },
+  idTipoArt: {
+    idTipoArt: number,
+    nombre: string
+  }
+}
+
+export interface postProducto {
+  codPructo: string,
+  idAuxiliar: number,
+  nombre: string,
+  descripcion: string,
+  precio: number,
+  stock: number,
+  stockMinimo: number,
+  idUnidadMe: number,
+  idTipoArt: number
+}
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
 export interface rol {
   idRol: number
   descripcion: string
@@ -210,7 +250,7 @@ export interface persona {
   fechaCreacion: Date,
   correo: string
   creadoPorU: {
-    idUsuario:0
+    idUsuario: 0
     nombre: string,
     apellido: string,
     cargo: string

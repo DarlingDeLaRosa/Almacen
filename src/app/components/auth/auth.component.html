@@ -1,9 +1,12 @@
 <div class="authContent">
   <div class="cardsComponent">
 
-    <h1 style="color: white;">LOGO DE LA APLICACION</h1>
+   <div>
+     <img src="../../../assets/SIGEBILogoBlanco.png" alt="Sistema de gestión de bienes">
+   </div>
+
     <mat-card class="logInCard">
-      <mat-card-title>Bienvenido</mat-card-title>
+      <mat-card-title class="titleLogIn">Bienvenido</mat-card-title>
       <mat-card-content>
         <div [formGroup]="formUserLogIn">
           <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
@@ -17,7 +20,6 @@
           </mat-form-field>
 
           <mat-card-actions align="end">
-            <!--[routerLink]="['/almacen/inicio']"-->
             <button mat-raised-button class="logIn" (click)="logIn()" [disabled]="disableBtn" >Iniciar Sesion</button>
           </mat-card-actions>
         </div>

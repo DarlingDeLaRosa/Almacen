@@ -5,6 +5,8 @@ import { alertLogOut } from '../../Helpers/alertsFunctions';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -25,6 +27,7 @@ export class AlmacenAdminAppComponent implements OnInit{
   submenuConfig:  boolean = false;
 
   constructor(
+    public dialog: MatDialog,
     private store: Store< {app: AppState}>,
     private local: LocalStorageService,
     private api: AuthService,
@@ -61,5 +64,9 @@ export class AlmacenAdminAppComponent implements OnInit{
       this.api.logOut(this.url, this.token)
       this.router.navigate(['/login'])
     }
+  }
+
+  changePassword(){
+    this.dialog.open(ChangePasswordComponent)
   }
 }

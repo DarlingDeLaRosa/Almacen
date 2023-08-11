@@ -12,7 +12,7 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>RNC</mat-label>
-        <input matInput required formControlName="rnc">
+        <input matInput required formControlName="rnc" (keydown.enter)="findByRNC()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>

@@ -48,6 +48,7 @@ import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-sa
 import { NuevoProductModalComponent } from './components/Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ChangePasswordComponent } from './components/Modals/change-password/change-password.component';
 
 
 @NgModule({
@@ -94,7 +95,8 @@ import { HttpClientModule } from '@angular/common/http';
     ReporteEntradaProductoComponent,
     ReporteSalidaProductoComponent,
     NuevoProductModalComponent,
-    ReporteTransparenciaComponent
+    ReporteTransparenciaComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,
