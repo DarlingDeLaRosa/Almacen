@@ -54,7 +54,6 @@ export class ProductosComponent implements OnInit {
 
       this.api.findProductoByCode(this.url, this.token, this.formProducto.value.idCatalogo)
         .subscribe((res: any) => {
-          console.log(res)
           if (res.data !== null) {
 
             this.formProducto.patchValue({

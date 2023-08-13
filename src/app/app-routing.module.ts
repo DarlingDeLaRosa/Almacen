@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'login', component: AuthComponent, canActivate: [authGuardBackToLogIn]},
   {
     path: 'almacen',
-    canActivate: [authGuard, roleSuperAdminGuard],
+    //canActivate: [authGuard, roleSuperAdminGuard],
     loadChildren: ()=>
     import('./admin/superAdmin-routing.module').then((m)=>m.AdminRoutingModule)
   },

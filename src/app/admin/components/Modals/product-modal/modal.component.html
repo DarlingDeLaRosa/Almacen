@@ -1,11 +1,12 @@
 <div class="modal">
   <h2 class="modal-title" mat-dialog-title> Editar producto </h2>
   <mat-dialog-content class="modal-content">
-    <div class="formInfo">
+
+    <div [formGroup]="formEditProducto" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Codigo de producto</mat-label>
-        <input matInput required formControlName="marca" >
+        <input matInput required formControlName="marca" (click)="findByCodeProduct()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
@@ -20,20 +21,29 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Unidad de medida</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput [matAutocomplete]="unitM" appearance="fill" formControlName="idUnidadMe"
+          (input)="findTipoMedidaByName()">
+        <mat-autocomplete #unitM='matAutocomplete'>
+
+          <mat-option *ngFor="let unidadMedida of unidadMedidaList" [value]="unidadMedida.descripcion">
+            {{unidadMedida.descripcion}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Tipo de articulo</mat-label>
-        <input matInput required formControlName="descripcion">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Tipo de Articulo</mat-label>
+        <input matInput [matAutocomplete]="tipoP" appearance="fill" formControlName="idTipoArt"
+          (input)="findTipoProductoByName()">
+        <mat-autocomplete #tipoP='matAutocomplete'>
+
+          <mat-option *ngFor="let tipoProducto of tipoProductoList" [value]="tipoProducto.nombre">
+            {{tipoProducto.nombre}}
+          </mat-option>
+
+        </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
@@ -60,7 +70,7 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
-    <button mat-raised-button>Cancelar</button>
-    <button mat-raised-button class="btnSend"><mat-icon>send</mat-icon>Enviar</button>
+    <button mat-raised-button class="btnCancel" (click)="closeModal()">Cancelar</button>
+    <button mat-raised-button class="btnSend" (click)="editData()"><mat-icon>send</mat-icon>Enviar</button>
   </mat-dialog-actions>
 </div>
