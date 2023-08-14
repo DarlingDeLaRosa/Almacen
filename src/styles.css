@@ -150,7 +150,7 @@ table{
   color: #004b8d;
 }
 
-.reporteHeader{
+#reporteHeader{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr ;
   background-color:#C7D1EA;
@@ -160,7 +160,7 @@ table{
   margin-bottom: 10px;
 }
 
-.reporteHeader span {
+#reporteHeader span {
   margin-top: 5px;
   margin-bottom: 5px;
 }

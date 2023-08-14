@@ -31,7 +31,6 @@ export class ModalComponent {
     private store: Store<{ app: AppState }>
   ) {
     this.formEditProducto = this.fb.group({
-      idProducto: 0,
       idCatalogo: new FormControl('', Validators.required),
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
@@ -41,25 +40,33 @@ export class ModalComponent {
       idTipoArt: new FormControl('', Validators.required),
       auxiliar: new FormControl(''),
       denominacion: new FormControl(''),
+      idProducto: 0,
     })
   }
 
   ngOnInit() {
-    this.formEditProducto.setValue({
-      idProducto: this.item.idProducto,
-      idCatalogo: this.item.codProducto,
-      nombre: this.item.nombre,
-      descripcion: this.item.descripcion,
-      precio: this.item.precio,
-      stockMinimo: this.item.stockMinimo,
-      idUnidadMe: this.item.unidadMedida.idUnidadMe,
-      idTipoArt: this.item.idTipoArt.idTipoArt,
-      auxiliar: this.item.auxiliar.id,
-      denominacion: this.item.auxiliar.denominacion
-    })
+    console.log(this.item)
+    if (this.item !== null) {
 
+      this.formEditProducto.setValue({
+        idProducto: this.item.idProducto,
+        idCatalogo: this.item.catalogo.id,
+        nombre: this.item.catalogo.nombre,
+        descripcion: this.item.descripcion,
+        precio: this.item.precio,
+        stockMinimo: this.item.stockMinimo,
+        idUnidadMe: this.item.unidadMedida.descripcion,
+        idTipoArt: this.item.idTipoArt.nombre,
+        auxiliar: this.item.catalogo.auxiliar.id,
+        denominacion: this.item.catalogo.auxiliar.denominacion
+      })
+
+    }
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+
+    this.getUnidadMedida()
+    this.getTipoProducto()
   }
 
   closeModal() {
@@ -67,15 +74,19 @@ export class ModalComponent {
   }
 
   findByCodeProduct() {
+
     if (this.formEditProducto.value.idCatalogo.length >= 5) {
 
       this.api.findProductoByCode(this.url, this.token, this.formEditProducto.value.idCatalogo)
         .subscribe((res: any) => {
+          console.log(res)
+
           if (res.data !== null) {
 
             this.formEditProducto.patchValue({
-              auxiliar: res.data.catalogo.idAuxiliar,
-              denominacion: res.data.definicionProducto,
+              auxiliar: res.data.auxiliar.id,
+              idCatalogo: res.data.id,
+              denominacion: res.data.auxiliar.denominacion,
               nombre: res.data.nombre
             })
 
@@ -83,7 +94,6 @@ export class ModalComponent {
             alertProductCodeNoFound()
             this.formEditProducto.get('idCatalogo')?.reset()
           }
-
         })
     }
   }
@@ -125,7 +135,7 @@ export class ModalComponent {
     }
   }
 
-  findTipoProductoByName(){
+  findTipoProductoByName() {
     if (this.formEditProducto.value.idTipoArt.length >= 2) {
 
       this.apiTipoProducto.filterTipoProducto(this.url, this.token, 1, this.formEditProducto.value.idTipoArt)
@@ -147,7 +157,7 @@ export class ModalComponent {
 
     if (this.formEditProducto.valid) {
       if (
-           this.formEditProducto.value.codProducto !== this.item.codProducto
+        this.formEditProducto.value.idCatalogo !== this.item.catalogo.id
         || this.formEditProducto.value.nombre !== this.item.nombre
         || this.formEditProducto.value.descripcion !== this.item.descripcion
         || this.formEditProducto.value.precio !== this.item.precio
@@ -155,7 +165,7 @@ export class ModalComponent {
         || this.formEditProducto.value.idUnidadMe !== this.item.unidadMedida.idUnidadMe
         || this.formEditProducto.value.idTipoArt !== this.item.idTipoArt.idTipoArt
         || this.formEditProducto.value.stockMinimo !== this.item.stockMinimo
-        ) {
+      ) {
 
         this.api.editProducto(this.url, this.formEditProducto.value, this.token)
           .subscribe((res: any) => {

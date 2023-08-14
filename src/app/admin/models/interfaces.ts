@@ -1,4 +1,80 @@
 
+export interface Entrada {
+
+  idEntrada: number
+  recinto: {
+    idRecinto: number,
+    nombre: string
+  },
+  tipoEntrada: {
+    idTipoEntrada: number,
+    nombre: string,
+    descripcion: string
+  },
+  tipoAlm: {
+    idTipoAlm: number
+    nombre: string
+  },
+  tipoEntrega: {
+    idTipoEntrega: number,
+    nombre: string,
+    descripcion: string,
+    creador: {
+      idUsuario: number,
+      nombre: string,
+      apellido: string,
+      cargo: string
+    }
+  },
+  proveedor: {
+    idProveedor: number,
+    rnc: string,
+    razonSocial: string,
+    nombreComercial: string,
+    estadoProveedor: string,
+    representante: string,
+    telRepresentante: string
+  },
+  numOrden: string,
+  noFactura: string,
+  fechaFactura: Date,
+  fechaCreacion: string,
+  itbisGeneral: number,
+  total: number,
+  observacion: string,
+  fechaModif: Date,
+  creadoPor: {
+    idUsuario: number, nombre: string, apellido: string, cargo: string
+  },
+  detalles: [
+    {
+      idEntradaDet: number,
+      idEntrada: number,
+      producto: {
+        idProducto: number,
+        idCatalogo: number,
+        codInstitucional: string,
+        idAuxiliar: number,
+        nombre: string,
+        descripcion: string,
+        precio: number,
+        stock: number,
+        stockMinimo: number,
+        idUnidadMe: number,
+        idTipoArt: number
+      },
+      marca: string,
+      modelo: string,
+      condicion: string,
+      serial: string,
+      precio: number,
+      itbisProducto: number,
+      cantidad: number,
+      subTotal: number
+    }
+  ]
+}
+
 export interface detalleProductoEntrada {
   itbisEspecifico: boolean,
   producto: string,
@@ -189,11 +265,16 @@ export interface postProveedor {
 
 export interface producto {
   idProducto: number,
-  codProducto: string,
   codInstitucional: string,
-  auxiliar: {
+  catalogo: {
     id: number,
-    denominacion: string
+    nombre: string,
+    definicionProducto: string,
+    sinonimos: string,
+    auxiliar: {
+      id: string,
+      denominacion: string
+    }
   },
   nombre: string,
   descripcion: string,
@@ -253,13 +334,13 @@ export interface recinto {
 
 export interface persona {
 
-  id: 0,
+  id: number,
   recinto: {
-    idRecinto: 0,
+    idRecinto: number,
     nombre: string
   },
   departamento: {
-    idDepar: 0,
+    idDepar: number,
     nombre: string
   },
   nombre: string,
@@ -271,7 +352,7 @@ export interface persona {
   fechaCreacion: Date,
   correo: string
   creadoPorU: {
-    idUsuario: 0
+    idUsuario: number
     nombre: string,
     apellido: string,
     cargo: string

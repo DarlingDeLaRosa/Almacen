@@ -54,11 +54,13 @@ export class ProductosComponent implements OnInit {
 
       this.api.findProductoByCode(this.url, this.token, this.formProducto.value.idCatalogo)
         .subscribe((res: any) => {
+          console.log(res)
           if (res.data !== null) {
 
             this.formProducto.patchValue({
-              auxiliar: res.data.catalogo.idAuxiliar,
-              denominacion: res.data.definicionProducto,
+              idCatalogo: res.data.id,
+              auxiliar: res.data.auxiliar.id,
+              denominacion: res.data.auxiliar.denominacion,
               nombre: res.data.nombre
             })
 
@@ -134,6 +136,7 @@ export class ProductosComponent implements OnInit {
     this.formProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
     this.formProducto.value.idTipoArt = idTipoP[0].idTipoArt
 
+    console.log(this.formProducto.value)
     if (this.formProducto.valid) {
       console.log(this.formProducto.value)
       this.api.postProducto(this.url, this.formProducto.value, this.token)

@@ -1,8 +1,6 @@
-import { Portal } from '@angular/cdk/portal';
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, map, startWith } from 'rxjs';
 import { alertIsSuccess, alertRncNoFound, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { GET } from 'src/app/admin/models/interfaces';
@@ -53,7 +51,6 @@ export class ProveedoresComponent implements OnInit {
   }
 
   findByRNC() {
-
     this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
       .subscribe((res: any) => {
         if (res.data !== null) {
@@ -99,7 +96,6 @@ export class ProveedoresComponent implements OnInit {
             alertServerDown();
           }
         })
-
     }
   }
 

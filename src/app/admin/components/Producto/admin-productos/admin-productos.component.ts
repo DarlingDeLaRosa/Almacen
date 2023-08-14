@@ -1,18 +1,12 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import Swal from 'sweetalert2';
 import { producto } from 'src/app/admin/models/interfaces';
 import { FormControl, FormGroup } from '@angular/forms';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -77,7 +71,8 @@ export class AdminProductosComponent implements OnInit {
   }
 
   openModal(item: producto) {
-    let dialogRef = this.dialog.open(NuevoProductModalComponent, { data: item })
+    console.log(item)
+    let dialogRef = this.dialog.open(ModalComponent, { data: item })
 
     dialogRef.afterClosed().subscribe(()=> {
       this.getProducto()

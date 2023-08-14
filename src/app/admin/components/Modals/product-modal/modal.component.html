@@ -1,12 +1,15 @@
 <div class="modal">
-  <h2 class="modal-title" mat-dialog-title> Editar producto </h2>
+  <h2 class="modal-title" mat-dialog-title *ngIf="item !== null; else nuevoProducto"> Editar producto </h2>
+  <ng-template #nuevoProducto>
+    <h2 class="modal-title" mat-dialog-title> Nuevo producto </h2>
+  </ng-template>
   <mat-dialog-content class="modal-content">
 
     <div [formGroup]="formEditProducto" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Codigo de producto</mat-label>
-        <input matInput required formControlName="marca" (click)="findByCodeProduct()">
+        <input matInput required formControlName="idCatalogo" (keydown.enter)="findByCodeProduct()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
@@ -49,22 +52,22 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Auxiliar</mat-label>
-        <input matInput required formControlName="condicion">
+        <input matInput required formControlName="auxiliar">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Denominación</mat-label>
-        <input matInput required formControlName="condicion">
+        <input matInput required formControlName="denominacion">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Precio</mat-label>
-        <input matInput required formControlName="condicion">
+        <input matInput required formControlName="precio">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Cantidad minima requerida</mat-label>
-        <input type="number" matInput required formControlName="precio">
+        <input type="number" matInput required formControlName="stockMinimo">
       </mat-form-field>&nbsp;
 
     </div>

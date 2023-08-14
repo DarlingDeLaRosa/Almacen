@@ -4,8 +4,15 @@ import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nue
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { detalleProductoEntrada } from 'src/app/admin/models/interfaces';
+import { detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
+import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
+import { proveedorService } from 'src/app/admin/Services/proveedor.service';
+import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
+import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
+import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
+import { ModalComponent } from '../../Modals/product-modal/modal.component';
+import { productoService } from 'src/app/admin/Services/producto.service';
 
 @Component({
   selector: 'app-entradas',
@@ -22,47 +29,189 @@ export class EntradasComponent implements OnInit {
   generalITBIS: boolean = false;
   serial: boolean = false;
 
+  proveedorList: proveedor[] = []
+  tipoAlmacenList: tipoAlmacen[] = []
+  tipoEntradaList: tipoEntrada[] = []
+  tipoEntregaList: tipoEntrega[] = []
+  productoList: producto[] = []
+
   constructor(
     public dialog: MatDialog,
     public fb: FormBuilder,
+    private apiProveedor: proveedorService,
+    private apiTipoAlmacen: TipoDeAlmacenService,
+    private apiTipoEntrega: TipoDeEntregaService,
+    private apiTipoEntrada: TipoDeEntradaService,
+    private apiProducto: productoService,
     private store: Store<{ app: AppState }>
   ) {
     this.formEntrada = this.fb.group({
-      itbisGeneral: new FormControl(''),
-      fecha: new FormControl('', Validators.required),
-      recinto: new FormControl('', Validators.required),
-      proveedor: new FormControl('', Validators.required),
-      tipoAlmacen: new FormControl('', Validators.required),
-      tipoEntrada: new FormControl('', Validators.required),
-      tipoEntrega: new FormControl('', Validators.required),
-      noEntrada: new FormControl('', Validators.required),
-      noContrato: new FormControl('', Validators.required),
+      fechaFactura: new FormControl('', Validators.required),
+      idProveedor: new FormControl('', Validators.required),
+      idTipoAlm: new FormControl('', Validators.required),
+      idTipoEntrada: new FormControl('', Validators.required),
+      idTipoEntrega: new FormControl('', Validators.required),
+      numOrden: new FormControl('', Validators.required),
       noFactura: new FormControl('', Validators.required),
+      itbisGeneral: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
-      ITBIS: new FormControl(''),
+      total: new FormControl(''),
     });
 
     this.formDetalleEntrada = this.fb.group({
-      itbisEspecifico: new FormControl(''),
-      producto: new FormControl('', Validators.required),
+      idProducto: new FormControl('', Validators.required),
       cantidad: new FormControl('', Validators.required),
       condicion: new FormControl('', Validators.required),
       marca: new FormControl('', Validators.required),
       modelo: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
-      noSerial: new FormControl(''),
-      ITBISArticulo: new FormControl(''),
-      subtotal: new FormControl(''),
+      serial: new FormControl(''),
+      subTotal: new FormControl(''),
+      itbisProducto: new FormControl(''),
+      idEntrada: new FormControl('')
     })
   }
 
   ngOnInit(): void {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+
+    this.getProveedor()
+    this.getProducto()
+    this.getTipoAlmacen()
+    this.getTipoEntrada()
+    this.getTipoEntrega()
+  }
+
+  getTipoAlmacen() {
+    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        console.log(res)
+        this.tipoAlmacenList = res.data
+      });
+  }
+
+  getProveedor() {
+    this.apiProveedor.getProveedor(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        this.proveedorList = res.data
+      });
+  }
+
+  getTipoEntrada() {
+    this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        this.tipoEntradaList = res.data
+      });
+  }
+
+  getTipoEntrega() {
+    this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        this.tipoEntregaList = res.data
+      });
+  }
+
+  getProducto() {
+    this.apiProducto.getProducto(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        console.log(res.data)
+        this.productoList = res.data
+      });
+  }
+
+  findProveedorByName() {
+    if (this.formEntrada.value.idProveedor.length >= 2) {
+
+      this.apiProveedor.filterProveedor(this.url, this.token, 1, this.formEntrada.value.idProveedor)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.proveedorList = []
+
+          options.forEach((item: any) => {
+            this.proveedorList.push(item)
+          });
+        })
+    } else {
+      this.getProveedor()
+    }
+  }
+
+  findTipoAlmacenByName() {
+    if (this.formEntrada.value.idTipoAlm.length >= 2) {
+
+      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEntrada.value.idTipoAlm)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.tipoAlmacenList = []
+
+          options.forEach((item: any) => {
+            this.tipoAlmacenList.push(item)
+          });
+        })
+    } else {
+      this.getTipoAlmacen()
+    }
+  }
+
+  findTipoEntradaByName() {
+    if (this.formEntrada.value.idTipoEntrada.length >= 2) {
+
+      this.apiTipoEntrada.filterTipoEntrada(this.url, this.token, 1, this.formEntrada.value.idTipoEntrada)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.tipoEntradaList = []
+
+          options.forEach((item: any) => {
+            this.tipoEntradaList.push(item)
+          });
+        })
+    } else {
+      this.getTipoAlmacen()
+    }
+  }
+
+  findTipoEntregaByName() {
+    if (this.formEntrada.value.idTipoEntrega.length >= 2) {
+
+      this.apiTipoEntrega.filterTipoEntrega(this.url, this.token, 1, this.formEntrada.value.idTipoEntrega)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.tipoEntregaList = []
+
+          options.forEach((item: any) => {
+            this.tipoEntregaList.push(item)
+          });
+        })
+    } else {
+      this.getTipoEntrega()
+    }
+  }
+
+  findProductoByName(){
+    if (this.formDetalleEntrada.value.idProducto.length >= 2) {
+
+      this.apiProducto.filterProducto(this.url, this.token, 1, this.formDetalleEntrada.value.idProducto)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.productoList = []
+
+          options.forEach((item: any) => {
+            this.productoList.push(item)
+          });
+        })
+    } else {
+      this.getProducto()
+    }
   }
 
   openModal() {
-    this.dialog.open(NuevoProductModalComponent)
+    this.dialog.open(ModalComponent)
   }
 
   itbisOption(event: any) {
@@ -81,49 +230,51 @@ export class EntradasComponent implements OnInit {
   }
 
 
-  addDetail(){
+  addDetail() {
     this.formEntrada.value.itbisGeneral = this.generalITBIS
-    this.formDetalleEntrada.value.itbisEspecifico = !this.generalITBIS
     this.formDetalleEntrada.value.subtotal =
-    this.formDetalleEntrada.value.cantidad * this.formDetalleEntrada.value.precio
+      this.formDetalleEntrada.value.cantidad * this.formDetalleEntrada.value.precio
 
     console.log(this.formDetalleEntrada.value)
     console.log(this.formDetalleEntrada.valid)
 
-    if(this.formDetalleEntrada.valid){
+    if (this.formDetalleEntrada.valid) {
+      console.log(this.formDetalleEntrada.value)
       this.detailGroup.push(this.formDetalleEntrada.value)
       this.formDetalleEntrada.reset()
     }
   }
 
-  editDetail(index: number, item: detalleProductoEntrada){
+  editDetail(index: number, item: detalleProductoEntrada) {
 
     this.detailGroup.splice(index, 1)
 
     this.formDetalleEntrada.setValue({
-      itbisEspecifico: `${item.itbisEspecifico}`,
-      producto: `${item.producto}`,
+      idProducto: `${item.producto}`,
       cantidad: `${item.cantidad}`,
       condicion: `${item.condicion}`,
       marca: `${item.marca}`,
       modelo: `${item.modelo}`,
       precio: `${item.precio}`,
-      noSerial: `${item.noSerial}`,
-      ITBISArticulo: `${item.ITBISArticulo}`,
-      subtotal: `${item.subtotal}`,
+      serial: `${item.noSerial}`,
+      itbisProducto: `${item.ITBISArticulo}`,
+      subTotal: `${item.subtotal}`,
     })
   }
 
-  async removeDetail(index: number){
+  async removeDetail(index: number) {
 
     let removeChoise: boolean = await alertRemoveSure()
 
-    if(removeChoise){
+    if (removeChoise) {
       this.detailGroup.splice(index, 1)
     }
   }
 
   sendData() {
+
+    console.log(this.formDetalleEntrada.value)
+    console.log(this.formEntrada.value)
 
     //this.formEntrada.value.itbisGeneral = this.generalITBIS
     //this.formDetalleEntrada.value.itbisEspecifico = !this.generalITBIS

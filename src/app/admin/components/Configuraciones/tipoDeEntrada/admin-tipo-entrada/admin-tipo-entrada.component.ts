@@ -1,10 +1,5 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import Swal from 'sweetalert2';
 import { TipoDeEntradaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-entrada-modal/tipo-de-entrada-modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { tipoEntrada } from 'src/app/admin/models/interfaces';

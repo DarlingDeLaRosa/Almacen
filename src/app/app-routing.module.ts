@@ -8,13 +8,13 @@ const routes: Routes = [
   { path: 'login', component: AuthComponent, canActivate: [authGuardBackToLogIn]},
   {
     path: 'almacen',
-    //canActivate: [authGuard, roleSuperAdminGuard],
+    canActivate: [authGuard, roleSuperAdminGuard],
     loadChildren: ()=>
     import('./admin/superAdmin-routing.module').then((m)=>m.AdminRoutingModule)
   },
   {
     path: 'user-almacen',
-    //canActivate: [roleUserGuard],
+    canActivate: [roleUserGuard],
     loadChildren: ()=>
     import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
   },

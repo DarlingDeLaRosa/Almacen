@@ -49,6 +49,7 @@ import { NuevoProductModalComponent } from './components/Modals/nuevo-product-mo
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChangePasswordComponent } from './components/Modals/change-password/change-password.component';
+import { NgxPrintModule } from 'ngx-print';
 
 
 @NgModule({
@@ -104,7 +105,8 @@ import { ChangePasswordComponent } from './components/Modals/change-password/cha
     AdminRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPrintModule
   ],
   exports:[
     AdminEntradasComponent,
