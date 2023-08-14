@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'user-almacen',
-    canActivate: [roleUserGuard],
+    //canActivate: [roleUserGuard],
     loadChildren: ()=>
     import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
   },

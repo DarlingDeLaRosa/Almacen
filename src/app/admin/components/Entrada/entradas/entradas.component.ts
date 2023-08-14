@@ -1,14 +1,10 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { detalleProducto } from 'src/app/admin/models/interfaces';
+import { detalleProductoEntrada } from 'src/app/admin/models/interfaces';
 import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -22,7 +18,7 @@ export class EntradasComponent implements OnInit {
   url!: string;
   token!: string
 
-  detailGroup: detalleProducto[] = [];
+  detailGroup: detalleProductoEntrada[] = [];
   generalITBIS: boolean = false;
   serial: boolean = false;
 
@@ -95,15 +91,12 @@ export class EntradasComponent implements OnInit {
     console.log(this.formDetalleEntrada.valid)
 
     if(this.formDetalleEntrada.valid){
-      console.log(typeof this.formDetalleEntrada.value)
-      console.log(this.formDetalleEntrada.value)
-
       this.detailGroup.push(this.formDetalleEntrada.value)
       this.formDetalleEntrada.reset()
     }
   }
 
-  editDetail(index: number, item: detalleProducto){
+  editDetail(index: number, item: detalleProductoEntrada){
 
     this.detailGroup.splice(index, 1)
 

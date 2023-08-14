@@ -1,17 +1,18 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nueva salida</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="formSalida" class="formInfo">
 
       <h2>Informacion de salidas</h2>
 
       <mat-form-field>
         <mat-label>Fecha</mat-label>
-        <input matInput [matDatepicker]="date">
+        <input matInput [matDatepicker]="date" formControlName="fecha">
         <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #date></mat-datepicker>
       </mat-form-field> &nbsp;
@@ -31,7 +32,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Salida</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipo_salida">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipoSalida">
         <mat-autocomplete #auto='matAutocomplete'>
           <!--
         <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
@@ -44,7 +45,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de almacen</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipo_alm">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipoAlm">
         <mat-autocomplete #auto='matAutocomplete'>
           <!--
         <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
@@ -57,7 +58,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de departamento</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepartamento">
         <mat-autocomplete #auto='matAutocomplete'>
           <!--
         <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
@@ -70,12 +71,12 @@
 
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
-        <input matInput required formControlName="nombre">
+        <input matInput required formControlName="observacion">
       </mat-form-field>&nbsp;
 
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Creado por</mat-label>
-        <input readonly matInput required formControlName="nombre">
+        <input readonly matInput required formControlName="creadoPor">
       </mat-form-field>&nbsp;
 
     </div>
@@ -89,7 +90,7 @@
 
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
-          <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+          <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idProducto">
           <mat-autocomplete #auto='matAutocomplete'>
             <!--
         <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
@@ -103,37 +104,37 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Existencia</mat-label>
-          <input type="number" readonly matInput required formControlName="nombre">
+          <input type="number" readonly matInput required formControlName="existencia">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="cantidad">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Serial</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="noSerial">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Condición</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="condicion">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="precio">
         </mat-form-field>&nbsp;
 
 
@@ -144,61 +145,12 @@
     </div>
 
     <div>
-      <!--
-      <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)">
-
-        <ng-container matColumnDef="producto">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by producto">Producto</th>
-          <td mat-cell *matCellDef="let element"> {{element.producto}} </td>
-          <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
-        </ng-container>
-
-        <ng-container matColumnDef="cantidad">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cantidad">Cantidad</th>
-          <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-
-        <ng-container matColumnDef="editar">
-          <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-          <td mat-cell *matCellDef="let element" class="fuctions">
-            <button class="btnEdit" mat-raised-button>
-              <mat-icon>edit</mat-icon>Editar
-            </button>
-          </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-
-        <ng-container matColumnDef="eliminar">
-          <th mat-header-cell *matHeaderCellDef style="padding: 0;"></th>
-          <td mat-cell *matCellDef="let element" class="fuctions">
-            <button class="btnDelete" mat-raised-button>
-              <mat-icon>delete</mat-icon>Remover
-            </button>
-          </td>
-          <td mat-footer-cell *matFooterCellDef>
-            <span class="btnContainer">
-              <button class="btnSend" mat-raised-button>
-                <mat-icon>send</mat-icon>Enviar
-              </button>
-            </span>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row class="footerTable" *matFooterRowDef="displayedColumns"></tr>
-
-      </table>
-      <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
-      -->
 
       <table>
         <thead class="headerTable">
           <tr class="headerRow">
             <th class="headerCell">Producto</th>
             <th class="headerCell">Cantidad saliente</th>
-            <th class="headerCell">Cantidad restante</th>
             <th class="headerCell">Condición</th>
             <th class="headerCell">Marca</th>
             <th class="headerCell">Modelo</th>
@@ -209,17 +161,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="dataRow">
-            <td class="dataCell">CPU</td>
-            <th class="headerCell">1</th>
-            <th class="headerCell">9</th>
-            <td class="dataCell">Bueno</td>
-            <td class="dataCell">Dell</td>
-            <td class="dataCell">pc-02445</td>
-            <td class="dataCell">144789654</td>
-            <td class="dataCell">3900</td>
-            <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
+            <td class="dataCell">{{item.idProducto}}</td>
+            <th class="headerCell">{{item.cantidad}}</th>
+            <td class="dataCell">{{item.condicion}}</td>
+            <td class="dataCell">{{item.marca}}</td>
+            <td class="dataCell">{{item.modelo}}</td>
+            <td class="dataCell">{{item.noSerial}}</td>
+            <td class="dataCell">{{item.precio}}</td>
+            <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)" ><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)" ><mat-icon>delete</mat-icon></button></td>
           </tr>
 
         </tbody>
@@ -231,10 +182,9 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell"></td>
             <td class="footerCell">Valor total</td>
             <td class="footerCell"></td>
-            <td class="footerCell"> <button class="fucSend"><mat-icon>send</mat-icon></button></td>
+            <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>
         </tfoot>
       </table>
