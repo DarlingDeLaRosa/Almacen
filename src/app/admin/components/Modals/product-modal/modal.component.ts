@@ -154,8 +154,8 @@ export class ModalComponent {
   }
 
   editData() {
-
-    if (this.formEditProducto.valid) {
+    console.log(this.formEditProducto.value)
+    if (this.formEditProducto.valid && this.item !== null) {
       if (
         this.formEditProducto.value.idCatalogo !== this.item.catalogo.id
         || this.formEditProducto.value.nombre !== this.item.nombre
@@ -188,6 +188,32 @@ export class ModalComponent {
         alertSameData()
         this.closeModal();
       }
+    } else if (this.formEditProducto.valid && this.item == null) {
+      this.formEditProducto.removeControl('idProducto')
+
+      let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
+      let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
+
+      this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
+      this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
+      console.log(this.formEditProducto.value)
+
+      this.api.postProducto(this.url, this.formEditProducto.value, this.token)
+        .subscribe((res: any) => {
+
+          let dataProducto = res;
+
+          if (dataProducto.success) {
+            alertIsSuccess(true)
+            this.closeModal();
+          } else {
+            alertIsSuccess(false)
+            this.closeModal();
+          }
+          () => {
+            alertServerDown();
+          }
+        })
     }
   }
 

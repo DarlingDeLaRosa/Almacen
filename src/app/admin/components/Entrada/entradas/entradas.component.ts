@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NuevoProductModalComponent } from '../../Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
-import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
-import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
+import { alertIsSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { productoService } from 'src/app/admin/Services/producto.service';
+import { entradaService } from 'src/app/admin/Services/entrada.service';
 
 @Component({
   selector: 'app-entradas',
@@ -24,6 +23,9 @@ export class EntradasComponent implements OnInit {
   formDetalleEntrada: FormGroup;
   url!: string;
   token!: string
+  totalResult: number = 0
+  totalItbis: number = 0
+  mostrarTotalItbis: number = 0
 
   detailGroup: detalleProductoEntrada[] = [];
   generalITBIS: boolean = false;
@@ -43,6 +45,7 @@ export class EntradasComponent implements OnInit {
     private apiTipoEntrega: TipoDeEntregaService,
     private apiTipoEntrada: TipoDeEntradaService,
     private apiProducto: productoService,
+    private api: entradaService,
     private store: Store<{ app: AppState }>
   ) {
     this.formEntrada = this.fb.group({
@@ -53,8 +56,8 @@ export class EntradasComponent implements OnInit {
       idTipoEntrega: new FormControl('', Validators.required),
       numOrden: new FormControl('', Validators.required),
       noFactura: new FormControl('', Validators.required),
-      itbisGeneral: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
+      itbisGeneral: new FormControl(''),
       total: new FormControl(''),
     });
 
@@ -192,7 +195,7 @@ export class EntradasComponent implements OnInit {
     }
   }
 
-  findProductoByName(){
+  findProductoByName() {
     if (this.formDetalleEntrada.value.idProducto.length >= 2) {
 
       this.apiProducto.filterProducto(this.url, this.token, 1, this.formDetalleEntrada.value.idProducto)
@@ -211,7 +214,11 @@ export class EntradasComponent implements OnInit {
   }
 
   openModal() {
-    this.dialog.open(ModalComponent)
+    let dialogRef = this.dialog.open(ModalComponent)
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getProducto()
+    })
   }
 
   itbisOption(event: any) {
@@ -222,26 +229,30 @@ export class EntradasComponent implements OnInit {
     this.serial = event.value
   }
 
-  getItbis() {
-    //return this.data.map((item)=> item.itbis).reduce((acc, value) => acc + value, 0)
-  }
-  getSubtotal() {
-    //return this.data.map((item)=> item.subtotal).reduce((acc, value) => acc + value, 0)
-  }
-
-
   addDetail() {
-    this.formEntrada.value.itbisGeneral = this.generalITBIS
-    this.formDetalleEntrada.value.subtotal =
-      this.formDetalleEntrada.value.cantidad * this.formDetalleEntrada.value.precio
 
     console.log(this.formDetalleEntrada.value)
-    console.log(this.formDetalleEntrada.valid)
 
     if (this.formDetalleEntrada.valid) {
-      console.log(this.formDetalleEntrada.value)
-      this.detailGroup.push(this.formDetalleEntrada.value)
-      this.formDetalleEntrada.reset()
+
+      this.totalResult += this.formDetalleEntrada.value.subTotal
+
+      if (!this.generalITBIS) {
+        this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
+      } else {
+        this.totalItbis += this.formDetalleEntrada.value.itbisProducto
+        this.mostrarTotalItbis = this.totalItbis
+        this.formEntrada.value.itbisGeneral = this.totalItbis
+      }
+
+      console.log(this.formEntrada.valid)
+
+      if (this.formEntrada.valid) {
+        console.log(this.formDetalleEntrada.value)
+        this.detailGroup.push(this.formDetalleEntrada.value)
+        this.formDetalleEntrada.reset()
+      }
+
     }
   }
 
@@ -249,16 +260,16 @@ export class EntradasComponent implements OnInit {
 
     this.detailGroup.splice(index, 1)
 
-    this.formDetalleEntrada.setValue({
-      idProducto: `${item.producto}`,
+    this.formDetalleEntrada.patchValue({
+      idProducto: `${item.idProducto}`,
       cantidad: `${item.cantidad}`,
       condicion: `${item.condicion}`,
       marca: `${item.marca}`,
       modelo: `${item.modelo}`,
       precio: `${item.precio}`,
-      serial: `${item.noSerial}`,
-      itbisProducto: `${item.ITBISArticulo}`,
-      subTotal: `${item.subtotal}`,
+      serial: `${item.serial}`,
+      itbisProducto: `${item.itbisProducto}`,
+      subTotal: `${item.subTotal}`,
     })
   }
 
@@ -271,34 +282,67 @@ export class EntradasComponent implements OnInit {
     }
   }
 
+  subTotalResult() {
+    let form = this.formDetalleEntrada.value
+
+    if (this.formDetalleEntrada.get('cantidad')?.valid || this.formDetalleEntrada.get('precio')?.valid) {
+      if (this.formDetalleEntrada.value.itbisProducto >= 0.01) {
+
+        this.totalItbis = form.cantidad * form.itbisProducto
+        let total = form.precio * form.cantidad
+        total += this.totalItbis
+        this.formDetalleEntrada.patchValue(
+          { subTotal: total }
+        )
+
+      } else {
+
+        let total = form.precio * form.cantidad
+        this.formDetalleEntrada.patchValue({
+          subTotal: total
+        })
+      }
+    }
+  }
+
   sendData() {
+    this.formEntrada.value.total = this.totalResult
 
-    console.log(this.formDetalleEntrada.value)
-    console.log(this.formEntrada.value)
+    let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
+    this.formEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
 
-    //this.formEntrada.value.itbisGeneral = this.generalITBIS
+    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEntrada.value.idTipoAlm)
+    this.formEntrada.value.idTipoAlm = idTipoAl[0].idTipoAlm
+
+    let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrega)
+    this.formEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
+
+    let idTipoPro = this.proveedorList.filter(item => item.razonSocial === this.formEntrada.value.idProveedor)
+    this.formEntrada.value.idProveedor = idTipoPro[0].idProveedor
+
     //this.formDetalleEntrada.value.itbisEspecifico = !this.generalITBIS
     //this.formDetalleEntrada.value.subtotal =
     //this.formDetalleEntrada.value.cantidad * this.formDetalleEntrada.value.precio
 
     //let dataEntrada: GET = { data: [], message: '', success: false };
 
-    if (this.formEntrada.valid) {
+    if (this.formEntrada.valid && this.detailGroup.length >= 1) {
 
-      //this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
-      //  .subscribe((res: any) => {
-      //
-      //    dataTipoSalida = res
-      //
-      //    if (dataTipoSalida.success) {
-      //      alertIsSuccess(true)
-      //      this.formTipoSalida.reset()
-      //    } else {
-      //      alertIsSuccess(false)
-      //    }
-      //    ()=> {
-      //      alertServerDown();
-      //    }})
+      console.log(this.formEntrada.value)
+      this.api.postEntrada(this.url, this.formEntrada.value, this.token)
+        .subscribe((res: any) => {
+
+          console.log(res)
+          //if (res.success) {
+          //  alertIsSuccess(true)
+          //  //this.formTipoSalida.reset()
+          //} else {
+          //  alertIsSuccess(false)
+          //}
+          //() => {
+          //  alertServerDown();
+          //}
+        })
 
     }
   }

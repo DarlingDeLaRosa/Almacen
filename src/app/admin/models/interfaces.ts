@@ -75,20 +75,63 @@ export interface Entrada {
   ]
 }
 
-export interface detalleProductoEntrada {
-  itbisEspecifico: boolean,
-  producto: string,
-  cantidad: number,
-  condicion: string,
-  marca: string,
-  modelo: string,
-  precio: number,
-  noSerial: string,
-  ITBISArticulo: number,
-  subtotal: number,
+export interface postEntrada {
+  idTipoEntrada: number,
+  idTipoAlm: number,
+  idTipoEntrega: number,
+  idProveedor: number,
+  numOrden: string,
+  noFactura: string,
+  fechaFactura: Date,
+  itbisGeneral: number,
+  total: number,
+  observacion: string
+}
+
+export interface putEntrada {
+  idEntrada: number,
+  idTipoEntrada: number,
+  idTipoAlm: number,
+  idTipoEntrega: number,
+  idProveedor: number,
+  numOrden: string,
+  noFactura: string,
+  fechaFactura: Date,
+  itbisGeneral: number,
+  total: number,
+  observacion: string
 }
 
 
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+export interface detalleProductoEntrada {
+  idProducto: number,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  cantidad: number,
+  itbisProducto: number,
+  subTotal: number,
+  idEntrada: number
+}
+
+export interface putDetalleProductoEntrada {
+  idEntradaDet: number,
+  idProducto: number,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  cantidad: number,
+  itbisProducto: number,
+  subTotal: number,
+  idEntrada: number
+}
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////

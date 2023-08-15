@@ -136,7 +136,6 @@ export class ProductosComponent implements OnInit {
     this.formProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
     this.formProducto.value.idTipoArt = idTipoP[0].idTipoArt
 
-    console.log(this.formProducto.value)
     if (this.formProducto.valid) {
       console.log(this.formProducto.value)
       this.api.postProducto(this.url, this.formProducto.value, this.token)

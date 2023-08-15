@@ -48,7 +48,7 @@ export class AdminProductosComponent implements OnInit {
   }
 
   getProducto() {
-    this.api.getProducto(this.url, this.token, this.pagina,)
+    this.api.getProducto(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -71,7 +71,6 @@ export class AdminProductosComponent implements OnInit {
   }
 
   openModal(item: producto) {
-    console.log(item)
     let dialogRef = this.dialog.open(ModalComponent, { data: item })
 
     dialogRef.afterClosed().subscribe(()=> {

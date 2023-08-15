@@ -31,27 +31,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">24/06/23</td>
-          <td class="dataCell">UM</td>
-          <td class="dataCell">788456122</td>
-          <td class="dataCell">Adiquisición</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">Bien</td>
-          <td class="dataCell">288399400</td>
-          <td class="dataCell">940003299</td>
-          <td class="dataCell">Bravo</td>
-          <td class="dataCell">6000</td>
+        <tr class="dataRow" *ngFor="let item of dataFiltered">
+          <td class="dataCell">{{item.fechaFactura | date:'dd/MM/yyyy'}}</td>
+          <td class="dataCell">{{item.recinto.nombre}}</td>
+          <td class="dataCell">{{item.idEntrada}}</td>
+          <td class="dataCell">{{item.tipoEntrada.nombre}}</td>
+          <td class="dataCell">{{item.tipoAlm.nombre}}</td>
+          <td class="dataCell">{{item.tipoEntrega.nombre}}</td>
+          <td class="dataCell">{{item.numOrden}}</td>
+          <td class="dataCell">{{item.noFactura}}</td>
+          <td class="dataCell">{{item.proveedor.razonSocial}}</td>
+          <td class="dataCell">{{item.total}}</td>
           <td class="dataCell"> <button [routerLink]="['/almacen/editar-entrada']" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button (click)="removeAlert(6)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"> <button (click)="removeAlert(item.idEntrada)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 
     </table>
     <div class="pagination">
-      <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+      <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
       <div style="display: grid; place-items: center;">{{pagina}}</div>
-      <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+      <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
   </div>
 </div>
