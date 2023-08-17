@@ -124,18 +124,22 @@ table{
   font-weight: 300;
 }
 
-.fucEdit, .fucRem, .fucSend{
+.fucEdit, .fucRem, .fucSend, .fucDetails{
   padding: 5px 10px;
   border: none;
   background-color: transparent;
   color: green;
 }
-.fucEdit, .fucRem, .fucSend:hover{
+.fucEdit, .fucDetails ,.fucRem, .fucSend:hover{
   cursor: pointer;
 }
 
 .fucRem{
   color: red;
+}
+
+.fucDetails{
+  color: #004b8d;
 }
 
 .footerCell{
@@ -149,6 +153,8 @@ table{
 .fucSend{
   color: #004b8d;
 }
+
+
 
 #reporteHeader{
   display: grid;

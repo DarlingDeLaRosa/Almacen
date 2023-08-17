@@ -44,7 +44,7 @@ const routes: Routes = [
 
       {path: 'entrada', component: EntradasComponent,},
       {path: 'administrar-entrada', component: AdminEntradasComponent},
-      {path: 'editar-entrada', component: EditEntradasComponent},
+      {path: 'editar-entrada/:id', component: EditEntradasComponent},
 
       { path: 'salida', component: SalidasComponent },
       {path: 'administrar-salida', component: AdminSalidasComponent},

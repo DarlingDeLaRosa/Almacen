@@ -50,6 +50,7 @@ import { ReporteTransparenciaComponent } from './components/Reportes/reporte-tra
 import { HttpClientModule } from '@angular/common/http';
 import { ChangePasswordComponent } from './components/Modals/change-password/change-password.component';
 import { NgxPrintModule } from 'ngx-print';
+import { ShowDetailsComponent } from './components/Modals/show-details/show-details.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { NgxPrintModule } from 'ngx-print';
     ReporteSalidaProductoComponent,
     NuevoProductModalComponent,
     ReporteTransparenciaComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ShowDetailsComponent
   ],
   imports: [
     CommonModule,

@@ -84,6 +84,7 @@ export interface postEntrada {
   noFactura: string,
   fechaFactura: Date,
   itbisGeneral: number,
+  itbisGeneralEstado: boolean,
   total: number,
   observacion: string
 }
@@ -107,14 +108,14 @@ export interface putEntrada {
 /////////////////////////////////////////////////////////////////
 
 export interface detalleProductoEntrada {
-  idProducto: number,
+  idProducto: any,
   marca: string,
   modelo: string,
   condicion: string,
   serial: string,
   precio: number,
   cantidad: number,
-  itbisProducto: number,
+  itbisProducto: any,
   subTotal: number,
   idEntrada: number
 }
@@ -131,6 +132,34 @@ export interface putDetalleProductoEntrada {
   itbisProducto: number,
   subTotal: number,
   idEntrada: number
+}
+
+export interface detalleByIdEntrada {
+
+  idEntradaDet: number,
+  idEntrada: number,
+  producto: {
+    idProducto: number,
+    idCatalogo: number,
+    codInstitucional: string,
+    idAuxiliar: number,
+    nombre: string,
+    descripcion: string,
+    precio: number,
+    stock: number,
+    stockMinimo: number,
+    idUnidadMe: number,
+    idTipoArt: number
+  },
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  itbisProducto: number,
+  cantidad: number,
+  subTotal: number
+
 }
 
 /////////////////////////////////////////////////////////////////

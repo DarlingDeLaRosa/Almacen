@@ -1,51 +1,41 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Editar entrada</h1>
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
   <div class="form">
-    <div class="formInfo">
+    <div [formGroup]="formEditEntrada" class="formInfo">
 
       <h2>Informacion de entrada</h2>
 
       <div class="ITBIS">
-        <h4>El ITBIS es general?</h4>
-        <mat-radio-group> <!-- (change)="itbisOption($event)"-->
-          <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
+        <h4>El ITBIS de la factura es general?</h4>
+        <mat-radio-group (change)="itbisOption($event)">
+          <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
+          <!--Hacer que el cheked sea el seleccionado-->
           <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
-      <mat-form-field>
+      <mat-form-field hideRequiredMarker>
         <mat-label>Fecha</mat-label>
-        <input matInput [matDatepicker]="date">
+        <input matInput required [matDatepicker]="date" appearance="fill" formControlName="fechaFactura">
         <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #date></mat-datepicker>
       </mat-form-field> &nbsp;
 
       <mat-form-field hideRequiredMarker>
-        <mat-label>Recinto</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
-        </mat-autocomplete>
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
         <mat-label>Proveedor</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput required [matAutocomplete]="pro" appearance="fill" formControlName="idProveedor"
+          (input)="findProveedorByName()">
+        <mat-autocomplete #pro='matAutocomplete'>
+
+          <mat-option *ngFor="let proveedor of proveedorList" [value]="proveedor.razonSocial">
+            {{proveedor.razonSocial}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
@@ -53,107 +43,147 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Almacen</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput required [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlm"
+          (input)="findTipoAlmacenByName()">
+        <mat-autocomplete #Talm='matAutocomplete'>
+
+          <mat-option *ngFor="let tipoAlmacen of tipoAlmacenList" [value]="tipoAlmacen.nombre">
+            {{tipoAlmacen.nombre}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Entrada</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-        <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+        <input matInput required [matAutocomplete]="Tetd" appearance="fill" formControlName="idTipoEntrada"
+          (input)="findTipoEntradaByName()">
+        <mat-autocomplete #Tetd='matAutocomplete'>
+
+          <mat-option *ngFor="let tipoEntrada of tipoEntradaList" [value]="tipoEntrada.nombre">
+            {{tipoEntrada.nombre}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Entrega</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idTipoEntrega"
+          (input)="findTipoEntregaByName()">
         <mat-autocomplete #auto='matAutocomplete'>
-          <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+
+          <mat-option *ngFor="let tipoEntrega of tipoEntregaList" [value]="tipoEntrega.nombre">
+            {{tipoEntrega.nombre}}
+          </mat-option>
+
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Num. De orden</mat-label>
-        <input matInput required formControlName="nombre">
+        <mat-label>No. Contrato</mat-label>
+        <input matInput required formControlName="numOrden">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>No. Factura</mat-label>
+        <input matInput required formControlName="noFactura">
       </mat-form-field>&nbsp;
 
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
-        <input matInput required formControlName="nombre">
+        <input matInput required formControlName="observacion">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill"><!--*ngIf="!generalITBIS; else generalItbis"-->
+      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else generalItbis">
         <mat-label>ITBIS General</mat-label>
-        <input type="number" matInput required formControlName="nombre">
+        <input type="number" matInput formControlName="itbisGeneral">
       </mat-form-field>&nbsp;
       <ng-template #generalItbis></ng-template>
 
     </div>
 
-    <div class="formInfo">
+    <div [formGroup]="formEditDetalleEntrada" class="formInfo">
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
-        <button mat-raised-button class="btnNavigate">Crear nuevo producto</button>
+        <button mat-raised-button (click)="openModal()">Crear nuevo producto</button>
       </div>
       <div>
 
+        <div class="ITBIS">
+          <h4>El producto contiene numero serial?</h4>
+          <mat-radio-group (change)="serialOption($event)">
+            <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
+            <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
-          <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idUnidadMe">
-          <mat-autocomplete #auto='matAutocomplete'>
-            <!--
-        <mat-option *ngFor="let option of options" [value]="[option.id, option.nombre]">
-          {{option.nombre}}
-        </mat-option>
-      -->
+          <input matInput [matAutocomplete]="proD" appearance="fill" formControlName="idProducto" (input)="findProductoByName()">
+          <mat-autocomplete #proD='matAutocomplete'>
+
+            <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
+              {{producto.nombre}}
+            </mat-option>
+
           </mat-autocomplete>
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="cantidad" (input)="subTotalResult()">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Condición</mat-label>
+          <mat-select required appearance="fill" formControlName="condicion">
+            <mat-option value="Bueno">Bueno</mat-option>
+            <mat-option value="Regular">Regular</mat-option>
+            <mat-option value="Dañado">Dañado</mat-option>
+          </mat-select>
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Precio</mat-label>
+          <mat-label>Marca</mat-label>
+          <input matInput required formControlName="marca">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Modelo</mat-label>
+          <input matInput required formControlName="modelo">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Precio / Valor</mat-label>
           <input type="number" matInput required formControlName="nombre">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker appearance="fill"> <!--*ngIf="generalITBIS; else noGeneralItbis"-->
-          <mat-label>ITBIS por articulo</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
+          <mat-label>ITBIS del articulo</mat-label>
+          <input type="number" matInput formControlName="itbisProducto" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
-
         <ng-template #noGeneralItbis></ng-template>
+
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
+          <mat-label>No. Serial</mat-label>
+          <input matInput formControlName="serial">
+        </mat-form-field>&nbsp;
+        <ng-template #noElectronicProduct></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
-          <input type="number" readonly matInput required formControlName="nombre">
+          <input type="number" readonly matInput formControlName="subTotal">
           <mat-icon matSuffix>$</mat-icon>
         </mat-form-field>&nbsp;
       </div>
       <span class="btnContainer">
-        <button mat-raised-button><mat-icon>add</mat-icon>Agregar</button>
+        <button mat-raised-button  (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
       </span>
     </div>
 
@@ -164,33 +194,47 @@
           <tr class="headerRow">
             <th class="headerCell">Producto</th>
             <th class="headerCell">Cantidad</th>
-            <th class="headerCell">Precio</th>
-            <th class="headerCell">ITBIS por articulo</th>
+            <th class="headerCell">Condición</th>
+            <th class="headerCell">Marca</th>
+            <th class="headerCell">Modelo</th>
+            <th class="headerCell">Precio/Valor</th>
+            <th class="headerCell">No.Serial</th>
+            <th class="headerCell">ITBIS</th>
             <th class="headerCell">Subtotal</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
           </tr>
         </thead>
         <tbody>
-          <tr class="dataRow">
-            <td class="dataCell">Jugo</td>
-            <td class="dataCell">Mango</td>
-            <td class="dataCell">Kawai</td>
-            <td class="dataCell">Pera</td>
-            <td class="dataCell">Manzana</td>
-            <td class="dataCell"> <button class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
+            <td class="dataCell">{{item.idProducto}}</td>
+            <td class="dataCell">{{item.cantidad}}</td>
+            <td class="dataCell">{{item.condicion}}</td>
+            <td class="dataCell">{{item.marca}}</td>
+            <td class="dataCell">{{item.modelo}}</td>
+            <td class="dataCell">{{item.precio | currency: '':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.serial}}</td>
+            <td class="dataCell">{{item.itbisProducto | currency: '':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell"><button class="fucEdit"
+                (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell"><button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
+            </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td class="footerCell">Total</td>
             <td class="footerCell"></td>
-            <td class="footerCell">Resultado</td>
-            <td class="footerCell">Resultado ITBIS</td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell"> <button class="fucSend"><mat-icon>send</mat-icon></button></td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
+            <td class="footerCell" >{{mostrarTotalItbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+            <td class="footerCell">{{totalResult | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+            <td class="footerCell"></td>
+            <td class="footerCell"> <button class="fucSend" (click)="editData()"><mat-icon>send</mat-icon></button></td>
           </tr>
         </tfoot>
       </table>

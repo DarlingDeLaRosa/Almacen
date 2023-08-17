@@ -7,6 +7,7 @@ import { combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
+import { ShowDetailsComponent } from '../../Modals/show-details/show-details.component';
 
 @Component({
   selector: 'app-admin-entradas',
@@ -47,6 +48,7 @@ export class AdminEntradasComponent implements OnInit {
   getEntrada() {
     this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       });
@@ -56,23 +58,31 @@ export class AdminEntradasComponent implements OnInit {
     console.log(event)
   }
 
+  openModal(detailId: number) {
+    let dialogRef = this.dialog.open(ShowDetailsComponent, {data: detailId})
+
+    dialogRef.afterClosed().subscribe(() => {
+    })
+  }
+
+
   async removeAlert(item: number){
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
-      //this.api.removeTipoSalida(this.url, item, this.token)
-        //.subscribe((res: any) => {
+      this.api.removeEntrada(this.url, item, this.token)
+        .subscribe((res: any) => {
 
-          //if (res) {
-          //  alertRemoveSuccess()
-            //this.getTipoSalida()
-          //} else {
-          //  alertIsSuccess(false)
-          //}
-          //() => {
-          //  alertServerDown();
-          //}
-        //})
+          if (res) {
+            alertRemoveSuccess()
+            this.getEntrada()
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
     }
   }
 

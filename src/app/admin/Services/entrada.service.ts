@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { postEntrada, putEntrada } from '../models/interfaces';
+import { detalleProductoEntrada, postEntrada, putEntrada } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,14 @@ export class entradaService {
     const EntradaHeader = {headers: headers}
 
     const getEntrada = `${url}/Entrada?page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getEntrada, EntradaHeader)
+  }
+
+  public getEntradaById(url: string, token: string, id:number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const EntradaHeader = {headers: headers}
+
+    const getEntrada = `${url}/Entrada/${id}`
     return this.http.get(getEntrada, EntradaHeader)
   }
 
@@ -52,12 +60,20 @@ export class entradaService {
 
   // Detalles de Entrada
 
-  public getDetalleEntrada(url: string, token: string, page: number) {
+  public getDetalleEntrada(url: string, token: string, id: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaDetalleHeader = {headers: headers}
 
-    const getDetalleEntrada = `${url}/Entrada/adddetalle?page=${page}&CantItems=${this.cantidadItems}`
+    const getDetalleEntrada = `${url}/Entrada/getdetalleentradabyid?id=${id}`
     return this.http.get(getDetalleEntrada, EntradaDetalleHeader)
+  }
+
+  public postDetalleEntrada(url: string, data: detalleProductoEntrada[], token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const detalleEntradaHeader = {headers: headers}
+
+    const postDetalleEntrada = `${url}/Entrada/adddetalle`
+    return this.http.post(postDetalleEntrada, data, detalleEntradaHeader)
   }
 
 }

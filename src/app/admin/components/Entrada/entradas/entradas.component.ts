@@ -58,6 +58,7 @@ export class EntradasComponent implements OnInit {
       noFactura: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
       itbisGeneral: new FormControl(''),
+      itbisGeneralEstado: new FormControl(''),
       total: new FormControl(''),
     });
 
@@ -120,6 +121,8 @@ export class EntradasComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res.data)
         this.productoList = res.data
+        console.log(this.productoList)
+
       });
   }
 
@@ -173,7 +176,7 @@ export class EntradasComponent implements OnInit {
           });
         })
     } else {
-      this.getTipoAlmacen()
+      this.getTipoEntrada()
     }
   }
 
@@ -207,6 +210,8 @@ export class EntradasComponent implements OnInit {
           options.forEach((item: any) => {
             this.productoList.push(item)
           });
+
+          console.log(this.productoList)
         })
     } else {
       this.getProducto()
@@ -230,7 +235,7 @@ export class EntradasComponent implements OnInit {
   }
 
   addDetail() {
-
+    console.log(this.productoList)
     console.log(this.formDetalleEntrada.value)
 
     if (this.formDetalleEntrada.valid) {
@@ -306,6 +311,15 @@ export class EntradasComponent implements OnInit {
   }
 
   sendData() {
+
+    console.log(this.detailGroup)
+    console.log(this.mostrarTotalItbis)
+
+    this.formEntrada.patchValue({
+      itbisGeneralEstado: !this.generalITBIS,
+      itbisGeneral: this.mostrarTotalItbis
+    })
+
     this.formEntrada.value.total = this.totalResult
 
     let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
@@ -320,28 +334,46 @@ export class EntradasComponent implements OnInit {
     let idTipoPro = this.proveedorList.filter(item => item.razonSocial === this.formEntrada.value.idProveedor)
     this.formEntrada.value.idProveedor = idTipoPro[0].idProveedor
 
-    //this.formDetalleEntrada.value.itbisEspecifico = !this.generalITBIS
-    //this.formDetalleEntrada.value.subtotal =
-    //this.formDetalleEntrada.value.cantidad * this.formDetalleEntrada.value.precio
-
-    //let dataEntrada: GET = { data: [], message: '', success: false };
-
     if (this.formEntrada.valid && this.detailGroup.length >= 1) {
 
       console.log(this.formEntrada.value)
+
       this.api.postEntrada(this.url, this.formEntrada.value, this.token)
         .subscribe((res: any) => {
 
           console.log(res)
-          //if (res.success) {
-          //  alertIsSuccess(true)
-          //  //this.formTipoSalida.reset()
-          //} else {
-          //  alertIsSuccess(false)
-          //}
-          //() => {
-          //  alertServerDown();
-          //}
+
+          if (res.success && res.data !== null) {
+
+            this.detailGroup.map((detail: detalleProductoEntrada) => {
+              detail.idEntrada = res.data.idEntrada
+              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              detail.idProducto = idTipoProD[0].idProducto
+              if(detail.itbisProducto == ""){
+                detail.itbisProducto = 0
+              }
+            })
+
+            JSON.stringify(this.detailGroup)
+            this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
+              .subscribe((res: any) => {
+                console.log(res)
+                if (res.success) {
+                  alertIsSuccess(true)
+                }
+                else {
+                  alertIsSuccess(false)
+                }
+              })
+            this.formDetalleEntrada.reset()
+            this.formEntrada.reset()
+
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
         })
 
     }
