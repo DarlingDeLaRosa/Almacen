@@ -59,6 +59,7 @@ export class AdminTipoProductoComponent implements OnInit {
 
       this.api.filterTipoProducto(this.url, this.token, this.pagina, this.filterTipoProducto.value.filter)
       .subscribe((res: any)=> {
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

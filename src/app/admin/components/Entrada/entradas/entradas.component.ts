@@ -235,25 +235,23 @@ export class EntradasComponent implements OnInit {
   }
 
   addDetail() {
-    console.log(this.productoList)
-    console.log(this.formDetalleEntrada.value)
 
     if (this.formDetalleEntrada.valid) {
 
       this.totalResult += this.formDetalleEntrada.value.subTotal
 
-      if (!this.generalITBIS) {
+      if (this.generalITBIS == false) {
         this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
+        console.log('pase por aqui')
       } else {
-        this.totalItbis += this.formDetalleEntrada.value.itbisProducto
-        this.mostrarTotalItbis = this.totalItbis
-        this.formEntrada.value.itbisGeneral = this.totalItbis
+        this.totalItbis  = this.formDetalleEntrada.value.itbisProducto
+          console.log(this.mostrarTotalItbis)
+          console.log(this.formDetalleEntrada.value.itbisProducto)
+          console.log( this.totalItbis)
+        //this.formEntrada.value.itbisGeneral = this.totalItbis
       }
 
-      console.log(this.formEntrada.valid)
-
       if (this.formEntrada.valid) {
-        console.log(this.formDetalleEntrada.value)
         this.detailGroup.push(this.formDetalleEntrada.value)
         this.formDetalleEntrada.reset()
       }
@@ -266,16 +264,19 @@ export class EntradasComponent implements OnInit {
     this.detailGroup.splice(index, 1)
 
     this.formDetalleEntrada.patchValue({
-      idProducto: `${item.idProducto}`,
-      cantidad: `${item.cantidad}`,
-      condicion: `${item.condicion}`,
-      marca: `${item.marca}`,
-      modelo: `${item.modelo}`,
-      precio: `${item.precio}`,
-      serial: `${item.serial}`,
-      itbisProducto: `${item.itbisProducto}`,
-      subTotal: `${item.subTotal}`,
+      idProducto: item.idProducto,
+      cantidad: item.cantidad,
+      condicion: item.condicion,
+      marca: item.marca,
+      modelo: item.modelo,
+      precio: item.precio,
+      serial: item.serial,
+      itbisProducto: item.itbisProducto,
+      subTotal: item.subTotal,
     })
+
+    this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
+    this.totalResult -= item.subTotal
   }
 
   async removeDetail(index: number) {
@@ -311,9 +312,6 @@ export class EntradasComponent implements OnInit {
   }
 
   sendData() {
-
-    console.log(this.detailGroup)
-    console.log(this.mostrarTotalItbis)
 
     this.formEntrada.patchValue({
       itbisGeneralEstado: !this.generalITBIS,

@@ -1,29 +1,4 @@
 .stadsContainer{
   display: grid;
   height: 86vh;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 45% 55%;
-}
-
-.stadsEntradaSalida{
-  padding: 10px;
-  grid-column: 1/3;
-  grid-row: 1/2;
-  width: 99%;
-  border-bottom: #ccc 1px solid;
-}
-
-.stadsExistencia{
-  margin-top: 5px;
-  padding: 10px;
-  grid-column: 1/2;
-  grid-row: 2/3;
-  border-right: #ccc 1px solid;
-}
-
-.stadsMoviminetos{
-  margin-top: 5px;
-  padding: 10px;
-  grid-column: 2/3;
-  grid-row: 2/3;
 }

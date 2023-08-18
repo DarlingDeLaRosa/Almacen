@@ -8,7 +8,7 @@ import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
-import { detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
+import { detalleEditProductoEntrada, detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
@@ -29,7 +29,7 @@ export class EditEntradasComponent {
   totalItbis: number = 0
   mostrarTotalItbis: number = 0
 
-  detailGroup: detalleProductoEntrada[] = [];
+  detailGroup: detalleEditProductoEntrada[] = [];
   generalITBIS: boolean = false;
   serial: boolean = false;
 
@@ -81,6 +81,16 @@ export class EditEntradasComponent {
 
   ngOnInit(): void {
 
+    let id: number = 0
+
+    this.route.paramMap.subscribe(params => {
+      const idparam = params.get('id');
+
+      if (idparam !== null) {
+        id = parseInt(idparam)
+      }
+    })
+
     combineLatest([
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path)
@@ -88,34 +98,28 @@ export class EditEntradasComponent {
       this.url = pathValue;
       this.token = tokenValue;
 
-      this.route.paramMap.subscribe(params => {
-        const idparam = params.get('id');
+      this.api.getEntradaById(this.url, this.token, id)
+          .subscribe((res: any) => {
 
-        if (idparam !== null) {
-          let id = parseInt(idparam)
-          this.api.getEntradaById(this.url, this.token, id)
-            .subscribe((res: any) => {
+            if (res.success && res.data !== null) {
+              this.formEditEntrada.setValue({
+                fechaFactura: res.data.fechaFactura,
+                idProveedor:  res.data.proveedor.razonSocial,
+                idTipoAlm: res.data.tipoAlm.nombre ,
+                idTipoEntrada:  res.data.tipoEntrada.nombre,
+                idTipoEntrega: res.data.tipoEntrega.nombre ,
+                numOrden:  res.data.numOrden,
+                noFactura: res.data.noFactura ,
+                observacion:  res.data.observacion,
+                itbisGeneral: res.data.itbisGeneral,
+                itbisGeneralEstado:  res.data.itbisGeneralEstado,
+                total:  res.data.total
+              })
 
-              if (res.success && res.data !== null) {
-                this.formEditEntrada.setValue({
-                  fechaFactura: res.data.fechaFactura,
-                  idProveedor:  res.data.proveedor.idProveedor,
-                  idTipoAlm: res.data.tipoAlm.nombre ,
-                  idTipoEntrada:  res.data.tipoEntrada.idTipoEntrada,
-                  idTipoEntrega: res.data.tipoEntrega.idTipoEntrega ,
-                  numOrden:  res.data.numOrden,
-                  noFactura: res.data.noFactura ,
-                  observacion:  res.data.observacion,
-                  itbisGeneral: res.data.itbisGeneral,
-                  itbisGeneralEstado:  res.data.itbisGeneralEstado,
-                  total:  res.data.total
-                })
+              this.detailGroup = res.data.detalles
+            }
+          })
 
-                this.detailGroup = res.data.detalles
-              }
-            })
-        }
-      })
       this.getProveedor()
       this.getProducto()
       this.getTipoAlmacen()
@@ -294,12 +298,12 @@ export class EditEntradasComponent {
     }
   }
 
-  editDetail(index: number, item: detalleProductoEntrada) {
+  editDetail(index: number, item: detalleEditProductoEntrada) {
 
     this.detailGroup.splice(index, 1)
 
     this.formEditDetalleEntrada.patchValue({
-      idProducto: `${item.idProducto}`,
+      idProducto: `${item.producto.idProducto}`,
       cantidad: `${item.cantidad}`,
       condicion: `${item.condicion}`,
       marca: `${item.marca}`,

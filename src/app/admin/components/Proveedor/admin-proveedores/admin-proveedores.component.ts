@@ -66,7 +66,7 @@ export class AdminProveedoresComponent implements OnInit{
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterProveedor.value.filter)
       .subscribe((res: any)=> {
-        console.log(res)
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

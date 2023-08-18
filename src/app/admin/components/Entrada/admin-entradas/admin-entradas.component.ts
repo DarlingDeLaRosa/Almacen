@@ -54,8 +54,19 @@ export class AdminEntradasComponent implements OnInit {
       });
   }
 
-  onInputFilterChange(event: Event) {
-    console.log(event)
+  onInputFilterChange() {
+    console.log(this.filterEntrada.value.filter)
+    if (this.filterEntrada.value.filter.length >= 2) {
+
+      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
+    } else {
+      this.getEntrada()
+    }
   }
 
   openModal(detailId: number) {

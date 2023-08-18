@@ -48,7 +48,7 @@ const routes: Routes = [
 
       { path: 'salida', component: SalidasComponent },
       {path: 'administrar-salida', component: AdminSalidasComponent},
-      {path: 'editar-salida', component: EditSalidasComponent},
+      {path: 'editar-salida/:id', component: EditSalidasComponent},
 
       { path: 'productos', component: ProductosComponent },
       { path: 'administrar-producto', component: AdminProductosComponent },

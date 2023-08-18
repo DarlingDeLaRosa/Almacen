@@ -59,7 +59,7 @@ export class AdminUsuariosComponent implements OnInit{
 
       this.api.filterUser(this.url, this.token, this.pagina, this.filterUser.value.filter)
       .subscribe((res: any)=> {
-        console.log(res)
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

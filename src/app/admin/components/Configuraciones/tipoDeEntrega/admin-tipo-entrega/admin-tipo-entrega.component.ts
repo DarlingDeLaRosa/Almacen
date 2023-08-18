@@ -59,6 +59,7 @@ export class AdminTipoEntregaComponent  implements OnInit{
 
       this.api.filterTipoEntrega(this.url, this.token, this.pagina, this.filterTipoEntrega.value.filter)
       .subscribe((res: any)=> {
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

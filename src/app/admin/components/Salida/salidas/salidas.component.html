@@ -12,7 +12,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Fecha</mat-label>
-        <input matInput required [matDatepicker]="date" formControlName="fecha" appearance="fill">
+        <input matInput required [matDatepicker]="date" formControlName="fechaCreacion" appearance="fill">
         <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #date></mat-datepicker>
       </mat-form-field> &nbsp;
@@ -47,12 +47,12 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de departamento</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepartamento"
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">
         <mat-autocomplete #auto='matAutocomplete'>
 
           <mat-option *ngFor="let tipoDepartamento of tipoDepartamentoList" [value]="tipoDepartamento.nombre">
-            <!--{{option.nombre}} arreglar esto-->
+            {{tipoDepartamento.nombre}}
           </mat-option>
 
         </mat-autocomplete>
@@ -65,9 +65,7 @@
       </mat-form-field>&nbsp;
     </div>
 
-
-
-    <div class="formInfo">
+    <div [formGroup]="formDetalleSalida" class="formInfo">
 
       <h4>Informacion de producto</h4>
       <div>
@@ -75,7 +73,7 @@
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
           <input matInput [matAutocomplete]="pro" appearance="fill" formControlName="idProducto"
-            (input)="findProductoByName()">
+            (input)="findProductoByName()"> <!--(optionSelected)="setValueFormProductoSalida($event.producto.value)"-->
           <mat-autocomplete #pro='matAutocomplete'>
 
             <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
@@ -97,6 +95,15 @@
           <input type="number" matInput required formControlName="cantidad">
         </mat-form-field>&nbsp;
 
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Condición</mat-label>
+          <mat-select required appearance="fill" formControlName="condicion">
+            <mat-option value="Bueno">Bueno</mat-option>
+            <mat-option value="Regular">Regular</mat-option>
+            <mat-option value="Dañado">Dañado</mat-option>
+          </mat-select>
+        </mat-form-field>&nbsp;
+
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
           <input type="number" matInput required formControlName="marca">
@@ -113,13 +120,13 @@
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Condición</mat-label>
-          <input type="number" matInput required formControlName="condicion">
+          <mat-label>Valor</mat-label>
+          <input type="number" matInput required formControlName="precio">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Valor</mat-label>
-          <input type="number" matInput required formControlName="precio">
+          <mat-label>Sub Total</mat-label>
+          <input type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 

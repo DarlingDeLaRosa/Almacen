@@ -60,6 +60,7 @@ export class AdminTipoEntradaComponent implements OnInit {
 
       this.api.filterTipoEntrada(this.url, this.token, this.pagina, this.filterTipoEntrada.value.filter)
       .subscribe((res: any)=> {
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

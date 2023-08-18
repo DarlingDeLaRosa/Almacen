@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { detalleProductoSalida, postSalida, putSalida } from '../models/interfaces';
 
-
+@Injectable({
+  providedIn: 'root'
+})
 export class salidaService {
 
   cantidadItems = 15
@@ -80,7 +82,7 @@ export class salidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const departamentoHeader = {headers: headers}
 
-    const getDepartamento = `${url}/Salida/getdetalleSalidabyid?id=${page}` // arreglar esto
+    const getDepartamento = `${url}/Departamento?page=${page}&CantItems=${this.cantidadItems}` // arreglar esto
     return this.http.get(getDepartamento, departamentoHeader)
   }
 
@@ -88,7 +90,7 @@ export class salidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
 
-    const getSalida = `${url}/Salida/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`//areglar esto
+    const getSalida = `${url}/Departamento/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`//areglar esto
     return this.http.get(getSalida, salidaHeader)
   }
 

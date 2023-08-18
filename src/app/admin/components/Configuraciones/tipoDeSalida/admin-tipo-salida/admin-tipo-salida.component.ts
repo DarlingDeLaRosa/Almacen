@@ -62,6 +62,7 @@ export class AdminTipoSalidaComponent implements OnInit {
 
       this.api.filterTipoSalida(this.url, this.token, this.pagina, this.filterTipoSalida.value.filter)
       .subscribe((res: any)=> {
+        this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 

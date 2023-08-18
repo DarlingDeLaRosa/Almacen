@@ -40,11 +40,12 @@ export class SalidasComponent implements OnInit {
     private store: Store<{ app: AppState }>
   ) {
     this.formSalida = this.fb.group({
-      fecha: new FormControl('', Validators.required),
+      fechaCreacion: new FormControl('', Validators.required),
       idTipoSalida: new FormControl('', Validators.required),
       idTipoAlm: new FormControl('', Validators.required),
       idDepar: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
+      total: 0
     });
 
     this.formDetalleSalida = this.fb.group({
@@ -54,8 +55,9 @@ export class SalidasComponent implements OnInit {
       condicion: new FormControl('', Validators.required),
       marca: new FormControl('', Validators.required),
       modelo: new FormControl('', Validators.required),
-      precio: new FormControl('', Validators.required),
       serial: new FormControl(''),
+      precio: new FormControl(''),
+      subTotal : new FormControl('')
     })
   }
 
@@ -94,6 +96,7 @@ export class SalidasComponent implements OnInit {
   getTipoDepartamento() {
     this.api.getTipoDepartamento(this.url, this.token, 1)
       .subscribe((res: any) => {
+        console.log(res)
         this.tipoDepartamentoList = res.data
       });
   }
@@ -206,6 +209,20 @@ export class SalidasComponent implements OnInit {
     if(removeChoise){
       this.detailGroup.splice(index, 1)
     }
+  }
+
+  setValueFormProductoSalida(producto: any) {
+    console.log(producto)
+    let setValuesform = this.productoList.filter((productoEspecifico: any) => {
+      return productoEspecifico.nombre == producto
+    });
+
+    //this.api
+//
+    //this.formProducto.patchValue({
+    //  rnc: setValuesform[0].rnc,
+    //  nombreComercial: setValuesform[0].nombreComercial,
+    //})
   }
 
   sendData() {

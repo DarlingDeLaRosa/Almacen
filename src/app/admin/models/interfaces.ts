@@ -107,8 +107,55 @@ export interface putEntrada {
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+export interface departamento {
+
+  idDepar: number,
+  nombre: string,
+  recinto: {
+    idRecinto: number,
+    nombre: string
+  },
+  estado: true,
+  fechaModif: Date,
+  fechaCreacion: Date,
+  createdBy: {
+    idUsuario: number,
+    nombre: string,
+    apellido: string,
+    cargo: string
+  }
+}
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
 export interface detalleProductoEntrada {
   idProducto: any,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  cantidad: number,
+  itbisProducto: any,
+  subTotal: number,
+  idEntrada: number
+}
+
+export interface detalleEditProductoEntrada {
+  producto: {
+    codInstitucional: string
+    descripcion: string
+    idAuxiliar: null
+    idCatalogo: number
+    idProducto: number
+    idTipoArt: number
+    idUnidadMe: number
+    nombre: string
+    precio: number
+    stock: number
+    stockMinimo: number
+  }
   marca: string,
   modelo: string,
   condicion: string,
@@ -197,6 +244,7 @@ export interface salida {
   fechaCreacion: Date,
   observacion: string,
   fechaModif: Date,
+  total: number
   detalles: [
     {
       idSalidaDet: number,

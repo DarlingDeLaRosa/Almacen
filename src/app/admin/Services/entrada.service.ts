@@ -30,7 +30,7 @@ export class entradaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}
 
-    const getEntrada = `${url}/Entrada/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
+    const getEntrada = `${url}/Entrada/getbyname?nombre=${data}&page=${page}&CantItems=${this.cantidadItems}`
     return this.http.get(getEntrada, EntradaHeader)
   }
 

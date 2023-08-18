@@ -161,7 +161,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Precio / Valor</mat-label>
-          <input type="number" matInput required formControlName="nombre">
+          <input type="number" matInput required formControlName="precio">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
@@ -207,7 +207,7 @@
         </thead>
         <tbody>
           <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
-            <td class="dataCell">{{item.idProducto}}</td>
+            <td class="dataCell">{{item.producto.nombre}}</td>
             <td class="dataCell">{{item.cantidad}}</td>
             <td class="dataCell">{{item.condicion}}</td>
             <td class="dataCell">{{item.marca}}</td>

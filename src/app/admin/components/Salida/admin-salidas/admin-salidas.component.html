@@ -1,4 +1,4 @@
-<div class="viewContent">
+  <div class="viewContent">
 
   <div class="fuctionContent">
     <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear nueva salida</button>
@@ -18,37 +18,37 @@
         <tr class="headerRow">
           <th class="headerCell">Fecha</th>
           <th class="headerCell">Recinto</th>
-          <th class="headerCell">Producto</th>
+          <th class="headerCell">Num. Salida</th>
           <th class="headerCell">T.Almacen</th>
           <th class="headerCell">T.Departamento</th>
           <th class="headerCell">T.Salida</th>
           <th class="headerCell">Creado por</th>
-          <th class="headerCell">Cantidad</th>
           <th class="headerCell">Valor</th>
+          <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">20/05/22</td>
-          <td class="dataCell">FEM</td>
-          <td class="dataCell">Monitor</td>
-          <td class="dataCell">Tecnologia</td>
-          <td class="dataCell">Div. Desarrollo</td>
-          <td class="dataCell">Asignacion</td>
-          <td class="dataCell">Juan Perez</td>
-          <td class="dataCell">1</td>
-          <td class="dataCell">5080</td>
-          <td class="dataCell"><button [routerLink]="['/almacen/editar-salida']" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"><button (click)="removeAlert(3)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+        <tr class="dataRow" *ngFor="let item of dataFiltered">
+          <td class="dataCell">{{item.fechaCreacion | date:'dd/MM/yyyy'}}</td>
+          <td class="dataCell">{{item.recinto.nombre}}</td>
+          <td class="dataCell">{{item.idSalida}}</td>
+          <td class="dataCell">{{item.tipoAlmacen.nombre}}</td>
+          <td class="dataCell">{{item.departamento.nombre}}</td>
+          <td class="dataCell">{{item.tipoSalida.nombre}}</td>
+          <td class="dataCell">{{item.creadoPor.nombre}}</td>
+          <td class="dataCell">{{item.total}}</td>
+          <td class="dataCell"><button class="fucDetails" (click)="openModal(item.idSalida)"> <mat-icon>list</mat-icon></button></td>
+          <td class="dataCell"><button [routerLink]="['/almacen/editar-salida', item.idSalida]" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"><button (click)="removeAlert(item.idSalida)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 
     </table>
     <div class="pagination">
       <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-      <div style="display: grid; place-items: center;">{{pagina}}</div>
+      <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}} </div>
       <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
   </div>
