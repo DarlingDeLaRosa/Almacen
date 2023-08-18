@@ -168,6 +168,83 @@ export interface detalleByIdEntrada {
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+export interface salida {
+
+  idSalida: number,
+  recinto: {
+    idRecinto: number,
+    nombre: string
+  },
+  tipoSalida: {
+    idTipoSalida: number,
+    nombre: string,
+    descripcion: string
+  },
+  tipoAlmacen: {
+    idTipoAlm: number,
+    nombre: string
+  },
+  departamento: {
+    idDepar: number,
+    nombre: string
+  },
+  creadoPor: {
+    idUsuario: number,
+    nombre: string,
+    apellido: string,
+    cargo: string
+  },
+  fechaCreacion: Date,
+  observacion: string,
+  fechaModif: Date,
+  detalles: [
+    {
+      idSalidaDet: number,
+      producto: {
+        idProducto: number,
+        idCatalogo: number,
+        codInstitucional: string,
+        idAuxiliar: number,
+        nombre: string,
+        descripcion: string,
+        precio: number,
+        stock: number,
+        stockMinimo: number,
+        idUnidadMe: number,
+        idTipoArt: number
+      },
+      cantidad: number,
+      idSalida: number,
+      marca: string,
+      modelo: string,
+      condicion: string,
+      serial: string
+    }
+  ]
+}
+
+export interface postSalida {
+  fecha: Date,
+  idTipoSalida: number,
+  idTipoAlm: number,
+  idDepar: number,
+  observacion: string
+}
+
+export interface putSalida {
+  idSalida: number,
+  idTipoSalida: number,
+  idTipoAlm: number,
+  idDepar: number,
+  creadoPor: number,
+  observacion: string,
+  total: number
+}
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
 export interface detalleProductoSalida {
   existencia: number,
   idProducto: string,
@@ -176,7 +253,7 @@ export interface detalleProductoSalida {
   marca: string,
   modelo: string,
   precio: number,
-  noSerial: string,
+  serial: string,
 }
 
 
