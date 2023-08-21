@@ -22,6 +22,7 @@ export class AdminEntradasComponent implements OnInit {
   token: string = ''
   pagina: number = 1
   noPage: number = 1
+  idRol: number = 0
 
   constructor(
     public dialog: MatDialog,
@@ -35,11 +36,13 @@ export class AdminEntradasComponent implements OnInit {
   ngOnInit(): void {
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol),
+    ]).subscribe(([tokenValue, pathValue, idRol]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
+      this.idRol = idRol
 
       this.getEntrada()
     })

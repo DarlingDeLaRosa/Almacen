@@ -1,8 +1,12 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Crear nueva entrada</h1>
-    <button mat-raised-button class="btnNavigate"
+    <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
+      <ng-template #supp>
+        <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/user-almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
+      </ng-template>
   </div>
 
   <div class="form">
@@ -13,8 +17,8 @@
       <div class="ITBIS">
         <h4>El ITBIS de la factura es general?</h4>
         <mat-radio-group (change)="itbisOption($event)">
-          <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
-          <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+          <mat-radio-button [disabled]="disableItbis" [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
+          <mat-radio-button [disabled]="disableItbis" [value]="true" color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -219,7 +223,7 @@
           <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button>
           </td>
-          <td class="dataCell"><button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
+          <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
           </td>
         </tr>
       </tbody>
@@ -232,7 +236,7 @@
           <td class="footerCell"></td>
           <td class="footerCell"></td>
           <td class="footerCell"></td>
-          <td class="footerCell">{{totalItbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="footerCell">{{mostrarTotalItbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="footerCell">{{totalResult | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="footerCell"></td>
           <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>

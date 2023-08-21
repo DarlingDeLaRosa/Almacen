@@ -28,6 +28,7 @@ export class EditEntradasComponent {
   totalResult: number = 0
   totalItbis: number = 0
   mostrarTotalItbis: number = 0
+  idRol: number = 0
 
   detailGroup: detalleEditProductoEntrada[] = [];
   generalITBIS: boolean = false;
@@ -93,10 +94,12 @@ export class EditEntradasComponent {
 
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol),
+    ]).subscribe(([tokenValue, pathValue, idRole]) => {
       this.url = pathValue;
       this.token = tokenValue;
+      this.idRol = idRole;
 
       this.api.getEntradaById(this.url, this.token, id)
           .subscribe((res: any) => {

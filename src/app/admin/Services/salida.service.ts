@@ -94,5 +94,13 @@ export class salidaService {
     return this.http.get(getSalida, salidaHeader)
   }
 
+  //para llenar el producto peticion por lote
 
+  public findProductoById(url: string, token: string, id: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const productoHeader = {headers: headers}
+
+    const getproducto = `${url}/Producto/getbiidcatalogo/${id}`
+    return this.http.get(getproducto, productoHeader)
+  }
 }

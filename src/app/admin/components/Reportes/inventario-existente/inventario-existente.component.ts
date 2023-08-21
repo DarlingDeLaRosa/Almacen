@@ -1,56 +1,69 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { productoService } from 'src/app/admin/Services/producto.service';
+import { producto } from 'src/app/admin/models/interfaces';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-inventario-existente',
   templateUrl: './inventario-existente.component.html',
   styleUrls: ['./inventario-existente.component.css']
 })
-export class InventarioExistenteComponent implements AfterViewInit{
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+export class InventarioExistenteComponent implements OnInit{
 
-  dates(){
-    console.log(this.range)
+  dataFiltered: producto[] = []
+  filterRepInventario: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
+
+
+  constructor(
+    private api: productoService,
+    private store: Store<{ app: AppState }>
+    ){
+    this.filterRepInventario = new FormGroup({
+      filter: new FormControl(''),
+      start: new FormControl<Date | null>(null),
+      end: new FormControl<Date | null>(null),
+    })
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  ngOnInit(): void {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
 
-  displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'unidadMedida', 't_producto'];
-  data = new MatTableDataSource(
+      this.url = pathValue;
+      this.token = tokenValue;
 
-    [
-      {
-        nombre: 'Azucar', descripcion: 'azucar blanca', marca: 'Lider', modelo: 'Sacarosa',
-        serial: '100010023', condicion: 'Nuevo', precio: 2000, stock: 78, unidadMedida: 'libra', t_producto: 'cocina'
-      },
-
-    ]
-  ) ;
-
-  constructor(private _liveAnnouncer: LiveAnnouncer) { }
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+      this.getProducto()
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  getProducto() {
+    this.api.getProducto(this.url, this.token, this.pagina)
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  dataFilter() {
+    if (this.filterRepInventario.value.filter.length >= 3) {
+
+      this.api.filterProducto(this.url, this.token, this.pagina, this.filterRepInventario.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getProducto()
     }
-  }
-
-  applyFilter(event: Event){
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
   }
 }

@@ -1,8 +1,12 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nueva salida</h1>
-    <button mat-raised-button class="btnNavigate"
+      <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+      <ng-template #supp>
+        <button mat-raised-button class="btnNavigate"
+      [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+      </ng-template>
   </div>
 
   <div class="form">
@@ -87,7 +91,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Existencia</mat-label>
-          <input type="number" readonly matInput required formControlName="existencia">
+          <input [disabled]="true" type="number" readonly matInput required formControlName="existencia">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -106,27 +110,28 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input type="number" matInput required formControlName="marca">
+          <input [disabled]="true" matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input type="number" matInput required formControlName="modelo">
+          <input [disabled]="true" matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input type="number" matInput required formControlName="serial">
+          <input [disabled]="true" matInput required formControlName="serial">
         </mat-form-field>&nbsp;
+        <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
-          <input type="number" matInput required formControlName="precio">
+          <input [disabled]="true" type="number" matInput required formControlName="precio">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Sub Total</mat-label>
-          <input type="number" matInput required formControlName="subTotal">
+          <mat-label>Subtotal</mat-label>
+          <input [disabled]="true" type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 
@@ -160,7 +165,7 @@
             <td class="dataCell">{{item.marca}}</td>
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
-            <td class="dataCell">{{item.precio}}</td>
+            <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"> <button class="fucEdit"
                 (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -20,6 +20,8 @@ export class SalidasComponent implements OnInit {
   formDetalleSalida: FormGroup;
   url!: string;
   token!: string
+  isSerial:boolean = false
+  idRol: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -57,13 +59,14 @@ export class SalidasComponent implements OnInit {
       modelo: new FormControl('', Validators.required),
       serial: new FormControl(''),
       precio: new FormControl(''),
-      subTotal : new FormControl('')
+      subTotal: new FormControl('')
     })
   }
 
   ngOnInit(): void {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+    this.store.select(state => state.app.user.role.idRol).subscribe((user: any) => { this.idRol = user; });
 
     this.getProducto()
     this.getTipoAlmacen()
@@ -175,7 +178,7 @@ export class SalidasComponent implements OnInit {
     }
   }
 
-  addDetail(){
+  addDetail() {
     if (this.formDetalleSalida.valid) {
 
       if (this.formSalida.valid) {
@@ -186,7 +189,7 @@ export class SalidasComponent implements OnInit {
     }
   }
 
-  editDetail(index: number, item: detalleProductoSalida){
+  editDetail(index: number, item: detalleProductoSalida) {
 
     this.detailGroup.splice(index, 1)
 
@@ -202,11 +205,11 @@ export class SalidasComponent implements OnInit {
     })
   }
 
-  async removeDetail(index: number){
+  async removeDetail(index: number) {
 
     let removeChoise: boolean = await alertRemoveSure()
 
-    if(removeChoise){
+    if (removeChoise) {
       this.detailGroup.splice(index, 1)
     }
   }
@@ -217,22 +220,35 @@ export class SalidasComponent implements OnInit {
       return productoEspecifico.nombre == producto
     });
 
-    //this.api
-//
-    //this.formProducto.patchValue({
-    //  rnc: setValuesform[0].rnc,
-    //  nombreComercial: setValuesform[0].nombreComercial,
-    //})
+    this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
+      .subscribe((res: any) => {
+        if (res.data !== null) {
+          if(res.data.producto.serial !== null){
+            this.isSerial = true
+            this.formDetalleSalida.patchValue({
+              existencia: new FormControl('', Validators.required),
+              condicion: new FormControl('', Validators.required),
+              marca: new FormControl('', Validators.required),
+              modelo: new FormControl('', Validators.required),
+              serial: new FormControl(''),
+              precio: new FormControl(''),
+            })
+          }else{
+            this.isSerial = false
+            this.formDetalleSalida.patchValue({
+              existencia: new FormControl('', Validators.required),
+              condicion: new FormControl('', Validators.required),
+              marca: new FormControl('', Validators.required),
+              modelo: new FormControl('', Validators.required),
+              precio: new FormControl(''),
+            })
+          }
+        }
+
+      })
   }
 
   sendData() {
-
-    //this.formSalida.value.itbisGeneral = this.generalITBIS
-    //this.formDetalleSalida.value.itbisEspecifico = !this.generalITBIS
-    //this.formDetalleSalida.value.subtotal =
-    //this.formDetalleSalida.value.cantidad * this.formDetalleSalida.value.precio
-
-    //let dataSalida: GET = { data: [], message: '', success: false };
 
     if (this.formSalida.valid) {
 

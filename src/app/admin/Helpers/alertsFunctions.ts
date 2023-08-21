@@ -30,6 +30,25 @@ export function alertSameData() {
   })
 }
 
+export function alertSerial() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Campo cantidad no debe ser mayor a uno.',
+    text: 'El producto debe ser unico cuando posee numero serial.',
+    showConfirmButton: false,
+    timer: 3000
+  })
+}
+
+export function alertNoValidForm() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Completa los campos requeridos para realizar la acción ',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertRncNoFound() {
   Swal.fire({
     icon: 'info',
