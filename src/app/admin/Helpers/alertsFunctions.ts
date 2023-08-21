@@ -49,6 +49,15 @@ export function alertNoValidForm() {
   })
 }
 
+export function alertCantExis() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Completa los campos requeridos para realizar la acción ',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertRncNoFound() {
   Swal.fire({
     icon: 'info',

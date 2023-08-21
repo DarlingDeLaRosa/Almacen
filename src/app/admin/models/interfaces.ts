@@ -290,6 +290,31 @@ export interface putSalida {
 }
 
 
+export interface detalleByIdSalida {
+
+  idSalidaDet: number,
+  producto: {
+    idProducto: number,
+    idCatalogo: number,
+    codInstitucional: string,
+    idAuxiliar: number,
+    nombre: string,
+    descripcion: string,
+    precio: number,
+    stock: number,
+    stockMinimo: number,
+    idUnidadMe: number,
+    idTipoArt: number
+  },
+  cantidad: number,
+  idSalida: number,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  subTotal: number
+}
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
@@ -302,6 +327,7 @@ export interface detalleProductoSalida {
   modelo: string,
   precio: number,
   serial: string,
+  subTotal: number
 }
 
 

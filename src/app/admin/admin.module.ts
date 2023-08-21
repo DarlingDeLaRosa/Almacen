@@ -51,6 +51,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChangePasswordComponent } from './components/Modals/change-password/change-password.component';
 import { NgxPrintModule } from 'ngx-print';
 import { ShowDetailsComponent } from './components/Modals/show-details/show-details.component';
+import { ShowDetailsSalidaComponent } from './components/Modals/show-details-salida/show-details-salida.component';
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import { ShowDetailsComponent } from './components/Modals/show-details/show-deta
     NuevoProductModalComponent,
     ReporteTransparenciaComponent,
     ChangePasswordComponent,
-    ShowDetailsComponent
+    ShowDetailsComponent,
+    ShowDetailsSalidaComponent
   ],
   imports: [
     CommonModule,

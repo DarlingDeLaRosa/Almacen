@@ -77,8 +77,8 @@
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
           <input matInput [matAutocomplete]="pro" appearance="fill" formControlName="idProducto"
-            (input)="findProductoByName()"> <!--(optionSelected)="setValueFormProductoSalida($event.producto.value)"-->
-          <mat-autocomplete #pro='matAutocomplete'>
+            (input)="findProductoByName()">
+          <mat-autocomplete #pro='matAutocomplete' (optionSelected)="setValueFormProductoSalida($event.option.value)">
 
             <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
               {{producto.nombre}}
@@ -96,7 +96,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
-          <input type="number" matInput required formControlName="cantidad">
+          <input type="number" matInput required formControlName="cantidad" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker>
@@ -120,13 +120,13 @@
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input [disabled]="true" matInput required formControlName="serial">
+          <input [disabled]="true" matInput  formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Valor</mat-label>
-          <input [disabled]="true" type="number" matInput required formControlName="precio">
+          <mat-label>Precio</mat-label>
+          <input [disabled]="true" type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -152,7 +152,8 @@
             <th class="headerCell">Marca</th>
             <th class="headerCell">Modelo</th>
             <th class="headerCell">Serial</th>
-            <th class="headerCell">Valor</th>
+            <th class="headerCell">Precio</th>
+            <th class="headerCell">Subtotal</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
           </tr>
@@ -160,12 +161,13 @@
         <tbody>
           <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
             <td class="dataCell">{{item.idProducto}}</td>
-            <th class="headerCell">{{item.cantidad}}</th>
+            <td class="dataCell">{{item.cantidad}}</td>
             <td class="dataCell">{{item.condicion}}</td>
             <td class="dataCell">{{item.marca}}</td>
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"> <button class="fucEdit"
                 (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
@@ -181,7 +183,8 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell">Valor total</td>
+            <td class="footerCell"></td>
+            <td class="footerCell">{{resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>

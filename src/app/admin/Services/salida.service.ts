@@ -100,7 +100,7 @@ export class salidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
-    const getproducto = `${url}/Producto/getbiidcatalogo/${id}`
+    const getproducto = `${url}/Salida/getproducto${id}`
     return this.http.get(getproducto, productoHeader)
   }
 }

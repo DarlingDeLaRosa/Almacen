@@ -2,7 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -20,8 +20,9 @@ export class SalidasComponent implements OnInit {
   formDetalleSalida: FormGroup;
   url!: string;
   token!: string
-  isSerial:boolean = false
+  isSerial: boolean = false
   idRol: number = 0
+  resultSubTotal: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -51,6 +52,7 @@ export class SalidasComponent implements OnInit {
     });
 
     this.formDetalleSalida = this.fb.group({
+      idSalida: 0,
       idProducto: new FormControl('', Validators.required),
       existencia: new FormControl('', Validators.required),
       cantidad: new FormControl('', Validators.required),
@@ -179,34 +181,47 @@ export class SalidasComponent implements OnInit {
   }
 
   addDetail() {
+
     if (this.formDetalleSalida.valid) {
 
       if (this.formSalida.valid) {
-        console.log(this.formDetalleSalida.value)
-        this.detailGroup.push(this.formDetalleSalida.value)
-        this.formDetalleSalida.reset()
+
+        if (this.formDetalleSalida.value.cantidad < this.formDetalleSalida.value.existencia) {
+          this.detailGroup.push(this.formDetalleSalida.value)
+          this.resultSubTotal += this.formDetalleSalida.value.subTotal
+          this.formDetalleSalida.reset()
+        } else {
+          alertCantExis()
+        }
       }
     }
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
-
     this.detailGroup.splice(index, 1)
 
-    this.formDetalleSalida.setValue({
-      producto: `${item.idProducto}`,
-      cantidad: `${item.cantidad}`,
-      condicion: `${item.condicion}`,
-      marca: `${item.marca}`,
-      modelo: `${item.modelo}`,
-      precio: `${item.precio}`,
-      noSerial: `${item.serial}`,
-      existencia: `${item.existencia}`,
+    this.formDetalleSalida.patchValue({
+      idProducto: item.idProducto,
+      cantidad: item.cantidad,
+      condicion: item.condicion,
+      marca: item.marca,
+      modelo: item.modelo,
+      precio: item.precio,
+      serial: item.serial,
+      existencia: item.existencia,
+      subTotal: item.subTotal
+    })
+
+    this.resultSubTotal -= item.subTotal
+  }
+
+  subTotalResult() {
+    this.formDetalleSalida.patchValue({
+      subTotal: this.formDetalleSalida.value.cantidad * this.formDetalleSalida.value.precio
     })
   }
 
   async removeDetail(index: number) {
-
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
@@ -215,32 +230,36 @@ export class SalidasComponent implements OnInit {
   }
 
   setValueFormProductoSalida(producto: any) {
-    console.log(producto)
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });
+    console.log(setValuesform)
 
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .subscribe((res: any) => {
+
+        console.log(res.data)
         if (res.data !== null) {
-          if(res.data.producto.serial !== null){
+          if (res.data.serial !== null) {
             this.isSerial = true
+
             this.formDetalleSalida.patchValue({
-              existencia: new FormControl('', Validators.required),
-              condicion: new FormControl('', Validators.required),
-              marca: new FormControl('', Validators.required),
-              modelo: new FormControl('', Validators.required),
-              serial: new FormControl(''),
-              precio: new FormControl(''),
+              existencia: res.data.producto.stock,
+              condicion: res.data.condicion,
+              marca: res.data.marca,
+              modelo: res.data.modelo,
+              serial: res.data.serial,
+              precio: res.data.producto.precio,
             })
-          }else{
+          } else {
             this.isSerial = false
+
             this.formDetalleSalida.patchValue({
-              existencia: new FormControl('', Validators.required),
-              condicion: new FormControl('', Validators.required),
-              marca: new FormControl('', Validators.required),
-              modelo: new FormControl('', Validators.required),
-              precio: new FormControl(''),
+              existencia: res.data.producto.stock,
+              condicion: res.data.condicion,
+              marca: res.data.marca,
+              modelo: res.data.modelo,
+              precio: res.data.producto.precio,
             })
           }
         }
@@ -250,22 +269,48 @@ export class SalidasComponent implements OnInit {
 
   sendData() {
 
-    if (this.formSalida.valid) {
+    let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formSalida.value.idTipoSalida)
+    this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
 
-      //this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
-      //  .subscribe((res: any) => {
-      //
-      //    dataTipoSalida = res
-      //
-      //    if (dataTipoSalida.success) {
-      //      alertIsSuccess(true)
-      //      this.formTipoSalida.reset()
-      //    } else {
-      //      alertIsSuccess(false)
-      //    }
-      //    ()=> {
-      //      alertServerDown();
-      //    }})
+    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formSalida.value.idTipoAlm)
+    this.formSalida.value.idTipoAlm = idTipoAl[0].idTipoAlm
+
+    let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
+    this.formSalida.value.idDepar = idTipoDep[0].idDepar
+
+    if (this.formSalida.valid) {
+      console.log(this.formSalida.value)
+      this.api.postSalida(this.url, this.formSalida.value, this.token)
+        .subscribe((res: any) => {
+
+          if (res.success) {
+
+            this.detailGroup.map((detail: any) => {
+              detail.idSalida = res.data.idSalida
+              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              detail.idProducto = idTipoProD[0].idProducto
+            })
+
+            JSON.stringify(this.detailGroup)
+
+            this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
+              .subscribe((res: any) => {
+                console.log(res)
+                if (res.data !==  null) {
+                  alertIsSuccess(true)
+                }
+                else {
+                  alertIsSuccess(false)
+                }
+              })
+
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
+        })
 
     }
   }

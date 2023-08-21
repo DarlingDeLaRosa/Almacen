@@ -379,7 +379,6 @@ export class EntradasComponent implements OnInit {
               }
             })
 
-            console.log(this.formDetalleEntrada.value)
             JSON.stringify(this.detailGroup)
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {

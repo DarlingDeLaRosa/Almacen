@@ -6,8 +6,8 @@ import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { salida } from 'src/app/admin/models/interfaces';
-import { ShowDetailsComponent } from '../../Modals/show-details/show-details.component';
 import { salidaService } from 'src/app/admin/Services/salida.service';
+import { ShowDetailsSalidaComponent } from '../../Modals/show-details-salida/show-details-salida.component';
 
 @Component({
   selector: 'app-admin-salidas',
@@ -62,7 +62,7 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   openModal(detailId: number) {
-    let dialogRef = this.dialog.open(ShowDetailsComponent, {data: detailId})
+    let dialogRef = this.dialog.open(ShowDetailsSalidaComponent, {data: detailId})
 
     dialogRef.afterClosed().subscribe(() => {
     })
