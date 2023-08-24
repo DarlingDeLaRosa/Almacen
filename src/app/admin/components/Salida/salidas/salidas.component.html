@@ -36,20 +36,6 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
-        <mat-label>Tipo de almacen</mat-label>
-        <input matInput [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlm"
-          (input)="findTipoAlmacenByName()">
-        <mat-autocomplete #Talm='matAutocomplete'>
-
-          <mat-option *ngFor="let tipoAlmacen of tipoAlmacenList" [value]="tipoAlmacen.nombre">
-            {{tipoAlmacen.nombre}}
-          </mat-option>
-
-        </mat-autocomplete>
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
-      </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">

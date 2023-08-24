@@ -15,6 +15,16 @@
         <input matInput required formControlName="idCatalogo" (keydown.enter)="findByCodeProduct()">
       </mat-form-field>&nbsp;
 
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Auxiliar</mat-label>
+        <input matInput required formControlName="auxiliar">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Denominación</mat-label>
+        <input matInput required formControlName="denominacion">
+      </mat-form-field>&nbsp;
+
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Nombre</mat-label>
         <input matInput required formControlName="nombre">
@@ -53,14 +63,28 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
+      
       <mat-form-field hideRequiredMarker>
-        <mat-label>Auxiliar</mat-label>
-        <input matInput required formControlName="auxiliar">
+        <mat-label>Tipo de almacen</mat-label>
+        <input matInput [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlmacen"
+          (input)="findTipoAlmacenByName()">
+        <mat-autocomplete #Talm='matAutocomplete'>
+
+          <mat-option *ngFor="let tipoAlmacen of tipoAlmacenList" [value]="tipoAlmacen.nombre">
+            {{tipoAlmacen.nombre}}
+          </mat-option>
+
+        </mat-autocomplete>
+        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
-        <mat-label>Denominación</mat-label>
-        <input matInput required formControlName="denominacion">
+        <mat-label>ITBIS</mat-label>
+        <mat-select required appearance="fill" formControlName="itbis">
+          <mat-option value=0>Exento</mat-option>
+          <mat-option value=16>16%</mat-option>
+          <mat-option value=18>18%</mat-option>
+        </mat-select>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>

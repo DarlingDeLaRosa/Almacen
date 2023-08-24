@@ -2,10 +2,11 @@ import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { alertIsSuccess, alertProductCodeNoFound, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
-import { GET, tipoMedida, tipoProducto } from 'src/app/admin/models/interfaces';
+import { GET, tipoAlmacen, tipoMedida, tipoProducto } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -20,11 +21,14 @@ export class ProductosComponent implements OnInit {
   token!: string
   unidadMedidaList: tipoMedida[] = []
   tipoProductoList: tipoProducto[] = []
+  tipoAlmacenList: tipoAlmacen[] = []
+
 
   constructor(
     public fb: FormBuilder,
     private apiTipoMedida: TipoDeMedidaService,
     private apiTipoProducto: TipoDeProductoService,
+    private apiTipoAlmacen: TipoDeAlmacenService,
     private api: productoService,
     private store: Store<{ app: AppState }>
   ) {
@@ -33,9 +37,11 @@ export class ProductosComponent implements OnInit {
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
+      itbis: new FormControl('', Validators.required),
       stockMinimo: new FormControl('', Validators.required),
       idUnidadMe: new FormControl('', Validators.required),
       idTipoArt: new FormControl('', Validators.required),
+      idTipoAlmacen: new FormControl('', Validators.required),
       auxiliar: new FormControl(''),
       denominacion: new FormControl(''),
     })
@@ -47,6 +53,8 @@ export class ProductosComponent implements OnInit {
 
     this.getTipoProducto();
     this.getUnidadMedida();
+    this.getTipoAlmacen()
+
   }
 
   findByCodeProduct() {
@@ -71,6 +79,14 @@ export class ProductosComponent implements OnInit {
 
         })
     }
+  }
+
+  getTipoAlmacen() {
+    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        console.log(res)
+        this.tipoAlmacenList = res.data
+      });
   }
 
   getUnidadMedida() {
@@ -127,12 +143,31 @@ export class ProductosComponent implements OnInit {
     }
   }
 
+  findTipoAlmacenByName() {
+    if (this.formProducto.value.idTipoAlm.length >= 2) {
+
+      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formProducto.value.idTipoAlm)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.tipoAlmacenList = []
+
+          options.forEach((item: any) => {
+            this.tipoAlmacenList.push(item)
+          });
+        })
+    } else {
+      this.getTipoAlmacen()
+    }
+  }
 
   sendData() {
 
     let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formProducto.value.idUnidadMe)
     let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formProducto.value.idTipoArt)
+    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formProducto.value.idTipoAlmacen)
 
+    this.formProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
     this.formProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
     this.formProducto.value.idTipoArt = idTipoP[0].idTipoArt
 

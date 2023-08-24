@@ -44,7 +44,6 @@ export class EditSalidasComponent {
     this.formEditSalida = this.fb.group({
       fechaCreacion: new FormControl('', Validators.required),
       idTipoSalida: new FormControl('', Validators.required),
-      idTipoAlm: new FormControl('', Validators.required),
       idDepar: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
       total: 0
@@ -69,17 +68,8 @@ export class EditSalidasComponent {
     this.store.select(state => state.app.user.role.idRol).subscribe((user: number) => { this.idRol = user; });
 
     this.getProducto()
-    this.getTipoAlmacen()
     this.getTipoSalida()
     this.getTipoDepartamento()
-  }
-
-  getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
-      .subscribe((res: any) => {
-        console.log(res)
-        this.tipoAlmacenList = res.data
-      });
   }
 
   getProducto() {
@@ -121,24 +111,6 @@ export class EditSalidasComponent {
         })
     } else {
       this.getProducto()
-    }
-  }
-
-  findTipoAlmacenByName() {
-    if (this.formEditSalida.value.idTipoAlm.length >= 2) {
-
-      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEditSalida.value.idTipoAlm)
-        .subscribe((res: any) => {
-
-          let options = res.data
-          this.tipoAlmacenList = []
-
-          options.forEach((item: any) => {
-            this.tipoAlmacenList.push(item)
-          });
-        })
-    } else {
-      this.getTipoAlmacen()
     }
   }
 

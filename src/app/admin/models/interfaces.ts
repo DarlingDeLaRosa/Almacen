@@ -1,7 +1,6 @@
 
 export interface Entrada {
-
-  idEntrada: number
+  idEntrada: number,
   recinto: {
     idRecinto: number,
     nombre: string
@@ -10,10 +9,6 @@ export interface Entrada {
     idTipoEntrada: number,
     nombre: string,
     descripcion: string
-  },
-  tipoAlm: {
-    idTipoAlm: number
-    nombre: string
   },
   tipoEntrega: {
     idTipoEntrega: number,
@@ -38,13 +33,17 @@ export interface Entrada {
   numOrden: string,
   noFactura: string,
   fechaFactura: Date,
-  fechaCreacion: string,
+  fechaCreacion: Date,
   itbisGeneral: number,
   total: number,
   observacion: string,
+  itbisGeneralEstado: true,
   fechaModif: Date,
   creadoPor: {
-    idUsuario: number, nombre: string, apellido: string, cargo: string
+    idUsuario: number,
+    nombre: string,
+    apellido: string,
+    cargo: string
   },
   detalles: [
     {
@@ -58,10 +57,12 @@ export interface Entrada {
         nombre: string,
         descripcion: string,
         precio: number,
+        itbis: number,
         stock: number,
         stockMinimo: number,
         idUnidadMe: number,
-        idTipoArt: number
+        idTipoArt: number,
+        idTipoAlmacen: number
       },
       marca: string,
       modelo: string,
@@ -75,9 +76,9 @@ export interface Entrada {
   ]
 }
 
+
 export interface postEntrada {
   idTipoEntrada: number,
-  idTipoAlm: number,
   idTipoEntrega: number,
   idProveedor: number,
   numOrden: string,
@@ -92,7 +93,6 @@ export interface postEntrada {
 export interface putEntrada {
   idEntrada: number,
   idTipoEntrada: number,
-  idTipoAlm: number,
   idTipoEntrega: number,
   idProveedor: number,
   numOrden: string,
@@ -197,6 +197,7 @@ export interface detalleByIdEntrada {
     stockMinimo: number,
     idUnidadMe: number,
     idTipoArt: number
+    idTipoAlmacen: number
   },
   marca: string,
   modelo: string,
@@ -227,10 +228,6 @@ export interface salida {
     nombre: string,
     descripcion: string
   },
-  tipoAlmacen: {
-    idTipoAlm: number,
-    nombre: string
-  },
   departamento: {
     idDepar: number,
     nombre: string
@@ -243,8 +240,8 @@ export interface salida {
   },
   fechaCreacion: Date,
   observacion: string,
+  total: number,
   fechaModif: Date,
-  total: number
   detalles: [
     {
       idSalidaDet: number,
@@ -256,17 +253,21 @@ export interface salida {
         nombre: string,
         descripcion: string,
         precio: number,
+        itbis: number,
         stock: number,
         stockMinimo: number,
         idUnidadMe: number,
-        idTipoArt: number
+        idTipoArt: number,
+        idTipoAlmacen: number
       },
       cantidad: number,
       idSalida: number,
       marca: string,
       modelo: string,
       condicion: string,
-      serial: string
+      serial: string,
+      precio: number,
+      subTotal: number
     }
   ]
 }
@@ -274,15 +275,14 @@ export interface salida {
 export interface postSalida {
   fecha: Date,
   idTipoSalida: number,
-  idTipoAlm: number,
   idDepar: number,
-  observacion: string
+  observacion: string, 
+  total: number
 }
 
 export interface putSalida {
   idSalida: number,
   idTipoSalida: number,
-  idTipoAlm: number,
   idDepar: number,
   creadoPor: number,
   observacion: string,
@@ -502,6 +502,7 @@ export interface producto {
   nombre: string,
   descripcion: string,
   precio: number,
+  itbis: number,
   stock: number,
   stockMinimo: number,
   unidadMedida: {
@@ -511,19 +512,23 @@ export interface producto {
   idTipoArt: {
     idTipoArt: number,
     nombre: string
+  },
+  tipoAlmacen: {
+    idTipoAlm: number,
+    nombre: string
   }
 }
 
 export interface postProducto {
-  codPructo: string,
-  idAuxiliar: number,
+  idCatalogo: string,
   nombre: string,
   descripcion: string,
   precio: number,
-  stock: number,
+  itbis: string,
   stockMinimo: number,
   idUnidadMe: number,
-  idTipoArt: number
+  idTipoArt: number,
+  idTipoAlmacen: number,
 }
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////

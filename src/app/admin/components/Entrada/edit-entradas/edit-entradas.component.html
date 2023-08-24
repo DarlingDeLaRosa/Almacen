@@ -44,21 +44,6 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Tipo de Almacen</mat-label>
-        <input matInput required [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlm"
-          (input)="findTipoAlmacenByName()">
-        <mat-autocomplete #Talm='matAutocomplete'>
-
-          <mat-option *ngFor="let tipoAlmacen of tipoAlmacenList" [value]="tipoAlmacen.nombre">
-            {{tipoAlmacen.nombre}}
-          </mat-option>
-
-        </mat-autocomplete>
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
-      </mat-form-field>&nbsp;
-
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Entrada</mat-label>
         <input matInput required [matAutocomplete]="Tetd" appearance="fill" formControlName="idTipoEntrada"
@@ -164,6 +149,16 @@
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>ITBIS</mat-label>
+          <input matInput required formControlName="itbis">
+        </mat-form-field>&nbsp;
+        
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Tipo de Almacen</mat-label>
+          <input matInput required formControlName="idTipoAlm">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Precio / Valor</mat-label>
           <input type="number" matInput required formControlName="precio">
         </mat-form-field>&nbsp;
@@ -201,7 +196,7 @@
             <th class="headerCell">Condición</th>
             <th class="headerCell">Marca</th>
             <th class="headerCell">Modelo</th>
-            <th class="headerCell">Precio/Valor</th>
+            <th class="headerCell">Precio</th>
             <th class="headerCell">No.Serial</th>
             <th class="headerCell">ITBIS</th>
             <th class="headerCell">Subtotal</th>

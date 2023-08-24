@@ -50,10 +50,11 @@ export class AdminProductosComponent implements OnInit {
   getProducto() {
     this.api.getProducto(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       });
-  }
+  }   
 
   dataFilter() {
     console.log(this.filterProducto.value.filter)

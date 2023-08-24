@@ -3,10 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
+import { detalleProductoEntrada, producto, proveedor, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSerial, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
-import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
@@ -34,7 +33,6 @@ export class EntradasComponent implements OnInit {
   serial: boolean = false;
 
   proveedorList: proveedor[] = []
-  tipoAlmacenList: tipoAlmacen[] = []
   tipoEntradaList: tipoEntrada[] = []
   tipoEntregaList: tipoEntrega[] = []
   productoList: producto[] = []
@@ -43,7 +41,6 @@ export class EntradasComponent implements OnInit {
     public dialog: MatDialog,
     public fb: FormBuilder,
     private apiProveedor: proveedorService,
-    private apiTipoAlmacen: TipoDeAlmacenService,
     private apiTipoEntrega: TipoDeEntregaService,
     private apiTipoEntrada: TipoDeEntradaService,
     private apiProducto: productoService,
@@ -53,7 +50,6 @@ export class EntradasComponent implements OnInit {
     this.formEntrada = this.fb.group({
       fechaFactura: new FormControl('', Validators.required),
       idProveedor: new FormControl('', Validators.required),
-      idTipoAlm: new FormControl('', Validators.required),
       idTipoEntrada: new FormControl('', Validators.required),
       idTipoEntrega: new FormControl('', Validators.required),
       numOrden: new FormControl('', Validators.required),
@@ -74,7 +70,8 @@ export class EntradasComponent implements OnInit {
       serial: new FormControl(''),
       subTotal: new FormControl(''),
       itbisProducto: new FormControl(''),
-      idEntrada: new FormControl('')
+      idEntrada: new FormControl(''),
+      idTipoAlm: new FormControl(''),
     })
   }
 
@@ -85,17 +82,8 @@ export class EntradasComponent implements OnInit {
 
     this.getProveedor()
     this.getProducto()
-    this.getTipoAlmacen()
     this.getTipoEntrada()
     this.getTipoEntrega()
-  }
-
-  getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
-      .subscribe((res: any) => {
-        console.log(res)
-        this.tipoAlmacenList = res.data
-      });
   }
 
   getProveedor() {
@@ -144,24 +132,6 @@ export class EntradasComponent implements OnInit {
         })
     } else {
       this.getProveedor()
-    }
-  }
-
-  findTipoAlmacenByName() {
-    if (this.formEntrada.value.idTipoAlm.length >= 2) {
-
-      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEntrada.value.idTipoAlm)
-        .subscribe((res: any) => {
-
-          let options = res.data
-          this.tipoAlmacenList = []
-
-          options.forEach((item: any) => {
-            this.tipoAlmacenList.push(item)
-          });
-        })
-    } else {
-      this.getTipoAlmacen()
     }
   }
 
@@ -237,10 +207,29 @@ export class EntradasComponent implements OnInit {
     this.serial = event.value
   }
 
+  setValueDetailsEntrada(producto: any) {
+    let setValuesform = this.productoList.filter((productoEspecifico: any) => {
+      return productoEspecifico.nombre == producto
+    });
+
+    if(!this.generalITBIS){
+      this.formDetalleEntrada.patchValue({
+        idTipoAlm: setValuesform[0].tipoAlmacen.nombre
+      })
+    }else{
+      this.formDetalleEntrada.patchValue({
+        idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        itbisProducto: setValuesform[0].itbis
+      })
+    }
+    
+  }
+
   addDetail() {
 
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
-      if (this.serial == false && this.formDetalleEntrada.value.cantidad == 1) {
+      console.log(this.serial)
+      if (this.serial == false && this.formDetalleEntrada.value.cantidad == 1 || this.serial == true && this.formDetalleEntrada.value.cantidad !== 1 ) {
 
         this.totalResult += this.formDetalleEntrada.value.subTotal
 
@@ -263,7 +252,7 @@ export class EntradasComponent implements OnInit {
       } else {
         alertSerial()
       }
-    }else{
+    } else {
       alertNoValidForm()
     }
 
@@ -351,9 +340,6 @@ export class EntradasComponent implements OnInit {
     let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
     this.formEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
 
-    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEntrada.value.idTipoAlm)
-    this.formEntrada.value.idTipoAlm = idTipoAl[0].idTipoAlm
-
     let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrega)
     this.formEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
 
@@ -385,6 +371,7 @@ export class EntradasComponent implements OnInit {
                 console.log(res)
                 if (res.success) {
                   alertIsSuccess(true)
+                  this.detailGroup = []
                 }
                 else {
                   alertIsSuccess(false)

@@ -8,7 +8,7 @@ import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
-import { detalleEditProductoEntrada, detalleProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
+import { detalleEditProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
@@ -55,7 +55,6 @@ export class EditEntradasComponent {
     this.formEditEntrada = this.fb.group({
       fechaFactura: new FormControl('', Validators.required),
       idProveedor: new FormControl('', Validators.required),
-      idTipoAlm: new FormControl('', Validators.required),
       idTipoEntrada: new FormControl('', Validators.required),
       idTipoEntrega: new FormControl('', Validators.required),
       numOrden: new FormControl('', Validators.required),
@@ -76,7 +75,9 @@ export class EditEntradasComponent {
       serial: new FormControl(''),
       subTotal: new FormControl(''),
       itbisProducto: new FormControl(''),
-      idEntrada: new FormControl('')
+      idEntrada: new FormControl(''),
+      itbis: new FormControl(''),
+      idTipoAlm: new FormControl(''),
     })
   }
 
@@ -125,17 +126,9 @@ export class EditEntradasComponent {
 
       this.getProveedor()
       this.getProducto()
-      this.getTipoAlmacen()
       this.getTipoEntrada()
       this.getTipoEntrega()
     })
-  }
-
-  getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
-      .subscribe((res: any) => {
-        this.tipoAlmacenList = res.data
-      });
   }
 
   getProveedor() {
@@ -186,24 +179,6 @@ export class EditEntradasComponent {
     }
   }
 
-  findTipoAlmacenByName() {
-    if (this.formEditEntrada.value.idTipoAlm.length >= 2) {
-
-      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEditEntrada.value.idTipoAlm)
-        .subscribe((res: any) => {
-
-          let options = res.data
-          this.tipoAlmacenList = []
-
-          options.forEach((item: any) => {
-            this.tipoAlmacenList.push(item)
-          });
-        })
-    } else {
-      this.getTipoAlmacen()
-    }
-  }
-
   findTipoEntradaByName() {
     if (this.formEditEntrada.value.idTipoEntrada.length >= 2) {
 
@@ -218,7 +193,7 @@ export class EditEntradasComponent {
           });
         })
     } else {
-      this.getTipoAlmacen()
+      this.getTipoEntrada()
     }
   }
 
@@ -360,9 +335,6 @@ export class EditEntradasComponent {
 
     let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEditEntrada.value.idTipoEntrada)
     this.formEditEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
-
-    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditEntrada.value.idTipoAlm)
-    this.formEditEntrada.value.idTipoAlm = idTipoAl[0].idTipoAlm
 
     let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEditEntrada.value.idTipoEntrega)
     this.formEditEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega

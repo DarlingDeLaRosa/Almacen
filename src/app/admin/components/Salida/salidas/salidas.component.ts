@@ -7,7 +7,7 @@ import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { salidaService } from 'src/app/admin/Services/salida.service';
-import { detalleProductoSalida, producto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
+import { departamento, detalleProductoSalida, producto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -29,8 +29,7 @@ export class SalidasComponent implements OnInit {
   serial: boolean = false;
 
   tipoSalidaList: tipoSalida[] = []
-  tipoAlmacenList: tipoAlmacen[] = []
-  tipoDepartamentoList: any[] = [] //tipoDepartamentoList
+  tipoDepartamentoList: departamento[] = [] 
   productoList: producto[] = []
 
   constructor(
@@ -45,7 +44,6 @@ export class SalidasComponent implements OnInit {
     this.formSalida = this.fb.group({
       fechaCreacion: new FormControl('', Validators.required),
       idTipoSalida: new FormControl('', Validators.required),
-      idTipoAlm: new FormControl('', Validators.required),
       idDepar: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
       total: 0
@@ -71,18 +69,10 @@ export class SalidasComponent implements OnInit {
     this.store.select(state => state.app.user.role.idRol).subscribe((user: any) => { this.idRol = user; });
 
     this.getProducto()
-    this.getTipoAlmacen()
     this.getTipoSalida()
     this.getTipoDepartamento()
   }
 
-  getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
-      .subscribe((res: any) => {
-        console.log(res)
-        this.tipoAlmacenList = res.data
-      });
-  }
 
   getProducto() {
     this.apiProducto.getProducto(this.url, this.token, 1)
@@ -123,24 +113,6 @@ export class SalidasComponent implements OnInit {
         })
     } else {
       this.getProducto()
-    }
-  }
-
-  findTipoAlmacenByName() {
-    if (this.formSalida.value.idTipoAlm.length >= 2) {
-
-      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formSalida.value.idTipoAlm)
-        .subscribe((res: any) => {
-
-          let options = res.data
-          this.tipoAlmacenList = []
-
-          options.forEach((item: any) => {
-            this.tipoAlmacenList.push(item)
-          });
-        })
-    } else {
-      this.getTipoAlmacen()
     }
   }
 
@@ -271,9 +243,6 @@ export class SalidasComponent implements OnInit {
 
     let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formSalida.value.idTipoSalida)
     this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
-
-    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formSalida.value.idTipoAlm)
-    this.formSalida.value.idTipoAlm = idTipoAl[0].idTipoAlm
 
     let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
     this.formSalida.value.idDepar = idTipoDep[0].idDepar

@@ -43,21 +43,6 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-
-      <mat-form-field hideRequiredMarker>
-        <mat-label>Tipo de Almacen</mat-label>
-        <input matInput required [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlm"
-          (input)="findTipoAlmacenByName()">
-        <mat-autocomplete #Talm='matAutocomplete'>
-
-          <mat-option *ngFor="let tipoAlmacen of tipoAlmacenList" [value]="tipoAlmacen.nombre">
-            {{tipoAlmacen.nombre}}
-          </mat-option>
-
-        </mat-autocomplete>
-        <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
-      </mat-form-field>&nbsp;
-
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Entrada</mat-label>
         <input matInput required [matAutocomplete]="Tetd" appearance="fill" formControlName="idTipoEntrada"
@@ -128,9 +113,8 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Producto</mat-label>
-        <input matInput [matAutocomplete]="proD" appearance="fill" formControlName="idProducto"
-          (input)="findProductoByName()">
-        <mat-autocomplete #proD='matAutocomplete'>
+        <input matInput [matAutocomplete]="proD" appearance="fill" formControlName="idProducto" (input)="findProductoByName()" >
+        <mat-autocomplete #proD='matAutocomplete' (optionSelected)="setValueDetailsEntrada($event.option.value)">
 
           <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
             {{producto.nombre}}
@@ -139,6 +123,17 @@
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
+      
+      <mat-form-field hideRequiredMarker appearance="fill">
+        <mat-label>Tipo de Almacen</mat-label>
+        <input matInput readonly required formControlName="idTipoAlm">
+      </mat-form-field>&nbsp;
+
+      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
+        <mat-label>Porcentaje de ITBIS</mat-label>
+        <input type="number" readonly matInput formControlName="itbisProducto" (input)="subTotalResult()">
+      </mat-form-field>&nbsp;
+      <ng-template #noGeneralItbis></ng-template>
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Cantidad</mat-label>
@@ -165,15 +160,9 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">
-        <mat-label>Precio / Valor</mat-label>
+        <mat-label>Precio</mat-label>
         <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
       </mat-form-field>&nbsp;
-
-      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
-        <mat-label>ITBIS del articulo</mat-label>
-        <input type="number" matInput formControlName="itbisProducto" (input)="subTotalResult()">
-      </mat-form-field>&nbsp;
-      <ng-template #noGeneralItbis></ng-template>
 
       <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
         <mat-label>No. Serial</mat-label>
@@ -202,7 +191,7 @@
           <th class="headerCell">Condición</th>
           <th class="headerCell">Marca</th>
           <th class="headerCell">Modelo</th>
-          <th class="headerCell">Precio/Valor</th>
+          <th class="headerCell">Precio</th>
           <th class="headerCell">Serial</th>
           <th class="headerCell">ITBIS</th>
           <th class="headerCell">Subtotal</th>
