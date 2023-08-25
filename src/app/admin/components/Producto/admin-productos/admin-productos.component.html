@@ -19,9 +19,9 @@
           <th class="headerCell">Codigo</th>
           <th class="headerCell">Nombre</th>
           <th class="headerCell">Descripción</th>
-          <th class="headerCell">Precio</th>
           <th class="headerCell">Medida</th>
           <th class="headerCell">T.Producto</th>
+          <th class="headerCell">Precio</th>
           <th class="headerCell">Stock</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
@@ -32,9 +32,9 @@
           <td class="dataCell">{{item.codInstitucional}}</td>
           <td class="dataCell">{{item.nombre}}</td>
           <td class="dataCell">{{item.descripcion}}</td>
-          <td class="dataCell">{{item.precio}}</td>
           <td class="dataCell">{{item.unidadMedida.descripcion}}</td>
           <td class="dataCell">{{item.idTipoArt.nombre}}</td>
+          <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.stock}}</td>
           <td class="dataCell"> <button (click)="openModal(item)" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
           <td class="dataCell"> <button (click)="removeAlert(item.idProducto)" class="fucRem"><mat-icon>delete</mat-icon></button></td>

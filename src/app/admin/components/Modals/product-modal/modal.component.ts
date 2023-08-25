@@ -1,12 +1,13 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
-import { producto, tipoMedida, tipoProducto } from 'src/app/admin/models/interfaces';
+import { producto, tipoAlmacen, tipoMedida, tipoProducto } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -14,12 +15,14 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit{
+
   formEditProducto: FormGroup;
   url!: string;
   token!: string
   unidadMedidaList: tipoMedida[] = []
   tipoProductoList: tipoProducto[] = []
+  tipoAlmacenList: tipoAlmacen[] = []
 
   constructor(
     public fb: FormBuilder,
@@ -27,6 +30,7 @@ export class ModalComponent {
     private api: productoService,
     private apiTipoMedida: TipoDeMedidaService,
     private apiTipoProducto: TipoDeProductoService,
+    private apiTipoAlmacen: TipoDeAlmacenService,
     private dialogRef: MatDialogRef<ModalComponent>,
     private store: Store<{ app: AppState }>
   ) {
@@ -35,9 +39,11 @@ export class ModalComponent {
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
+      itbis: new FormControl('', Validators.required),
       stockMinimo: new FormControl('', Validators.required),
       idUnidadMe: new FormControl('', Validators.required),
       idTipoArt: new FormControl('', Validators.required),
+      idTipoAlmacen: new FormControl('', Validators.required),
       auxiliar: new FormControl(''),
       denominacion: new FormControl(''),
       idProducto: 0,
@@ -53,20 +59,24 @@ export class ModalComponent {
         idCatalogo: this.item.catalogo.id,
         nombre: this.item.catalogo.nombre,
         descripcion: this.item.descripcion,
+        itbis: this.item.itbis,
         precio: this.item.precio,
         stockMinimo: this.item.stockMinimo,
         idUnidadMe: this.item.unidadMedida.descripcion,
         idTipoArt: this.item.idTipoArt.nombre,
         auxiliar: this.item.catalogo.auxiliar.id,
-        denominacion: this.item.catalogo.auxiliar.denominacion
+        denominacion: this.item.catalogo.auxiliar.denominacion,
+        idTipoAlmacen: this.item.tipoAlmacen.nombre,
       })
 
     }
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
 
-    this.getUnidadMedida()
-    this.getTipoProducto()
+    this.getUnidadMedida();
+    this.getTipoProducto();
+    this.getTipoAlmacen();
+
   }
 
   closeModal() {
@@ -96,6 +106,14 @@ export class ModalComponent {
           }
         })
     }
+  }
+
+  getTipoAlmacen() {
+    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+      .subscribe((res: any) => {
+        console.log(res)
+        this.tipoAlmacenList = res.data
+      });
   }
 
   getUnidadMedida() {
@@ -153,6 +171,24 @@ export class ModalComponent {
     }
   }
 
+  findTipoAlmacenByName() {
+    if (this.formEditProducto.value.idTipoAlm.length >= 2) {
+
+      this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEditProducto.value.idTipoAlm)
+        .subscribe((res: any) => {
+
+          let options = res.data
+          this.tipoAlmacenList = []
+
+          options.forEach((item: any) => {
+            this.tipoAlmacenList.push(item)
+          });
+        })
+    } else {
+      this.getTipoAlmacen()
+    }
+  }
+
   editData() {
     console.log(this.formEditProducto.value)
     if (this.formEditProducto.valid && this.item !== null) {
@@ -165,6 +201,8 @@ export class ModalComponent {
         || this.formEditProducto.value.idUnidadMe !== this.item.unidadMedida.idUnidadMe
         || this.formEditProducto.value.idTipoArt !== this.item.idTipoArt.idTipoArt
         || this.formEditProducto.value.stockMinimo !== this.item.stockMinimo
+        || this.formEditProducto.value.itbis !== this.item.itbis
+        || this.formEditProducto.value.idTipoAlmacen !== this.item.tipoAlmacen.nombre
       ) {
 
         this.api.editProducto(this.url, this.formEditProducto.value, this.token)
@@ -193,10 +231,12 @@ export class ModalComponent {
 
       let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
       let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
+      let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
 
+      this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
       this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
       this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
-      console.log(this.formEditProducto.value)
+
 
       this.api.postProducto(this.url, this.formEditProducto.value, this.token)
         .subscribe((res: any) => {

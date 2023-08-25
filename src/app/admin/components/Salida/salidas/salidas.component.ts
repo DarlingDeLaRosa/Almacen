@@ -50,16 +50,17 @@ export class SalidasComponent implements OnInit {
     });
 
     this.formDetalleSalida = this.fb.group({
-      idSalida: 0,
       idProducto: new FormControl('', Validators.required),
       existencia: new FormControl('', Validators.required),
       cantidad: new FormControl('', Validators.required),
       condicion: new FormControl('', Validators.required),
       marca: new FormControl('', Validators.required),
       modelo: new FormControl('', Validators.required),
+      idTipoAlm: new FormControl(''),
       serial: new FormControl(''),
       precio: new FormControl(''),
-      subTotal: new FormControl('')
+      subTotal: new FormControl(''),
+      idSalida: 0,
     })
   }
 
@@ -78,6 +79,7 @@ export class SalidasComponent implements OnInit {
     this.apiProducto.getProducto(this.url, this.token, 1)
       .subscribe((res: any) => {
         this.productoList = res.data
+        console.log(this.productoList)
       });
   }
 
@@ -181,6 +183,7 @@ export class SalidasComponent implements OnInit {
       precio: item.precio,
       serial: item.serial,
       existencia: item.existencia,
+      idTipoAlm: item.idTipoAlmacen,
       subTotal: item.subTotal
     })
 
@@ -200,19 +203,22 @@ export class SalidasComponent implements OnInit {
       this.detailGroup.splice(index, 1)
     }
   }
+  
+  clearDetail(){
+    this.formDetalleSalida.reset()
+  }
 
   setValueFormProductoSalida(producto: any) {
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });
-    console.log(setValuesform)
 
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .subscribe((res: any) => {
 
         console.log(res.data)
         if (res.data !== null) {
-          if (res.data.serial !== null) {
+          if (res.data.serial !== "") {
             this.isSerial = true
 
             this.formDetalleSalida.patchValue({
@@ -221,6 +227,7 @@ export class SalidasComponent implements OnInit {
               marca: res.data.marca,
               modelo: res.data.modelo,
               serial: res.data.serial,
+              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
               precio: res.data.producto.precio,
             })
           } else {
@@ -230,12 +237,12 @@ export class SalidasComponent implements OnInit {
               existencia: res.data.producto.stock,
               condicion: res.data.condicion,
               marca: res.data.marca,
+              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
               modelo: res.data.modelo,
               precio: res.data.producto.precio,
             })
           }
         }
-
       })
   }
 
@@ -247,8 +254,12 @@ export class SalidasComponent implements OnInit {
     let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
     this.formSalida.value.idDepar = idTipoDep[0].idDepar
 
+    this.formSalida.value.total = this.resultSubTotal
+
     if (this.formSalida.valid) {
+      
       console.log(this.formSalida.value)
+
       this.api.postSalida(this.url, this.formSalida.value, this.token)
         .subscribe((res: any) => {
 

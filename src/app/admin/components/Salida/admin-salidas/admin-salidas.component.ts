@@ -58,7 +58,17 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   onInputFilterChange(event: Event) {
-    console.log(event)
+    if (this.filterSalida.value.filter.length >= 2) {
+
+      this.api.filterSalida(this.url, this.token, this.pagina, this.filterSalida.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
+    } else {
+      this.getSalida()
+    }
   }
 
   openModal(detailId: number) {
@@ -74,6 +84,7 @@ export class AdminSalidasComponent implements OnInit {
     if (removeChoise) {
       this.api.removeSalida(this.url, item, this.token)
         .subscribe((res: any) => {
+          
           if (res.sucess) {
             alertRemoveSuccess()
           } else {

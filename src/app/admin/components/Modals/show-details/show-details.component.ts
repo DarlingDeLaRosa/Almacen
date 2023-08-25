@@ -16,6 +16,7 @@ export class ShowDetailsComponent {
   url!: string;
   token!: string
   detallesList: detalleByIdEntrada[] = []
+  id!: number  
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public item: number,
@@ -41,11 +42,12 @@ export class ShowDetailsComponent {
     this.api.getDetalleEntrada(this.url, this.token, this.item)
     .subscribe((res: any)=>{
       this.detallesList = res.data
+      console.log(this.detallesList)
+      this.id = this.detallesList[0].idEntrada
     })
   }
 
   closeModal() {
     this.dialogRef.close()
   }
-
 }

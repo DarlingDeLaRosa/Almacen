@@ -1,12 +1,12 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nueva salida</h1>
-      <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
+    <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      <ng-template #supp>
-        <button mat-raised-button class="btnNavigate"
-      [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      </ng-template>
+    <ng-template #supp>
+      <button mat-raised-button class="btnNavigate"
+        [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+    </ng-template>
   </div>
 
   <div class="form">
@@ -74,7 +74,6 @@
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
 
-
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Existencia</mat-label>
           <input [disabled]="true" type="number" readonly matInput required formControlName="existencia">
@@ -83,6 +82,11 @@
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
           <input type="number" matInput required formControlName="cantidad" (input)="subTotalResult()">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Tipo de Almacen</mat-label>
+          <input matInput readonly required formControlName="idTipoAlm">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker>
@@ -106,15 +110,15 @@
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input [disabled]="true" matInput  formControlName="serial">
+          <input [disabled]="true" matInput formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Precio</mat-label>
-          <input [disabled]="true" type="number" matInput required formControlName="precio" (input)="subTotalResult()">
+          <mat-label>Valor</mat-label>
+          <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
-
+        
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
           <input [disabled]="true" type="number" matInput required formControlName="subTotal">
@@ -122,6 +126,7 @@
 
 
         <span class="btnContainer">
+          <button mat-raised-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
           <button mat-raised-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
@@ -145,7 +150,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
+          <tr class="dataRow" *ngFor="let item of detailGroup; let i = index" >
             <td class="dataCell">{{item.idProducto}}</td>
             <td class="dataCell">{{item.cantidad}}</td>
             <td class="dataCell">{{item.condicion}}</td>
@@ -154,10 +159,8 @@
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell"> <button class="fucEdit"
-                (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
-            </td>
+            <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button></td>
           </tr>
 
         </tbody>

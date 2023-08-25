@@ -327,7 +327,8 @@ export interface detalleProductoSalida {
   modelo: string,
   precio: number,
   serial: string,
-  subTotal: number
+  subTotal: number,
+  idTipoAlmacen: string
 }
 
 

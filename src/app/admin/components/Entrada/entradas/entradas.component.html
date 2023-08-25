@@ -106,8 +106,8 @@
       <div class="ITBIS">
         <h4>El producto contiene numero serial?</h4>
         <mat-radio-group (change)="serialOption($event)">
-          <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
-          <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+          <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
+          <mat-radio-button [value]="true" [checked]="true"  color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -177,7 +177,8 @@
       </mat-form-field>&nbsp;
     </div>
     <span class="btnContainer">
-      <button mat-raised-button (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
+      <button mat-raised-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
+      <button mat-raised-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
     </span>
   </div>
 
@@ -200,7 +201,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
+        <tr class="dataRow" *ngFor="let item of detailGroup; let i = index" (click)="duplicateDetail(item)" >
           <td class="dataCell">{{item.idProducto}}</td>
           <td class="dataCell">{{item.cantidad}}</td>
           <td class="dataCell">{{item.condicion}}</td>
@@ -210,10 +211,8 @@
           <td class="dataCell">{{item.serial}}</td>
           <td class="dataCell">{{item.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button>
-          </td>
-          <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
-          </td>
+          <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
       <tfoot>

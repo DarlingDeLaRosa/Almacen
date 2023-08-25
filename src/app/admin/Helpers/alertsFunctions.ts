@@ -30,6 +30,15 @@ export function alertSameData() {
   })
 }
 
+export function alertSameSerial() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Numero Serial Duplicado.',
+    showConfirmButton: false,
+    timer: 2500
+  })
+}
+
 export function alertSerial() {
   Swal.fire({
     icon: 'info',

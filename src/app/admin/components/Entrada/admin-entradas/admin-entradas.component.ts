@@ -58,7 +58,6 @@ export class AdminEntradasComponent implements OnInit {
   }
 
   onInputFilterChange() {
-    console.log(this.filterEntrada.value.filter)
     if (this.filterEntrada.value.filter.length >= 2) {
 
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
@@ -79,8 +78,7 @@ export class AdminEntradasComponent implements OnInit {
     })
   }
 
-
-  async removeAlert(item: number){
+  async removeAlert(item: number) {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {

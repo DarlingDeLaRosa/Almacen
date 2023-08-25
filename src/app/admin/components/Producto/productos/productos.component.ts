@@ -23,7 +23,6 @@ export class ProductosComponent implements OnInit {
   tipoProductoList: tipoProducto[] = []
   tipoAlmacenList: tipoAlmacen[] = []
 
-
   constructor(
     public fb: FormBuilder,
     private apiTipoMedida: TipoDeMedidaService,
@@ -53,7 +52,7 @@ export class ProductosComponent implements OnInit {
 
     this.getTipoProducto();
     this.getUnidadMedida();
-    this.getTipoAlmacen()
+    this.getTipoAlmacen();
 
   }
 

@@ -2,7 +2,7 @@
   <div class="fuctionContent">
     <h2 class="modal-title" mat-dialog-title>Detalle de productos</h2>
     <button mat-raised-button class="btnNavigate"
-      [routerLink]="['/almacen/administrar-entrada']"><mat-icon>edit</mat-icon> Editar</button>
+      [routerLink]="['/almacen/administrar-entrada']"  [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
   </div>
   <mat-dialog-content class="modal-content">
       <div>
@@ -26,11 +26,11 @@
               <td class="dataCell">{{detalles.marca}}</td>
               <td class="dataCell">{{detalles.modelo}}</td>
               <td class="dataCell">{{detalles.condicion}}</td>
-              <td class="dataCell">{{detalles.itbisProducto}}</td>
+              <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
-              <td class="dataCell">{{detalles.precio}}</td>
+              <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.cantidad}}</td>
-              <td class="dataCell">{{detalles.subTotal}}</td>
+              <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2' }}</td>
             </tr>
           </tbody>
 

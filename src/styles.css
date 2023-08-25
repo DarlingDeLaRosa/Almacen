@@ -225,6 +225,24 @@ table{
   padding-left: 30px;
 }
 
+.btnAdd{
+  box-shadow: 0px 3px 6px #97AAD7 !important;
+  color: #004b8d!important;
+}
+
+.btnAdd:hover{
+  box-shadow: 0px 4px 7px #97AAD7 !important;
+}
+
+.btnClear{
+  box-shadow: 0px 2px 6px #ec5858 !important;
+  color: rgba(200, 10, 10, 0.918) !important;
+}
+
+.btnClear:hover{
+  box-shadow: 0px 3px 7px #ec5858 !important;
+}
+
 .item-submenu {
   width: 153px;
   height: 35px;

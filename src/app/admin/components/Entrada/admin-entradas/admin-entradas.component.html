@@ -43,7 +43,7 @@
           <td class="dataCell">{{item.numOrden}}</td>
           <td class="dataCell">{{item.noFactura}}</td>
           <td class="dataCell">{{item.proveedor.razonSocial}}</td>
-          <td class="dataCell">{{item.total}}</td>
+          <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"> <button class="fucDetails" (click)="openModal(item.idEntrada)">
               <mat-icon>list</mat-icon></button></td>
           <td class="dataCell">

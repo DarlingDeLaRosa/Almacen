@@ -15,3 +15,7 @@
 .newProduct{
   margin-bottom: 10px;
 }
+
+.dataRow:hover {
+  background-color: #eee;
+}

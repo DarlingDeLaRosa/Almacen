@@ -45,7 +45,6 @@ import { TipoDeSalidaModalComponent } from './components/Modals/configuracion-mo
 import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
 import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
-import { NuevoProductModalComponent } from './components/Modals/nuevo-product-modal/nuevo-product-modal.component';
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChangePasswordComponent } from './components/Modals/change-password/change-password.component';
@@ -97,7 +96,6 @@ import { ShowDetailsSalidaComponent } from './components/Modals/show-details-sal
     VistaInicialComponent,
     ReporteEntradaProductoComponent,
     ReporteSalidaProductoComponent,
-    NuevoProductModalComponent,
     ReporteTransparenciaComponent,
     ChangePasswordComponent,
     ShowDetailsComponent,
