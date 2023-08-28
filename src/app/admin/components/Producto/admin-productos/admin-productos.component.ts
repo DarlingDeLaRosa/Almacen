@@ -7,7 +7,7 @@ import { productoService } from 'src/app/admin/Services/producto.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-productos',
@@ -79,23 +79,28 @@ export class AdminProductosComponent implements OnInit {
     })
   }
 
-  async removeAlert(item: number) {
-    let removeChoise: boolean = await alertRemoveSure()
-
-    if (removeChoise) {
-      this.api.removeProducto(this.url, item, this.token)
-        .subscribe((res: any) => {
-
-          if (res) {
-            alertRemoveSuccess()
-            this.getProducto()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            alertServerDown();
-          }
-        })
+  async removeAlert(item: number, stock: number) {
+    
+    if(stock == 0){
+      let removeChoise: boolean = await alertRemoveSure()
+      
+      if (removeChoise) {
+        this.api.removeProducto(this.url, item, this.token)
+          .subscribe((res: any) => {
+  
+            if (res) {
+              alertRemoveSuccess()
+              this.getProducto()
+            } else {
+              alertIsSuccess(false)
+            }
+            () => {
+              alertServerDown();
+            }
+          })
+      }
+    }else{
+      alertUnableToRemove()
     }
   }
 

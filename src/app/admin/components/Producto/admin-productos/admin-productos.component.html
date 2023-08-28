@@ -37,7 +37,7 @@
           <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.stock}}</td>
           <td class="dataCell"> <button (click)="openModal(item)" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button (click)="removeAlert(item.idProducto)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"> <button (click)="removeAlert(item.idProducto, item.stock)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
         </tr>
       </tbody>
 

@@ -212,12 +212,14 @@ export class EntradasComponent implements OnInit {
 
     if (!this.generalITBIS) {
       this.formDetalleEntrada.patchValue({
-        idTipoAlm: setValuesform[0].tipoAlmacen.nombre
+        idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        precio: setValuesform[0].precio
       })
     } else {
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
-        itbisProducto: setValuesform[0].itbis
+        itbisProducto: setValuesform[0].itbis,
+        precio: setValuesform[0].precio
       })
     }
   }

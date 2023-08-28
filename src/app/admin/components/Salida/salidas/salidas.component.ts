@@ -216,7 +216,7 @@ export class SalidasComponent implements OnInit {
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .subscribe((res: any) => {
 
-        console.log(res.data)
+        console.log(res)
         if (res.data !== null) {
           if (res.data.serial !== "") {
             this.isSerial = true
@@ -272,12 +272,19 @@ export class SalidasComponent implements OnInit {
             })
 
             JSON.stringify(this.detailGroup)
+            
+            console.log(this.detailGroup)
 
             this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
                 console.log(res)
                 if (res.data !==  null) {
+
                   alertIsSuccess(true)
+
+                  this.formSalida.reset()
+                  this.detailGroup = []
+                  this.resultSubTotal = 0 
                 }
                 else {
                   alertIsSuccess(false)

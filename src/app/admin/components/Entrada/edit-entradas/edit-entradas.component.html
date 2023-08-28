@@ -16,10 +16,9 @@
 
       <div class="ITBIS">
         <h4>El ITBIS de la factura es general?</h4>
-        <mat-radio-group (change)="itbisOption($event)">
-          <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
-          <!--Hacer que el cheked sea el seleccionado-->
-          <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+        <mat-radio-group formControlName="itbisGeneralEstado" (change)="itbisOption($event)">
+          <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
+          <mat-radio-button [value]="true"  color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -106,8 +105,8 @@
         <div class="ITBIS">
           <h4>El producto contiene numero serial?</h4>
           <mat-radio-group (change)="serialOption($event)">
-            <mat-radio-button [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
-            <mat-radio-button [value]="true" color="primary">No</mat-radio-button>
+            <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
+            <mat-radio-button [value]="true" [checked]="true" color="primary">No</mat-radio-button>
           </mat-radio-group>
         </div>
 
@@ -123,6 +122,22 @@
           </mat-autocomplete>
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Tipo de Almacen</mat-label>
+          <input matInput required formControlName="idTipoAlm">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Precio</mat-label>
+          <input type="number" matInput required formControlName="precio">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
+          <mat-label>Porcentaje de ITBIS</mat-label>
+          <input type="number" matInput formControlName="itbis" (input)="subTotalResult()">
+        </mat-form-field>&nbsp;
+        <ng-template #noGeneralItbis></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
@@ -147,27 +162,6 @@
           <mat-label>Modelo</mat-label>
           <input matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
-
-        <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>ITBIS</mat-label>
-          <input matInput required formControlName="itbis">
-        </mat-form-field>&nbsp;
-        
-        <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Tipo de Almacen</mat-label>
-          <input matInput required formControlName="idTipoAlm">
-        </mat-form-field>&nbsp;
-
-        <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Precio / Valor</mat-label>
-          <input type="number" matInput required formControlName="precio">
-        </mat-form-field>&nbsp;
-
-        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
-          <mat-label>ITBIS del articulo</mat-label>
-          <input type="number" matInput formControlName="itbisProducto" (input)="subTotalResult()">
-        </mat-form-field>&nbsp;
-        <ng-template #noGeneralItbis></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
           <mat-label>No. Serial</mat-label>

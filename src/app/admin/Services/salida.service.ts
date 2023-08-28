@@ -30,7 +30,7 @@ export class salidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
 
-    const getSalida = `${url}/Salida/getbyname?name=${data}&page=${page}&CantItems=${this.cantidadItems}`
+    const getSalida = `${url}/Salida/getbyname?nombre=${data}&page=${page}&CantItems=${this.cantidadItems}`
     return this.http.get(getSalida, salidaHeader)
   }
 
@@ -64,7 +64,7 @@ export class salidaService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaDetalleHeader = {headers: headers}
 
-    const getDetalleSalida = `${url}/Salida/getdetalleSalidabyid?id=${id}`
+    const getDetalleSalida = `${url}/Salida/getdetallesalidabyidsalida?id=${id}`
     return this.http.get(getDetalleSalida, salidaDetalleHeader)
   }
 

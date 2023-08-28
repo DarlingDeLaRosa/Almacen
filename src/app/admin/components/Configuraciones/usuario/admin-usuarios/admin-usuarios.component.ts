@@ -49,6 +49,7 @@ export class AdminUsuariosComponent implements OnInit{
   getUser() {
     this.api.getUser(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       });

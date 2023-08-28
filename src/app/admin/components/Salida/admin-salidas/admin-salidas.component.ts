@@ -57,7 +57,7 @@ export class AdminSalidasComponent implements OnInit {
       });
   }
 
-  onInputFilterChange(event: Event) {
+  onInputFilterChange() {
     if (this.filterSalida.value.filter.length >= 2) {
 
       this.api.filterSalida(this.url, this.token, this.pagina, this.filterSalida.value.filter)

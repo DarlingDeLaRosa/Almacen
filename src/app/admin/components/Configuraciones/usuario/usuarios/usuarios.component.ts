@@ -107,9 +107,7 @@ export class UsuariosComponent implements OnInit {
       this.api.postUser(this.url, this.formUser.value, this.token)
         .subscribe((res: any) => {
 
-          dataUser = res
-
-          if (dataUser.success) {
+          if (res.success) {
             alertIsSuccess(true)
             this.formUser.reset()
           } else {

@@ -39,6 +39,15 @@ export function alertSameSerial() {
   })
 }
 
+export function alertUnableToRemove() {
+  Swal.fire({
+    icon: 'error',
+    title: 'No puedes eliminar este producto',
+    showConfirmButton: false,
+    timer: 2500
+  })
+}
+
 export function alertSerial() {
   Swal.fire({
     icon: 'info',

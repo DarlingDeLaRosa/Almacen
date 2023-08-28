@@ -19,6 +19,7 @@ export class AlmacenAdminAppComponent implements OnInit{
   token!: string
   sidenavOpened: boolean = false;
   userName$ = this.store.select(state => state.app.user.nombre)
+  userLastName$ = this.store.select(state => state.app.user.apellido)
   userEmail$ = this.store.select(state => state.app.user.correo)
   userPosition$ = this.store.select(state => state.app.user.cargo)
   recinto$ = this.store.select(state => state.app.user.recinto.nombre)
@@ -52,7 +53,7 @@ export class AlmacenAdminAppComponent implements OnInit{
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
   }
-
+  
   async logOut(){
 
     let closeAccount: boolean = await alertLogOut()

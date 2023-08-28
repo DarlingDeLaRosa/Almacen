@@ -61,7 +61,7 @@
           </div>
 
           <div class="logout">
-            <h3 class="userName">{{userName$ | async}}</h3> &nbsp;
+            <h3 class="userName">{{userName$ | async}} {{userLastName$ | async}}</h3> &nbsp;
               <button class="closeAccount" [matMenuTriggerFor]="menu">
             </button>
             <mat-menu class="menuPanel" #menu="matMenu">

@@ -152,9 +152,14 @@ export interface detalleEditProductoEntrada {
     idTipoArt: number
     idUnidadMe: number
     nombre: string
+    itbis: number
     precio: number
     stock: number
     stockMinimo: number
+    tipoAlmacen: {
+      idTipoAlm: number,
+      nombre: string
+    }
   }
   marca: string,
   modelo: string,
