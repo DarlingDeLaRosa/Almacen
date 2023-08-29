@@ -19,3 +19,7 @@
 .dataRow:hover {
   background-color: #eee;
 }
+
+.formInfo .observacion{
+  width: 48.5% !important;
+}

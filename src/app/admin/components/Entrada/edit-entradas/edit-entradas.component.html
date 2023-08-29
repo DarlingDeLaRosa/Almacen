@@ -113,7 +113,7 @@
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
           <input matInput [matAutocomplete]="proD" appearance="fill" formControlName="idProducto" (input)="findProductoByName()">
-          <mat-autocomplete #proD='matAutocomplete'>
+          <mat-autocomplete #proD='matAutocomplete' (optionSelected)="setValueDetailsEntrada($event.option.value)">
 
             <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
               {{producto.nombre}}
@@ -143,7 +143,7 @@
           <mat-label>Cantidad</mat-label>
           <input type="number" matInput required formControlName="cantidad" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
-
+        
         <mat-form-field hideRequiredMarker>
           <mat-label>Condición</mat-label>
           <mat-select required appearance="fill" formControlName="condicion">
@@ -174,6 +174,12 @@
           <input type="number" readonly matInput formControlName="subTotal">
           <mat-icon matSuffix>$</mat-icon>
         </mat-form-field>&nbsp;
+
+        <mat-form-field class="comment" hideRequiredMarker appearance="fill" class="observacion">
+          <mat-label>Observacion</mat-label>
+          <input matInput formControlName="observacion">
+        </mat-form-field>&nbsp;
+        
       </div>
       <span class="btnContainer">
         <button mat-raised-button  (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
@@ -200,7 +206,7 @@
         </thead>
         <tbody>
           <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
-            <td class="dataCell">{{item.producto.nombre}}</td>
+            <td class="dataCell">{{item.producto}}</td>
             <td class="dataCell">{{item.cantidad}}</td>
             <td class="dataCell">{{item.condicion}}</td>
             <td class="dataCell">{{item.marca}}</td>

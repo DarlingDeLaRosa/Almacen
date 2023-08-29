@@ -55,7 +55,7 @@ export class EntradasComponent implements OnInit {
       idTipoEntrega: new FormControl('', Validators.required),
       numOrden: new FormControl('', Validators.required),
       noFactura: new FormControl('', Validators.required),
-      observacion: new FormControl('', Validators.required),
+      observacion: new FormControl(''),
       itbisGeneral: new FormControl(''),
       itbisGeneralEstado: new FormControl(''),
       total: new FormControl(''),
@@ -68,6 +68,7 @@ export class EntradasComponent implements OnInit {
       marca: new FormControl('', Validators.required),
       modelo: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
+      observacion: new FormControl(''),
       itbisProducto: new FormControl(''),
       serial: new FormControl(''),
       subTotal: new FormControl(''),
@@ -199,17 +200,17 @@ export class EntradasComponent implements OnInit {
 
   itbisOption(event: any) {
     this.generalITBIS = event.value;
+    //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
   }
 
   serialOption(event: any) {
     this.serial = event.value
   }
 
-  setValueDetailsEntrada(producto: any) {
-    let setValuesform = this.productoList.filter((productoEspecifico: any) => {
+  setValueDetailsEntrada(producto: string) {
+    let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
     });
-
     if (!this.generalITBIS) {
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
@@ -268,36 +269,37 @@ export class EntradasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
-
+    console.log(this.detailGroup)
   }
 
-  editDetail(index: number, item: detalleProductoEntrada) {
+  editDetail(index: number, producto: detalleProductoEntrada) {
 
     this.detailGroup.splice(index, 1)
 
     this.formDetalleEntrada.patchValue({
-      idProducto: item.idProducto,
-      cantidad: item.cantidad,
-      condicion: item.condicion,
-      marca: item.marca,
-      modelo: item.modelo,
-      precio: item.precio,
-      serial: item.serial,
-      itbisProducto: item.itbisProducto,
-      subTotal: item.subTotal,
+      idProducto: producto.idProducto,
+      cantidad: producto.cantidad,
+      condicion: producto.condicion,
+      marca: producto.marca,
+      modelo: producto.modelo,
+      precio: producto.precio,
+      serial: producto.serial,
+      itbisProducto: producto.itbisProducto,
+      subTotal: producto.subTotal,
+      observacion: producto.observacion
     })
 
     if (this.detailGroup.length == 0) {
       this.totalItbis = 0
     }
-    this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
-    this.totalResult -= item.subTotal
+    this.mostrarTotalItbis -= producto.itbisProducto * producto.cantidad
+    this.totalResult -= producto.subTotal
 
     if (this.detailGroup.length == 0) {
       this.disableItbis = false
     }
 
-    this.setValueDetailsEntrada(item.idProducto)
+    this.setValueDetailsEntrada(producto.idProducto)
   }
 
   async removeDetail(index: number, item: detalleProductoEntrada) {
@@ -334,6 +336,7 @@ export class EntradasComponent implements OnInit {
       precio: producto.precio,
       itbisProducto: producto.itbisProducto,
       subTotal: producto.subTotal,
+      observacion: producto.observacion
     })
 
     this.formDetalleEntrada.get('serial')?.reset()
@@ -370,8 +373,8 @@ export class EntradasComponent implements OnInit {
 
   sendData() {
 
-      this.formEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-      this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
+    this.formEntrada.value.itbisGeneralEstado = !this.generalITBIS,
+    this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
     this.formEntrada.value.total = this.totalResult
 

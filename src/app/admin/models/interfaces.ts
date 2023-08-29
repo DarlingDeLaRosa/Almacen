@@ -69,7 +69,7 @@ export interface Entrada {
       condicion: string,
       serial: string,
       precio: number,
-      itbisProducto: number,
+      itbisProducto: any,
       cantidad: number,
       subTotal: number
     }
@@ -140,6 +140,22 @@ export interface detalleProductoEntrada {
   itbisProducto: any,
   subTotal: number,
   idEntrada: number
+  observacion: string  
+}
+
+export interface detallePutGroup {
+  idEntradaDet: number,
+  idProducto: number,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  cantidad: number,
+  itbisProducto: number,
+  subTotal: number,
+  idEntrada: number,
+  observacion: string
 }
 
 export interface detalleEditProductoEntrada {
@@ -152,7 +168,7 @@ export interface detalleEditProductoEntrada {
     idTipoArt: number
     idUnidadMe: number
     nombre: string
-    itbis: number
+    itbis: number | string
     precio: number
     stock: number
     stockMinimo: number
@@ -170,6 +186,8 @@ export interface detalleEditProductoEntrada {
   itbisProducto: any,
   subTotal: number,
   idEntrada: number
+  observacion: string  
+
 }
 
 export interface putDetalleProductoEntrada {
@@ -181,9 +199,10 @@ export interface putDetalleProductoEntrada {
   serial: string,
   precio: number,
   cantidad: number,
-  itbisProducto: number,
+  itbisProducto: any,
   subTotal: number,
   idEntrada: number
+  observacion: string  
 }
 
 export interface detalleByIdEntrada {
@@ -209,9 +228,10 @@ export interface detalleByIdEntrada {
   condicion: string,
   serial: string,
   precio: number,
-  itbisProducto: number,
+  itbisProducto: any,
   cantidad: number,
   subTotal: number
+  observacion: string  
 
 }
 
@@ -258,7 +278,7 @@ export interface salida {
         nombre: string,
         descripcion: string,
         precio: number,
-        itbis: number,
+        itbis: number | string,
         stock: number,
         stockMinimo: number,
         idUnidadMe: number,
@@ -508,7 +528,7 @@ export interface producto {
   nombre: string,
   descripcion: string,
   precio: number,
-  itbis: number,
+  itbis: number | string,
   stock: number,
   stockMinimo: number,
   unidadMedida: {

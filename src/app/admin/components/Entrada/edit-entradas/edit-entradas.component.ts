@@ -30,7 +30,7 @@ export class EditEntradasComponent {
   idRol: number = 0
 
   detailGroup: detalleEditProductoEntrada[] = [];
-  generalITBIS!: boolean 
+  generalITBIS!: boolean
   serial: boolean = true;
   respuesta!: string
 
@@ -72,8 +72,8 @@ export class EditEntradasComponent {
       modelo: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
       serial: new FormControl(''),
+      observacion: new FormControl(''),
       subTotal: new FormControl(''),
-      itbisProducto: new FormControl(''),
       idEntrada: new FormControl(''),
       itbis: new FormControl(''),
       idTipoAlm: new FormControl(''),
@@ -120,14 +120,14 @@ export class EditEntradasComponent {
                 noFactura: res.data.noFactura,
                 observacion: res.data.observacion,
                 itbisGeneralEstado: !res.data.itbisGeneralEstado,
-                total: res.data.total
+                total: res.data.total,
               })
-
+              
               this.detailGroup = res.data.detalles
-            }else{
+            } else {
 
               this.generalITBIS = false
-              
+
               this.formEditEntrada.setValue({
                 fechaFactura: res.data.fechaFactura,
                 idProveedor: res.data.proveedor.razonSocial,
@@ -138,10 +138,12 @@ export class EditEntradasComponent {
                 observacion: res.data.observacion,
                 itbisGeneral: res.data.itbisGeneral,
                 itbisGeneralEstado: !res.data.itbisGeneralEstado,
-                total: res.data.total
+                total: res.data.total,
               })
 
               this.detailGroup = res.data.detalles
+              console.log(this.detailGroup)
+
             }
           }
         })
@@ -190,8 +192,8 @@ export class EditEntradasComponent {
           let options = res.data
           this.proveedorList = []
 
-          options.forEach((item: any) => {
-            this.proveedorList.push(item)
+          options.forEach((detalle: any) => {
+            this.proveedorList.push(detalle)
           });
         })
     } else {
@@ -208,8 +210,8 @@ export class EditEntradasComponent {
           let options = res.data
           this.tipoEntradaList = []
 
-          options.forEach((item: any) => {
-            this.tipoEntradaList.push(item)
+          options.forEach((detalle: any) => {
+            this.tipoEntradaList.push(detalle)
           });
         })
     } else {
@@ -226,8 +228,8 @@ export class EditEntradasComponent {
           let options = res.data
           this.tipoEntregaList = []
 
-          options.forEach((item: any) => {
-            this.tipoEntregaList.push(item)
+          options.forEach((detalle: any) => {
+            this.tipoEntregaList.push(detalle)
           });
         })
     } else {
@@ -244,8 +246,8 @@ export class EditEntradasComponent {
           let options = res.data
           this.productoList = []
 
-          options.forEach((item: any) => {
-            this.productoList.push(item)
+          options.forEach((detalle: any) => {
+            this.productoList.push(detalle)
           });
         })
     } else {
@@ -269,6 +271,25 @@ export class EditEntradasComponent {
     this.serial = event.value
   }
 
+  
+  setValueDetailsEntrada(producto: string) {
+    let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
+      return productoEspecifico.nombre == producto
+    });
+    if (!this.generalITBIS) {
+      this.formEditDetalleEntrada.patchValue({
+        idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        precio: setValuesform[0].precio
+      })
+    } else {
+      this.formEditDetalleEntrada.patchValue({
+        idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        itbisProducto: setValuesform[0].itbis,
+        precio: setValuesform[0].precio
+      })
+    }
+  }
+
   addDetail() {
 
     console.log(this.formEditDetalleEntrada.value)
@@ -280,7 +301,7 @@ export class EditEntradasComponent {
       if (!this.generalITBIS) {
         this.mostrarTotalItbis = this.formEditEntrada.value.itbisGeneral
       } else {
-        this.totalItbis += this.formEditDetalleEntrada.value.itbisProducto
+        this.totalItbis += this.formEditDetalleEntrada.value.itbis
         this.mostrarTotalItbis = this.totalItbis
         this.formEditEntrada.value.itbisGeneral = this.totalItbis
       }
@@ -295,40 +316,41 @@ export class EditEntradasComponent {
     }
   }
 
-  editDetail(index: number, item: detalleEditProductoEntrada) {
-
+  editDetail(index: number, detalle: detalleEditProductoEntrada) {
+    
     this.detailGroup.splice(index, 1)
 
-    if(item.itbisProducto == 0 ){
+    if (detalle.producto.itbis == 0) {
       this.formEditDetalleEntrada.patchValue({
-        idProducto: item.producto.nombre,
-        cantidad: item.cantidad,
-        condicion: item.condicion,
-        marca: item.marca,
-        modelo: item.modelo,
-        precio: item.precio,
-        serial: item.serial,
-        itbisProducto: item.itbisProducto,
-        subTotal: item.subTotal,
-        idTipoAlm: item.producto.tipoAlmacen.nombre
+        idProducto: detalle.producto.nombre,
+        cantidad: detalle.cantidad,
+        condicion: detalle.condicion,
+        marca: detalle.marca,
+        modelo: detalle.modelo,
+        precio: detalle.precio,
+        serial: detalle.serial,
+        itbis: detalle.producto.itbis,
+        subTotal: detalle.subTotal,
+        idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+        observacion: detalle.observacion
       })
-    }else{
+    } else {
       this.formEditDetalleEntrada.patchValue({
-        idProducto: item.producto.nombre,
-        cantidad: item.cantidad,
-        condicion: item.condicion,
-        marca: item.marca,
-        modelo: item.modelo,
-        precio: item.precio,
-        serial: item.serial,
-        itbisProducto: item.itbisProducto,
-        subTotal: item.subTotal,
-        itbis: item.producto.itbis,
-        idTipoAlm: item.producto.tipoAlmacen.nombre
+        idProducto: detalle.producto.nombre,
+        cantidad: detalle.cantidad,
+        condicion: detalle.condicion,
+        marca: detalle.marca,
+        modelo: detalle.modelo,
+        precio: detalle.precio,
+        serial: detalle.serial,
+        itbis: detalle.producto.itbis,
+        subTotal: detalle.subTotal,
+        idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+        observacion: detalle.observacion
       })
     }
 
-    
+    console.log(this.formEditDetalleEntrada.value)
   }
 
   async removeDetail(index: number) {
@@ -344,9 +366,9 @@ export class EditEntradasComponent {
     let form = this.formEditDetalleEntrada.value
 
     if (this.formEditDetalleEntrada.get('cantidad')?.valid || this.formEditDetalleEntrada.get('precio')?.valid) {
-      if (this.formEditDetalleEntrada.value.itbisProducto >= 0.01) {
+      if (this.formEditDetalleEntrada.value.itbis >= 0.01) {
 
-        this.totalItbis = form.cantidad * form.itbisProducto
+        this.totalItbis = form.cantidad * form.itbis
         let total = form.precio * form.cantidad
         total += this.totalItbis
         this.formEditDetalleEntrada.patchValue(
@@ -371,13 +393,13 @@ export class EditEntradasComponent {
 
     this.formEditEntrada.value.total = this.totalResult
 
-    let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEditEntrada.value.idTipoEntrada)
+    let idTipoEn = this.tipoEntradaList.filter(tEntrada => tEntrada.nombre === this.formEditEntrada.value.idTipoEntrada)
     this.formEditEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
 
-    let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEditEntrada.value.idTipoEntrega)
+    let idTipoEnt = this.tipoEntregaList.filter(tEntrega => tEntrega.nombre === this.formEditEntrada.value.idTipoEntrega)
     this.formEditEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
 
-    let idTipoPro = this.proveedorList.filter(item => item.razonSocial === this.formEditEntrada.value.idProveedor)
+    let idTipoPro = this.proveedorList.filter(proveedor => proveedor.razonSocial === this.formEditEntrada.value.idProveedor)
     this.formEditEntrada.value.idProveedor = idTipoPro[0].idProveedor
 
     if (this.formEditEntrada.valid && this.detailGroup.length >= 1) {

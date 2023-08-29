@@ -74,6 +74,9 @@ export class ProductosComponent implements OnInit {
           } else {
             alertProductCodeNoFound()
             this.formProducto.get('idCatalogo')?.reset()
+            this.formProducto.get('auxiliar')?.reset()
+            this.formProducto.get('denominacion')?.reset()
+            this.formProducto.get('nombre')?.reset()
           }
 
         })

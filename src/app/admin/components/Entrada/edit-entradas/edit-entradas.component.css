@@ -12,7 +12,10 @@
   margin: 0;
 }
 
-
 .newProduct{
   margin-bottom: 10px;
+}
+
+.formInfo .observacion{
+  width: 48.5% !important;
 }

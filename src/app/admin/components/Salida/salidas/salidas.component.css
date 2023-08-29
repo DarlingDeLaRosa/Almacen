@@ -11,3 +11,7 @@
 .ITBIS h3 {
   margin: 0;
 }
+
+.formInfo .departamento{
+  width: 48% !important;
+}

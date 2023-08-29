@@ -35,9 +35,9 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker class="departamento">
         <mat-label>Tipo de departamento</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar" 
           (input)="findTipoDepartamentoByName()">
         <mat-autocomplete #auto='matAutocomplete'>
 
