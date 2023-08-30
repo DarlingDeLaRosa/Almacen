@@ -7,12 +7,13 @@ import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
-import { detalleEditProductoEntrada, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
+import { detalleEditProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
+import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 
 @Component({
   selector: 'app-edit-entradas',
@@ -29,7 +30,7 @@ export class EditEntradasComponent {
   mostrarTotalItbis: number = 0
   idRol: number = 0
 
-  detailGroup: detalleEditProductoEntrada[] = [];
+  detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
   serial: boolean = true;
   respuesta!: string
@@ -39,6 +40,7 @@ export class EditEntradasComponent {
   tipoEntradaList: tipoEntrada[] = []
   tipoEntregaList: tipoEntrega[] = []
   productoList: producto[] = []
+  detalleList: detalleEditProductoEntrada[] = []
 
   constructor(
     public dialog: MatDialog,
@@ -47,6 +49,7 @@ export class EditEntradasComponent {
     private apiTipoEntrega: TipoDeEntregaService,
     private apiTipoEntrada: TipoDeEntradaService,
     private apiProducto: productoService,
+    private apiTipoAlmacen: TipoDeAlmacenService,
     private api: entradaService,
     private store: Store<{ app: AppState }>,
     private route: ActivatedRoute
@@ -62,6 +65,7 @@ export class EditEntradasComponent {
       itbisGeneral: new FormControl(''),
       itbisGeneralEstado: new FormControl(''),
       total: new FormControl(''),
+      idEntrada: 0,
     });
 
     this.formEditDetalleEntrada = this.fb.group({
@@ -74,9 +78,10 @@ export class EditEntradasComponent {
       serial: new FormControl(''),
       observacion: new FormControl(''),
       subTotal: new FormControl(''),
-      idEntrada: new FormControl(''),
-      itbis: new FormControl(''),
+      itbisProducto: new FormControl(''),
       idTipoAlm: new FormControl(''),
+      idEntrada: 0,
+      idEntradaDet: 0,
     })
   }
 
@@ -97,6 +102,7 @@ export class EditEntradasComponent {
       this.store.select(state => state.app.path),
       this.store.select(state => state.app.user.role.idRol),
     ]).subscribe(([tokenValue, pathValue, idRole]) => {
+      
       this.url = pathValue;
       this.token = tokenValue;
       this.idRol = idRole;
@@ -121,30 +127,54 @@ export class EditEntradasComponent {
                 observacion: res.data.observacion,
                 itbisGeneralEstado: !res.data.itbisGeneralEstado,
                 total: res.data.total,
-              })
-              
-              this.detailGroup = res.data.detalles
-            } else {
-
-              this.generalITBIS = false
-
-              this.formEditEntrada.setValue({
-                fechaFactura: res.data.fechaFactura,
-                idProveedor: res.data.proveedor.razonSocial,
-                idTipoEntrada: res.data.tipoEntrada.nombre,
-                idTipoEntrega: res.data.tipoEntrega.nombre,
-                numOrden: res.data.numOrden,
-                noFactura: res.data.noFactura,
-                observacion: res.data.observacion,
-                itbisGeneral: res.data.itbisGeneral,
-                itbisGeneralEstado: !res.data.itbisGeneralEstado,
-                total: res.data.total,
+                idEntrada: res.data.idEntrada
               })
 
-              this.detailGroup = res.data.detalles
-              console.log(this.detailGroup)
+              this.detalleList = res.data.detalles
+              console.log(this.detalleList)
+              this.detalleList.map(detalle => {
+                this.detailGroup.push({
 
-            }
+                  idProducto: detalle.producto.nombre,
+                  idEntradaDet: detalle.idEntradaDet,
+                  idEntrada: detalle.idEntrada,
+                  marca: detalle.marca,
+                  modelo: detalle.modelo,
+                  condicion: detalle.condicion,
+                  serial: detalle.serial,
+                  precio: detalle.precio,
+                  cantidad: detalle.cantidad,
+                  itbisProducto: detalle.producto.itbis,
+                  subTotal: detalle.subTotal,
+                  observacion: detalle.observacion,
+                  tipoAlmacen: detalle.producto.tipoAlmacen
+                })
+              })
+
+             } 
+            //else {
+
+            //   this.generalITBIS = false
+
+            //   this.formEditEntrada.setValue({
+            //     fechaFactura: res.data.fechaFactura,
+            //     idProveedor: res.data.proveedor.razonSocial,
+            //     idTipoEntrada: res.data.tipoEntrada.nombre,
+            //     idTipoEntrega: res.data.tipoEntrega.nombre,
+            //     numOrden: res.data.numOrden,
+            //     noFactura: res.data.noFactura,
+            //     observacion: res.data.observacion,
+            //     itbisGeneral: res.data.itbisGeneral,
+            //     itbisGeneralEstado: !res.data.itbisGeneralEstado,
+            //     total: res.data.total,
+            //     idEntrada: res.data.idEntrada
+            //   })
+
+            //   this.detailGroup = res.data.detalles
+
+            //   console.log(this.detailGroup)
+
+            // }
           }
         })
 
@@ -271,7 +301,7 @@ export class EditEntradasComponent {
     this.serial = event.value
   }
 
-  
+
   setValueDetailsEntrada(producto: string) {
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
@@ -316,39 +346,42 @@ export class EditEntradasComponent {
     }
   }
 
-  editDetail(index: number, detalle: detalleEditProductoEntrada) {
-    
+  editDetail(index: number, detalle: detallePutGroup) {
+    console.log(detalle)
     this.detailGroup.splice(index, 1)
 
-    if (detalle.producto.itbis == 0) {
+    //if (detalle.itbis == 0) {
       this.formEditDetalleEntrada.patchValue({
-        idProducto: detalle.producto.nombre,
+        idProducto: detalle.idProducto,
         cantidad: detalle.cantidad,
         condicion: detalle.condicion,
         marca: detalle.marca,
         modelo: detalle.modelo,
         precio: detalle.precio,
         serial: detalle.serial,
-        itbis: detalle.producto.itbis,
+        itbisProducto: detalle.itbisProducto,
         subTotal: detalle.subTotal,
-        idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-        observacion: detalle.observacion
+        idTipoAlm: detalle.tipoAlmacen.nombre,
+        observacion: detalle.observacion,
+        idEntrada: detalle.idEntrada,
+        idEntradaDet: detalle.idEntradaDet,
       })
-    } else {
-      this.formEditDetalleEntrada.patchValue({
-        idProducto: detalle.producto.nombre,
-        cantidad: detalle.cantidad,
-        condicion: detalle.condicion,
-        marca: detalle.marca,
-        modelo: detalle.modelo,
-        precio: detalle.precio,
-        serial: detalle.serial,
-        itbis: detalle.producto.itbis,
-        subTotal: detalle.subTotal,
-        idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-        observacion: detalle.observacion
-      })
-    }
+    // } 
+    //else {
+    //   this.formEditDetalleEntrada.patchValue({
+    //     idProducto: detalle.idProducto,
+    //     cantidad: detalle.cantidad,
+    //     condicion: detalle.condicion,
+    //     marca: detalle.marca,
+    //     modelo: detalle.modelo,
+    //     precio: detalle.precio,
+    //     serial: detalle.serial,
+    //     itbis: detalle.itbis,
+    //     subTotal: detalle.subTotal,
+    //     idTipoAlm: detalle.tipoAlmacen.nombre,
+    //     observacion: detalle.observacion
+    //   })
+    // }
 
     console.log(this.formEditDetalleEntrada.value)
   }
@@ -366,9 +399,9 @@ export class EditEntradasComponent {
     let form = this.formEditDetalleEntrada.value
 
     if (this.formEditDetalleEntrada.get('cantidad')?.valid || this.formEditDetalleEntrada.get('precio')?.valid) {
-      if (this.formEditDetalleEntrada.value.itbis >= 0.01) {
+      if (this.formEditDetalleEntrada.value.itbisProducto >= 0.01) {
 
-        this.totalItbis = form.cantidad * form.itbis
+        this.totalItbis = form.cantidad * form.itbisProducto
         let total = form.precio * form.cantidad
         total += this.totalItbis
         this.formEditDetalleEntrada.patchValue(
@@ -387,9 +420,10 @@ export class EditEntradasComponent {
 
   editData() {
 
-    this.formEditEntrada.patchValue({
-      itbisGeneralEstado: !this.generalITBIS
-    })
+    console.log(this.detailGroup)
+    this.formEditEntrada.value.itbisGeneralEstado = !this.generalITBIS,
+    this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
+
 
     this.formEditEntrada.value.total = this.totalResult
 
@@ -405,19 +439,45 @@ export class EditEntradasComponent {
     if (this.formEditEntrada.valid && this.detailGroup.length >= 1) {
 
       console.log(this.formEditEntrada.value)
-      this.api.postEntrada(this.url, this.formEditEntrada.value, this.token)
+      this.api.putEntrada(this.url, this.formEditEntrada.value, this.token)
         .subscribe((res: any) => {
 
           console.log(res)
-          //if (res.success) {
-          //  alertIsSuccess(true)
-          //  //this.formTipoSalida.reset()
-          //} else {
-          //  alertIsSuccess(false)
-          //}
-          //() => {
-          //  alertServerDown();
-          //}
+          if (res.data !== null) {
+            
+            this.detailGroup.map((detail: any) => {
+              console.log(detail)
+
+              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              
+              detail.idProducto = idTipoProD[0].idProducto
+              detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
+
+              if (detail.itbisProducto == "") {
+                detail.itbisProducto = 0
+              }
+            })
+
+            console.log(JSON.stringify(this.detailGroup))
+            
+
+
+            this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
+            .subscribe((respuesta: any)=>{
+              console.log(respuesta)
+              if(respuesta.success){
+                alertIsSuccess(true)
+              }else{
+                alertIsSuccess(false)
+              }
+            })
+
+          } else {
+            alertIsSuccess(false)
+          }
+          () => {
+            alertServerDown();
+          }
         })
 
     }

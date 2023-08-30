@@ -398,15 +398,20 @@ export class EntradasComponent implements OnInit {
           if (res.success && res.data !== null) {
 
             this.detailGroup.map((detail: detalleProductoEntrada) => {
+
               detail.idEntrada = res.data.idEntrada
+              
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              
               detail.idProducto = idTipoProD[0].idProducto
+              
               if (detail.itbisProducto == "") {
                 detail.itbisProducto = 0
               }
             })
 
             JSON.stringify(this.detailGroup)
+            
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
                 console.log(res)

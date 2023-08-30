@@ -143,9 +143,25 @@ export interface detalleProductoEntrada {
   observacion: string  
 }
 
-export interface detallePutGroup {
+
+export interface putDetalleProductoEntrada {
   idEntradaDet: number,
   idProducto: number,
+  marca: string,
+  modelo: string,
+  condicion: string,
+  serial: string,
+  precio: number,
+  cantidad: number,
+  itbisProducto: any,
+  subTotal: number,
+  idEntrada: number
+  observacion: string  
+}
+
+export interface detallePutGroup {
+  idEntradaDet: number,
+  idProducto: any,
   marca: string,
   modelo: string,
   condicion: string,
@@ -156,6 +172,10 @@ export interface detallePutGroup {
   subTotal: number,
   idEntrada: number,
   observacion: string
+  tipoAlmacen: {
+    idTipoAlm: number,
+    nombre: string
+  }
 }
 
 export interface detalleEditProductoEntrada {
@@ -168,7 +188,7 @@ export interface detalleEditProductoEntrada {
     idTipoArt: number
     idUnidadMe: number
     nombre: string
-    itbis: number | string
+    itbis: number 
     precio: number
     stock: number
     stockMinimo: number
@@ -184,22 +204,7 @@ export interface detalleEditProductoEntrada {
   precio: number,
   cantidad: number,
   itbisProducto: any,
-  subTotal: number,
-  idEntrada: number
-  observacion: string  
-
-}
-
-export interface putDetalleProductoEntrada {
-  idEntradaDet: number,
-  idProducto: number,
-  marca: string,
-  modelo: string,
-  condicion: string,
-  serial: string,
-  precio: number,
-  cantidad: number,
-  itbisProducto: any,
+  idEntradaDet: number
   subTotal: number,
   idEntrada: number
   observacion: string  

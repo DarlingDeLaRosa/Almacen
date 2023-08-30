@@ -16,13 +16,13 @@ import { ShowDetailsComponent } from '../../Modals/show-details/show-details.com
 })
 export class AdminEntradasComponent implements OnInit {
 
-  dataFiltered!: Entrada[]
+  dataFiltered!: Entrada[];
   filterEntrada: FormGroup;
-  url: string = ''
-  token: string = ''
-  pagina: number = 1
-  noPage: number = 1
-  idRol: number = 0
+  url: string = '';
+  token: string = '';
+  pagina: number = 1;
+  noPage: number = 1;
+  idRol: number = 0;
 
   constructor(
     public dialog: MatDialog,

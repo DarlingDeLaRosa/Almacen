@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { detalleProductoEntrada, postEntrada, putEntrada } from '../models/interfaces';
+import { detalleProductoEntrada, detallePutGroup, postEntrada, putEntrada } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class entradaService {
     return this.http.post(postEntrada, data, EntradaHeader)
   }
 
-  public editEntrada(url: string, data: putEntrada, token: string) {
+  public putEntrada(url: string, data: putEntrada, token: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}
 
@@ -74,6 +74,14 @@ export class entradaService {
 
     const postDetalleEntrada = `${url}/Entrada/adddetalle`
     return this.http.post(postDetalleEntrada, data, detalleEntradaHeader)
+  }
+
+  public putDetalleEntrada(url: string, data: detallePutGroup[], token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const detalleEntradaHeader = {headers: headers}
+
+    const editDetalleEntrada = `${url}/Entrada`
+    return this.http.put(editDetalleEntrada, data, detalleEntradaHeader)
   }
 
 }

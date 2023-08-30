@@ -155,21 +155,46 @@ table{
   color: #004b8d;
 }
 
-
-
 #reporteHeader{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr ;
-  background-color:#C7D1EA;
+  grid-template-rows: 8vh 8vh auto;
   padding: 15px;
   min-height: 60px;
   margin-top: 20px;
   margin-bottom: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 #reporteHeader span {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.entradaReporteTitle{
+  grid-row: 1/2;
+  grid-column: 1/5;
+  background-color:#C7D1EA;
+}
+
+.entradaReporteSubtitle{
+  display: grid; 
+  grid-row: 2/3;
+  grid-column: 1/5;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-right: #ccc;
+}
+
+.entradaReporteSubtitle:last-child{
+  border-right: none;
+}
+
+.entradaReporteDetalle{
+  display: grid;
+  grid-row: 3/4;
+  grid-column: 1/5;
+  grid-template-columns: 1fr 1fr 1fr 1fr ;
+
 }
 
 .itemReporte{

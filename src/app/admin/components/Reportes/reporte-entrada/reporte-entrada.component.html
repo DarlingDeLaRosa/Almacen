@@ -3,73 +3,80 @@
   <h1>Reportes de Entradas</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent">
 
-      <mat-form-field>
+    <div class="filtrarContent" [formGroup]="filterReporteEntrada">
+
+      <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput type="search" (keyup)="applyFilter($event)">
+        <input matInput (input)="onInputFilterChange()" formControlName="filter">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Rango de fecha</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
+          <input matStartDate formControlName="start" placeholder="Fecha Inicial">
+          <input matEndDate formControlName="end" placeholder="Fecha Final">
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
+        <!-- 
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        -->
       </mat-form-field>
 
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button printSectionId="reporteHeader" [useExistingCss]="true" ngxPrint><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
+      <button class="btnImprimir" mat-raised-button printSectionId="reporteHeader" [useExistingCss]="true"
+        ngxPrint><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
       <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
     </span>
   </div>
 
-  <div >
+  <div>
 
-    <div id="reporteHeader">
-      <span>
-        <b class="itemReporte">Fecha:</b> 20/06/2021
-      </span>
-      <span>
-        <b class="itemReporte">Recinto</b>: FEM
-      </span>
-      <span>
-        <b class="itemReporte">Proveedor</b>: Darling De la Rosa
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de Almacen</b> Cocina
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de entrada</b> Adquisicion
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de Entrega</b> En las manos
-      </span>
-      <span>
-        <b class="itemReporte">No. de orden</b> 8554626912
-      </span>
-      <span>
-        <b class="itemReporte">No. de contrato</b> 8557786912
-      </span>
-      <span>
-        <b class="itemReporte">No. Factura</b> 8554969912
-      </span>
-      <span>
-        <b class="itemReporte">Observacion</b> Todo Bien todo correcto
-      </span>
-      <span>
-        <b class="itemReporte">Creado por</b> Juan Perez
-      </span>
+    <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
+      <h1 class="entradaReporteTitle">{{entradas.idEntrada}}</h1>
+      <div class="entradaReporteSubtitle">
+        <h3> Fecha: {{entradas.fechaFactura | date: 'dd/MM/yyyy'}}</h3>
+        <h3> Numero de Factura: {{entradas.noFactura}}</h3>
+        <h3> Numero de Contrato: {{entradas.numOrden}}</h3>
+      </div>
+      <div class="entradaReporteDetalle">
+        <span>
+          <b class="itemReporte">Tipo de entrada</b> Adquisicion
+        </span>
+        <span>
+          <b class="itemReporte">Tipo de Entrega</b> En las manos
+        </span>
+        <span>
+          <b class="itemReporte">No. de orden</b> 8554626912
+        </span>
+        <span>
+          <b class="itemReporte">No. de contrato</b> 8557786912
+        </span>
+        <span>
+          <b class="itemReporte">No. Factura</b> 8554969912
+        </span>
+        <span>
+          <b class="itemReporte">Observacion</b> Todo Bien todo correcto
+        </span>
+        <span>
+          <b class="itemReporte">Creado por</b> Juan Perez
+        </span>
+
+      </div>
     </div>
 
+  </div>
+
+  <div class="pagination">
+    <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+    <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+    <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
   </div>
 
 </div>
