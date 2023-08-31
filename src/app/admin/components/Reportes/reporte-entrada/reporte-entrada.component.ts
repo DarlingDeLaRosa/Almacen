@@ -51,6 +51,7 @@ export class ReporteEntradaComponent implements OnInit {
   getEntrada() {
     this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       });

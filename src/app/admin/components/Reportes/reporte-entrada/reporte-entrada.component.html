@@ -10,7 +10,7 @@
         <mat-label>Filtrar</mat-label>
         <input matInput (input)="onInputFilterChange()" formControlName="filter">
         <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>&nbsp;
+      </mat-form-field>&nbsp; 
 
       <mat-form-field appearance="fill">
         <mat-label>Rango de fecha</mat-label>
@@ -30,45 +30,38 @@
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button printSectionId="reporteHeader" [useExistingCss]="true"
-        ngxPrint><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
-      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+      <button class="btnImprimir" mat-raised-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon>print</mat-icon>Imprimir</button>
     </span>
   </div>
 
-  <div>
+  <div id="reportesEntrada">
 
     <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
-      <h1 class="entradaReporteTitle">{{entradas.idEntrada}}</h1>
+      <div class="entradaReporteTitle">
+        <h1>
+          Numero de Entrada:  
+          {{entradas.idEntrada}}
+        </h1>
+      </div>
+    
       <div class="entradaReporteSubtitle">
-        <h3> Fecha: {{entradas.fechaFactura | date: 'dd/MM/yyyy'}}</h3>
-        <h3> Numero de Factura: {{entradas.noFactura}}</h3>
-        <h3> Numero de Contrato: {{entradas.numOrden}}</h3>
+        <h3> <b class="itemReporte">Fecha:</b> {{entradas.fechaFactura | date: 'dd/MM/yyyy'}}</h3>
+        <h3> <b class="itemReporte">Numero de Factura:</b> {{entradas.noFactura}}</h3>
+        <h3> <b class="itemReporte">Numero de Contrato:</b> {{entradas.numOrden}}</h3>
       </div>
       <div class="entradaReporteDetalle">
-        <span>
-          <b class="itemReporte">Tipo de entrada</b> Adquisicion
-        </span>
-        <span>
-          <b class="itemReporte">Tipo de Entrega</b> En las manos
-        </span>
-        <span>
-          <b class="itemReporte">No. de orden</b> 8554626912
-        </span>
-        <span>
-          <b class="itemReporte">No. de contrato</b> 8557786912
-        </span>
-        <span>
-          <b class="itemReporte">No. Factura</b> 8554969912
-        </span>
-        <span>
-          <b class="itemReporte">Observacion</b> Todo Bien todo correcto
-        </span>
-        <span>
-          <b class="itemReporte">Creado por</b> Juan Perez
-        </span>
-
+        <span> <b class="itemReporte">Recinto:</b> {{entradas.recinto.nombre}} </span>
+        <span> <b class="itemReporte">Proveedor:</b> {{entradas.proveedor.razonSocial}} </span>
+        <span> <b class="itemReporte">Tipo de entrada:</b> {{entradas.tipoEntrada.descripcion}} </span>
+        <span> <b class="itemReporte">Tipo de Entrega:</b> {{entradas.tipoEntrega.nombre}} </span>
+        <span> <b class="itemReporte">Creado por:</b> {{entradas.creadoPor.nombre}} {{entradas.creadoPor.apellido}} ({{entradas.creadoPor.cargo}})</span>
+        <span> <b class="itemReporte">Monto total:</b> {{entradas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
       </div>
+
+      <div class="observacionReporte">
+        <b class="itemReporte">Observacion:</b> {{entradas.observacion}}
+      </div>
+    
     </div>
 
   </div>

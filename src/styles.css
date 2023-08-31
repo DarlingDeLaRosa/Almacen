@@ -157,32 +157,36 @@ table{
 
 #reporteHeader{
   display: grid;
-  grid-template-rows: 8vh 8vh auto;
-  padding: 15px;
+  grid-template-rows: 8vh 8vh 12vh auto;
+  padding-bottom: 16px;
   min-height: 60px;
   margin-top: 20px;
   margin-bottom: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
-}
-
-#reporteHeader span {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  border: solid 1px #ccc;
 }
 
 .entradaReporteTitle{
   grid-row: 1/2;
-  grid-column: 1/5;
+  display: flex;
+  align-items: center;
   background-color:#C7D1EA;
+  padding: 0px 16px; 
 }
 
 .entradaReporteSubtitle{
+  box-sizing: border-box;
   display: grid; 
   grid-row: 2/3;
-  grid-column: 1/5;
-  width: 100%;
   grid-template-columns: 1fr 1fr 1fr;
-  border-right: #ccc;
+  width: 100%;
+  padding: 0px 16px;
+  align-items: center;
+  border-bottom: solid 1px #ccc;
+  border-top: none;
+}
+
+.entradaReporteSubtitle h3 {
+  margin: 0;
 }
 
 .entradaReporteSubtitle:last-child{
@@ -190,11 +194,23 @@ table{
 }
 
 .entradaReporteDetalle{
-  display: grid;
   grid-row: 3/4;
-  grid-column: 1/5;
-  grid-template-columns: 1fr 1fr 1fr 1fr ;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr ;
+  padding: 0px 16px;
+  box-sizing: border-box;
+}
 
+.entradaReporteDetalle span {
+  display: flex;
+  align-items: center;
+}
+
+.observacionReporte{
+  border-top: #ccc solid 1px;
+  grid-row: 4/5;
+  padding: 15px 16px 0px 16px;
+  text-align: justify;
 }
 
 .itemReporte{

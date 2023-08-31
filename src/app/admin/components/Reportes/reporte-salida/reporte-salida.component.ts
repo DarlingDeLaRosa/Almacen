@@ -4,6 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { entradaService } from 'src/app/admin/Services/entrada.service';
+import { Entrada } from 'src/app/admin/models/interfaces';
 
 @Component({
   selector: 'app-reporte-salida',
@@ -11,6 +13,15 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./reporte-salida.component.css']
 })
 export class ReporteSalidaComponent {
+  filterReporteEntrada!: FormGroup;
+
+  dataFiltered!: Entrada[];
+  url: string = '';
+  token: string = '';
+  pagina: number = 1;
+  noPage: number = 1;
+  idRol: number = 0;
+
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
@@ -35,7 +46,33 @@ export class ReporteSalidaComponent {
     ]
   ) ;
 
-  constructor(private _liveAnnouncer: LiveAnnouncer) { }
+  onInputFilterChange() {
+    if (this.filterReporteEntrada.value.filter.length >= 2) {
+
+      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
+    } else {
+      this.getEntrada()
+    }
+  }
+
+  
+  getEntrada() {
+    this.api.getEntrada(this.url, this.token, this.pagina)
+      .subscribe((res: any) => {
+        console.log(res)
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  constructor(private _liveAnnouncer: LiveAnnouncer, 
+    private api: entradaService,
+    ) { }
 
   ngAfterViewInit(): void {
     this.data.sort = this.sort

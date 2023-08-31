@@ -13,7 +13,6 @@ import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { alertIsSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 
 @Component({
   selector: 'app-edit-entradas',
@@ -33,7 +32,7 @@ export class EditEntradasComponent {
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
   serial: boolean = true;
-  respuesta!: string
+  respuesta!: any
 
   proveedorList: proveedor[] = []
   tipoAlmacenList: tipoAlmacen[] = []
@@ -49,7 +48,6 @@ export class EditEntradasComponent {
     private apiTipoEntrega: TipoDeEntregaService,
     private apiTipoEntrada: TipoDeEntradaService,
     private apiProducto: productoService,
-    private apiTipoAlmacen: TipoDeAlmacenService,
     private api: entradaService,
     private store: Store<{ app: AppState }>,
     private route: ActivatedRoute
@@ -110,7 +108,7 @@ export class EditEntradasComponent {
       this.api.getEntradaById(this.url, this.token, id)
         .subscribe((res: any) => {
           console.log(res.data)
-          this.respuesta = res.itbisGeneralEstado
+          this.respuesta = res.data.detalles
 
           if (res.success && res.data !== null) {
 
@@ -424,7 +422,6 @@ export class EditEntradasComponent {
     this.formEditEntrada.value.itbisGeneralEstado = !this.generalITBIS,
     this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
-
     this.formEditEntrada.value.total = this.totalResult
 
     let idTipoEn = this.tipoEntradaList.filter(tEntrada => tEntrada.nombre === this.formEditEntrada.value.idTipoEntrada)
@@ -444,27 +441,37 @@ export class EditEntradasComponent {
 
           console.log(res)
           if (res.data !== null) {
-            
+
             this.detailGroup.map((detail: any) => {
               console.log(detail)
-
+              
+              let idsDetalles = this.respuesta.filter((detalle: any)=> {
+                if(detalle.idEntradaDet == detail.idEntradaDet && detalle.producto.nombre == detail.idProducto){
+                  return detalle
+                }
+              })
+              
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
               
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
+
+              if(idsDetalles.length == 0){
+                detail.idEntradaDet = null
+              }
 
               if (detail.itbisProducto == "") {
                 detail.itbisProducto = 0
               }
             })
 
-            console.log(JSON.stringify(this.detailGroup))
-            
-
+            console.log(this.detailGroup)
 
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
             .subscribe((respuesta: any)=>{
+              
               console.log(respuesta)
+              
               if(respuesta.success){
                 alertIsSuccess(true)
               }else{
