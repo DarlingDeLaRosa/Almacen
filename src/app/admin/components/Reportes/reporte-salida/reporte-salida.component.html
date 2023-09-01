@@ -3,8 +3,8 @@
   <h1>Reportes de Salidas</h1>
 
   <div class="fuctionContent">
-    
-    <div class="filtrarContent" [formGroup]="filterReporteEntrada" >
+
+    <div class="filtrarContent" [formGroup]="filterReporteSalida">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -28,40 +28,45 @@
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button printSectionId="reportesSalidas" [useExistingCss]="true" ngxPrint ><mat-icon>print</mat-icon>Imprimir</button>
+      <button class="btnImprimir" mat-raised-button printSectionId="reportesSalidas" [useExistingCss]="true" ngxPrint><mat-icon>print</mat-icon>Imprimir</button>
     </span>
 
   </div>
 
-  <div class="reportesSalidas">
+  <div id="reportesSalidas">
 
-    <div class="reporteHeader">
-      <span>
-        <b class="itemReporte">Fecha:</b> 20/06/2023
-      </span>
-      <span>
-        <b class="itemReporte">Recinto</b>: FEM
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de salida</b>: Asignacion
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de almacen</b> Tecnologia
-      </span>
-      <span>
-        <b class="itemReporte">Tipo de departamento</b> Div. Desarrollo
-      </span>
-      <span>
-        <b class="itemReporte">No. de orden</b> 521447889
-      </span>
-      <span>
-        <b class="itemReporte">Creado por</b> Juan Perez
-      </span>
-      <span>
-        <b class="itemReporte">Observacion</b> Todo Bien todo correcto
-      </span>
+    <div id="reporteHeader" *ngFor="let salidas of dataFiltered">
+      <div class="entradaReporteTitle">
+        <h1>
+          Numero de Salida:
+          {{salidas.idSalida}}
+        </h1>
+      </div>
+
+      <div class="entradaReporteSubtitle">
+        <h3> <b class="itemReporte">Fecha:</b> {{salidas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
+      </div>
+      <div class="entradaReporteDetalle">
+        <span> <b class="itemReporte">Recinto:</b> {{salidas.recinto.nombre}} </span>
+        <span> <b class="itemReporte">Tipo de entrada:</b> {{salidas.tipoSalida.nombre}} </span>
+        <span> <b class="itemReporte">Tipo de Entrega:</b> {{salidas.departamento.nombre}} </span>
+        <span> <b class="itemReporte">Creado por:</b> {{salidas.creadoPor.nombre}} {{salidas.creadoPor.apellido}}
+          ({{salidas.creadoPor.cargo}})</span>
+        <span> <b class="itemReporte">Monto total:</b> {{salidas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
+      </div>
+
+      <div class="observacionReporte">
+        <b class="itemReporte">Observacion:</b> {{salidas.observacion}}
+      </div>
+
     </div>
 
+  </div>
+
+  <div class="pagination">
+    <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+    <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+    <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
   </div>
 
 </div>

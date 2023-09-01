@@ -1,5 +1,5 @@
 import { NgModule, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './superAdmin-routing.module';
@@ -117,6 +117,9 @@ import { ShowDetailsSalidaComponent } from './components/Modals/show-details-sal
     SalidasComponent,
     AdminSalidasComponent,
     EditSalidasComponent
+  ], 
+  providers: [
+    DatePipe, 
   ]
 })
 export class AdminModule implements OnInit{

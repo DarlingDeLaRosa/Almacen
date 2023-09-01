@@ -11,7 +11,7 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './inventario-existente.component.html',
   styleUrls: ['./inventario-existente.component.css']
 })
-export class InventarioExistenteComponent implements OnInit{
+export class InventarioExistenteComponent implements OnInit {
 
   dataFiltered: producto[] = []
   filterRepInventario: FormGroup;
@@ -48,12 +48,14 @@ export class InventarioExistenteComponent implements OnInit{
   getProducto() {
     this.api.getProducto(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       });
   }
 
   dataFilter() {
+    console.log(this.filterRepInventario.value.filter)
     if (this.filterRepInventario.value.filter.length >= 3) {
 
       this.api.filterProducto(this.url, this.token, this.pagina, this.filterRepInventario.value.filter)
@@ -63,6 +65,20 @@ export class InventarioExistenteComponent implements OnInit{
       })
 
     } else {
+      this.getProducto()
+    }
+  }
+
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getProducto()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
       this.getProducto()
     }
   }

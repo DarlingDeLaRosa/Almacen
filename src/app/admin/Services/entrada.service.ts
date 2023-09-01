@@ -34,6 +34,14 @@ export class entradaService {
     return this.http.get(getEntrada, EntradaHeader)
   }
 
+  public getEntradaReport(url: string, token: string, page: number, desde: any , hasta: any, data: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const EntradaHeader = {headers: headers}
+
+    const getEntrada = `${url}/Entrada/getbynamereport?nombre=${data}&desde=${desde}&hasta=${hasta}&page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getEntrada, EntradaHeader)
+  }
+
   public postEntrada(url: string, data: postEntrada, token: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,7 +14,7 @@ import { AppState } from 'src/app/store/state';
   styleUrls: ['./reporte-entrada.component.css']
 })
 export class ReporteEntradaComponent implements OnInit {
-  
+
   dataFiltered!: Entrada[];
   filterReporteEntrada: FormGroup;
   url: string = '';
@@ -25,13 +26,14 @@ export class ReporteEntradaComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private api: entradaService,
+    private datePipe: DatePipe,
     private store: Store<{ app: AppState }>) {
     this.filterReporteEntrada = new FormGroup({
-      filter: new FormControl(''),
-      start: new FormControl(''),
-      end: new FormControl(''),
+      nombre: new FormControl(''),
+      desde: new FormControl(''),
+      hasta: new FormControl(''),
     })
-   }
+  }
 
   ngOnInit(): void {
     combineLatest([
@@ -48,6 +50,16 @@ export class ReporteEntradaComponent implements OnInit {
     })
   }
 
+  getFormatteddesdeDate(): any {
+    let desdeDate: Date = new Date(this.filterReporteEntrada.value.desde);
+    let hastaDate = new Date(this.filterReporteEntrada.value.hasta);
+
+    return {
+      desde: this.datePipe.transform(desdeDate, 'yyyy/MM/dd'),
+      hasta:  this.datePipe.transform(hastaDate, 'yyyy/MM/dd')
+    }
+  }
+
   getEntrada() {
     this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
@@ -58,28 +70,45 @@ export class ReporteEntradaComponent implements OnInit {
   }
 
   onInputFilterChange() {
-    if (this.filterReporteEntrada.value.filter.length >= 2) {
+    if (this.filterReporteEntrada.value.nombre.length >= 2 ) {
 
-      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+      let dates = this.getFormatteddesdeDate()
+      console.log(dates)
+
+      this.api.getEntradaReport(this.url, this.token, this.pagina, dates?.desde, dates?.hasta, this.filterReporteEntrada.value.nombre)
+        .subscribe((res: any) => {
+          console.log(res)
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
+
+      if (this.filterReporteEntrada.get('desde')?.valid == true && this.filterReporteEntrada.get('hasta')?.valid == true) {
+
+        let dates = this.getFormatteddesdeDate()
+        console.log(dates)
+
+        this.api.getEntradaReport(this.url, this.token, this.pagina, dates.desde, dates.hasta, this.filterReporteEntrada.value.nombre)
+          .subscribe((res: any) => {
+            console.log(res)
+            this.noPage = res.cantPage
+            this.dataFiltered = res.data
+          })
+      }
 
     } else {
       this.getEntrada()
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getEntrada()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getEntrada()
     }

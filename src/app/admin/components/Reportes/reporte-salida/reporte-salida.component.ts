@@ -1,11 +1,11 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { entradaService } from 'src/app/admin/Services/entrada.service';
-import { Entrada } from 'src/app/admin/models/interfaces';
+import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { salidaService } from 'src/app/admin/Services/salida.service';
+import { salida } from 'src/app/admin/models/interfaces';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-reporte-salida',
@@ -13,56 +13,43 @@ import { Entrada } from 'src/app/admin/models/interfaces';
   styleUrls: ['./reporte-salida.component.css']
 })
 export class ReporteSalidaComponent {
-  filterReporteEntrada!: FormGroup;
-
-  dataFiltered!: Entrada[];
+  
+  dataFiltered!: salida[];
+  filterReporteSalida: FormGroup;
   url: string = '';
   token: string = '';
   pagina: number = 1;
   noPage: number = 1;
   idRol: number = 0;
 
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+  constructor(
+    public dialog: MatDialog,
+    private api: salidaService,
+    private store: Store<{ app: AppState }>) {
+    this.filterReporteSalida = new FormGroup({
+      filter: new FormControl(''),
+      start: new FormControl(''),
+      end: new FormControl(''),
+    })
+   }
 
-  dates(){
-    console.log(this.range)
+   ngOnInit(): void {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol),
+    ]).subscribe(([tokenValue, pathValue, idRol]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+      this.idRol = idRol
+
+      this.getSalida()
+    })
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  displayedColumns: string[] = ['fechaFactura', 'idProveedor', 'idRecinto', 'idTipoAlm', 'idTipoEntrada', 'idTipoEntrega', 'numOrden', 'observacion', 'total',];
-  data = new MatTableDataSource(
-
-    [
-      {
-        fechaFactura: 'Azucar', idProveedor: 'azucar blanca', idRecinto: 'Lider', idTipoAlm: 'Sacarosa',
-        idTipoEntrada: '100010023', idTipoEntrega: 'Nuevo', numOrden: 2000, observacion: 'Esta muy bien', total: 78
-      },
-
-    ]
-  ) ;
-
-  onInputFilterChange() {
-    if (this.filterReporteEntrada.value.filter.length >= 2) {
-
-      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
-
-    } else {
-      this.getEntrada()
-    }
-  }
-
-  
-  getEntrada() {
-    this.api.getEntrada(this.url, this.token, this.pagina)
+  getSalida() {
+    this.api.getSalida(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
         console.log(res)
         this.noPage = res.cantPage
@@ -70,24 +57,32 @@ export class ReporteSalidaComponent {
       });
   }
 
-  constructor(private _liveAnnouncer: LiveAnnouncer, 
-    private api: entradaService,
-    ) { }
+  onInputFilterChange() {
+    if (this.filterReporteSalida.value.filter.length >= 2) {
 
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
-  }
+      this.api.filterSalida(this.url, this.token, this.pagina, this.filterReporteSalida.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getSalida()
     }
   }
 
-  applyFilter(event: Event){
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  nextPage() {
+    if (this.pagina < this.noPage) {
+      this.pagina += 1
+      this.getSalida()
+    }
   }
+
+  previousPage() {
+    if (this.pagina > 1) {
+      this.pagina -= 1
+      this.getSalida()
+    }
+  }
+
 }

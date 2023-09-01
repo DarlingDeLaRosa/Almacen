@@ -14,8 +14,8 @@
       <mat-form-field>
         <mat-label>Rango de fecha </mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
+          <input matStartDate formControlName="start" placeholder="Fecha Inicial">
+          <input matEndDate formControlName="end" placeholder="Fecha Final">
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
@@ -24,69 +24,44 @@
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
-      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+      <button class="btnImprimir" mat-raised-button printSectionId="reportesInventario" [useExistingCss]="true" ngxPrint><mat-icon>print</mat-icon>Imprimir</button>
     </span>
   </div>
 
-  <div>
-
+  <div id="reportesInventario">
 
     <table>
       <thead class="headerTable">
         <tr class="headerRow">
-          <th class="headerCell">Nombre</th>
           <th class="headerCell">Codigo</th>
+          <th class="headerCell">Nombre</th>
           <th class="headerCell">Descripcion</th>
-          <th class="headerCell">Marca</th>
-          <th class="headerCell">Modelo</th>
-          <th class="headerCell">Condicion</th>
-          <th class="headerCell">Precio</th>
+          <th class="headerCell">T. Almacen</th>
+          <th class="headerCell">T. Producto</th>
           <th class="headerCell">Unidad de medida</th>
-          <th class="headerCell">T.Producto</th>
           <th class="headerCell">Stock</th>
+          <th class="headerCell">Precio</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow" >
-          <td class="dataCell">Azucar</td>
-          <td class="dataCell">FEM-002</td>
-          <td class="dataCell">crema</td>
-          <td class="dataCell">Lider</td>
-          <td class="dataCell">azuCrem</td>
-          <td class="dataCell">Nuevo</td>
-          <td class="dataCell">400</td>
-          <td class="dataCell">Paq.Libra</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">40</td>
-        </tr>
-        <tr class="dataRow">
-          <td class="dataCell">Cafe</td>
-          <td class="dataCell">FEM-001</td>
-          <td class="dataCell">arabigo</td>
-          <td class="dataCell">Santo Domingo</td>
-          <td class="dataCell">cafAra</td>
-          <td class="dataCell">Nuevo</td>
-          <td class="dataCell">600</td>
-          <td class="dataCell">Paq.2 Libra</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">21</td>
-        </tr>
-        <tr class="dataRow">
-          <td class="dataCell">Monitor</td>
-          <td class="dataCell">UM-001</td>
-          <td class="dataCell">24 Pulgadas</td>
-          <td class="dataCell">Dell</td>
-          <td class="dataCell">Dell24</td>
-          <td class="dataCell">Usado</td>
-          <td class="dataCell">5600</td>
-          <td class="dataCell">Unidad</td>
-          <td class="dataCell">Tecnologia</td>
-          <td class="dataCell">4</td>
+        <tr class="dataRow" *ngFor="let producto of dataFiltered">
+          <td class="dataCell">{{producto.codInstitucional}}</td>
+          <td class="dataCell">{{producto.nombre}}</td>
+          <td class="dataCell">{{producto.descripcion}}</td>
+          <td class="dataCell">{{producto.tipoAlmacen.nombre}}</td>
+          <td class="dataCell">{{producto.idTipoArt.nombre}}</td>
+          <td class="dataCell">{{producto.unidadMedida.descripcion}}</td>
+          <td class="dataCell">{{producto.stock}}</td>
+          <td class="dataCell">{{producto.precio | currency: 'RD$ ': 'symbol': '1.2-2' }}</td>
         </tr>
       </tbody>
 
     </table>
+  </div>
+  <div class="pagination">
+    <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+    <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+    <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
   </div>
 
 </div>

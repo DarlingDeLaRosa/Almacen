@@ -3,59 +3,35 @@
   <h1>Reportes de Proveedores</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent">
+    <div class="filtrarContent" [formGroup]="filterRepProveedor" class="filtrarContent">
 
-      <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput type="search" (keyup)="applyFilter($event)">
+        <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field>
-        <mat-label>Rango de fecha </mat-label>
+        <mat-label>Rango de fecha</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
+          <input matStartDate formControlName="start" placeholder="Fecha Inicial">
+          <input matEndDate formControlName="end" placeholder="Fecha Final">
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        <!-- <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> -->
       </mat-form-field>
 
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button><mat-icon>print</mat-icon>Imprimir</button>&nbsp;
-      <button class="btnExportar" mat-raised-button><mat-icon>save_alt</mat-icon>Exportar</button>
+      <button class="btnImprimir" mat-raised-button printSectionId="reportesProveedor" [useExistingCss]="true" ngxPrint><mat-icon>print</mat-icon>Imprimir</button>
     </span>
   </div>
 
-  <div>
-    <!--
-      <table mat-table matSort [dataSource]="data" (matSortChange)="announceSortChange($event)">
-
-        <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nombre"> Nombre </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="rnc">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by rnc"> RNC </th>
-          <td mat-cell *matCellDef="let element"> {{element.rnc}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="representante">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by representante"> Representante </th>
-          <td mat-cell *matCellDef="let element"> {{element.representante}} </td>
-        </ng-container>
-
-        <tr mat-header-row class="headTable" *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row class="rowTable" *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    -->
-
+  <div id="reportesProveedor">
     <table>
       <thead class="headerTable">
         <tr class="headerRow">
@@ -64,21 +40,24 @@
           <th class="headerCell">Nombre comercial</th>
           <th class="headerCell">Representante</th>
           <th class="headerCell">Contacto</th>
-          <th class="headerCell">Estado</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">101-79682-2</td>
-          <td class="dataCell">GRUPO RAMOS SA</td>
-          <td class="dataCell">GRUPO RAMOS</td>
-          <td class="dataCell">Julio Ramos</td>
-          <td class="dataCell">829-987-6358</td>
-          <td class="dataCell">ACTIVO</td>
+        <tr class="dataRow" *ngFor="let proveedor of dataFiltered" >
+          <td class="dataCell">{{proveedor.rnc}}</td>
+          <td class="dataCell">{{proveedor.razonSocial}}</td>
+          <td class="dataCell">{{proveedor.nombreComercial}}</td>
+          <td class="dataCell">{{proveedor.representante}}</td>
+          <td class="dataCell">{{proveedor.telRepresentante}}</td>
         </tr>
       </tbody>
 
     </table>
+  </div>
+  <div class="pagination">
+    <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+    <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+    <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
   </div>
 
 </div>

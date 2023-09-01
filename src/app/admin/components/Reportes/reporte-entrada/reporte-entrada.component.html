@@ -8,16 +8,18 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
-        <input matInput (input)="onInputFilterChange()" formControlName="filter">
+        <input matInput (input)="onInputFilterChange()" formControlName="nombre">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp; 
 
       <mat-form-field appearance="fill">
         <mat-label>Rango de fecha</mat-label>
+
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Fecha Inicial">
-          <input matEndDate formControlName="end" placeholder="Fecha Final">
+          <input matStartDate formControlName="desde" placeholder="Fecha Inicial" (input)="onInputFilterChange()">
+          <input matEndDate formControlName="hasta" placeholder="Fecha Final" (input)="onInputFilterChange()">
         </mat-date-range-input>
+
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
@@ -45,7 +47,7 @@
       </div>
     
       <div class="entradaReporteSubtitle">
-        <h3> <b class="itemReporte">Fecha:</b> {{entradas.fechaFactura | date: 'dd/MM/yyyy'}}</h3>
+        <h3> <b class="itemReporte">Fecha:</b> {{entradas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
         <h3> <b class="itemReporte">Numero de Factura:</b> {{entradas.noFactura}}</h3>
         <h3> <b class="itemReporte">Numero de Contrato:</b> {{entradas.numOrden}}</h3>
       </div>
@@ -60,6 +62,39 @@
 
       <div class="observacionReporte">
         <b class="itemReporte">Observacion:</b> {{entradas.observacion}}
+      </div>
+      
+      <div>
+        <table>
+          <thead class="headerTable">
+            <tr class="headerRow">
+              <th class="headerCell">Producto</th>
+              <th class="headerCell">Marca</th>
+              <th class="headerCell">Modelo</th>
+              <th class="headerCell">Condición</th>
+              <th class="headerCell">Unidad De Medida</th>
+              <th class="headerCell">Serial</th>
+              <th class="headerCell">Precio</th>
+              <th class="headerCell">Cantidad</th>
+              <th class="headerCell">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="dataRow" *ngFor="let detalles of entradas.detalles">
+              <td class="dataCell">{{detalles.producto.nombre}}</td>
+              <td class="dataCell">{{detalles.marca}}</td>
+              <td class="dataCell">{{detalles.modelo}}</td>
+              <td class="dataCell">{{detalles.condicion}}</td>
+              <td class="dataCell">{{detalles.producto.idUnidadMe}}</td>
+              <td class="dataCell">{{detalles.serial}}</td>
+              <td class="dataCell">{{detalles.precio}}</td>
+              <td class="dataCell">{{detalles.cantidad}}</td>
+              <td class="dataCell">{{detalles.subTotal}}</td>
+              
+            </tr>
+          </tbody>
+    
+        </table>
       </div>
     
     </div>

@@ -84,7 +84,7 @@ export class AdminEntradasComponent implements OnInit {
     if (removeChoise) {
       this.api.removeEntrada(this.url, item, this.token)
         .subscribe((res: any) => {
-
+          console.log(res)
           if (res) {
             alertRemoveSuccess()
             this.getEntrada()

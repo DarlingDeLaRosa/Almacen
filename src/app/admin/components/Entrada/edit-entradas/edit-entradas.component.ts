@@ -455,6 +455,7 @@ export class EditEntradasComponent {
               
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
+              detail.idEntrada = res.data.idEntrada
 
               if(idsDetalles.length == 0){
                 detail.idEntradaDet = null
