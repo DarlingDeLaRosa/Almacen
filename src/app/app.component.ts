@@ -15,7 +15,7 @@ export class AppComponent implements OnInit{
   constructor(private store: Store<{app: AppState}>){}
 
   ngOnInit(): void {
-    const path = 'http://172.25.4.24:81'
+    const path = 'http://172.16.1.41:3001'
     const userData = localStorage.getItem('userData')
 
     this.store.dispatch(Path({path}))
