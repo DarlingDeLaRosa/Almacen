@@ -99,7 +99,7 @@ import { ShowDetailsSalidaComponent } from './components/Modals/show-details-sal
     ReporteTransparenciaComponent,
     ChangePasswordComponent,
     ShowDetailsComponent,
-    ShowDetailsSalidaComponent
+    ShowDetailsSalidaComponent,
   ],
   imports: [
     CommonModule,
@@ -108,7 +108,7 @@ import { ShowDetailsSalidaComponent } from './components/Modals/show-details-sal
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxPrintModule
+    NgxPrintModule,
   ],
   exports:[
     AdminEntradasComponent,

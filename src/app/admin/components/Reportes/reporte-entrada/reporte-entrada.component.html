@@ -12,22 +12,19 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Rango de fecha</mat-label>
 
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="desde" placeholder="Fecha Inicial" (input)="onInputFilterChange()">
-          <input matEndDate formControlName="hasta" placeholder="Fecha Final" (input)="onInputFilterChange()">
+          <input matStartDate formControlName="desde" placeholder="Fecha Inicial" >
+          <input matEndDate formControlName="hasta" placeholder="Fecha Final" >
         </mat-date-range-input>
 
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <!--
-        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-        -->
-      </mat-form-field>
+       
+      </mat-form-field> -->
 
     </div>
 

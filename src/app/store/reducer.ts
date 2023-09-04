@@ -26,7 +26,7 @@ export const inicialState: AppState = {
     creadoPor: '',
     supervisor: ''
   },
-  edit: '',
+  loading: false,
   token: '',
 }
 
@@ -35,8 +35,7 @@ export const appReducer = createReducer(
   on(AppActions.logIn, (state, { user }) => ({ ...state, user })),
   on(AppActions.Path, (state, { path }) => ({ ...state, path })),
   on(AppActions.Token, (state, { token }) => ({ ...state, token})),
-
+  on(AppActions.Loading, (state, { loading }) => ({ ...state, loading})),
 
   on(AppActions.App, (state, { app }) => ({ ...state = app})),
-
 )

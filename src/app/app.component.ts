@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/state';
 import { Path, logIn } from './store/actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,5 @@ export class AppComponent implements OnInit{
       let dataParse = JSON.parse(userData)
       this.store.dispatch(logIn({user: dataParse }))
     }
-
   }
 }

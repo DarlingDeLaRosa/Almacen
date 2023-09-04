@@ -16,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatMenuModule} from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 const materialComponents = [
@@ -35,7 +36,9 @@ const materialComponents = [
   MatNativeDateModule,
   MatRadioModule,
   MatStepperModule,
-  MatMenuModule
+  MatMenuModule,
+  MatProgressSpinnerModule
+
 ]
 
 @NgModule({

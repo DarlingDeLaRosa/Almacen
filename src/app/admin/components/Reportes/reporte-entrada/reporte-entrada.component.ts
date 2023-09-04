@@ -72,28 +72,25 @@ export class ReporteEntradaComponent implements OnInit {
   onInputFilterChange() {
     if (this.filterReporteEntrada.value.nombre.length >= 2 ) {
 
-      let dates = this.getFormatteddesdeDate()
-      console.log(dates)
-
-      this.api.getEntradaReport(this.url, this.token, this.pagina, dates?.desde, dates?.hasta, this.filterReporteEntrada.value.nombre)
+      this.api.filterEntrada(this.url, this.token, this.pagina,  this.filterReporteEntrada.value.nombre)
         .subscribe((res: any) => {
           console.log(res)
           this.noPage = res.cantPage
           this.dataFiltered = res.data
         })
+        
+      // if (this.filterReporteEntrada.get('desde') && this.filterReporteEntrada.get('hasta')) {
 
-      if (this.filterReporteEntrada.get('desde')?.valid == true && this.filterReporteEntrada.get('hasta')?.valid == true) {
+      //   let dates = this.getFormatteddesdeDate()
+      //   console.log(dates)
 
-        let dates = this.getFormatteddesdeDate()
-        console.log(dates)
-
-        this.api.getEntradaReport(this.url, this.token, this.pagina, dates.desde, dates.hasta, this.filterReporteEntrada.value.nombre)
-          .subscribe((res: any) => {
-            console.log(res)
-            this.noPage = res.cantPage
-            this.dataFiltered = res.data
-          })
-      }
+      //   this.api.getEntradaReport(this.url, this.token, this.pagina, dates.desde, dates.hasta, this.filterReporteEntrada.value.nombre)
+      //     .subscribe((res: any) => {
+      //       console.log(res)
+      //       this.noPage = res.cantPage
+      //       this.dataFiltered = res.data
+      //     })
+      // }
 
     } else {
       this.getEntrada()

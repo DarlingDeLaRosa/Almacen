@@ -16,13 +16,14 @@ import { ShowDetailsComponent } from '../../Modals/show-details/show-details.com
 })
 export class AdminEntradasComponent implements OnInit {
 
-  dataFiltered!: Entrada[];
+  dataFiltered: Entrada[] = [];
   filterEntrada: FormGroup;
   url: string = '';
   token: string = '';
   pagina: number = 1;
   noPage: number = 1;
   idRol: number = 0;
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -31,7 +32,7 @@ export class AdminEntradasComponent implements OnInit {
     this.filterEntrada = new FormGroup({
       filter: new FormControl(''),
     })
-   }
+  }
 
   ngOnInit(): void {
     combineLatest([
@@ -43,28 +44,38 @@ export class AdminEntradasComponent implements OnInit {
       this.url = pathValue;
       this.token = tokenValue;
       this.idRol = idRol
-
+      
       this.getEntrada()
     })
   }
 
   getEntrada() {
-    this.api.getEntrada(this.url, this.token, this.pagina)
+    this.loading = true
+
+    setTimeout(() => {
+      this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+        this.loading = false
       });
+    }, 2000);
+    
+
   }
 
   onInputFilterChange() {
     if (this.filterEntrada.value.filter.length >= 2) {
 
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .subscribe((res: any) => {
+          console.log(res)
+
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
 
     } else {
       this.getEntrada()
@@ -72,7 +83,7 @@ export class AdminEntradasComponent implements OnInit {
   }
 
   openModal(detailId: number) {
-    let dialogRef = this.dialog.open(ShowDetailsComponent, {data: detailId})
+    let dialogRef = this.dialog.open(ShowDetailsComponent, { data: detailId })
 
     dialogRef.afterClosed().subscribe(() => {
     })
@@ -98,15 +109,15 @@ export class AdminEntradasComponent implements OnInit {
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getEntrada()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getEntrada()
     }

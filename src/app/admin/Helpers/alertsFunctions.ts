@@ -156,7 +156,7 @@ export function alertWelcome(name: string) {
   })
 }
 
-export function alertRemoveSuccess(){
+export function alertRemoveSuccess() {
   Swal.fire({
     icon: 'success',
     title: 'Eliminado correctamente.',
@@ -165,11 +165,26 @@ export function alertRemoveSuccess(){
   })
 }
 
-export function alerUserWrong(){
+export function alerUserWrong() {
   Swal.fire({
     icon: 'error',
     title: 'Usuario o constraseña incorrectos.',
     showConfirmButton: false,
     timer: 2000
   })
+}
+
+export function loading(load: boolean) {
+  if(load){
+    Swal.fire({
+      width: '200px',
+      html: '<div class="loader"></div>',
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    })
+  }
+  else{
+    Swal.close();
+  }
 }

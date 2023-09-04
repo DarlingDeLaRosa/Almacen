@@ -3,7 +3,7 @@
   <h1>Reportes de entradas por producto</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent" [formGroup]="filterRepProveedor" class="filtrarContent">
+    <div class="filtrarContent" [formGroup]="filterRepEntrada" class="filtrarContent">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -11,7 +11,7 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label>Rango de fecha</mat-label>
         <mat-date-range-input [rangePicker]="picker">
           <input matStartDate formControlName="start" placeholder="Fecha Inicial">
@@ -20,9 +20,10 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <!-- <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> -->
-      </mat-form-field>
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> 
+      </mat-form-field> 
+    -->
 
     </div>
 
@@ -33,37 +34,33 @@
 
   <div id="reportesEntradaProducto">
 
-    <table>
+    <table >
       <thead class="headerTable">
         <tr class="headerRow">
           <th class="headerCell">Fecha</th>
-          <th class="headerCell">Codigo</th>
           <th class="headerCell">Producto</th>
           <th class="headerCell">No. Entrada</th>
-          <th class="headerCell">Descripcion</th>
           <th class="headerCell">Marca</th>
           <th class="headerCell">Modelo</th>
           <th class="headerCell">Serial</th>
           <th class="headerCell">Condicion</th>
-          <th class="headerCell">T.Almacen</th>
           <th class="headerCell">Cantidad</th>
           <th class="headerCell">Precio</th>
+          <th class="headerCell">subTotal</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">20/12/20</td>
-          <td class="dataCell">FEM-001</td>
-          <td class="dataCell">Azucar</td>
-          <td class="dataCell">785457895</td>
-          <td class="dataCell">crema</td>
-          <td class="dataCell">Lider</td>
-          <td class="dataCell">azuCrem</td>
-          <td class="dataCell">----</td>
-          <td class="dataCell">Nuevo</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">40</td>
-          <td class="dataCell">400</td>
+        <tr class="dataRow" *ngFor="let entradas of dataFiltered">
+          <td class="dataCell">{{entradas.entrada.fechaCreacion | date: 'dd/MM/yyyy'}}</td>
+          <td class="dataCell">{{entradas.producto.nombre}}</td>
+          <td class="dataCell">{{entradas.entrada.idEntrada}}</td>
+          <td class="dataCell">{{entradas.marca}}</td>
+          <td class="dataCell">{{entradas.modelo}}</td>
+          <td class="dataCell">{{entradas.serial}}</td>
+          <td class="dataCell">{{entradas.condicion}}</td>
+          <td class="dataCell">{{entradas.cantidad}}</td>
+          <td class="dataCell">{{entradas.precio | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{entradas.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
         </tr>
       </tbody>
 

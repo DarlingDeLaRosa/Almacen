@@ -9,6 +9,9 @@ export const Token = createAction('[token] token', props<{token: string}>())
 
 export const App = createAction('[app] app', props<{app: AppState}>())
 
+export const Loading = createAction('[loading] loading', props<{loading: boolean}>())
+
+
 
 
 

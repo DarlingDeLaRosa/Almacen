@@ -35,6 +35,7 @@ export class ChangePasswordComponent implements OnInit{
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
   }
+  
   closeModal() {
     this.dialogRef.close()
   }

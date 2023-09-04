@@ -92,4 +92,14 @@ export class entradaService {
     return this.http.put(editDetalleEntrada, data, detalleEntradaHeader)
   }
 
+  // Reporte de detalles de entrada
+
+  public getAllDetalleEntrada(url: string, token: string, nombre: string, desde: any, hasta: any, page: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const EntradaDetalleHeader = {headers: headers}
+
+    const getDetalleEntrada = `${url}/Entrada/getbynamedetailsreport?nombre=${nombre}&desde=${desde}&hasta=${hasta}&page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getDetalleEntrada, EntradaDetalleHeader)
+  }
+
 }

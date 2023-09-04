@@ -24,7 +24,7 @@ export interface User {
 export interface AppState {
   path: string
   user:  User;
-  edit: any,
+  loading: boolean,
   token: string
 }
 

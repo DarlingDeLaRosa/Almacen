@@ -6,8 +6,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { proveedorService } from 'src/app/admin/Services/proveedor.service';
-import { proveedor } from 'src/app/admin/models/interfaces';
+import { entradaService } from 'src/app/admin/Services/entrada.service';
+import { Entrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -17,21 +17,21 @@ import { AppState } from 'src/app/store/state';
 })
 export class ReporteEntradaProductoComponent implements OnInit {
 
-  dataFiltered: proveedor[] = []
-  filterRepProveedor: FormGroup;
+  dataFiltered: any[] = []
+  filterRepEntrada: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
 
   constructor(
-    private api: proveedorService,
+    private api: entradaService,
     private store: Store<{ app: AppState }>
     ){
-    this.filterRepProveedor = new FormGroup({
+    this.filterRepEntrada = new FormGroup({
       filter: new FormControl(''),
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
+      // start: new FormControl<Date | null>(null),
+      // end: new FormControl<Date | null>(null),
     })
   }
   
@@ -44,12 +44,12 @@ export class ReporteEntradaProductoComponent implements OnInit {
       this.url = pathValue;
       this.token = tokenValue;
 
-      this.getProveedor()
+      this.getEntrada()
     })
   }
 
-  getProveedor() {
-    this.api.getProveedor(this.url, this.token, this.pagina,)
+  getEntrada() {
+    this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '', this.pagina)
       .subscribe((res: any) => {
         console.log(res)
         this.noPage = res.cantPage
@@ -58,31 +58,31 @@ export class ReporteEntradaProductoComponent implements OnInit {
   }
 
   dataFilter() {
-    console.log(this.filterRepProveedor.value.filter)
-    if (this.filterRepProveedor.value.filter.length >= 3) {
+    if (this.filterRepEntrada.value.filter.length >= 2) {
+      console.log(this.filterRepEntrada.value.filter)
 
-      this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)
+      this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '',this.pagina)
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
       })
 
     } else {
-      this.getProveedor()
+      this.getEntrada()
     }
   }
 
   nextPage(){
     if(this.pagina < this.noPage){
       this.pagina += 1
-      this.getProveedor()
+      this.getEntrada()
     }
   }
 
   previousPage(){
     if(this.pagina > 1){
       this.pagina -= 1
-      this.getProveedor()
+      this.getEntrada()
     }
   }
 }

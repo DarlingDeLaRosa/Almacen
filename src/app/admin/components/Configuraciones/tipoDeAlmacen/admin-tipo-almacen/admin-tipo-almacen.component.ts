@@ -53,6 +53,7 @@ export class AdminTipoAlmacenComponent implements OnInit {
       .subscribe((res: any) => {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+        console.log(this.dataFiltered)
       });
   }
 

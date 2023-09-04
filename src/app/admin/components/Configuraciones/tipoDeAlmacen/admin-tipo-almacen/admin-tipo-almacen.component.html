@@ -32,7 +32,7 @@
 
     </table>
 
-    <div class="noDataRow" *ngIf="!dataFiltered;">
+    <div class="noDataRow" *ngIf="dataFiltered.length == 0;">
       <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
     </div>
 

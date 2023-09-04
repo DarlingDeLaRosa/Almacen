@@ -31,6 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
     StoreModule.forRoot({app: appReducer}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
+  exports:[
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
