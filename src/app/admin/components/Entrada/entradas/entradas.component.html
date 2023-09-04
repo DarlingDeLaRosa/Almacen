@@ -1,10 +1,10 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Crear nueva entrada</h1>
-    <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
+    <button *ngIf="idRol == 1 ; else supp" mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
       <ng-template #supp>
-        <button mat-raised-button class="btnNavigate"
+        <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/user-almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
       </ng-template>
   </div>
@@ -99,7 +99,7 @@
 
     <div class="fuctionContent newProduct">
       <h2>Informacion de producto</h2>
-      <button mat-raised-button (click)="openModal()">Crear nuevo producto</button>
+      <button mat-stroked-button style="background-color: #49aa42; color: white;" (click)="openModal()">Crear nuevo producto</button>
     </div>
     <div>
 
@@ -123,17 +123,17 @@
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
-      
+
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Tipo de Almacen</mat-label>
         <input matInput readonly required formControlName="idTipoAlm">
       </mat-form-field>&nbsp;
-      
+
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Precio</mat-label>
         <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
       </mat-form-field>&nbsp;
-      
+
       <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
         <mat-label>Porcentaje de ITBIS</mat-label>
         <input readonly matInput formControlName="itbisProducto" (input)="subTotalResult()">
@@ -183,8 +183,8 @@
 
     </div>
     <span class="btnContainer">
-      <button mat-raised-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
-      <button mat-raised-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
+      <button mat-stroked-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
+      <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
     </span>
   </div>
 

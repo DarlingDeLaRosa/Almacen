@@ -1,7 +1,7 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nuevo producto</h1>
-    <button mat-raised-button class="btnNavigate"
+    <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-producto']"><mat-icon>arrow_back</mat-icon>Volver</button>
   </div>
 
@@ -62,7 +62,7 @@
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
-      
+
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de almacen</mat-label>
         <input matInput [matAutocomplete]="Talm" appearance="fill" formControlName="idTipoAlmacen"
@@ -97,7 +97,7 @@
       </mat-form-field>&nbsp;
 
       <span class="btnContainer">
-        <button class="btnSend" mat-raised-button (click)="sendData()">
+        <button class="btnSend" mat-stroked-button (click)="sendData()">
           <mat-icon>send</mat-icon>Enviar
         </button>
       </span>

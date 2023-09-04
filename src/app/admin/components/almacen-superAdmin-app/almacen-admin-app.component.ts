@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
 import { MatDialog } from '@angular/material/dialog';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -23,6 +24,7 @@ export class AlmacenAdminAppComponent implements OnInit{
   userEmail$ = this.store.select(state => state.app.user.correo)
   userPosition$ = this.store.select(state => state.app.user.cargo)
   recinto$ = this.store.select(state => state.app.user.recinto.nombre)
+  firstLetter = this.userName$.pipe(map(letter => letter.charAt(0).toUpperCase()))
 
   submenu: boolean = false;
   submenuConfig:  boolean = false;
@@ -53,7 +55,7 @@ export class AlmacenAdminAppComponent implements OnInit{
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
   }
-  
+
   async logOut(){
 
     let closeAccount: boolean = await alertLogOut()

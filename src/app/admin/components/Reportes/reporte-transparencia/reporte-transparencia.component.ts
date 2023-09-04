@@ -1,56 +1,89 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { proveedorService } from 'src/app/admin/Services/proveedor.service';
+import { proveedor } from 'src/app/admin/models/interfaces';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-reporte-transparencia',
   templateUrl: './reporte-transparencia.component.html',
   styleUrls: ['./reporte-transparencia.component.css']
 })
-export class ReporteTransparenciaComponent implements AfterViewInit{
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+export class ReporteTransparenciaComponent implements OnInit{
 
-  dates(){
-    console.log(this.range)
+  dataFiltered: proveedor[] = []
+  filterRepProveedor: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
+
+  constructor(
+    private api: proveedorService,
+    private store: Store<{ app: AppState }>
+    ){
+    this.filterRepProveedor = new FormGroup({
+      filter: new FormControl(''),
+      start: new FormControl<Date | null>(null),
+      end: new FormControl<Date | null>(null),
+    })
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  ngOnInit() {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
 
-  displayedColumns: string[] = ['nombre', 'descripcion', 'marca', 'modelo', 'serial', 'condicion', 'precio', 'stock', 'unidadMedida', 't_producto'];
-  data = new MatTableDataSource(
+      this.url = pathValue;
+      this.token = tokenValue;
 
-    [
-      {
-        nombre: 'Azucar', descripcion: 'azucar blanca', marca: 'Lider', modelo: 'Sacarosa',
-        serial: '100010023', condicion: 'Nuevo', precio: 2000, stock: 78, unidadMedida: 'libra', t_producto: 'cocina'
-      },
-
-    ]
-  ) ;
-
-  constructor(private _liveAnnouncer: LiveAnnouncer) { }
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+      this.getProveedor()
+    })
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  getProveedor() {
+    this.api.getProveedor(this.url, this.token, this.pagina,)
+      .subscribe((res: any) => {
+        console.log(res)
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
+  }
+
+  dataFilter() {
+    console.log(this.filterRepProveedor.value.filter)
+    if (this.filterRepProveedor.value.filter.length >= 3) {
+
+      this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getProveedor()
     }
   }
 
-  applyFilter(event: Event){
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getProveedor()
+    }
   }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getProveedor()
+    }
+  }
+
 }

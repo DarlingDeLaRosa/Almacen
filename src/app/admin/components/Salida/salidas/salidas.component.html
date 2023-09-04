@@ -1,10 +1,10 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Crear una nueva salida</h1>
-    <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
+    <button *ngIf="idRol == 1 ; else supp" mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
     <ng-template #supp>
-      <button mat-raised-button class="btnNavigate"
+      <button mat-stroked-button class="btnNavigate"
         [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
     </ng-template>
   </div>
@@ -37,7 +37,7 @@
 
       <mat-form-field hideRequiredMarker class="departamento">
         <mat-label>Tipo de departamento</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar" 
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">
         <mat-autocomplete #auto='matAutocomplete'>
 
@@ -118,7 +118,7 @@
           <mat-label>Valor</mat-label>
           <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
-        
+
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
           <input [disabled]="true" type="number" matInput required formControlName="subTotal">
@@ -126,8 +126,8 @@
 
 
         <span class="btnContainer">
-          <button mat-raised-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
-          <button mat-raised-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
+          <button mat-stroked-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
+          <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
     </div>

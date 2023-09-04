@@ -1,7 +1,7 @@
 <div class="modal">
     <div class="fuctionContent">
       <h2 class="modal-title" mat-dialog-title>Detalle de productos</h2>
-      <button mat-raised-button class="btnNavigate"
+      <button mat-stroked-button class="btnNavigate"
         [routerLink]="['/almacen/administrar-entrada']"><mat-icon>edit</mat-icon> Editar</button>
     </div>
     <mat-dialog-content class="modal-content">
@@ -37,6 +37,6 @@
 
     </mat-dialog-content>
     <mat-dialog-actions class="form-actions">
-      <button mat-raised-button class="btnCancel" (click)="closeModal()">Cerrar</button>
+      <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cerrar</button>
     </mat-dialog-actions>
   </div>

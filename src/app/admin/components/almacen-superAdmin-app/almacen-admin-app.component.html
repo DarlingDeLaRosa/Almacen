@@ -32,20 +32,29 @@
           <a class="item-submenu" [routerLink]="['/almacen/reporteSalida']" routerLinkActive="active">Salida</a>
           <a class="item-submenu" [routerLink]="['/almacen/reporteInventario']" routerLinkActive="active">Inventario</a>
           <a class="item-submenu" [routerLink]="['/almacen/reporteProveedor']" routerLinkActive="active">Proveedor</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteTransparencia']" routerLinkActive="active">Transparencia</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoEntrada']" routerLinkActive="active">Entrada por productos</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoSalida']" routerLinkActive="active">Salida por productos</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteTransparencia']"
+            routerLinkActive="active">Transparencia</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoEntrada']" routerLinkActive="active">Entrada
+            por productos</a>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoSalida']" routerLinkActive="active">Salida por
+            productos</a>
         </div>
         <ng-template #submenuClosed></ng-template>
 
         <a class="item-menu" (click)="toggleSubmenuConfig()"><mat-icon>settings</mat-icon>Configuraciones</a>
         <div class="submenu" *ngIf="submenuConfig else submenuClosedConfig">
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-almacen']" routerLinkActive="active">Tipo de almacen</a>
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-entrada']" routerLinkActive="active">Tipo de entrada</a>
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-medida']" routerLinkActive="active">Unidad de medida</a>
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-salida']" routerLinkActive="active">Tipo de salida</a>
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-producto']" routerLinkActive="active">Tipo de producto</a>
-          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-entrega']" routerLinkActive="active">Tipo de entrega</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-almacen']" routerLinkActive="active">Tipo de
+            almacen</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-entrada']" routerLinkActive="active">Tipo de
+            entrada</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-medida']" routerLinkActive="active">Unidad
+            de medida</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-salida']" routerLinkActive="active">Tipo de
+            salida</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-producto']" routerLinkActive="active">Tipo
+            de producto</a>
+          <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-entrega']" routerLinkActive="active">Tipo de
+            entrega</a>
         </div>
         <ng-template #submenuClosedConfig></ng-template>
       </div>
@@ -62,7 +71,8 @@
 
           <div class="logout">
             <h3 class="userName">{{userName$ | async}} {{userLastName$ | async}}</h3> &nbsp;
-              <button class="closeAccount" [matMenuTriggerFor]="menu">
+            <button class="closeAccount" [matMenuTriggerFor]="menu">
+              <!-- {{firstLetter}} -->
             </button>
             <mat-menu class="menuPanel" #menu="matMenu">
               <div mat-menu-item class="profile">

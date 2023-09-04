@@ -1,7 +1,7 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-raised-button class="btnNavigate" [routerLink]="['/almacen/tipo-medida']">Crear nueva unidad de medida</button>
+    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/tipo-medida']">Crear nueva unidad de medida</button>
 
     <div class="filtrarContent"  [formGroup]="filterTipoMedida">
       <mat-form-field appearance="fill">
@@ -31,6 +31,11 @@
       </tbody>
 
     </table>
+
+    <div class="noDataRow" *ngIf="!dataFiltered;">
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+    </div>
+
     <div class="pagination">
       <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
       <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>

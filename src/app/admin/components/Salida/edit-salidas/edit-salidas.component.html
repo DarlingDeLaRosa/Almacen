@@ -1,10 +1,10 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title> Editar salida</h1>
-    <button *ngIf="idRol == 1 ; else supp" mat-raised-button class="btnNavigate"
+    <button *ngIf="idRol == 1 ; else supp" mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
       <ng-template #supp>
-        <button mat-raised-button class="btnNavigate"
+        <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
       </ng-template>
   </div>
@@ -126,7 +126,7 @@
 
 
         <span class="btnContainer">
-          <button mat-raised-button class="btnAdd"><mat-icon>add</mat-icon>Agregar</button>
+          <button mat-stroked-button class="btnAdd"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
     </div>

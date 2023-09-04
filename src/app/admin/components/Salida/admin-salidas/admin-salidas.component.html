@@ -1,9 +1,9 @@
   <div class="viewContent">
 
   <div class="fuctionContent">
-    <button *ngIf="idRol == 1; else sup" mat-raised-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear nueva salida</button>
+    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear nueva salida</button>
     <ng-template #sup>
-      <button mat-raised-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva entrada</button>
+      <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva entrada</button>
     </ng-template>
 
     <div [formGroup]="filterSalida">
@@ -51,6 +51,10 @@
       </tbody>
 
     </table>
+    <div class="noDataRow" *ngIf="!dataFiltered;">
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+    </div>
+
     <div class="pagination">
       <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
       <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}} </div>

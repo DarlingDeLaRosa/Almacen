@@ -34,7 +34,7 @@ export class ReporteProveedorComponent implements OnInit {
       end: new FormControl<Date | null>(null),
     })
   }
-  
+
   ngOnInit() {
     combineLatest([
       this.store.select(state => state.app.token),

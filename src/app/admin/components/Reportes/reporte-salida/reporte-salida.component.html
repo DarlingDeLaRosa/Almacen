@@ -28,7 +28,7 @@
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button printSectionId="reportesSalidas" [useExistingCss]="true" ngxPrint><mat-icon>print</mat-icon>Imprimir</button>
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesSalidas" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
 
   </div>
@@ -61,6 +61,10 @@
 
     </div>
 
+  </div>
+
+  <div class="noDataRow" *ngIf="!dataFiltered;">
+    <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
   </div>
 
   <div class="pagination">

@@ -10,7 +10,7 @@
         <mat-label>Filtrar</mat-label>
         <input matInput (input)="onInputFilterChange()" formControlName="nombre">
         <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>&nbsp; 
+      </mat-form-field>&nbsp;
 
       <mat-form-field appearance="fill">
         <mat-label>Rango de fecha</mat-label>
@@ -23,7 +23,7 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <!-- 
+        <!--
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
         -->
@@ -32,7 +32,7 @@
     </div>
 
     <span>
-      <button class="btnImprimir" mat-raised-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon>print</mat-icon>Imprimir</button>
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
@@ -41,11 +41,11 @@
     <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
       <div class="entradaReporteTitle">
         <h1>
-          Numero de Entrada:  
+          Numero de Entrada:
           {{entradas.idEntrada}}
         </h1>
       </div>
-    
+
       <div class="entradaReporteSubtitle">
         <h3> <b class="itemReporte">Fecha:</b> {{entradas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
         <h3> <b class="itemReporte">Numero de Factura:</b> {{entradas.noFactura}}</h3>
@@ -63,7 +63,7 @@
       <div class="observacionReporte">
         <b class="itemReporte">Observacion:</b> {{entradas.observacion}}
       </div>
-      
+
       <div>
         <table>
           <thead class="headerTable">
@@ -90,15 +90,18 @@
               <td class="dataCell">{{detalles.precio}}</td>
               <td class="dataCell">{{detalles.cantidad}}</td>
               <td class="dataCell">{{detalles.subTotal}}</td>
-              
+
             </tr>
           </tbody>
-    
+
         </table>
       </div>
-    
+
     </div>
 
+  </div>
+  <div class="noDataRow" *ngIf="!dataFiltered;">
+    <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
   </div>
 
   <div class="pagination">
