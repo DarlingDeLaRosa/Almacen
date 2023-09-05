@@ -42,10 +42,12 @@ export class AuthComponent implements OnInit {
   logIn() {
 
     if (this.formUserLogIn.valid) {
+      
       loading(true)
-      setTimeout(() => {
         this.api.logIn(this.url, this.formUserLogIn.value)
           .subscribe((res: any) => {
+            loading(false)
+
             let userResponse: GETUser = res
             let userData: User = res.data
 
@@ -65,34 +67,26 @@ export class AuthComponent implements OnInit {
                 this.router.navigate(['/almacen/inicio'])
 
               } else if (userResponse.data.role.idRol === 2) {
-                loading(false)
                 //this.router.navigate(['/user-almacen/inicio'])
 
               } else if (userResponse.data.role.idRol === 3) {
-                loading(false)
                 this.router.navigate(['/user-almacen/inicio'])
 
               } else {
-                loading(false)
                 this.router.navigate(['/login'])
               }
 
               this.formUserLogIn.reset()
             } else {
-              loading(false)
               alerUserWrong()
               this.formUserLogIn.reset()
             }
             () => {
-              loading(false)
               alertServerDown();
             }
           })
-      }, 3000);
 
     }
   }
-
-
 }
 

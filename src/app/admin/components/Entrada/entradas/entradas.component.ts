@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { detalleProductoEntrada, producto, proveedor, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
@@ -21,6 +21,7 @@ export class EntradasComponent implements OnInit {
 
   formEntrada: FormGroup;
   formDetalleEntrada: FormGroup;
+  serialToggle: FormGroup;
   url!: string;
   token!: string
   totalResult: number = 0
@@ -74,6 +75,10 @@ export class EntradasComponent implements OnInit {
       subTotal: new FormControl(''),
       idTipoAlm: new FormControl(''),
       idEntrada: 0,
+    })
+
+    this.serialToggle = this.fb.group({
+      serialT: new FormControl(''),
     })
   }
 
@@ -225,6 +230,15 @@ export class EntradasComponent implements OnInit {
     }
   }
 
+  setValueDetailEntradaEdit(producto: string) {
+    let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
+      return productoEspecifico.nombre == producto
+    });
+    this.formDetalleEntrada.patchValue({
+      idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+    })
+  }
+
   addDetail() {
 
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
@@ -245,24 +259,30 @@ export class EntradasComponent implements OnInit {
         this.totalResult += this.formDetalleEntrada.value.subTotal
 
         if (this.generalITBIS == false) {
+
           this.mostrarTotalItbis = 0
           this.totalItbis = this.formEntrada.value.itbisGeneral
           this.mostrarTotalItbis = this.totalItbis
+
         } else {
-          this.mostrarTotalItbis += this.totalItbis
+          if (this.formDetalleEntrada.value.itbisProducto !== 0) {
+
+            this.subTotalResult()
+
+            this.mostrarTotalItbis += this.totalItbis
+
+            this.formDetalleEntrada.value.itbisProducto
+              = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+          }
         }
 
-        if (this.formEntrada.valid) {
-          if (this.generalITBIS == true) {
-            this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
-          }
-          this.detailGroup.push(this.formDetalleEntrada.value)
-          this.formDetalleEntrada.reset()
-        }
+        this.detailGroup.push(this.formDetalleEntrada.value)
+        this.formDetalleEntrada.reset()
 
         if (this.detailGroup.length >= 1) {
           this.disableItbis = true
         }
+
       } else {
         alertSerial()
       }
@@ -273,33 +293,47 @@ export class EntradasComponent implements OnInit {
   }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
+    console.log(producto)
 
-    this.detailGroup.splice(index, 1)
+    if (!this.formDetalleEntrada.valid) {
 
-    this.formDetalleEntrada.patchValue({
-      idProducto: producto.idProducto,
-      cantidad: producto.cantidad,
-      condicion: producto.condicion,
-      marca: producto.marca,
-      modelo: producto.modelo,
-      precio: producto.precio,
-      serial: producto.serial,
-      itbisProducto: producto.itbisProducto,
-      subTotal: producto.subTotal,
-      observacion: producto.observacion
-    })
+      let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
+        return productoEspecifico.nombre == producto.idProducto
+      });
 
-    if (this.detailGroup.length == 0) {
-      this.totalItbis = 0
+      this.detailGroup.splice(index, 1)
+
+      this.serialToggle.setValue({
+        serialT: true
+      })
+
+      this.formDetalleEntrada.patchValue({
+        idProducto: producto.idProducto,
+        cantidad: producto.cantidad,
+        condicion: producto.condicion,
+        marca: producto.marca,
+        modelo: producto.modelo,
+        precio: producto.precio,
+        serial: producto.serial,
+        itbisProducto: setValuesform[0].itbis,
+        subTotal: producto.subTotal,
+        observacion: producto.observacion
+      })
+      this.setValueDetailEntradaEdit(producto.idProducto)
+
+      this.mostrarTotalItbis -= producto.itbisProducto * producto.cantidad
+      this.totalResult -= producto.subTotal
+
+      if (this.detailGroup.length == 0) {
+        this.disableItbis = false
+        this.totalItbis = 0
+        this.mostrarTotalItbis = 0
+      }
+
+    } else {
+      alertUnableEdit()
     }
-    this.mostrarTotalItbis -= producto.itbisProducto * producto.cantidad
-    this.totalResult -= producto.subTotal
 
-    if (this.detailGroup.length == 0) {
-      this.disableItbis = false
-    }
-
-    this.setValueDetailsEntrada(producto.idProducto)
   }
 
   async removeDetail(index: number, item: detalleProductoEntrada) {
@@ -321,27 +355,32 @@ export class EntradasComponent implements OnInit {
     }
   }
 
-  clearDetail(){
+  clearDetail() {
     this.formDetalleEntrada.reset()
   }
 
   duplicateDetail(producto: detalleProductoEntrada) {
 
-    this.formDetalleEntrada.patchValue({
-      idProducto: producto.idProducto,
-      cantidad: producto.cantidad,
-      condicion: producto.condicion,
-      marca: producto.marca,
-      modelo: producto.modelo,
-      precio: producto.precio,
-      itbisProducto: producto.itbisProducto,
-      subTotal: producto.subTotal,
-      observacion: producto.observacion
-    })
+    if (!this.formDetalleEntrada.valid) {
+      this.formDetalleEntrada.patchValue({
+        idProducto: producto.idProducto,
+        cantidad: producto.cantidad,
+        condicion: producto.condicion,
+        marca: producto.marca,
+        modelo: producto.modelo,
+        precio: producto.precio,
+        itbisProducto: producto.itbisProducto,
+        subTotal: producto.subTotal,
+        observacion: producto.observacion
+      })
 
-    this.formDetalleEntrada.get('serial')?.reset()
+      this.formDetalleEntrada.get('serial')?.reset()
+      this.setValueDetailEntradaEdit(producto.idProducto)
 
-    this.setValueDetailsEntrada(producto.idProducto)
+      //this.setValueDetailsEntrada(producto.idProducto)
+    } else {
+      alertUnableEdit()
+    }
   }
 
   subTotalResult() {
@@ -356,6 +395,7 @@ export class EntradasComponent implements OnInit {
         this.totalItbis = form.cantidad * form.itbisProducto
 
         let total = form.precio * form.cantidad
+
         total += this.totalItbis
 
         this.formDetalleEntrada.patchValue(
@@ -374,7 +414,7 @@ export class EntradasComponent implements OnInit {
   sendData() {
 
     this.formEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-    this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
+      this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
     this.formEntrada.value.total = this.totalResult
 
@@ -400,18 +440,18 @@ export class EntradasComponent implements OnInit {
             this.detailGroup.map((detail: detalleProductoEntrada) => {
 
               detail.idEntrada = res.data.idEntrada
-              
+
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
-              
+
               detail.idProducto = idTipoProD[0].idProducto
-              
+
               if (detail.itbisProducto == "") {
                 detail.itbisProducto = 0
               }
             })
 
             JSON.stringify(this.detailGroup)
-            
+
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
                 console.log(res)

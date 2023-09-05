@@ -314,6 +314,11 @@ table{
   color: rgba(200, 10, 10, 0.918) !important;
 }
 
+.newPro{
+  background-color: #49aa42 !important; 
+  color: white !important;
+  font-weight: 300 ;
+}
 
 .item-submenu {
   width: 153px;

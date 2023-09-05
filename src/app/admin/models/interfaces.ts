@@ -172,10 +172,7 @@ export interface detallePutGroup {
   subTotal: number,
   idEntrada: number,
   observacion: string
-  tipoAlmacen: {
-    idTipoAlm: number,
-    nombre: string
-  }
+  idTipoAlm: any
 }
 
 export interface detalleEditProductoEntrada {

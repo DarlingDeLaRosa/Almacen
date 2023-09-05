@@ -56,5 +56,4 @@ export class AuthService {
     this.idRol = id;
   }
 
-
 }

@@ -17,8 +17,8 @@
       <div class="ITBIS">
         <h4>El ITBIS de la factura es general?</h4>
         <mat-radio-group formControlName="itbisGeneralEstado" (change)="itbisOption($event)">
-          <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
-          <mat-radio-button [value]="true"  color="primary">No</mat-radio-button>
+          <mat-radio-button [value]="false" [disabled]="disableItbis" color="primary">Si</mat-radio-button>
+          <mat-radio-button [value]="true"  [disabled]="disableItbis" color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -98,9 +98,10 @@
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
-        <button *ngIf="idRol == 1; else noNewPro" mat-stroked-button (click)="openModal()">Crear nuevo producto</button>
+        <button *ngIf="idRol == 1; else noNewPro" mat-stroked-button class="newPro" (click)="openModal()">Crear nuevo producto</button>
         <ng-template #noNewPro></ng-template>
       </div>
+
       <div>
 
         <div class="ITBIS">
@@ -183,7 +184,8 @@
 
       </div>
       <span class="btnContainer">
-        <button mat-stroked-button  (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
+        <button mat-stroked-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
+        <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
       </span>
     </div>
 
@@ -200,6 +202,7 @@
             <th class="headerCell">Precio</th>
             <th class="headerCell">No.Serial</th>
             <th class="headerCell">ITBIS</th>
+            <th class="headerCell">Total ITBIS</th>
             <th class="headerCell">Subtotal</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
@@ -215,16 +218,17 @@
             <td class="dataCell">{{item.precio | currency: '':  'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.itbisProducto | currency: '':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.itbisProducto * item.cantidad | currency: '':  'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell"><button class="fucEdit"
-                (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"><button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
+            <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
             </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td class="footerCell">Total</td>
+            <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>

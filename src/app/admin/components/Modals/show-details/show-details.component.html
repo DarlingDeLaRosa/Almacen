@@ -10,26 +10,28 @@
           <thead class="headerTable">
             <tr class="headerRow">
               <th class="headerCell">Producto</th>
+              <th class="headerCell">Cantidad</th>
+              <th class="headerCell">Condición</th>
               <th class="headerCell">Marca</th>
               <th class="headerCell">Modelo</th>
-              <th class="headerCell">Condición</th>
-              <th class="headerCell">ITBIS</th>
               <th class="headerCell">Serial</th>
               <th class="headerCell">Precio</th>
-              <th class="headerCell">Cantidad</th>
+              <th class="headerCell">ITBIS</th>
+              <th class="headerCell">Total ITBIS</th>
               <th class="headerCell">Subtotal</th>
             </tr>
           </thead>
           <tbody>
             <tr class="dataRow" *ngFor="let detalles of detallesList">
               <td class="dataCell">{{detalles.producto.nombre}}</td>
+              <td class="dataCell">{{detalles.cantidad}}</td>
+              <td class="dataCell">{{detalles.condicion}}</td>
               <td class="dataCell">{{detalles.marca}}</td>
               <td class="dataCell">{{detalles.modelo}}</td>
-              <td class="dataCell">{{detalles.condicion}}</td>
-              <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
               <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
-              <td class="dataCell">{{detalles.cantidad}}</td>
+              <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.itbisProducto * detalles.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2' }}</td>
             </tr>
           </tbody>

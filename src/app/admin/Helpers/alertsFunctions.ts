@@ -174,6 +174,16 @@ export function alerUserWrong() {
   })
 }
 
+export function alertUnableEdit() {
+  Swal.fire({
+    icon: 'error',
+    title: 'Agregar o Limpiar contenido antes de editar o duplicar',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
+
 export function loading(load: boolean) {
   if(load){
     Swal.fire({
