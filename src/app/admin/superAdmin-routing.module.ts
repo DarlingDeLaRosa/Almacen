@@ -37,7 +37,7 @@ import { ReporteTransparenciaComponent } from './components/Reportes/reporte-tra
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'almacen',
     component: AlmacenAdminAppComponent,
     children: [
       {path: 'inicio', component: VistaInicialComponent,},
@@ -82,6 +82,7 @@ const routes: Routes = [
       { path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
     ]
   },
+
 ];
 
 @NgModule({

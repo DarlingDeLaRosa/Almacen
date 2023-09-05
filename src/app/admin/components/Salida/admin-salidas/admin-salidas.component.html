@@ -3,7 +3,7 @@
   <div class="fuctionContent">
     <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear nueva salida</button>
     <ng-template #sup>
-      <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva entrada</button>
+      <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva salida</button>
     </ng-template>
 
     <div [formGroup]="filterSalida">

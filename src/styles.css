@@ -54,7 +54,11 @@ h1{
 .profile{
   height: 75px !important;
   cursor: auto !important;
-  background-color: #ddd !important;
+  border-bottom: 1px solid #ddd !important;
+}
+
+.profile:hover{
+  background-color: white !important;
 }
 
 .email{

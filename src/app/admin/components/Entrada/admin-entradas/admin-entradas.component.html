@@ -1,11 +1,9 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear
-      nueva entrada</button>
+    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button>
     <ng-template #sup>
-      <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva
-        entrada</button>
+      <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva entrada</button>
     </ng-template>
 
     <div [formGroup]="filterEntrada">
@@ -32,7 +30,8 @@
           <th class="headerCell">Monto</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th>
+          <th class="fuctionCell" *ngIf="idRol == 1; else remove"></th>
+          <ng-template #remove></ng-template>
         </tr>
       </thead>
       <tbody>
@@ -56,8 +55,8 @@
                 class="fucEdit"><mat-icon>edit</mat-icon></button>
             </ng-template>
           </td>
-          <td class="dataCell"> <button (click)="removeAlert(item.idEntrada)"
-              class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td *ngIf="idRol == 1; else btnremove" class="dataCell"> <button (click)="removeAlert(item.idEntrada)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <ng-template #btnremove></ng-template>
         </tr>
       </tbody>
 

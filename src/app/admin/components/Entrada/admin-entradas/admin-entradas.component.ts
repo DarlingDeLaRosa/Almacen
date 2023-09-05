@@ -44,7 +44,7 @@ export class AdminEntradasComponent implements OnInit {
       this.url = pathValue;
       this.token = tokenValue;
       this.idRol = idRol
-      
+
       this.getEntrada()
     })
   }
@@ -52,8 +52,7 @@ export class AdminEntradasComponent implements OnInit {
   getEntrada() {
     this.loading = true
 
-    setTimeout(() => {
-      this.api.getEntrada(this.url, this.token, this.pagina)
+    this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
 
         console.log(res)
@@ -61,8 +60,6 @@ export class AdminEntradasComponent implements OnInit {
         this.dataFiltered = res.data
         this.loading = false
       });
-    }, 2000);
-    
 
   }
 

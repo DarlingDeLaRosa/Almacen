@@ -12,7 +12,7 @@ import { EditUserEntradasComponent } from './components/entradas/edit-user-entra
 // Tengo que saber si podre usar los componentes del admin debido a la ruta que utiliza.. TODO
 const routes: Routes = [
   {
-    path: '',
+    path: 'user-almacen',
     component: AlmacenUserComponent,
     children: [
       { path: 'administrar-entrada', component: AdminUserEntradasComponent },

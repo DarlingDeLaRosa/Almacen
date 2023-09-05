@@ -98,7 +98,8 @@
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
-        <button mat-stroked-button (click)="openModal()">Crear nuevo producto</button>
+        <button *ngIf="idRol == 1; else noNewPro" mat-stroked-button (click)="openModal()">Crear nuevo producto</button>
+        <ng-template #noNewPro></ng-template>
       </div>
       <div>
 
