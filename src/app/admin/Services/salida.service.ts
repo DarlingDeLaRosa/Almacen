@@ -76,6 +76,14 @@ export class salidaService {
     return this.http.post(postDetalleSalida, data, detalleSalidaHeader)
   }
 
+  public getAllDetalleSalida(url: string, token: string, page: number, data: string, desde:any, hasta: any) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const salidaDetalleHeader = {headers: headers}
+
+    const getDetalleSalida = `${url}/Salida/getbynamedetailsreport?nombre=${data}&desde=${desde}&hasta=${hasta}&page=${page}&CantItems=${this.cantidadItems}`
+    return this.http.get(getDetalleSalida, salidaDetalleHeader)
+  }
+
   // Salida Departamento
 
   public getTipoDepartamento(url: string, token: string, page: number){

@@ -10,8 +10,8 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { detalleEditProductoEntrada, detalleProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit } from 'src/app/admin/Helpers/alertsFunctions';
-import { ActivatedRoute } from '@angular/router';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -28,7 +28,7 @@ export class EditEntradasComponent {
   totalItbis: number = 0
   mostrarTotalItbis: number = 0
   idRol: number = 0
-  setdetailGroup: boolean = false 
+  setdetailGroup: boolean = false
 
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
@@ -50,6 +50,7 @@ export class EditEntradasComponent {
     private apiTipoEntrega: TipoDeEntregaService,
     private apiTipoEntrada: TipoDeEntradaService,
     private apiProducto: productoService,
+    private router: Router,
     private api: entradaService,
     private store: Store<{ app: AppState }>,
     private route: ActivatedRoute
@@ -107,8 +108,11 @@ export class EditEntradasComponent {
       this.token = tokenValue;
       this.idRol = idRole;
 
+      loading(true)
       this.api.getEntradaById(this.url, this.token, id)
         .subscribe((res: any) => {
+          loading(false)
+
           console.log(res.data)
           this.respuesta = res.data.detalles
 
@@ -384,10 +388,10 @@ export class EditEntradasComponent {
             this.mostrarTotalItbis += this.totalItbis
 
             this.formEditDetalleEntrada.value.itbisProducto
-            = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
+              = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
 
-          } else if(this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true){
-            
+          } else if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true) {
+
             this.totalItbis = this.formEditDetalleEntrada.value.itbisProducto * this.formEditDetalleEntrada.value.cantidad
             this.mostrarTotalItbis += this.totalItbis
           }
@@ -541,6 +545,7 @@ export class EditEntradasComponent {
     if (this.formEditEntrada.valid && this.detailGroup.length >= 1) {
 
       console.log(this.formEditEntrada.value)
+      loading(true)
       this.api.putEntrada(this.url, this.formEditEntrada.value, this.token)
         .subscribe((res: any) => {
 
@@ -572,27 +577,39 @@ export class EditEntradasComponent {
             })
 
             console.log(this.detailGroup)
-
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .subscribe((respuesta: any) => {
-
+                loading(false)
                 console.log(respuesta)
 
                 if (respuesta.success) {
                   alertIsSuccess(true)
+
+                  this.detailGroup = []
+                  this.formEditEntrada.reset()
+                  this.mostrarTotalItbis = 0
+                  this.totalResult = 0
+
+                  this.router.navigate(['/almacen/administrar-entrada'])
+
                 } else {
                   alertIsSuccess(false)
                 }
+                () => {
+                  loading(false)
+                  alertServerDown();
+                }
               })
-
+            
           } else {
             alertIsSuccess(false)
           }
+
           () => {
+            loading(false)
             alertServerDown();
           }
         })
-
     }
   }
 }

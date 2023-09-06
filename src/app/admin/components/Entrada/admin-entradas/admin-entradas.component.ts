@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
 import { ShowDetailsComponent } from '../../Modals/show-details/show-details.component';
@@ -59,16 +59,21 @@ export class AdminEntradasComponent implements OnInit {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
         this.loading = false
+      
+      },
+      () => {
+        loading(false)
+        alertServerDown();
       });
 
   }
 
   onInputFilterChange() {
     if (this.filterEntrada.value.filter.length >= 2) {
-
+      
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
         .subscribe((res: any) => {
-          console.log(res)
+          this.loading = false
 
           this.noPage = res.cantPage
           this.dataFiltered = res.data
@@ -90,9 +95,9 @@ export class AdminEntradasComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+
       this.api.removeEntrada(this.url, item, this.token)
         .subscribe((res: any) => {
-          console.log(res)
           if (res) {
             alertRemoveSuccess()
             this.getEntrada()

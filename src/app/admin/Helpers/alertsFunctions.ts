@@ -70,7 +70,7 @@ export function alertNoValidForm() {
 export function alertCantExis() {
   Swal.fire({
     icon: 'info',
-    title: 'Completa los campos requeridos para realizar la acción ',
+    title: 'Cantidad saliente no puede ser mayor a la cantidad existente.',
     showConfirmButton: false,
     timer: 2000
   })

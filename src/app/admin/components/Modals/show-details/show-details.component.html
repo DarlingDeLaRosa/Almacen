@@ -1,8 +1,7 @@
 <div class="modal">
   <div class="fuctionContent">
     <h2 class="modal-title" mat-dialog-title>Detalle de productos</h2>
-    <button mat-stroked-button class="btnNavigate"
-      [routerLink]="['/almacen/administrar-entrada']"  [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
+    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
   </div>
   <mat-dialog-content class="modal-content">
       <div>

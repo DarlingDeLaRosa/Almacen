@@ -23,6 +23,7 @@ export class AdminSalidasComponent implements OnInit {
   pagina: number = 1
   noPage: number = 1
   idRol: number = 0
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,

@@ -7,7 +7,7 @@
 
       <mat-form-field>
         <mat-label>Filtrar</mat-label>
-        <input matInput type="search" (keyup)="applyFilter($event)">
+        <input matInput type="search" (keyup)="applyFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>&nbsp;
 
@@ -45,56 +45,41 @@
           <th class="headerCell">Modelo</th>
           <th class="headerCell">Serial</th>
           <th class="headerCell">Condicion</th>
-          <th class="headerCell">T.Almacen</th>
           <th class="headerCell">Cantidad</th>
           <th class="headerCell">Valor</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow">
-          <td class="dataCell">15/1/2023</td>
-          <td class="dataCell">EPH-001</td>
-          <td class="dataCell">Azucar</td>
-          <td class="dataCell">211478966</td>
-          <td class="dataCell">crema</td>
-          <td class="dataCell">Lider</td>
-          <td class="dataCell">azuCrem</td>
-          <td class="dataCell">178776716</td>
-          <td class="dataCell">Nuevo</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">4</td>
-          <td class="dataCell">400</td>
+        <tr class="dataRow" *ngFor="let salida of dataFiltered">
+          <td class="dataCell">{{salida.salida.fechaCreacion | date:"dd/MM/yyyy"}}</td>
+          <td class="dataCell">{{salida.producto.codInstitucional}}</td>
+          <td class="dataCell">{{salida.producto.nombre}}</td>
+          <td class="dataCell">{{salida.salida.idSalida}}</td>
+          <td class="dataCell">{{salida.producto.descripcion}}</td>
+          <td class="dataCell">{{salida.marca}}</td>
+          <td class="dataCell">{{salida.modelo}}</td>
+          <td class="dataCell">{{salida.serial}}</td>
+          <td class="dataCell">{{salida.condicion}}</td>
+          <td class="dataCell">{{salida.cantidad}}</td>
+          <td class="dataCell">{{salida.subTotal}}</td>
         </tr>
-        <tr class="dataRow">
-          <td class="dataCell">10/2/2022</td>
-          <td class="dataCell">UM-001</td>
-          <td class="dataCell">Cafe</td>
-          <td class="dataCell">457896332</td>
-          <td class="dataCell">arabigo</td>
-          <td class="dataCell">Santo Domingo</td>
-          <td class="dataCell">cafAra</td>
-          <td class="dataCell">122263488</td>
-          <td class="dataCell">Nuevo</td>
-          <td class="dataCell">Cocina</td>
-          <td class="dataCell">5</td>
-          <td class="dataCell">5000</td>
-        </tr>
-        <tr class="dataRow">
-          <td class="dataCell">15/4/2021</td>
-          <td class="dataCell">FEM-001</td>
-          <td class="dataCell">Monitor</td>
-          <td class="dataCell">24 Pulgadas</td>
-          <td class="dataCell">457896332</td>
-          <td class="dataCell">Dell</td>
-          <td class="dataCell">Dell24</td>
-          <td class="dataCell">114257895</td>
-          <td class="dataCell">Usado</td>
-          <td class="dataCell">Tecnologia</td>
-          <td class="dataCell">2</td>
-          <td class="dataCell">2200</td>
-        </tr>
+        
       </tbody>
     </table>
+
+    <div class="loadingRow" *ngIf="loading">
+      <div class="loader"></div>
+    </div>
+
+    <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+    </div>
+
+    <div class="pagination">
+      <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+      <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}}</div>
+      <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+    </div>
 
   </div>
 

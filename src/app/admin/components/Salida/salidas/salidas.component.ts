@@ -2,7 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertCantExis, alertIsSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -26,10 +26,10 @@ export class SalidasComponent implements OnInit {
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = false;
+  serial: boolean = true;
 
   tipoSalidaList: tipoSalida[] = []
-  tipoDepartamentoList: departamento[] = [] 
+  tipoDepartamentoList: departamento[] = []
   productoList: producto[] = []
 
   constructor(
@@ -156,38 +156,57 @@ export class SalidasComponent implements OnInit {
 
   addDetail() {
 
-    if (this.formDetalleSalida.valid) {
+    if (this.formDetalleSalida.valid && this.formSalida.valid) {
 
-      if (this.formSalida.valid) {
+      if (this.detailGroup.length >= 1 && this.serial == false) {
+        if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase())) {
+          alertSameSerial()
+          return
+        }
+      }
 
-        if (this.formDetalleSalida.value.cantidad < this.formDetalleSalida.value.existencia) {
+      if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
+
+        if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1
+          || this.isSerial == false) {
+
           this.detailGroup.push(this.formDetalleSalida.value)
           this.resultSubTotal += this.formDetalleSalida.value.subTotal
           this.formDetalleSalida.reset()
+
         } else {
-          alertCantExis()
+          alertSerial()
         }
+
+      } else {
+        alertCantExis()
       }
+    } else {
+      alertNoValidForm()
     }
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
-    this.detailGroup.splice(index, 1)
 
-    this.formDetalleSalida.patchValue({
-      idProducto: item.idProducto,
-      cantidad: item.cantidad,
-      condicion: item.condicion,
-      marca: item.marca,
-      modelo: item.modelo,
-      precio: item.precio,
-      serial: item.serial,
-      existencia: item.existencia,
-      idTipoAlm: item.idTipoAlmacen,
-      subTotal: item.subTotal
-    })
+    if (!this.formDetalleSalida.valid) {
+      this.detailGroup.splice(index, 1)
 
-    this.resultSubTotal -= item.subTotal
+      this.formDetalleSalida.patchValue({
+        idProducto: item.idProducto,
+        cantidad: item.cantidad,
+        condicion: item.condicion,
+        marca: item.marca,
+        modelo: item.modelo,
+        precio: item.precio,
+        serial: item.serial,
+        existencia: item.existencia,
+        idTipoAlm: item.idTipoAlmacen,
+        subTotal: item.subTotal
+      })
+
+      this.resultSubTotal -= item.subTotal
+    }
+
   }
 
   subTotalResult() {
@@ -203,8 +222,8 @@ export class SalidasComponent implements OnInit {
       this.detailGroup.splice(index, 1)
     }
   }
-  
-  clearDetail(){
+
+  clearDetail() {
     this.formDetalleSalida.reset()
   }
 
@@ -218,7 +237,7 @@ export class SalidasComponent implements OnInit {
 
         console.log(res)
         if (res.data !== null) {
-          if (res.data.serial !== "") {
+          if (res.data.serial !== "" && res.data.serial !== null) {
             this.isSerial = true
 
             this.formDetalleSalida.patchValue({
@@ -257,7 +276,7 @@ export class SalidasComponent implements OnInit {
     this.formSalida.value.total = this.resultSubTotal
 
     if (this.formSalida.valid) {
-      
+
       console.log(this.formSalida.value)
 
       this.api.postSalida(this.url, this.formSalida.value, this.token)
@@ -272,19 +291,19 @@ export class SalidasComponent implements OnInit {
             })
 
             JSON.stringify(this.detailGroup)
-            
+
             console.log(this.detailGroup)
 
             this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
                 console.log(res)
-                if (res.data !==  null) {
+                if (res.data !== null) {
 
                   alertIsSuccess(true)
 
                   this.formSalida.reset()
                   this.detailGroup = []
-                  this.resultSubTotal = 0 
+                  this.resultSubTotal = 0
                 }
                 else {
                   alertIsSuccess(false)

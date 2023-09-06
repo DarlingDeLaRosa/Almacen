@@ -23,6 +23,7 @@ export class ReporteEntradaProductoComponent implements OnInit {
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
 
   constructor(
     private api: entradaService,

@@ -1,56 +1,88 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { salidaService } from 'src/app/admin/Services/salida.service';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-reporte-salida-producto',
   templateUrl: './reporte-salida-producto.component.html',
   styleUrls: ['./reporte-salida-producto.component.css']
 })
-export class ReporteSalidaProductoComponent implements AfterViewInit {
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
-  });
+export class ReporteSalidaProductoComponent implements OnInit {
+  
+  dataFiltered: any[] = []
+  filterRepSalida: FormGroup;
+  url: string = ''
+  noPage: number = 1
+  token: string = ''
+  pagina: number = 1
+  loading: boolean = false;
 
-  dates(){
-    console.log(this.range)
+  constructor(
+    private api: salidaService,
+    private store: Store<{ app: AppState }>
+    ){
+    this.filterRepSalida = new FormGroup({
+      filter: new FormControl(''),
+      // start: new FormControl<Date | null>(null),
+      // end: new FormControl<Date | null>(null),
+    })
+  }
+  
+  ngOnInit() {
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path)
+    ]).subscribe(([tokenValue, pathValue]) => {
+
+      this.url = pathValue;
+      this.token = tokenValue;
+
+      this.getSalida()
+    })
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  displayedColumns: string[] = ['fechaFactura', 'idProveedor', 'idRecinto', 'idTipoAlm', 'idTipoEntrada', 'idTipoEntrega', 'numOrden', 'observacion', 'total',];
-  data = new MatTableDataSource(
-
-    [
-      {
-        fechaFactura: 'Azucar', idProveedor: 'azucar blanca', idRecinto: 'Lider', idTipoAlm: 'Sacarosa',
-        idTipoEntrada: '100010023', idTipoEntrega: 'Nuevo', numOrden: 2000, observacion: 'Esta muy bien', total: 78
-      },
-
-    ]
-  ) ;
-
-  constructor(private _liveAnnouncer: LiveAnnouncer) { }
-
-  ngAfterViewInit(): void {
-    this.data.sort = this.sort
-    this.data.paginator = this.paginator
+  getSalida() {
+    this.api.getAllDetalleSalida(this.url, this.token, this.pagina, this.filterRepSalida.value.filter, '', '', )
+      .subscribe((res: any) => {
+        console.log(res)
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      });
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  applyFilter() {
+    if (this.filterRepSalida.value.filter.length >= 2) {
+      console.log(this.filterRepSalida.value.filter)
+
+      this.api.getAllDetalleSalida(this.url, this.token, this.filterRepSalida.value.filter, '', '',this.pagina)
+      .subscribe((res: any)=> {
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+      })
+
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.getSalida()
     }
   }
 
-  applyFilter(event: Event){
-    this.data.filter = (event.target as HTMLTextAreaElement).value.trim().toLowerCase()
+  nextPage(){
+    if(this.pagina < this.noPage){
+      this.pagina += 1
+      this.getSalida()
+    }
+  }
+
+  previousPage(){
+    if(this.pagina > 1){
+      this.pagina -= 1
+      this.getSalida()
+    }
   }
 }
