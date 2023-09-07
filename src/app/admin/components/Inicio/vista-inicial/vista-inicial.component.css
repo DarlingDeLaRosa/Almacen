@@ -1,4 +1,9 @@
 .stadsContainer{
   display: grid;
   height: 86vh;
+  grid-template-rows: 6vh 80vh;
+}
+
+.alertNotifications{
+  background-color: #eee;
 }

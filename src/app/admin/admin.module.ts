@@ -51,6 +51,7 @@ import { ChangePasswordComponent } from './components/Modals/change-password/cha
 import { NgxPrintModule } from 'ngx-print';
 import { ShowDetailsComponent } from './components/Modals/show-details/show-details.component';
 import { ShowDetailsSalidaComponent } from './components/Modals/show-details-salida/show-details-salida.component';
+import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { ShowDetailsSalidaComponent } from './components/Modals/show-details-sal
     ChangePasswordComponent,
     ShowDetailsComponent,
     ShowDetailsSalidaComponent,
+    MinStockProductComponent
   ],
   imports: [
     CommonModule,

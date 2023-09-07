@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -36,10 +36,10 @@ export class TipoProductoComponent implements OnInit {
     let dataTipoProducto: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formTipoProducto.valid) {
-
+      loading(true)
       this.api.postTipoProducto(this.url, this.formTipoProducto.value, this.token)
         .subscribe((res: any) => {
-
+          loading(false)
           dataTipoProducto = res
 
           if (dataTipoProducto.success) {
@@ -49,6 +49,7 @@ export class TipoProductoComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

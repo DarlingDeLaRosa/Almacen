@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { salida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -14,13 +15,14 @@ import { AppState } from 'src/app/store/state';
 })
 export class ReporteSalidaComponent {
   
-  dataFiltered!: salida[];
+  dataFiltered: salida[] = [];
   filterReporteSalida: FormGroup;
   url: string = '';
   token: string = '';
   pagina: number = 1;
   noPage: number = 1;
   idRol: number = 0;
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -49,11 +51,21 @@ export class ReporteSalidaComponent {
   }
 
   getSalida() {
+    this.loading = true
+
     this.api.getSalida(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        }  
       });
   }
 
@@ -64,6 +76,10 @@ export class ReporteSalidaComponent {
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        }
       })
 
     } else {

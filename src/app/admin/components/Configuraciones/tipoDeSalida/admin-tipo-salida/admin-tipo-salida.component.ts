@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TipoDeSalidaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-salida-modal/tipo-de-salida-modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
@@ -16,19 +16,19 @@ import { GET, tipoSalida } from 'src/app/admin/models/interfaces';
 })
 export class AdminTipoSalidaComponent implements OnInit {
 
-  dataFiltered!: tipoSalida[]
+  dataFiltered: tipoSalida[] = []
   filterTipoSalida: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
-
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
     private api: TipoDeSalidaService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.filterTipoSalida = new FormGroup({
       filter: new FormControl(''),
     })
@@ -50,10 +50,20 @@ export class AdminTipoSalidaComponent implements OnInit {
   }
 
   getTipoSalida() {
+    this.loading = true
+
     this.api.getTipoSalida(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+          , () => {
+            this.loading = false
+            alertServerDown();
+          }
       });
   }
 
@@ -61,10 +71,14 @@ export class AdminTipoSalidaComponent implements OnInit {
     if (this.filterTipoSalida.value.filter.length >= 3) {
 
       this.api.filterTipoSalida(this.url, this.token, this.pagina, this.filterTipoSalida.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+
+          , () => {
+            alertServerDown();
+          }
+        })
 
     } else {
       this.getTipoSalida()
@@ -74,7 +88,7 @@ export class AdminTipoSalidaComponent implements OnInit {
   openModal(item: tipoSalida) {
     let dialogRef = this.dialog.open(TipoDeSalidaModalComponent, { data: item })
 
-    dialogRef.afterClosed().subscribe(()=> {
+    dialogRef.afterClosed().subscribe(() => {
       this.getTipoSalida()
     })
   }
@@ -84,9 +98,10 @@ export class AdminTipoSalidaComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+      loading(true)
       this.api.removeTipoSalida(this.url, item, this.token)
         .subscribe((res: any) => {
-
+          loading(false)
           if (res) {
             alertRemoveSuccess()
             this.getTipoSalida()
@@ -94,21 +109,22 @@ export class AdminTipoSalidaComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getTipoSalida()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getTipoSalida()
     }

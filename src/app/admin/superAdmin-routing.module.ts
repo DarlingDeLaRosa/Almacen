@@ -34,6 +34,7 @@ import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-i
 import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
+import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
 
 const routes: Routes = [
   {
@@ -46,7 +47,7 @@ const routes: Routes = [
       {path: 'administrar-entrada', component: AdminEntradasComponent},
       {path: 'editar-entrada/:id', component: EditEntradasComponent},
 
-      { path: 'salida', component: SalidasComponent },
+      {path: 'salida', component: SalidasComponent },
       {path: 'administrar-salida', component: AdminSalidasComponent},
       {path: 'editar-salida/:id', component: EditSalidasComponent},
 
@@ -80,6 +81,7 @@ const routes: Routes = [
       { path: 'reporteProductoEntrada', component: ReporteEntradaProductoComponent},
       { path: 'reporteProductoSalida', component: ReporteSalidaProductoComponent},
       { path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
+      { path: 'reporteStock', component: MinStockProductComponent},
     ]
   },
 

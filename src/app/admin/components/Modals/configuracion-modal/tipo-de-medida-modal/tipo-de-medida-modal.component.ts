@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { tipoMedida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -45,10 +45,10 @@ export class TipoDeMedidaModalComponent implements OnInit{
 
     if (this.formEditTipoMedida.valid) {
       if ( this.formEditTipoMedida.value.descripcion !== this.item.descripcion) {
-
+        loading(true)
         this.api.editTipoMedida(this.url, this.formEditTipoMedida.value, this.token)
           .subscribe((res: any) => {
-
+            loading(false)
             let dataTipoMedida = res;
 
             if (dataTipoMedida.success) {
@@ -59,6 +59,7 @@ export class TipoDeMedidaModalComponent implements OnInit{
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

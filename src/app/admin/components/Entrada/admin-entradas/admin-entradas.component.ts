@@ -55,30 +55,32 @@ export class AdminEntradasComponent implements OnInit {
     this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
 
-        console.log(res)
+        this.loading = false
+
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-        this.loading = false
-      
-      },
-      () => {
-        loading(false)
-        alertServerDown();
-      });
 
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        }  
+      });
   }
 
   onInputFilterChange() {
     if (this.filterEntrada.value.filter.length >= 2) {
-      
+
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
         .subscribe((res: any) => {
-          this.loading = false
 
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-        })
 
+          ,() => {
+            alertServerDown();
+          }
+        })
+       
     } else {
       this.getEntrada()
     }
@@ -95,16 +97,20 @@ export class AdminEntradasComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
-
+      loading(true)
       this.api.removeEntrada(this.url, item, this.token)
         .subscribe((res: any) => {
+          loading(false)
+          
           if (res) {
             alertRemoveSuccess()
             this.getEntrada()
           } else {
             alertIsSuccess(false)
           }
+
           () => {
+            loading(false)
             alertServerDown();
           }
         })

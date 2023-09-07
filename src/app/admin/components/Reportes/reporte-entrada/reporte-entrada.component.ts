@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -15,13 +16,14 @@ import { AppState } from 'src/app/store/state';
 })
 export class ReporteEntradaComponent implements OnInit {
 
-  dataFiltered!: Entrada[];
+  dataFiltered: Entrada[] = [];
   filterReporteEntrada: FormGroup;
   url: string = '';
   token: string = '';
   pagina: number = 1;
   noPage: number = 1;
   idRol: number = 0;
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -56,29 +58,42 @@ export class ReporteEntradaComponent implements OnInit {
 
     return {
       desde: this.datePipe.transform(desdeDate, 'yyyy/MM/dd'),
-      hasta:  this.datePipe.transform(hastaDate, 'yyyy/MM/dd')
+      hasta: this.datePipe.transform(hastaDate, 'yyyy/MM/dd')
     }
   }
 
   getEntrada() {
+    this.loading = true
     this.api.getEntrada(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+          , () => {
+            this.loading = false
+            alertServerDown();
+          }
       });
   }
 
   onInputFilterChange() {
-    if (this.filterReporteEntrada.value.nombre.length >= 2 ) {
+    if (this.filterReporteEntrada.value.nombre.length >= 2) {
 
-      this.api.filterEntrada(this.url, this.token, this.pagina,  this.filterReporteEntrada.value.nombre)
+      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.nombre)
         .subscribe((res: any) => {
           console.log(res)
           this.noPage = res.cantPage
           this.dataFiltered = res.data
+
+            , () => {
+              alertServerDown();
+            }
         })
-        
+
       // if (this.filterReporteEntrada.get('desde') && this.filterReporteEntrada.get('hasta')) {
 
       //   let dates = this.getFormatteddesdeDate()

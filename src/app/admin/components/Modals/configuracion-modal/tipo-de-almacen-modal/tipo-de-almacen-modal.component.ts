@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { tipoAlmacen } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -31,7 +31,7 @@ export class TipoDeAlmacenModalComponent {
   }
 
   ngOnInit() {
-    this.formEditTipoAlmacen.setValue({ nombre: `${this.item.nombre}` , idTipoAlm: this.item.idTipoAlm })
+    this.formEditTipoAlmacen.setValue({ nombre: `${this.item.nombre}`, idTipoAlm: this.item.idTipoAlm })
 
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
@@ -45,9 +45,10 @@ export class TipoDeAlmacenModalComponent {
 
     if (this.formEditTipoAlmacen.valid) {
       if (this.formEditTipoAlmacen.value.nombre !== this.item.nombre) {
-
+        loading(true)
         this.api.editTipoAlmacen(this.url, this.formEditTipoAlmacen.value, this.token)
           .subscribe((res: any) => {
+            loading(false)
 
             let dataTipoAlmacen = res;
 
@@ -59,6 +60,7 @@ export class TipoDeAlmacenModalComponent {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

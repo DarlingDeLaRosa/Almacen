@@ -8,12 +8,12 @@ import { producto } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
-  selector: 'app-inventario-existente',
-  templateUrl: './inventario-existente.component.html',
-  styleUrls: ['./inventario-existente.component.css']
+  selector: 'app-min-stock-product',
+  templateUrl: './min-stock-product.component.html',
+  styleUrls: ['./min-stock-product.component.css']
 })
-export class InventarioExistenteComponent implements OnInit {
-
+export class MinStockProductComponent implements OnInit{
+  
   dataFiltered: producto[] = []
   filterRepInventario: FormGroup;
   url: string = ''
@@ -42,14 +42,14 @@ export class InventarioExistenteComponent implements OnInit {
       this.url = pathValue;
       this.token = tokenValue;
 
-      this.getProducto()
+      this.getProductoAgotamineto()
     })
   }
 
-  getProducto() {
+  getProductoAgotamineto() {
     this.loading = true
 
-    this.api.getProducto(this.url, this.token, this.pagina)
+    this.api.getProductoEscazes(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
 
         this.loading = false
@@ -66,7 +66,6 @@ export class InventarioExistenteComponent implements OnInit {
   }
 
   dataFilter() {
-    console.log(this.filterRepInventario.value.filter)
     if (this.filterRepInventario.value.filter.length >= 3) {
 
       this.api.filterProducto(this.url, this.token, this.pagina, this.filterRepInventario.value.filter)
@@ -80,21 +79,21 @@ export class InventarioExistenteComponent implements OnInit {
         })
 
     } else {
-      this.getProducto()
+      this.getProductoAgotamineto()
     }
   }
 
   nextPage() {
     if (this.pagina < this.noPage) {
       this.pagina += 1
-      this.getProducto()
+      this.getProductoAgotamineto()
     }
   }
 
   previousPage() {
     if (this.pagina > 1) {
       this.pagina -= 1
-      this.getProducto()
+      this.getProductoAgotamineto()
     }
   }
 }

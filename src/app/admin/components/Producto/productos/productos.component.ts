@@ -1,7 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertProductCodeNoFound, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertProductCodeNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -79,6 +79,9 @@ export class ProductosComponent implements OnInit {
             this.formProducto.get('nombre')?.reset()
           }
 
+          () => {
+            alertServerDown();
+          }
         })
     }
   }
@@ -88,6 +91,10 @@ export class ProductosComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res)
         this.tipoAlmacenList = res.data
+
+        ,() => {
+          alertServerDown();
+        }
       });
   }
 
@@ -97,6 +104,10 @@ export class ProductosComponent implements OnInit {
         if (res) {
           this.unidadMedidaList = res.data
         }
+
+        () => {
+          alertServerDown();
+        }
       })
   }
 
@@ -105,6 +116,10 @@ export class ProductosComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.tipoProductoList = res.data
+        }
+
+        () => {
+          alertServerDown();
         }
       })
   }
@@ -121,6 +136,10 @@ export class ProductosComponent implements OnInit {
           options.forEach((item: any) => {
             this.unidadMedidaList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getUnidadMedida()
@@ -139,6 +158,10 @@ export class ProductosComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoProductoList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoProducto()
@@ -157,6 +180,10 @@ export class ProductosComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoAlmacenList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoAlmacen()
@@ -175,9 +202,12 @@ export class ProductosComponent implements OnInit {
 
     if (this.formProducto.valid) {
       console.log(this.formProducto.value)
+      
+      loading(true)
       this.api.postProducto(this.url, this.formProducto.value, this.token)
         .subscribe((res: any) => {
-
+          loading(false)
+          
           if (res.success) {
             alertIsSuccess(true)
             this.formProducto.reset()
@@ -185,6 +215,7 @@ export class ProductosComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

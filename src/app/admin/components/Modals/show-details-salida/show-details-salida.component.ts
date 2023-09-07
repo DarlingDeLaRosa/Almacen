@@ -5,6 +5,7 @@ import { salidaService } from 'src/app/admin/Services/salida.service';
 import { detalleByIdSalida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
+import { alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-show-details-salida',
@@ -44,6 +45,10 @@ export class ShowDetailsSalidaComponent {
       console.log(res)
       this.detallesList = res.data
       this.id = this.detallesList[0].idSalida
+
+      ,() => {
+        alertServerDown();
+      }
     })
   }
 

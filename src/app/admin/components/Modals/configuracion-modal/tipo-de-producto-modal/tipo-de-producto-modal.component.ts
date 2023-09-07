@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tipoProducto } from 'src/app/admin/models/interfaces';
-import { alertSameData, alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertSameData, alertIsSuccess, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -47,10 +47,10 @@ export class TipoDeProductoModalComponent implements OnInit {
 
     if (this.formEditTipoProducto.valid) {
       if (this.formEditTipoProducto.value.nombre !== this.item.nombre ) {
-
+        loading(true)
         this.api.editTipoProducto(this.url, this.formEditTipoProducto.value, this.token)
         .subscribe((res: any) => {
-
+          loading(false)
             let dataTipoProducto = res;
 
             if (dataTipoProducto.success) {
@@ -61,6 +61,7 @@ export class TipoDeProductoModalComponent implements OnInit {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { persona, recinto, rol } from 'src/app/admin/models/interfaces';
 import { AppState, User } from 'src/app/store/state';
@@ -78,6 +78,10 @@ export class UsuarioModalComponent implements OnInit {
         if (res) {
           this.rolesList = res.data
         }
+
+        () => {
+          alertServerDown();
+        }
       })
   }
 
@@ -86,6 +90,10 @@ export class UsuarioModalComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.recintoList = res.data
+        }
+
+        () => {
+          alertServerDown();
         }
       })
   }
@@ -102,6 +110,9 @@ export class UsuarioModalComponent implements OnInit {
             this.supInmediatoList.push(item)
             this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
 
+            () => {
+              alertServerDown();
+            }
           });
         })
     }
@@ -134,11 +145,11 @@ export class UsuarioModalComponent implements OnInit {
         this.formEditUser.value.ext !== this.item.ext ||
         this.formEditUser.value.celular !== this.item.celular ||
         this.formEditUser.value.supervisorInmediato !== this.item.supervisor
-        ) {
-
+      ) {
+        loading(true)
         this.api.editUser(this.url, this.formEditUser.value, this.token)
           .subscribe((res: any) => {
-
+            loading(false)
             let dataUser = res;
 
             if (dataUser.success) {
@@ -149,6 +160,7 @@ export class UsuarioModalComponent implements OnInit {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

@@ -84,6 +84,12 @@ h1{
   justify-content: space-between;
 }
 
+.fuctionContentInicial {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .formInfo{
   border: 1px solid #ccc;
   padding: 15px;
@@ -121,13 +127,17 @@ table{
   background-color: #C7D1EA;
 }
 
+.headerRepRow{
+  background-color: #ddd;
+}
+
 .dataCell{
   border-top: 1px solid #ccc;
   padding-left: 15px;
 }
 
 .dataRow{
-  height: 5vh;
+  height: 6vh;
 }
 
 .dataRow:nth-child(even) {
@@ -198,7 +208,6 @@ table{
 #reporteHeader{
   display: grid;
   grid-template-rows: 8vh 8vh 12vh auto;
-  padding-bottom: 16px;
   min-height: 60px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -289,21 +298,14 @@ table{
   background-color: #004b8d;
 }
 
-.item-menu {
-  width: 183px;
-  height: 40px;
-  display: grid;
-  grid-template-columns: 30px 153px;
-  align-items: center;
-  text-decoration: none;
-  cursor: pointer;
-  color: white;
-  padding-left: 16px;
-}
-
 .submenu {
   width: 153px;
   padding-left: 30px;
+}
+
+.menuSubmenu{
+  width: 123px;
+  padding-left: 20px;
 }
 
 .btnAdd{
@@ -320,10 +322,33 @@ table{
   font-weight: 300 ;
 }
 
+.item-menu {
+  width: 183px;
+  height: 40px;
+  display: grid;
+  grid-template-columns: 30px 153px;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  padding-left: 16px;
+}
+
 .item-submenu {
   width: 153px;
   height: 35px;
   padding-left: 16px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+}
+
+.item-submenux {
+  width: 141px;
+  height: 35px;
+  padding-left: 8px;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -412,6 +437,9 @@ mat-sidenav {
   color: #999;
 }
 
+.alertNote{
+
+}
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 140px;

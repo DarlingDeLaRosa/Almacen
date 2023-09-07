@@ -7,7 +7,7 @@ import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-tipo-almacen',
@@ -16,13 +16,13 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } 
 })
 export class AdminTipoAlmacenComponent implements OnInit {
 
-  dataFiltered!: tipoAlmacen[]
+  dataFiltered: tipoAlmacen[] = []
   filterTipoAlmacen: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
-
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -49,11 +49,20 @@ export class AdminTipoAlmacenComponent implements OnInit {
   }
 
   getTipoAlmacen() {
+    this.loading = true
+
     this.api.getTipoAlmacen(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+    
+        this.loading = false
+    
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-        console.log(this.dataFiltered)
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        }  
       });
   }
 
@@ -64,6 +73,10 @@ export class AdminTipoAlmacenComponent implements OnInit {
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        }  
       })
 
     } else {
@@ -84,9 +97,13 @@ export class AdminTipoAlmacenComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+      loading(true)
+
       this.api.removeTipoAlmacen(this.url, item, this.token)
         .subscribe((res: any) => {
 
+          loading(false)
+          
           if (res) {
             alertRemoveSuccess()
             this.getTipoAlmacen()
@@ -94,6 +111,7 @@ export class AdminTipoAlmacenComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

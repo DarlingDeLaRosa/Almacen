@@ -28,16 +28,24 @@
         </a>
         <a class="item-menu" (click)="toggleSubmenu()"><mat-icon>summarize</mat-icon>Reportes</a>
         <div class="submenu" *ngIf="submenu else submenuClosed">
-          <a class="item-submenu" [routerLink]="['/almacen/reporteEntrada']" routerLinkActive="active">Entrada</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteSalida']" routerLinkActive="active">Salida</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteInventario']" routerLinkActive="active">Inventario</a>
+
+        <a class="item-submenu" (click)="toggleSubmenuEntrada()">Entradas</a>
+          <div class="menuSubmenu" *ngIf="submenuEntrada">
+            <a class="item-submenux" [routerLink]="['/almacen/reporteEntrada']" routerLinkActive="active">Entrada</a>
+            <a class="item-submenux" [routerLink]="['/almacen/reporteProductoEntrada']" routerLinkActive="active">Entrada / productos</a>
+          </div>
+        <a class="item-submenu" (click)="toggleSubmenuSalida()">Salidas</a>
+          <div class="menuSubmenu" *ngIf="submenuSalida">
+            <a class="item-submenux" [routerLink]="['/almacen/reporteSalida']" routerLinkActive="active">Salida</a>
+            <a class="item-submenux" [routerLink]="['/almacen/reporteProductoSalida']" routerLinkActive="active">Salida / productos</a>
+          </div>
+        <a class="item-submenu" (click)="toggleSubmenuProductos()">Productos</a>
+          <div class="menuSubmenu" *ngIf="submenuProductos">
+            <a class="item-submenux" [routerLink]="['/almacen/reporteInventario']" routerLinkActive="active">Inventario</a>
+            <a class="item-submenux" [routerLink]="['/almacen/reporteStock']" routerLinkActive="active">Escasez</a>
+            <a class="item-submenux" [routerLink]="['/almacen/reporteTransparencia']" routerLinkActive="active">Transparencia</a>
+          </div>
           <a class="item-submenu" [routerLink]="['/almacen/reporteProveedor']" routerLinkActive="active">Proveedor</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteTransparencia']"
-            routerLinkActive="active">Transparencia</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoEntrada']" routerLinkActive="active">Entrada
-            por productos</a>
-          <a class="item-submenu" [routerLink]="['/almacen/reporteProductoSalida']" routerLinkActive="active">Salida por
-            productos</a>
         </div>
         <ng-template #submenuClosed></ng-template>
 

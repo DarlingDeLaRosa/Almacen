@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { salida } from 'src/app/admin/models/interfaces';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { ShowDetailsSalidaComponent } from '../../Modals/show-details-salida/show-details-salida.component';
@@ -16,7 +16,7 @@ import { ShowDetailsSalidaComponent } from '../../Modals/show-details-salida/sho
 })
 export class AdminSalidasComponent implements OnInit {
 
-  dataFiltered!: salida[]
+  dataFiltered: salida[] = [];
   filterSalida: FormGroup;
   url: string = ''
   token: string = ''
@@ -50,11 +50,21 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   getSalida() {
+    this.loading = true
+
     this.api.getSalida(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+          , () => {
+            this.loading = false
+            alertServerDown();
+          }
       });
   }
 
@@ -62,10 +72,14 @@ export class AdminSalidasComponent implements OnInit {
     if (this.filterSalida.value.filter.length >= 2) {
 
       this.api.filterSalida(this.url, this.token, this.pagina, this.filterSalida.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+
+          , () => {
+            alertServerDown();
+          }
+        })
 
     } else {
       this.getSalida()
@@ -73,7 +87,7 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   openModal(detailId: number) {
-    let dialogRef = this.dialog.open(ShowDetailsSalidaComponent, {data: detailId})
+    let dialogRef = this.dialog.open(ShowDetailsSalidaComponent, { data: detailId })
 
     dialogRef.afterClosed().subscribe(() => {
     })
@@ -83,15 +97,18 @@ export class AdminSalidasComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+      loading(true)
       this.api.removeSalida(this.url, item, this.token)
         .subscribe((res: any) => {
-          
+          loading(false)
+
           if (res.sucess) {
             alertRemoveSuccess()
           } else {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

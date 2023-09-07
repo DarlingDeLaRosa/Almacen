@@ -1,0 +1,76 @@
+<div class="viewContent">
+
+    <h1>Reporte de Escasez</h1>
+  
+    <div class="fuctionContent">
+      <div class="filtrarContent" [formGroup]="filterRepInventario" class="filtrarContent">
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Filtrar</mat-label>
+          <input matInput formControlName="filter" (input)="dataFilter()">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>&nbsp;
+  
+        <!-- <mat-form-field>
+          <mat-label>Rango de fecha </mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Fecha Inicial">
+            <input matEndDate formControlName="end" placeholder="Fecha Final">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field> -->
+        
+      </div>
+  
+      <span>
+        <button class="btnImprimir" mat-stroked-button printSectionId="reportesEscasez" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+      </span>
+    </div>
+  
+    <div id="reportesEscasez">
+  
+      <table>
+        <thead class="headerTable">
+          <tr class="headerRow">
+            <th class="headerCell">Codigo</th>
+            <th class="headerCell">Nombre</th>
+            <th class="headerCell">Descripcion</th>
+            <th class="headerCell">T. Almacen</th>
+            <th class="headerCell">T. Producto</th>
+            <th class="headerCell">Unidad de medida</th>
+            <th class="headerCell">Stock actual</th>
+            <th class="headerCell">Stock Minimo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="dataRow" *ngFor="let producto of dataFiltered">
+            <td class="dataCell">{{producto.codInstitucional}}</td>
+            <td class="dataCell">{{producto.nombre}}</td>
+            <td class="dataCell">{{producto.descripcion}}</td>
+            <td class="dataCell">{{producto.tipoAlmacen.nombre}}</td>
+            <td class="dataCell">{{producto.idTipoArt.nombre}}</td>
+            <td class="dataCell">{{producto.unidadMedida.descripcion}}</td>
+            <td class="dataCell" style="color: red;">{{producto.stock}}</td>
+            <td class="dataCell">{{producto.stockMinimo}}</td>
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+    <div class="loadingRow" *ngIf="loading">
+      <div class="loader"></div>
+    </div>  
+  
+    <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+    </div>
+  
+    <div class="pagination">
+      <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
+      <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
+      <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+    </div>
+  
+  </div>
+  

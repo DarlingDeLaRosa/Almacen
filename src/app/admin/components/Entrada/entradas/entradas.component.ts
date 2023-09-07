@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { detalleProductoEntrada, producto, proveedor, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
@@ -216,6 +216,7 @@ export class EntradasComponent implements OnInit {
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
     });
+    
     if (!this.generalITBIS) {
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
@@ -430,7 +431,7 @@ export class EntradasComponent implements OnInit {
     if (this.formEntrada.valid && this.detailGroup.length >= 1) {
 
       console.log(this.formEntrada.value)
-
+      loading(true)
       this.api.postEntrada(this.url, this.formEntrada.value, this.token)
         .subscribe((res: any) => {
 
@@ -454,6 +455,7 @@ export class EntradasComponent implements OnInit {
 
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
+                loading(false)
                 console.log(res)
                 if (res.success) {
                   alertIsSuccess(true)
@@ -464,6 +466,10 @@ export class EntradasComponent implements OnInit {
                 else {
                   alertIsSuccess(false)
                 }
+                () => {
+                  loading(false)
+                  alertServerDown();
+                }
               })
             this.formDetalleEntrada.reset()
             this.formEntrada.reset()
@@ -472,6 +478,7 @@ export class EntradasComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

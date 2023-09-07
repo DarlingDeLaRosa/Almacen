@@ -59,11 +59,48 @@
         <b class="itemReporte">Observacion:</b> {{salidas.observacion}}
       </div>
 
+      <div>
+        <table>
+          <thead class="headerTable">
+            <tr class="headerRepRow">
+              <th class="headerCell">Producto</th>
+              <th class="headerCell">Marca</th>
+              <th class="headerCell">Modelo</th>
+              <th class="headerCell">Condición</th>
+              <th class="headerCell">Unidad De Medida</th>
+              <th class="headerCell">Serial</th>
+              <th class="headerCell">Stock restante</th>
+              <th class="headerCell">Precio</th>
+              <th class="headerCell">Cantidad</th>
+              <th class="headerCell">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="dataRow" *ngFor="let detalles of salidas.detalles">
+              <td class="dataCell">{{detalles.producto.nombre}}</td>
+              <td class="dataCell">{{detalles.marca}}</td>
+              <td class="dataCell">{{detalles.modelo}}</td>
+              <td class="dataCell">{{detalles.condicion}}</td>
+              <td class="dataCell">{{detalles.producto.idUnidadMe}}</td>
+              <td class="dataCell">{{detalles.serial}}</td>
+              <td class="dataCell">{{detalles.producto.stock}}</td>
+              <td class="dataCell">{{detalles.precio}}</td>
+              <td class="dataCell">{{detalles.cantidad}}</td>
+              <td class="dataCell">{{detalles.subTotal}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
     </div>
 
   </div>
 
-  <div class="noDataRow" *ngIf="!dataFiltered;">
+  <div class="loadingRow" *ngIf="loading">
+    <div class="loader"></div>
+  </div>  
+
+  <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
     <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
   </div>
 

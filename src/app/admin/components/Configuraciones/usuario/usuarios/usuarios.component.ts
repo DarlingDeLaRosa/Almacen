@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -62,6 +62,10 @@ export class UsuariosComponent implements OnInit {
         if (res) {
           this.rolesList = res.data
         }
+
+        () => {
+          alertServerDown();
+        }
       })
   }
 
@@ -70,6 +74,9 @@ export class UsuariosComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.recintoList = res.data
+        }
+        () => {
+          alertServerDown();
         }
       })
   }
@@ -87,6 +94,9 @@ export class UsuariosComponent implements OnInit {
             this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
 
           });
+          () => {
+            alertServerDown();
+          }
         })
     }
   }
@@ -103,10 +113,12 @@ export class UsuariosComponent implements OnInit {
     this.formUser.value.idRol = id[0].idRol
 
     if (this.formUser.valid) {
-
+      loading(true)
       this.api.postUser(this.url, this.formUser.value, this.token)
         .subscribe((res: any) => {
-
+          
+          loading(false)
+          
           if (res.success) {
             alertIsSuccess(true)
             this.formUser.reset()
@@ -114,11 +126,10 @@ export class UsuariosComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })
-
     }
   }
-
 }

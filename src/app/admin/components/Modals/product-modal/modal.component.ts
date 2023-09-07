@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -15,7 +15,7 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit{
+export class ModalComponent implements OnInit {
 
   formEditProducto: FormGroup;
   url!: string;
@@ -113,6 +113,10 @@ export class ModalComponent implements OnInit{
       .subscribe((res: any) => {
         console.log(res)
         this.tipoAlmacenList = res.data
+
+          , () => {
+            alertServerDown();
+          }
       });
   }
 
@@ -122,6 +126,10 @@ export class ModalComponent implements OnInit{
         if (res) {
           this.unidadMedidaList = res.data
         }
+
+        () => {
+          alertServerDown();
+        }
       })
   }
 
@@ -130,6 +138,10 @@ export class ModalComponent implements OnInit{
       .subscribe((res: any) => {
         if (res) {
           this.tipoProductoList = res.data
+        }
+
+        () => {
+          alertServerDown();
         }
       })
   }
@@ -147,6 +159,10 @@ export class ModalComponent implements OnInit{
           options.forEach((item: any) => {
             this.unidadMedidaList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getUnidadMedida()
@@ -165,6 +181,10 @@ export class ModalComponent implements OnInit{
           options.forEach((item: any) => {
             this.tipoProductoList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoProducto()
@@ -183,6 +203,10 @@ export class ModalComponent implements OnInit{
           options.forEach((item: any) => {
             this.tipoAlmacenList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoAlmacen()
@@ -204,10 +228,10 @@ export class ModalComponent implements OnInit{
         || this.formEditProducto.value.itbis !== this.item.itbis
         || this.formEditProducto.value.idTipoAlmacen !== this.item.tipoAlmacen.nombre
       ) {
-
+        loading(true)
         this.api.editProducto(this.url, this.formEditProducto.value, this.token)
           .subscribe((res: any) => {
-
+            loading(false)
             let dataProducto = res;
 
             if (dataProducto.success) {
@@ -218,6 +242,7 @@ export class ModalComponent implements OnInit{
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })
@@ -237,10 +262,10 @@ export class ModalComponent implements OnInit{
       this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
       this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
 
-
+      loading(true)
       this.api.postProducto(this.url, this.formEditProducto.value, this.token)
         .subscribe((res: any) => {
-
+          loading(false)
           let dataProducto = res;
 
           if (dataProducto.success) {
@@ -251,6 +276,7 @@ export class ModalComponent implements OnInit{
             this.closeModal();
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

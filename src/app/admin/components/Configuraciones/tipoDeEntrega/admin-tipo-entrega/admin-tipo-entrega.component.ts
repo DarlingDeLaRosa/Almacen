@@ -16,12 +16,13 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } 
 })
 export class AdminTipoEntregaComponent  implements OnInit{
 
-  dataFiltered!: tipoEntrega[]
+  dataFiltered: tipoEntrega[] = []
   filterTipoEntrega: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -47,10 +48,19 @@ export class AdminTipoEntregaComponent  implements OnInit{
   }
 
   getTipoEntrega() {
+    this.loading = true
+
     this.api.getTipoEntrega(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+        this.loading = false
+
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+,() => {
+          this.loading = false
+          alertServerDown();
+        }  
       });
   }
 

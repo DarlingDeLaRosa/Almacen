@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { proveedor } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -63,6 +63,10 @@ export class ProveedorModalComponent {
           options.forEach((item: any) => {
             this.filterOptions.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else { }
   }
@@ -77,7 +81,9 @@ export class ProveedorModalComponent {
             razonSocial: res.data.razonSocial,
             nombreComercial: res.data.nombreComercial,
           })
-
+        }
+        () => {
+          alertServerDown();
         }
       })
   }
@@ -103,10 +109,10 @@ export class ProveedorModalComponent {
         || this.formEditProveedor.value.representante !== this.item.representante
         || this.formEditProveedor.value.telRepresentante !== this.item.telRepresentante
         ) {
-
+        loading(true)
         this.api.editProveedor(this.url, this.formEditProveedor.value, this.token)
           .subscribe((res: any) => {
-
+            loading(false)
             let dataProveedor = res;
 
             if (dataProveedor.success) {
@@ -117,6 +123,7 @@ export class ProveedorModalComponent {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

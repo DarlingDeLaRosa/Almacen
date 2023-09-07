@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertSameData, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { tipoEntrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -47,9 +47,10 @@ export class TipoDeEntradaModalComponent implements OnInit {
 
     if (this.formEditTipoEntrada.valid) {
       if (this.formEditTipoEntrada.value.nombre !== this.item.nombre || this.formEditTipoEntrada.value.descripcion !== this.item.descripcion) {
-
+        loading(true)
         this.api.editTipoEntrada(this.url, this.formEditTipoEntrada.value, this.token)
           .subscribe((res: any) => {
+            loading(false)
 
             let dataTipoEntrada = res;
 
@@ -61,6 +62,7 @@ export class TipoDeEntradaModalComponent implements OnInit {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })

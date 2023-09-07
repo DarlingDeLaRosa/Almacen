@@ -6,6 +6,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { AppState } from 'src/app/store/state';
 
@@ -49,11 +50,22 @@ export class ReporteSalidaProductoComponent implements OnInit {
   }
 
   getSalida() {
+
+    this.loading = true
+
     this.api.getAllDetalleSalida(this.url, this.token, this.pagina, this.filterRepSalida.value.filter, '', '', )
       .subscribe((res: any) => {
+        
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        } 
       });
   }
 
@@ -65,6 +77,10 @@ export class ReporteSalidaProductoComponent implements OnInit {
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        }
       })
 
     } else {

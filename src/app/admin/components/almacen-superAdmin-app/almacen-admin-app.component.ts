@@ -28,6 +28,9 @@ export class AlmacenAdminAppComponent implements OnInit{
 
   submenu: boolean = false;
   submenuConfig:  boolean = false;
+  submenuEntrada: boolean = false;
+  submenuSalida: boolean = false;
+  submenuProductos: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -49,6 +52,24 @@ export class AlmacenAdminAppComponent implements OnInit{
     if(this.submenuConfig){
       this.submenu = false;
     }
+  }
+
+  toggleSubmenuEntrada(){
+    this.submenuEntrada = !this.submenuEntrada
+    if(this.submenuEntrada)this.submenuSalida = false;
+    if(this.submenuEntrada)this.submenuProductos = false;
+  }
+
+  toggleSubmenuSalida(){
+    this.submenuSalida = !this.submenuSalida
+    if(this.submenuSalida)this.submenuEntrada = false;
+    if(this.submenuSalida)this.submenuProductos = false;
+  }
+
+  toggleSubmenuProductos(){
+    this.submenuProductos = !this.submenuProductos
+    if(this.submenuProductos)this.submenuSalida = false;
+    if(this.submenuProductos)this.submenuEntrada = false;
   }
 
   ngOnInit() {

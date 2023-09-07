@@ -1,18 +1,13 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProveedorModalComponent } from '../../Modals/proveedor-modal/proveedor-modal.component';
-import Swal from 'sweetalert2';
 import { proveedor } from 'src/app/admin/models/interfaces';
 import { FormControl, FormGroup } from '@angular/forms';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-proveedores',
@@ -21,12 +16,14 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } 
 })
 export class AdminProveedoresComponent implements OnInit{
 
-  dataFiltered!: proveedor[]
+  dataFiltered: proveedor[] = []
   filterProveedor: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
+
 
   constructor(
     public dialog: MatDialog,
@@ -53,10 +50,21 @@ export class AdminProveedoresComponent implements OnInit{
   }
 
   getProveedor() {
+
+    this.loading = true;
+
     this.api.getProveedor(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+
+        this.loading = false;
+
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        } 
       });
   }
 
@@ -68,6 +76,10 @@ export class AdminProveedoresComponent implements OnInit{
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        } 
       })
 
     } else {
@@ -88,8 +100,10 @@ export class AdminProveedoresComponent implements OnInit{
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+      loading(true)
       this.api.removeProveedor(this.url, item, this.token)
         .subscribe((res: any) => {
+          loading(false)
 
           if (res) {
             alertRemoveSuccess()
@@ -98,6 +112,7 @@ export class AdminProveedoresComponent implements OnInit{
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

@@ -1,7 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { alertIsSuccess, alertRncNoFound, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRncNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -46,6 +46,10 @@ export class ProveedoresComponent implements OnInit {
           options.forEach((item: any) => {
             this.filterOptions.push(item)
           });
+
+          () => {
+            alertServerDown();
+          } 
         })
     }
   }
@@ -63,6 +67,10 @@ export class ProveedoresComponent implements OnInit {
           alertRncNoFound()
           this.formProveedor.get('rnc')?.reset()
         }
+
+        () => {
+          alertServerDown();
+        } 
       })
   }
 
@@ -81,9 +89,11 @@ export class ProveedoresComponent implements OnInit {
     let dataProveedor: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formProveedor.valid) {
-
+      loading(true)
       this.api.postProveedor(this.url, this.formProveedor.value, this.token)
         .subscribe((res: any) => {
+
+          loading(false)
           dataProveedor = res
 
           if (dataProveedor.success) {
@@ -93,6 +103,7 @@ export class ProveedoresComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

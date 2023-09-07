@@ -6,6 +6,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { proveedor } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -23,6 +24,7 @@ export class ReporteTransparenciaComponent implements OnInit{
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
 
   constructor(
     private api: proveedorService,
@@ -49,11 +51,22 @@ export class ReporteTransparenciaComponent implements OnInit{
   }
 
   getProveedor() {
+
+    this.loading = true
+
     this.api.getProveedor(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+        
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        } 
       });
   }
 
@@ -65,6 +78,10 @@ export class ReporteTransparenciaComponent implements OnInit{
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        }
       })
 
     } else {

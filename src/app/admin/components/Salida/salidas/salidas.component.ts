@@ -2,7 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -80,6 +80,10 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
         this.productoList = res.data
         console.log(this.productoList)
+
+          , () => {
+            alertServerDown();
+          }
       });
   }
 
@@ -87,6 +91,10 @@ export class SalidasComponent implements OnInit {
     this.apiTipoSalida.getTipoSalida(this.url, this.token, 1)
       .subscribe((res: any) => {
         this.tipoSalidaList = res.data
+
+          , () => {
+            alertServerDown();
+          }
       });
   }
 
@@ -95,6 +103,10 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res)
         this.tipoDepartamentoList = res.data
+
+          , () => {
+            alertServerDown();
+          }
       });
   }
 
@@ -111,7 +123,9 @@ export class SalidasComponent implements OnInit {
             this.productoList.push(item)
           });
 
-          console.log(this.productoList)
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getProducto()
@@ -130,6 +144,10 @@ export class SalidasComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoSalidaList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoSalida()
@@ -148,6 +166,10 @@ export class SalidasComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoDepartamentoList.push(item)
           });
+
+          () => {
+            alertServerDown();
+          }
         })
     } else {
       this.getTipoDepartamento()
@@ -262,6 +284,10 @@ export class SalidasComponent implements OnInit {
             })
           }
         }
+
+        () => {
+          alertServerDown();
+        }
       })
   }
 
@@ -278,10 +304,9 @@ export class SalidasComponent implements OnInit {
     if (this.formSalida.valid) {
 
       console.log(this.formSalida.value)
-
+      loading(true)
       this.api.postSalida(this.url, this.formSalida.value, this.token)
         .subscribe((res: any) => {
-
           if (res.success) {
 
             this.detailGroup.map((detail: any) => {
@@ -296,7 +321,8 @@ export class SalidasComponent implements OnInit {
 
             this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
               .subscribe((res: any) => {
-                console.log(res)
+                loading(false)
+
                 if (res.data !== null) {
 
                   alertIsSuccess(true)
@@ -308,12 +334,17 @@ export class SalidasComponent implements OnInit {
                 else {
                   alertIsSuccess(false)
                 }
+                () => {
+                  loading(false)
+                  alertServerDown();
+                }
               })
 
           } else {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

@@ -57,4 +57,14 @@ export class productoService {
     const removeproducto = `${url}/producto/${id}`
     return this.http.delete(removeproducto, productoHeader)
   }
+
+  // Ezcases de Productos 
+
+  public getProductoEscazes(url: string, token: string, page: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const productoHeader = {headers: headers}
+
+    const getTipoproducto = `${url}/Producto/getproductoreport${page}-${this.cantidadItems}`
+    return this.http.get(getTipoproducto, productoHeader)
+  }
 }

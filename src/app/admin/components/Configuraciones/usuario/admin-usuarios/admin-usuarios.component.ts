@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -15,12 +15,13 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } 
 })
 export class AdminUsuariosComponent implements OnInit{
 
-  dataFiltered!: User[]
+  dataFiltered: User[] = []
   filterUser: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -47,11 +48,21 @@ export class AdminUsuariosComponent implements OnInit{
   }
 
   getUser() {
+    this.loading = true
+
     this.api.getUser(this.url, this.token, this.pagina,)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          this.loading = false
+          alertServerDown();
+        }  
       });
   }
 
@@ -62,6 +73,10 @@ export class AdminUsuariosComponent implements OnInit{
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+        ,() => {
+          alertServerDown();
+        }  
       })
 
     } else {
@@ -83,8 +98,13 @@ export class AdminUsuariosComponent implements OnInit{
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+
+      loading(true)
+      
       this.api.removeUser(this.url, item, this.token)
         .subscribe((res: any) => {
+
+          loading(false)
 
           if (res) {
             alertRemoveSuccess()
@@ -93,6 +113,7 @@ export class AdminUsuariosComponent implements OnInit{
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })

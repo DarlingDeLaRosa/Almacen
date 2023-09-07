@@ -7,7 +7,7 @@ import { productoService } from 'src/app/admin/Services/producto.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-productos',
@@ -16,18 +16,19 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, a
 })
 export class AdminProductosComponent implements OnInit {
 
-  dataFiltered!: producto[]
+  dataFiltered: producto[] = [];
   filterProducto: FormGroup;
   url: string = ''
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
     private api: productoService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.filterProducto = new FormGroup({
       filter: new FormControl(''),
     })
@@ -48,23 +49,33 @@ export class AdminProductosComponent implements OnInit {
   }
 
   getProducto() {
+    this.loading = true
+    
     this.api.getProducto(this.url, this.token, this.pagina)
       .subscribe((res: any) => {
+
+        this.loading = false
+
         console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
+
+          , () => {
+            this.loading = false
+            alertServerDown();
+          }
       });
-  }   
+  }
 
   dataFilter() {
     console.log(this.filterProducto.value.filter)
     if (this.filterProducto.value.filter.length >= 3) {
 
       this.api.filterProducto(this.url, this.token, this.pagina, this.filterProducto.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
 
     } else {
       this.getProducto()
@@ -74,20 +85,21 @@ export class AdminProductosComponent implements OnInit {
   openModal(item: producto) {
     let dialogRef = this.dialog.open(ModalComponent, { data: item })
 
-    dialogRef.afterClosed().subscribe(()=> {
+    dialogRef.afterClosed().subscribe(() => {
       this.getProducto()
     })
   }
 
   async removeAlert(item: number, stock: number) {
-    
-    if(stock == 0){
+
+    if (stock == 0) {
       let removeChoise: boolean = await alertRemoveSure()
-      
+
       if (removeChoise) {
+        loading(true)
         this.api.removeProducto(this.url, item, this.token)
           .subscribe((res: any) => {
-  
+            loading(false)
             if (res) {
               alertRemoveSuccess()
               this.getProducto()
@@ -95,24 +107,25 @@ export class AdminProductosComponent implements OnInit {
               alertIsSuccess(false)
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })
       }
-    }else{
+    } else {
       alertUnableToRemove()
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getProducto()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getProducto()
     }

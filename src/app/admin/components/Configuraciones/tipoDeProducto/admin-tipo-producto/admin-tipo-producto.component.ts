@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TipoDeProductoModalComponent } from '../../../Modals/configuracion-modal/tipo-de-producto-modal/tipo-de-producto-modal.component';
 import { GET, tipoProducto } from 'src/app/admin/models/interfaces';
 import { FormControl, FormGroup } from '@angular/forms';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
@@ -22,6 +22,7 @@ export class AdminTipoProductoComponent implements OnInit {
   token: string = ''
   pagina: number = 1
   noPage: number = 1
+  loading: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -47,21 +48,35 @@ export class AdminTipoProductoComponent implements OnInit {
   }
 
   getTipoProducto() {
+    this.loading = true
+
     this.api.getTipoProducto(this.url, this.token, this.pagina,)
-    .subscribe((res: any)=> {
-      this.noPage = res.cantPage
-      this.dataFiltered = res.data
-    })
+      .subscribe((res: any) => {
+
+        this.loading = false
+
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
+
+          , () => {
+            this.loading = false
+            alertServerDown();
+          }
+      })
   }
 
   dataFilter() {
     if (this.filterTipoProducto.value.filter.length >= 3) {
 
       this.api.filterTipoProducto(this.url, this.token, this.pagina, this.filterTipoProducto.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+
+            , () => {
+              alertServerDown();
+            }
+        })
 
     } else {
       this.getTipoProducto()
@@ -69,8 +84,6 @@ export class AdminTipoProductoComponent implements OnInit {
   }
 
   openModal(item: tipoProducto) {
-    console.log(item)
-
     let dialogRef = this.dialog.open(TipoDeProductoModalComponent, { data: item })
 
     dialogRef.afterClosed().subscribe(() => {
@@ -82,8 +95,10 @@ export class AdminTipoProductoComponent implements OnInit {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
+      loading(true)
       this.api.removeTipoProducto(this.url, item, this.token)
         .subscribe((res: any) => {
+          loading(false)
 
           if (res) {
             alertRemoveSuccess()
@@ -92,21 +107,22 @@ export class AdminTipoProductoComponent implements OnInit {
             alertIsSuccess(false)
           }
           () => {
+            loading(false)
             alertServerDown();
           }
         })
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getTipoProducto()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getTipoProducto()
     }

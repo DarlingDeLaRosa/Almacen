@@ -2,7 +2,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tipoSalida } from 'src/app/admin/models/interfaces';
-import { alertSameData, alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertSameData, alertIsSuccess, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
@@ -46,10 +46,10 @@ export class TipoDeSalidaModalComponent implements OnInit {
 
     if (this.formEditTipoSalida.valid) {
       if (this.formEditTipoSalida.value.nombre !== this.item.nombre || this.formEditTipoSalida.value.descripcion !== this.item.descripcion) {
-
+        loading(true)
         this.api.editTipoSalida(this.url, this.formEditTipoSalida.value, this.token)
           .subscribe((res: any) => {
-
+            loading(false)
             let dataTipoSalida = res;
 
             if (dataTipoSalida.success) {
@@ -60,6 +60,7 @@ export class TipoDeSalidaModalComponent implements OnInit {
               this.closeModal();
             }
             () => {
+              loading(false)
               alertServerDown();
             }
           })
