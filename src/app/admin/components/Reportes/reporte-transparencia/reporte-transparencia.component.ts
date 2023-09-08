@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { proveedor } from 'src/app/admin/models/interfaces';
@@ -55,18 +55,17 @@ export class ReporteTransparenciaComponent implements OnInit{
     this.loading = true
 
     this.api.getProveedor(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-        
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
-        console.log(res)
+        alertServerDown();
+        return error;
+      })
+    )    
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        } 
+        this.dataFiltered = res.data 
       });
   }
 
@@ -75,13 +74,15 @@ export class ReporteTransparenciaComponent implements OnInit{
     if (this.filterRepProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )  
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }
       })
 
     } else {

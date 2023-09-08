@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
@@ -54,33 +54,33 @@ export class ReporteEntradaProductoComponent implements OnInit {
     this.loading = true
 
     this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '', this.pagina)
-      .subscribe((res: any) => {
-
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
-        console.log(res)
+        alertServerDown();
+        return error;
+      })
+    )    
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
   dataFilter() {
     if (this.filterRepEntrada.value.filter.length >= 2) {
-      console.log(this.filterRepEntrada.value.filter)
 
       this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '', this.pagina)
-        .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )    
+      .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-          ,() => {
-            alertServerDown();
-          }  
         })
 
     } else {

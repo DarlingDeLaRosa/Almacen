@@ -6,6 +6,7 @@ import { alertSameData, alertIsSuccess, alertServerDown, loading } from '../../.
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-tipo-de-salida-modal',
@@ -48,21 +49,18 @@ export class TipoDeSalidaModalComponent implements OnInit {
       if (this.formEditTipoSalida.value.nombre !== this.item.nombre || this.formEditTipoSalida.value.descripcion !== this.item.descripcion) {
         loading(true)
         this.api.editTipoSalida(this.url, this.formEditTipoSalida.value, this.token)
-          .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
             loading(false)
-            let dataTipoSalida = res;
+            alertServerDown();
+            return error;
+          })
+        )  
+        .subscribe((res: any) => {
+            loading(false)
 
-            if (dataTipoSalida.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
-              loading(false)
-              alertServerDown();
-            }
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal();} 
+            else { alertIsSuccess(false); this.closeModal();}
           })
 
       } else {

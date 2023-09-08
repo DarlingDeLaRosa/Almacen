@@ -11,6 +11,7 @@ import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-entradas',
@@ -125,6 +126,12 @@ export class EntradasComponent implements OnInit {
     if (this.formEntrada.value.idProveedor.length >= 2) {
 
       this.apiProveedor.filterProveedor(this.url, this.token, 1, this.formEntrada.value.idProveedor)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -143,6 +150,12 @@ export class EntradasComponent implements OnInit {
     if (this.formEntrada.value.idTipoEntrada.length >= 2) {
 
       this.apiTipoEntrada.filterTipoEntrada(this.url, this.token, 1, this.formEntrada.value.idTipoEntrada)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -161,6 +174,12 @@ export class EntradasComponent implements OnInit {
     if (this.formEntrada.value.idTipoEntrega.length >= 2) {
 
       this.apiTipoEntrega.filterTipoEntrega(this.url, this.token, 1, this.formEntrada.value.idTipoEntrega)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -179,6 +198,12 @@ export class EntradasComponent implements OnInit {
     if (this.formDetalleEntrada.value.idProducto.length >= 2) {
 
       this.apiProducto.filterProducto(this.url, this.token, 1, this.formDetalleEntrada.value.idProducto)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -216,7 +241,7 @@ export class EntradasComponent implements OnInit {
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
     });
-    
+
     if (!this.generalITBIS) {
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
@@ -433,8 +458,13 @@ export class EntradasComponent implements OnInit {
       console.log(this.formEntrada.value)
       loading(true)
       this.api.postEntrada(this.url, this.formEntrada.value, this.token)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
 
           if (res.success && res.data !== null) {
 
@@ -454,9 +484,16 @@ export class EntradasComponent implements OnInit {
             JSON.stringify(this.detailGroup)
 
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
+              .pipe(
+                catchError((error) => {
+                  loading(false)
+                  alertServerDown();
+                  return error;
+                })
+              )
               .subscribe((res: any) => {
                 loading(false)
-                console.log(res)
+
                 if (res.success) {
                   alertIsSuccess(true)
                   this.detailGroup = []
@@ -466,20 +503,12 @@ export class EntradasComponent implements OnInit {
                 else {
                   alertIsSuccess(false)
                 }
-                () => {
-                  loading(false)
-                  alertServerDown();
-                }
               })
             this.formDetalleEntrada.reset()
             this.formEntrada.reset()
 
           } else {
             alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
           }
         })
 

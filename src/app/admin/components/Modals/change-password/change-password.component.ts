@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { AppState } from 'src/app/store/state';
@@ -45,20 +46,18 @@ export class ChangePasswordComponent implements OnInit {
     if (this.formChangePassword.valid) {
       loading(true)
       this.api.changePassword(this.url, this.formChangePassword.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-
-          if (res.success) {
-            alertIsSuccess(true)
-            this.closeModal();
-          } else {
-            alertIsSuccess(false)
-            this.closeModal();
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          
+          if (res.success) { alertIsSuccess(true); this.closeModal();} 
+          else { alertIsSuccess(false); this.closeModal();}
         })
 
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { GET } from 'src/app/admin/models/interfaces';
@@ -11,7 +12,7 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './tipo-entrada.component.html',
   styleUrls: ['./tipo-entrada.component.css']
 })
-export class TipoEntradaComponent implements OnInit{
+export class TipoEntradaComponent implements OnInit {
   formTipoEntrada: FormGroup;
   url!: string;
   token!: string
@@ -20,7 +21,7 @@ export class TipoEntradaComponent implements OnInit{
     public fb: FormBuilder,
     private api: TipoDeEntradaService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.formTipoEntrada = this.fb.group({
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
@@ -38,20 +39,17 @@ export class TipoEntradaComponent implements OnInit{
     if (this.formTipoEntrada.valid) {
       loading(true)
       this.api.postTipoEntrada(this.url, this.formTipoEntrada.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          dataTipoEntrada = res
-
-          if (dataTipoEntrada.success) {
-            alertIsSuccess(true)
-            this.formTipoEntrada.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertIsSuccess(true); this.formTipoEntrada.reset() }
+          else alertIsSuccess(false)
         })
 
     }

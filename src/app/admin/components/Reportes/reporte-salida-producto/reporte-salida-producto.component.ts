@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { AppState } from 'src/app/store/state';
@@ -54,18 +54,17 @@ export class ReporteSalidaProductoComponent implements OnInit {
     this.loading = true
 
     this.api.getAllDetalleSalida(this.url, this.token, this.pagina, this.filterRepSalida.value.filter, '', '', )
-      .subscribe((res: any) => {
-        
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
-        console.log(res)
+        alertServerDown();
+        return error;
+      })
+    )    
+    .subscribe((res: any) => {        
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        } 
       });
   }
 
@@ -74,13 +73,15 @@ export class ReporteSalidaProductoComponent implements OnInit {
       console.log(this.filterRepSalida.value.filter)
 
       this.api.getAllDetalleSalida(this.url, this.token, this.filterRepSalida.value.filter, '', '',this.pagina)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )  
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }
       })
 
     } else {

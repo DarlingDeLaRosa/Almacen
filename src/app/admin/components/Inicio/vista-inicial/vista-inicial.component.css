@@ -1,9 +1,15 @@
 .stadsContainer{
   display: grid;
   height: 86vh;
-  grid-template-rows: 6vh 80vh;
+  grid-template-rows: 7vh 79vh;
 }
 
 .alertNotifications{
   background-color: #eee;
+  margin-bottom: 5px;
+  padding: 0px 5px;
+}
+
+.iconStock{
+  cursor: pointer;
 }

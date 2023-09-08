@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
@@ -53,17 +53,17 @@ export class AdminEntradasComponent implements OnInit {
     this.loading = true
 
     this.api.getEntrada(this.url, this.token, this.pagina)
+      .pipe(
+        catchError((error) => {
+          this.loading = false;
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        }  
       });
   }
 
@@ -71,16 +71,16 @@ export class AdminEntradasComponent implements OnInit {
     if (this.filterEntrada.value.filter.length >= 2) {
 
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-          ,() => {
-            alertServerDown();
-          }
         })
-       
     } else {
       this.getEntrada()
     }
@@ -99,20 +99,17 @@ export class AdminEntradasComponent implements OnInit {
     if (removeChoise) {
       loading(true)
       this.api.removeEntrada(this.url, item, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          
-          if (res) {
-            alertRemoveSuccess()
-            this.getEntrada()
-          } else {
-            alertIsSuccess(false)
-          }
-
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res) { alertRemoveSuccess(); this.getEntrada() }
+          else alertIsSuccess(false)
         })
     }
   }

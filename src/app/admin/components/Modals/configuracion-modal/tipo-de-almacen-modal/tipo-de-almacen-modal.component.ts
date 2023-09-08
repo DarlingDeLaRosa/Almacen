@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { tipoAlmacen } from 'src/app/admin/models/interfaces';
@@ -47,22 +48,18 @@ export class TipoDeAlmacenModalComponent {
       if (this.formEditTipoAlmacen.value.nombre !== this.item.nombre) {
         loading(true)
         this.api.editTipoAlmacen(this.url, this.formEditTipoAlmacen.value, this.token)
+          .pipe(
+            catchError((error) => {
+              loading(false)
+              alertServerDown();
+              return error;
+            })
+          )
           .subscribe((res: any) => {
             loading(false)
 
-            let dataTipoAlmacen = res;
-
-            if (dataTipoAlmacen.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
-              loading(false)
-              alertServerDown();
-            }
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal();} 
+            else { alertIsSuccess(false); this.closeModal();}
           })
 
       } else {

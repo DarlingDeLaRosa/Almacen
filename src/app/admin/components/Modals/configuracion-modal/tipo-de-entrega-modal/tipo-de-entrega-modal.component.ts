@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
 import { tipoEntrega } from 'src/app/admin/models/interfaces';
@@ -49,22 +50,18 @@ export class TipoDeEntregaModalComponent {
         loading(true)
 
         this.api.editTipoEntrega(this.url, this.formEditTipoEntrega.value, this.token)
-          .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
             loading(false)
 
-            let dataTipoEntrega = res;
-
-            if (dataTipoEntrega.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
-              loading(false)
-              alertServerDown();
-            }
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal();} 
+            else {alertIsSuccess(false); this.closeModal(); }
           })
 
       } else {

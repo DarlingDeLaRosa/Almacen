@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { alertLogOut } from '../../Helpers/alertsFunctions';
+import { alertLogOut, alertServerDown } from '../../Helpers/alertsFunctions';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
 import { MatDialog } from '@angular/material/dialog';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -80,12 +80,19 @@ export class AlmacenAdminAppComponent implements OnInit{
   async logOut(){
 
     let closeAccount: boolean = await alertLogOut()
+    
     if(closeAccount){
       this.local.removeDataLocalStorage('token')
       this.local.removeDataLocalStorage('userData')
 
       this.api.IsLoggedIn(false)
       this.api.logOut(this.url, this.token)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       this.router.navigate(['/login'])
     }
   }

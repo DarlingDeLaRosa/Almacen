@@ -6,7 +6,7 @@ import { tipoEntrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -52,17 +52,17 @@ export class AdminTipoEntradaComponent implements OnInit {
     this.loading = true
 
     this.api.getTipoEntrada(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-        
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
+        alertServerDown();
+        return error;
+      })
+    )  
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        } 
       });
   }
 
@@ -70,15 +70,16 @@ export class AdminTipoEntradaComponent implements OnInit {
     if (this.filterTipoEntrada.value.filter.length >= 3) {
 
       this.api.filterTipoEntrada(this.url, this.token, this.pagina, this.filterTipoEntrada.value.filter)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }
       })
-
     } else {
       this.getTipoEntrada()
     }
@@ -100,20 +101,17 @@ export class AdminTipoEntradaComponent implements OnInit {
       loading(true)
 
       this.api.removeTipoEntrada(this.url, item, this.token)
-        .subscribe((res: any) => {
-
+      .pipe(
+        catchError((error) => {
           loading(false)
-
-          if (res) {
-            alertRemoveSuccess()
-            this.getTipoEntrada()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
-          }
+          alertServerDown();
+          return error;
+        })
+      )  
+      .subscribe((res: any) => {
+          loading(false)
+          if (res) {alertRemoveSuccess(); this.getTipoEntrada()} 
+          else alertIsSuccess(false)
         })
     }
   }

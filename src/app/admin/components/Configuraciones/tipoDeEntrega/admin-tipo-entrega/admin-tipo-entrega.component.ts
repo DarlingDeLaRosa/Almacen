@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TipoDeEntregaModalComponent } from '../../../Modals/configuracion-modal/tipo-de-entrega-modal/tipo-de-entrega-modal.component';
 import { tipoEntrega } from 'src/app/admin/models/interfaces';
@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -14,7 +14,7 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown } 
   templateUrl: './admin-tipo-entrega.component.html',
   styleUrls: ['./admin-tipo-entrega.component.css']
 })
-export class AdminTipoEntregaComponent  implements OnInit{
+export class AdminTipoEntregaComponent implements OnInit {
 
   dataFiltered: tipoEntrega[] = []
   filterTipoEntrega: FormGroup;
@@ -28,7 +28,7 @@ export class AdminTipoEntregaComponent  implements OnInit{
     public dialog: MatDialog,
     private api: TipoDeEntregaService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.filterTipoEntrega = new FormGroup({
       filter: new FormControl(''),
     })
@@ -51,16 +51,17 @@ export class AdminTipoEntregaComponent  implements OnInit{
     this.loading = true
 
     this.api.getTipoEntrega(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-        this.loading = false
-
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-,() => {
+      .pipe(
+        catchError((error) => {
           this.loading = false
           alertServerDown();
-        }  
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        this.loading = false
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
       });
   }
 
@@ -68,10 +69,16 @@ export class AdminTipoEntregaComponent  implements OnInit{
     if (this.filterTipoEntrega.value.filter.length >= 3) {
 
       this.api.filterTipoEntrega(this.url, this.token, this.pagina, this.filterTipoEntrega.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-      })
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
 
     } else {
       this.getTipoEntrega()
@@ -81,41 +88,39 @@ export class AdminTipoEntregaComponent  implements OnInit{
   openModal(item: tipoEntrega) {
     let dialogRef = this.dialog.open(TipoDeEntregaModalComponent, { data: item })
 
-    dialogRef.afterClosed().subscribe(()=> {
+    dialogRef.afterClosed().subscribe(() => {
       this.getTipoEntrega()
     })
   }
 
-  async removeAlert(item: number){
+  async removeAlert(item: number) {
 
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
       this.api.removeTipoEntrega(this.url, item, this.token)
-        .subscribe((res: any) => {
-
-          if (res) {
-            alertRemoveSuccess()
-            this.getTipoEntrega()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          if (res) { alertRemoveSuccess(); this.getTipoEntrega() }
+          else alertIsSuccess(false)
         })
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getTipoEntrega()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getTipoEntrega()
     }

@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -91,25 +91,23 @@ export class AdminProductosComponent implements OnInit {
   }
 
   async removeAlert(item: number, stock: number) {
-
     if (stock == 0) {
       let removeChoise: boolean = await alertRemoveSure()
 
       if (removeChoise) {
         loading(true)
         this.api.removeProducto(this.url, item, this.token)
-          .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
             loading(false)
-            if (res) {
-              alertRemoveSuccess()
-              this.getProducto()
-            } else {
-              alertIsSuccess(false)
-            }
-            () => {
-              loading(false)
-              alertServerDown();
-            }
+            alertServerDown();
+            return error;
+          })
+        )  
+        .subscribe((res: any) => {
+            loading(false)
+            if (res !== null) { alertRemoveSuccess(); this.getProducto()} 
+            else { alertIsSuccess(false) }
           })
       }
     } else {

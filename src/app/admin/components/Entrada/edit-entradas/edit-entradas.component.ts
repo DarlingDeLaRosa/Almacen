@@ -12,7 +12,7 @@ import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-edit-entradas',
@@ -110,6 +110,13 @@ export class EditEntradasComponent {
 
       loading(true)
       this.api.getEntradaById(this.url, this.token, id)
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           loading(false)
 
@@ -547,6 +554,12 @@ export class EditEntradasComponent {
       console.log(this.formEditEntrada.value)
       loading(true)
       this.api.putEntrada(this.url, this.formEditEntrada.value, this.token)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           console.log(res)
@@ -578,6 +591,13 @@ export class EditEntradasComponent {
 
             console.log(this.detailGroup)
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
+              .pipe(
+                catchError((error) => {
+                  loading(false)
+                  alertServerDown();
+                  return error;
+                })
+              )
               .subscribe((respuesta: any) => {
                 loading(false)
                 console.log(respuesta)
@@ -595,19 +615,10 @@ export class EditEntradasComponent {
                 } else {
                   alertIsSuccess(false)
                 }
-                () => {
-                  loading(false)
-                  alertServerDown();
-                }
               })
-            
+
           } else {
             alertIsSuccess(false)
-          }
-
-          () => {
-            loading(false)
-            alertServerDown();
           }
         })
     }

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
 import { GET } from 'src/app/admin/models/interfaces';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-tipo-producto',
@@ -38,20 +39,17 @@ export class TipoProductoComponent implements OnInit {
     if (this.formTipoProducto.valid) {
       loading(true)
       this.api.postTipoProducto(this.url, this.formTipoProducto.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          dataTipoProducto = res
-
-          if (dataTipoProducto.success) {
-            alertIsSuccess(true)
-            this.formTipoProducto.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertIsSuccess(true); this.formTipoProducto.reset() }
+          else alertIsSuccess(false)
         })
 
     }

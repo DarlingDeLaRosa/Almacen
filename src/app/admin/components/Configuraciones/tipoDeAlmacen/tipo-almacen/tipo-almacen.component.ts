@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { GET } from 'src/app/admin/models/interfaces';
@@ -32,29 +33,23 @@ export class TipoAlmacenComponent {
   }
 
   sendData() {
-    let dataTipoAlmacen: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
-
     if (this.formTipoAlmacen.valid) {
-
       loading(true)
 
       this.api.postTipoAlmacen(this.url, this.formTipoAlmacen.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          dataTipoAlmacen = res
-
-          if (dataTipoAlmacen.success) {
-            alertIsSuccess(true)
-            this.formTipoAlmacen.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
-        })
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
 
+          if (res.data !== null) { alertIsSuccess(true); this.formTipoAlmacen.reset() }
+          else alertIsSuccess(false)
+        })
     }
   }
 }

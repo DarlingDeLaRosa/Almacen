@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { salida } from 'src/app/admin/models/interfaces';
 import { salidaService } from 'src/app/admin/Services/salida.service';
@@ -53,18 +53,17 @@ export class AdminSalidasComponent implements OnInit {
     this.loading = true
 
     this.api.getSalida(this.url, this.token, this.pagina)
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
-        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
@@ -72,13 +71,15 @@ export class AdminSalidasComponent implements OnInit {
     if (this.filterSalida.value.filter.length >= 2) {
 
       this.api.filterSalida(this.url, this.token, this.pagina, this.filterSalida.value.filter)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-          , () => {
-            alertServerDown();
-          }
         })
 
     } else {
@@ -99,18 +100,17 @@ export class AdminSalidasComponent implements OnInit {
     if (removeChoise) {
       loading(true)
       this.api.removeSalida(this.url, item, this.token)
-        .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
           loading(false)
-
-          if (res.sucess) {
-            alertRemoveSuccess()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
-          }
+          alertServerDown();
+          return error;
+        })
+      )    
+      .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) alertRemoveSuccess()
+          else alertIsSuccess(false)
         })
     }
   }

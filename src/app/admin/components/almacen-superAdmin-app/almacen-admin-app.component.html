@@ -11,12 +11,12 @@
         <a class="item-menu" [routerLink]="['/almacen/inicio']" routerLinkActive="active">
           <mat-icon>home</mat-icon>Inicio
         </a>
-        <a class="item-menu" [routerLink]="['/almacen/administrar-entrada']" routerLinkActive="active">
-          <mat-icon>add_box</mat-icon>Entradas
-        </a>
+        <a class="item-menu" [routerLink]="['/almacen/administrar-entrada']" routerLinkActive="active"><mat-icon>add_box</mat-icon>Entradas</a>
         <a class="item-menu" [routerLink]="['/almacen/administrar-salida']" routerLinkActive="active">
           <mat-icon>indeterminate_check_box</mat-icon>Salidas
         </a>
+        <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active"><mat-icon>compare_arrows</mat-icon>Transferencias</a>
+
         <a class="item-menu" [routerLink]="['/almacen/administrar-producto']" routerLinkActive="active">
           <mat-icon>category</mat-icon>Productos
         </a>
@@ -80,12 +80,12 @@
           <div class="logout">
             <h3 class="userName">{{userName$ | async}} {{userLastName$ | async}}</h3> &nbsp;
             <button class="closeAccount" [matMenuTriggerFor]="menu">
-              <!-- {{firstLetter}} -->
+               {{firstLetter | async}} 
             </button>
             <mat-menu class="menuPanel" #menu="matMenu">
               <div mat-menu-item class="profile">
                 <mat-icon>person</mat-icon>
-                <span>{{userName$ | async }}</span>
+                <span>{{userName$ | async }} {{userLastName$ | async}}</span>
                 <br>
                 <span class="email">{{userEmail$ | async }}</span>
               </div>

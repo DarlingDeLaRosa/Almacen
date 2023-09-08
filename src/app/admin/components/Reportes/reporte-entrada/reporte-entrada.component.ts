@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
@@ -65,18 +65,17 @@ export class ReporteEntradaComponent implements OnInit {
   getEntrada() {
     this.loading = true
     this.api.getEntrada(this.url, this.token, this.pagina)
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
-        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
@@ -84,14 +83,15 @@ export class ReporteEntradaComponent implements OnInit {
     if (this.filterReporteEntrada.value.nombre.length >= 2) {
 
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.nombre)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-          console.log(res)
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-            , () => {
-              alertServerDown();
-            }
         })
 
       // if (this.filterReporteEntrada.get('desde') && this.filterReporteEntrada.get('hasta')) {

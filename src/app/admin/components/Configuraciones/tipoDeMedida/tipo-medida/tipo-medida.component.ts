@@ -1,6 +1,7 @@
 import { Component, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { GET } from 'src/app/admin/models/interfaces';
@@ -36,20 +37,17 @@ export class TipoMedidaComponent {
     if (this.formTipoMedida.valid) {
       loading(true)
       this.api.postTipoMedida(this.url, this.formTipoMedida.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          dataTipoMedida = res
-
-          if (dataTipoMedida.success) {
-            alertIsSuccess(true)
-            this.formTipoMedida.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertIsSuccess(true); this.formTipoMedida.reset() }
+          else alertIsSuccess(false)
         })
 
     }

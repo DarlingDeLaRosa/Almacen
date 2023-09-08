@@ -54,7 +54,7 @@ h1{
 .profile{
   height: 75px !important;
   cursor: auto !important;
-  border-bottom: 1px solid #ddd !important;
+  border-bottom: 1px solid #ccc !important;
 }
 
 .profile:hover{
@@ -81,12 +81,6 @@ h1{
 
 .fuctionContent {
   display: flex;
-  justify-content: space-between;
-}
-
-.fuctionContentInicial {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
 }
 
@@ -124,7 +118,7 @@ table{
 }
 
 .headerRow{
-  background-color: #C7D1EA;
+  background-color: #004b8d2a;
 }
 
 .headerRepRow{
@@ -181,6 +175,7 @@ table{
   background-color: transparent;
   color: green;
 }
+
 .fucEdit, .fucDetails ,.fucRem, .fucSend:hover{
   cursor: pointer;
 }
@@ -195,8 +190,8 @@ table{
 
 .footerCell{
   height: 6vh;
-  border-top: 2px solid #C7D1EA;
-  border-bottom: 2px solid #C7D1EA;
+  border-top: 2px solid #004b8d2a;
+  border-bottom: 2px solid #004b8d2a;
   padding-left: 15px;
 }
 
@@ -218,7 +213,7 @@ table{
   grid-row: 1/2;
   display: flex;
   align-items: center;
-  background-color:#C7D1EA;
+  background-color:#004b8d2a;
   padding: 0px 16px;
 }
 
@@ -372,7 +367,10 @@ mat-sidenav {
 .navbar {
   height: 9vh;
   justify-content: space-between;
-  background-color: #C7D1EA;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-top: 1px solid #49aa42;
+  border-bottom: 1px solid #49aa42;
 }
 
 .btnMenuContainer {
@@ -400,7 +398,8 @@ mat-sidenav {
   width: 50px;
   height: 50px;
   border-radius: 100px;
-  border: 1px solid #ccc;
+  border: 1px solid #aaa;
+  font-size: 20px;
 }
 
 .almacenOptions mat-icon{
@@ -417,8 +416,8 @@ mat-sidenav {
   height: 6vh;
   display: flex;
   justify-content: center;
-  border-top: 2px solid #C7D1EA;
-  border-bottom: 2px solid #C7D1EA;
+  border-top: 2px solid #004b8d2a;
+  border-bottom: 2px solid #004b8d2a;
 }
 
 .btnPag{
@@ -437,9 +436,57 @@ mat-sidenav {
   color: #999;
 }
 
-.alertNote{
-
+.fuctionContentInicial {
+  display: flex;
+  height: 4vh;
+  margin-top: 1vh;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.alertNote{
+  background-color: rgb(255, 73, 73);
+  border: red 1px solid;
+  text-align: center;
+  padding: 0px 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+.recieveTransfer , .sendTransfer{
+  display: grid;
+  height: 8vh;
+  align-items: center;
+  grid-template-columns: 200px 1fr 60px 100px;
+  border-radius: 5px;
+  padding: 0px 16px;
+  background-color: #49aa4265;
+  border: 1px solid green;
+  margin-bottom: 10px;
+}
+
+.sendTransfer{
+  background-color: rgba(255, 0, 0, 0.26);
+  border: 1px solid red
+}
+
+.acceptTransfer{
+  background-color: white !important;
+}
+
+.recieveTransfer h4, .recieveTransfer h3, .sendTransfer h4, .sendTransfer h3{
+  margin: 0;
+}
+
+.sendTransfer h3, .recieveTransfer h3{
+  max-width: 98px;
+  max-height: 48px;
+  text-align: center;
+  background-color: white;
+  padding: 4px;
+  border-radius: 5px;
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 140px;

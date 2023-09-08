@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
@@ -88,18 +89,20 @@ export class ModalComponent implements OnInit {
     if (this.formEditProducto.value.idCatalogo.length >= 5) {
 
       this.api.findProductoByCode(this.url, this.token, this.formEditProducto.value.idCatalogo)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-          console.log(res)
-
           if (res.data !== null) {
-
             this.formEditProducto.patchValue({
               auxiliar: res.data.auxiliar.id,
               idCatalogo: res.data.id,
               denominacion: res.data.auxiliar.denominacion,
               nombre: res.data.nombre
             })
-
           } else {
             alertProductCodeNoFound()
             this.formEditProducto.get('idCatalogo')?.reset()
@@ -110,38 +113,43 @@ export class ModalComponent implements OnInit {
 
   getTipoAlmacen() {
     this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-        console.log(res)
         this.tipoAlmacenList = res.data
-
-          , () => {
-            alertServerDown();
-          }
       });
   }
 
   getUnidadMedida() {
     this.apiTipoMedida.getTipoMedida(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res) {
           this.unidadMedidaList = res.data
-        }
-
-        () => {
-          alertServerDown();
         }
       })
   }
 
   getTipoProducto() {
     this.apiTipoProducto.getTipoProducto(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res) {
           this.tipoProductoList = res.data
-        }
-
-        () => {
-          alertServerDown();
         }
       })
   }
@@ -151,6 +159,12 @@ export class ModalComponent implements OnInit {
     if (this.formEditProducto.value.idUnidadMe.length >= 2) {
 
       this.apiTipoMedida.filterTipoMedida(this.url, this.token, 1, this.formEditProducto.value.idUnidadMe)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -159,10 +173,6 @@ export class ModalComponent implements OnInit {
           options.forEach((item: any) => {
             this.unidadMedidaList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getUnidadMedida()
@@ -173,6 +183,12 @@ export class ModalComponent implements OnInit {
     if (this.formEditProducto.value.idTipoArt.length >= 2) {
 
       this.apiTipoProducto.filterTipoProducto(this.url, this.token, 1, this.formEditProducto.value.idTipoArt)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -181,10 +197,6 @@ export class ModalComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoProductoList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getTipoProducto()
@@ -195,6 +207,12 @@ export class ModalComponent implements OnInit {
     if (this.formEditProducto.value.idTipoAlm.length >= 2) {
 
       this.apiTipoAlmacen.filterTipoAlmacen(this.url, this.token, 1, this.formEditProducto.value.idTipoAlm)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           let options = res.data
@@ -203,10 +221,6 @@ export class ModalComponent implements OnInit {
           options.forEach((item: any) => {
             this.tipoAlmacenList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getTipoAlmacen()
@@ -230,21 +244,18 @@ export class ModalComponent implements OnInit {
       ) {
         loading(true)
         this.api.editProducto(this.url, this.formEditProducto.value, this.token)
-          .subscribe((res: any) => {
-            loading(false)
-            let dataProducto = res;
-
-            if (dataProducto.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
+          .pipe(
+            catchError((error) => {
               loading(false)
               alertServerDown();
-            }
+              return error;
+            })
+          )
+          .subscribe((res: any) => {
+            loading(false)
+
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
+            else { alertIsSuccess(false); this.closeModal(); }
           })
 
       } else {
@@ -264,21 +275,18 @@ export class ModalComponent implements OnInit {
 
       loading(true)
       this.api.postProducto(this.url, this.formEditProducto.value, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          let dataProducto = res;
-
-          if (dataProducto.success) {
-            alertIsSuccess(true)
-            this.closeModal();
-          } else {
-            alertIsSuccess(false)
-            this.closeModal();
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+
+          if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
+          else { alertIsSuccess(false); this.closeModal(); }
         })
     }
   }

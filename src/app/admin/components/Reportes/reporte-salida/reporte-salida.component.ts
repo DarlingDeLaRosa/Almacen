@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { salida } from 'src/app/admin/models/interfaces';
@@ -54,18 +54,17 @@ export class ReporteSalidaComponent {
     this.loading = true
 
     this.api.getSalida(this.url, this.token, this.pagina)
-      .subscribe((res: any) => {
-
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
-        console.log(res)
+        alertServerDown();
+        return error;
+      })
+    )    
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        }  
       });
   }
 
@@ -73,15 +72,16 @@ export class ReporteSalidaComponent {
     if (this.filterReporteSalida.value.filter.length >= 2) {
 
       this.api.filterSalida(this.url, this.token, this.pagina, this.filterReporteSalida.value.filter)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )  
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }
       })
-
     } else {
       this.getSalida()
     }

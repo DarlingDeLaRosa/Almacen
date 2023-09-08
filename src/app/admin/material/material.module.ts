@@ -17,7 +17,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import {MatBadgeModule} from '@angular/material/badge';
 
 const materialComponents = [
   MatButtonModule,
@@ -37,8 +37,8 @@ const materialComponents = [
   MatRadioModule,
   MatStepperModule,
   MatMenuModule,
-  MatProgressSpinnerModule
-
+  MatProgressSpinnerModule,
+  MatBadgeModule
 ]
 
 @NgModule({

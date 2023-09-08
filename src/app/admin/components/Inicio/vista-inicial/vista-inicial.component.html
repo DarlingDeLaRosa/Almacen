@@ -2,8 +2,9 @@
 <div class="stadsContainer">
     <div class="alertNotifications">
       <div class="fuctionContentInicial"> <!--Conpletar el diseño y traer el badged-->
-        <span></span>
-        <span class="alertNote" *ngIf="itemEscasez > 0"> Articulos en Agotamiento</span>
+        <span><h1>Estadisticas</h1></span>
+          <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0" [matBadge]="itemEscasez" matBadgeColor="warn">category</mat-icon> <span class="cdk-visually-hidden">
+        </span>
       </div>
     </div>
     <div class="stadsEntradaSalida">

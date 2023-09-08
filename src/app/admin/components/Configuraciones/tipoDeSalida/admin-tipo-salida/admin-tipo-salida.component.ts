@@ -6,7 +6,7 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, l
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { GET, tipoSalida } from 'src/app/admin/models/interfaces';
 
 @Component({
@@ -53,17 +53,17 @@ export class AdminTipoSalidaComponent implements OnInit {
     this.loading = true
 
     this.api.getTipoSalida(this.url, this.token, this.pagina,)
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
@@ -71,13 +71,15 @@ export class AdminTipoSalidaComponent implements OnInit {
     if (this.filterTipoSalida.value.filter.length >= 3) {
 
       this.api.filterTipoSalida(this.url, this.token, this.pagina, this.filterTipoSalida.value.filter)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-          , () => {
-            alertServerDown();
-          }
         })
 
     } else {
@@ -100,18 +102,17 @@ export class AdminTipoSalidaComponent implements OnInit {
     if (removeChoise) {
       loading(true)
       this.api.removeTipoSalida(this.url, item, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-          if (res) {
-            alertRemoveSuccess()
-            this.getTipoSalida()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertRemoveSuccess(); this.getTipoSalida() }
+          else alertIsSuccess(false)
         })
     }
   }

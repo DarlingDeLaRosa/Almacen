@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { tipoMedida } from 'src/app/admin/models/interfaces';
@@ -12,7 +13,7 @@ import { AppState } from 'src/app/store/state';
   templateUrl: './tipo-de-medida-modal.component.html',
   styleUrls: ['./tipo-de-medida-modal.component.css']
 })
-export class TipoDeMedidaModalComponent implements OnInit{
+export class TipoDeMedidaModalComponent implements OnInit {
   formEditTipoMedida: FormGroup;
   url!: string;
   token!: string
@@ -44,24 +45,21 @@ export class TipoDeMedidaModalComponent implements OnInit{
   editData() {
 
     if (this.formEditTipoMedida.valid) {
-      if ( this.formEditTipoMedida.value.descripcion !== this.item.descripcion) {
+      if (this.formEditTipoMedida.value.descripcion !== this.item.descripcion) {
         loading(true)
         this.api.editTipoMedida(this.url, this.formEditTipoMedida.value, this.token)
-          .subscribe((res: any) => {
-            loading(false)
-            let dataTipoMedida = res;
-
-            if (dataTipoMedida.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
+          .pipe(
+            catchError((error) => {
               loading(false)
               alertServerDown();
-            }
+              return error;
+            })
+          )
+          .subscribe((res: any) => {
+            loading(false)
+
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
+            else { alertIsSuccess(false); this.closeModal(); }
           })
 
       } else {

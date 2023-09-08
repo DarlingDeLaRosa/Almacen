@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { proveedor } from 'src/app/admin/models/interfaces';
@@ -43,7 +44,7 @@ export class ProveedorModalComponent {
       nombreComercial: `${this.item.nombreComercial}`,
       representante: `${this.item.representante}`,
       telRepresentante: `${this.item.telRepresentante}`,
-     })
+    })
 
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
@@ -57,33 +58,36 @@ export class ProveedorModalComponent {
     if (this.formEditProveedor.value.razonSocial.length >= 5) {
 
       this.api.findProveedorByRS(this.url, this.token, this.formEditProveedor.value.razonSocial)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           let options = res.data
           this.filterOptions = []
           options.forEach((item: any) => {
             this.filterOptions.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
-    } else { }
+    }
   }
 
   findByRNC() {
-
     this.api.findProveedorByRNC(this.url, this.token, this.formEditProveedor.value.rnc)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res.data !== null) {
-
           this.formEditProveedor.patchValue({
             razonSocial: res.data.razonSocial,
             nombreComercial: res.data.nombreComercial,
           })
-        }
-        () => {
-          alertServerDown();
         }
       })
   }
@@ -103,29 +107,26 @@ export class ProveedorModalComponent {
 
     if (this.formEditProveedor.valid) {
       if (
-           this.formEditProveedor.value.rnc !== this.item.rnc
+        this.formEditProveedor.value.rnc !== this.item.rnc
         || this.formEditProveedor.value.razonSocial !== this.item.razonSocial
         || this.formEditProveedor.value.nombreComercial !== this.item.nombreComercial
         || this.formEditProveedor.value.representante !== this.item.representante
         || this.formEditProveedor.value.telRepresentante !== this.item.telRepresentante
-        ) {
+      ) {
         loading(true)
         this.api.editProveedor(this.url, this.formEditProveedor.value, this.token)
-          .subscribe((res: any) => {
-            loading(false)
-            let dataProveedor = res;
-
-            if (dataProveedor.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
+          .pipe(
+            catchError((error) => {
               loading(false)
               alertServerDown();
-            }
+              return error;
+            })
+          )
+          .subscribe((res: any) => {
+            loading(false)
+
+            if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
+            else { alertIsSuccess(false); this.closeModal(); }
           })
 
       } else {

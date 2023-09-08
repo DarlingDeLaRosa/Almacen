@@ -6,7 +6,7 @@ import { tipoAlmacen } from 'src/app/admin/models/interfaces';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { combineLatest, catchError } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -52,17 +52,17 @@ export class AdminTipoAlmacenComponent implements OnInit {
     this.loading = true
 
     this.api.getTipoAlmacen(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-    
+    .pipe(
+      catchError((error) => {
         this.loading = false
-    
+        alertServerDown();
+        return error;
+      })
+    )  
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          this.loading = false
-          alertServerDown();
-        }  
       });
   }
 
@@ -70,13 +70,15 @@ export class AdminTipoAlmacenComponent implements OnInit {
     if (this.filterTipoAlmacen.value.filter.length >= 3) {
 
       this.api.filterTipoAlmacen(this.url, this.token, this.pagina, this.filterTipoAlmacen.value.filter)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )  
       .subscribe((res: any)=> {
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }  
       })
 
     } else {
@@ -100,20 +102,19 @@ export class AdminTipoAlmacenComponent implements OnInit {
       loading(true)
 
       this.api.removeTipoAlmacen(this.url, item, this.token)
-        .subscribe((res: any) => {
-
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return error;
+        })
+      )    
+      .subscribe((res: any) => {
           loading(false)
           
-          if (res) {
-            alertRemoveSuccess()
-            this.getTipoAlmacen()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
-          }
+          if (res !== null) {alertRemoveSuccess(); this.getTipoAlmacen(); }
+          else alertIsSuccess(false) 
+          
         })
     }
   }

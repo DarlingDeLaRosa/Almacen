@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from '../../../../Helpers/alertsFunctions';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
 
 @Component({
@@ -51,17 +51,17 @@ export class AdminTipoProductoComponent implements OnInit {
     this.loading = true
 
     this.api.getTipoProducto(this.url, this.token, this.pagina,)
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       })
   }
 
@@ -69,15 +69,16 @@ export class AdminTipoProductoComponent implements OnInit {
     if (this.filterTipoProducto.value.filter.length >= 3) {
 
       this.api.filterTipoProducto(this.url, this.token, this.pagina, this.filterTipoProducto.value.filter)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-            , () => {
-              alertServerDown();
-            }
         })
-
     } else {
       this.getTipoProducto()
     }
@@ -97,19 +98,17 @@ export class AdminTipoProductoComponent implements OnInit {
     if (removeChoise) {
       loading(true)
       this.api.removeTipoProducto(this.url, item, this.token)
-        .subscribe((res: any) => {
-          loading(false)
-
-          if (res) {
-            alertRemoveSuccess()
-            this.getTipoProducto()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res) { alertRemoveSuccess(); this.getTipoProducto() }
+          else alertIsSuccess(false)
         })
     }
   }

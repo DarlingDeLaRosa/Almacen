@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { producto } from 'src/app/admin/models/interfaces';
@@ -22,8 +22,8 @@ export class VistaInicialComponent {
   constructor(
     private api: productoService,
     private store: Store<{ app: AppState }>
-  ) {}
-  
+  ) { }
+
   ngOnInit(): void {
     combineLatest([
       this.store.select(state => state.app.token),
@@ -41,17 +41,16 @@ export class VistaInicialComponent {
     this.loading = true
 
     this.api.getProductoEscazes(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-
         this.loading = false
-
-        console.log(res)
         this.itemEscasez = res.data.length
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 

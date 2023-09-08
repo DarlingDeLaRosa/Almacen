@@ -1,6 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertRncNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { GET } from 'src/app/admin/models/interfaces';
@@ -40,22 +41,30 @@ export class ProveedoresComponent implements OnInit {
     if (this.formProveedor.value.razonSocial.length >= 5) {
 
       this.api.findProveedorByRS(this.url, this.token, this.formProveedor.value.razonSocial)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           let options = res.data
           this.filterOptions = []
           options.forEach((item: any) => {
             this.filterOptions.push(item)
           });
-
-          () => {
-            alertServerDown();
-          } 
         })
     }
   }
 
   findByRNC() {
     this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res.data !== null) {
 
@@ -63,14 +72,10 @@ export class ProveedoresComponent implements OnInit {
             razonSocial: res.data.razonSocial,
             nombreComercial: res.data.nombreComercial,
           })
-        }else{
+        } else {
           alertRncNoFound()
           this.formProveedor.get('rnc')?.reset()
         }
-
-        () => {
-          alertServerDown();
-        } 
       })
   }
 
@@ -91,6 +96,13 @@ export class ProveedoresComponent implements OnInit {
     if (this.formProveedor.valid) {
       loading(true)
       this.api.postProveedor(this.url, this.formProveedor.value, this.token)
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
 
           loading(false)
@@ -101,10 +113,6 @@ export class ProveedoresComponent implements OnInit {
             this.formProveedor.reset()
           } else {
             alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
           }
         })
     }

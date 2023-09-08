@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { persona, recinto, rol } from 'src/app/admin/models/interfaces';
@@ -74,26 +75,30 @@ export class UsuarioModalComponent implements OnInit {
 
   getRol() {
     this.api.getRol(this.url, this.token)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res) {
           this.rolesList = res.data
-        }
-
-        () => {
-          alertServerDown();
         }
       })
   }
 
   getRecinto() {
     this.api.getRecinto(this.url, this.token)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res) {
           this.recintoList = res.data
-        }
-
-        () => {
-          alertServerDown();
         }
       })
   }
@@ -102,17 +107,19 @@ export class UsuarioModalComponent implements OnInit {
     if (this.formEditUser.value.supervisorInmediato.length >= 4) {
 
       this.api.getPersonByName(this.url, this.token, 1, 10, this.formEditUser.value.supervisorInmediato)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           let options = res.data
           this.supInmediatoList = []
-          options.forEach((item: any) => {
 
+          options.forEach((item: any) => {
             this.supInmediatoList.push(item)
             this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
-
-            () => {
-              alertServerDown();
-            }
           });
         })
     }
@@ -123,14 +130,9 @@ export class UsuarioModalComponent implements OnInit {
     let recinto = this.recintoList.filter(item => item.nombre === this.formEditUser.value.idRecinto)
     let selectedId = this.supervisorIdMap[this.formEditUser.value.supervisorInmediato];
 
-    console.log(selectedId)
     this.formEditUser.value.supervisorInmediato = selectedId
     this.formEditUser.value.idRecinto = recinto[0].idRecinto
     this.formEditUser.value.idRol = id[0].idRol
-
-    console.log(this.formEditUser.value)
-    let hola = JSON.stringify(this.formEditUser.value)
-    console.log(hola)
 
     if (this.formEditUser.valid) {
       if (
@@ -148,21 +150,18 @@ export class UsuarioModalComponent implements OnInit {
       ) {
         loading(true)
         this.api.editUser(this.url, this.formEditUser.value, this.token)
-          .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
             loading(false)
-            let dataUser = res;
+            alertServerDown();
+            return error;
+          })
+        )  
+        .subscribe((res: any) => {
+            loading(false)
 
-            if (dataUser.success) {
-              alertIsSuccess(true)
-              this.closeModal();
-            } else {
-              alertIsSuccess(false)
-              this.closeModal();
-            }
-            () => {
-              loading(false)
-              alertServerDown();
-            }
+            if (res.data !== null) { alertIsSuccess(true) ;this.closeModal(); } 
+            else { alertIsSuccess(false); this.closeModal(); }
           })
 
       } else {

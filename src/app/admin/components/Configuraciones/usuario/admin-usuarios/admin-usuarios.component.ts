@@ -5,7 +5,7 @@ import { AppState, User } from 'src/app/store/state';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -13,7 +13,7 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, l
   templateUrl: './admin-usuarios.component.html',
   styleUrls: ['./admin-usuarios.component.css']
 })
-export class AdminUsuariosComponent implements OnInit{
+export class AdminUsuariosComponent implements OnInit {
 
   dataFiltered: User[] = []
   filterUser: FormGroup;
@@ -27,7 +27,7 @@ export class AdminUsuariosComponent implements OnInit{
     public dialog: MatDialog,
     private api: UserService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.filterUser = new FormGroup({
       filter: new FormControl(''),
     })
@@ -51,18 +51,17 @@ export class AdminUsuariosComponent implements OnInit{
     this.loading = true
 
     this.api.getUser(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-
-        this.loading = false
-
-        console.log(res)
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-        ,() => {
+      .pipe(
+        catchError((error) => {
           this.loading = false
           alertServerDown();
-        }  
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        this.loading = false
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
       });
   }
 
@@ -70,14 +69,16 @@ export class AdminUsuariosComponent implements OnInit{
     if (this.filterUser.value.filter.length >= 3) {
 
       this.api.filterUser(this.url, this.token, this.pagina, this.filterUser.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        }  
-      })
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
 
     } else {
       this.getUser()
@@ -85,10 +86,9 @@ export class AdminUsuariosComponent implements OnInit{
   }
 
   openModal(item: User) {
-    console.log(item)
     let dialogRef = this.dialog.open(UsuarioModalComponent, { data: item })
 
-    dialogRef.afterClosed().subscribe(()=> {
+    dialogRef.afterClosed().subscribe(() => {
       this.getUser()
     })
   }
@@ -100,35 +100,32 @@ export class AdminUsuariosComponent implements OnInit{
     if (removeChoise) {
 
       loading(true)
-      
+
       this.api.removeUser(this.url, item, this.token)
-        .subscribe((res: any) => {
-
-          loading(false)
-
-          if (res) {
-            alertRemoveSuccess()
-            this.getUser()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             loading(false)
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertRemoveSuccess(); this.getUser() }
+          else alertIsSuccess(false)
         })
     }
   }
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getUser()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getUser()
     }

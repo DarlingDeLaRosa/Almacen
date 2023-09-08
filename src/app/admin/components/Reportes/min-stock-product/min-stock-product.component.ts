@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { producto } from 'src/app/admin/models/interfaces';
@@ -50,18 +50,17 @@ export class MinStockProductComponent implements OnInit{
     this.loading = true
 
     this.api.getProductoEscazes(this.url, this.token, this.pagina)
-      .subscribe((res: any) => {
-
+    .pipe(
+      catchError((error) => {
         this.loading = false
-
-        console.log(res)
+        alertServerDown();
+        return error;
+      })
+    )    
+    .subscribe((res: any) => {
+        this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
@@ -69,15 +68,16 @@ export class MinStockProductComponent implements OnInit{
     if (this.filterRepInventario.value.filter.length >= 3) {
 
       this.api.filterProducto(this.url, this.token, this.pagina, this.filterRepInventario.value.filter)
-        .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )    
+      .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
-
-            , () => {
-              alertServerDown();
-            }
         })
-
     } else {
       this.getProductoAgotamineto()
     }

@@ -2,6 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
@@ -77,36 +78,41 @@ export class SalidasComponent implements OnInit {
 
   getProducto() {
     this.apiProducto.getProducto(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         this.productoList = res.data
-        console.log(this.productoList)
-
-          , () => {
-            alertServerDown();
-          }
       });
   }
 
   getTipoSalida() {
     this.apiTipoSalida.getTipoSalida(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         this.tipoSalidaList = res.data
-
-          , () => {
-            alertServerDown();
-          }
       });
   }
 
   getTipoDepartamento() {
     this.api.getTipoDepartamento(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         console.log(res)
         this.tipoDepartamentoList = res.data
-
-          , () => {
-            alertServerDown();
-          }
       });
   }
 
@@ -114,18 +120,19 @@ export class SalidasComponent implements OnInit {
     if (this.formDetalleSalida.value.idProducto.length >= 2) {
 
       this.apiProducto.filterProducto(this.url, this.token, 1, this.formDetalleSalida.value.idProducto)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.productoList = []
 
           options.forEach((item: any) => {
             this.productoList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getProducto()
@@ -136,18 +143,19 @@ export class SalidasComponent implements OnInit {
     if (this.formSalida.value.idTipoSalida.length >= 2) {
 
       this.apiTipoSalida.filterTipoSalida(this.url, this.token, 1, this.formSalida.value.idTipoSalida)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.tipoSalidaList = []
 
           options.forEach((item: any) => {
             this.tipoSalidaList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getTipoSalida()
@@ -158,18 +166,19 @@ export class SalidasComponent implements OnInit {
     if (this.formSalida.value.idDepar.length >= 2) {
 
       this.api.filterTipoDepartamento(this.url, this.token, 1, this.formSalida.value.idDepar)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.tipoDepartamentoList = []
 
           options.forEach((item: any) => {
             this.tipoDepartamentoList.push(item)
           });
-
-          () => {
-            alertServerDown();
-          }
         })
     } else {
       this.getTipoDepartamento()
@@ -255,6 +264,12 @@ export class SalidasComponent implements OnInit {
     });
 
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
 
         console.log(res)
@@ -284,10 +299,6 @@ export class SalidasComponent implements OnInit {
             })
           }
         }
-
-        () => {
-          alertServerDown();
-        }
       })
   }
 
@@ -305,7 +316,14 @@ export class SalidasComponent implements OnInit {
 
       console.log(this.formSalida.value)
       loading(true)
+
       this.api.postSalida(this.url, this.formSalida.value, this.token)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           if (res.success) {
 
@@ -320,13 +338,18 @@ export class SalidasComponent implements OnInit {
             console.log(this.detailGroup)
 
             this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
+              .pipe(
+                catchError((error) => {
+                  loading(false)
+                  alertServerDown();
+                  return error;
+                })
+              )
               .subscribe((res: any) => {
                 loading(false)
 
                 if (res.data !== null) {
-
                   alertIsSuccess(true)
-
                   this.formSalida.reset()
                   this.detailGroup = []
                   this.resultSubTotal = 0
@@ -334,18 +357,9 @@ export class SalidasComponent implements OnInit {
                 else {
                   alertIsSuccess(false)
                 }
-                () => {
-                  loading(false)
-                  alertServerDown();
-                }
               })
-
           } else {
             alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
           }
         })
 

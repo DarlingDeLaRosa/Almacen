@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { alertRemoveSure } from 'src/app/admin/Helpers/alertsFunctions';
+import { catchError } from 'rxjs';
+import { alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -20,7 +21,7 @@ export class EditSalidasComponent {
   formDetalleEditSalida: FormGroup;
   url!: string;
   token!: string
-  isSerial:boolean = false
+  isSerial: boolean = false
   idRol: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
@@ -74,6 +75,12 @@ export class EditSalidasComponent {
 
   getProducto() {
     this.apiProducto.getProducto(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         this.productoList = res.data
       });
@@ -81,6 +88,12 @@ export class EditSalidasComponent {
 
   getTipoSalida() {
     this.apiTipoSalida.getTipoSalida(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         this.tipoSalidaList = res.data
       });
@@ -88,6 +101,12 @@ export class EditSalidasComponent {
 
   getTipoDepartamento() {
     this.api.getTipoDepartamento(this.url, this.token, 1)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         console.log(res)
         this.tipoDepartamentoList = res.data
@@ -98,16 +117,19 @@ export class EditSalidasComponent {
     if (this.formDetalleEditSalida.value.idProducto.length >= 2) {
 
       this.apiProducto.filterProducto(this.url, this.token, 1, this.formDetalleEditSalida.value.idProducto)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.productoList = []
 
           options.forEach((item: any) => {
             this.productoList.push(item)
           });
-
-          console.log(this.productoList)
         })
     } else {
       this.getProducto()
@@ -118,8 +140,13 @@ export class EditSalidasComponent {
     if (this.formEditSalida.value.idTipoSalida.length >= 2) {
 
       this.apiTipoSalida.filterTipoSalida(this.url, this.token, 1, this.formEditSalida.value.idTipoSalida)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.tipoSalidaList = []
 
@@ -136,8 +163,13 @@ export class EditSalidasComponent {
     if (this.formEditSalida.value.idDepar.length >= 2) {
 
       this.api.filterTipoDepartamento(this.url, this.token, 1, this.formEditSalida.value.idDepar)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
-
           let options = res.data
           this.tipoDepartamentoList = []
 
@@ -154,7 +186,6 @@ export class EditSalidasComponent {
     if (this.formDetalleEditSalida.valid) {
 
       if (this.formEditSalida.valid) {
-        console.log(this.formDetalleEditSalida.value)
         this.detailGroup.push(this.formDetalleEditSalida.value)
         this.formDetalleEditSalida.reset()
       }
@@ -193,9 +224,15 @@ export class EditSalidasComponent {
     });
 
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
         if (res.data !== null) {
-          if(res.data.producto.serial !== null){
+          if (res.data.producto.serial !== null) {
             this.isSerial = true
             this.formDetalleEditSalida.patchValue({
               existencia: new FormControl('', Validators.required),
@@ -205,7 +242,7 @@ export class EditSalidasComponent {
               serial: new FormControl(''),
               precio: new FormControl(''),
             })
-          }else{
+          } else {
             this.isSerial = false
             this.formDetalleEditSalida.patchValue({
               existencia: new FormControl('', Validators.required),

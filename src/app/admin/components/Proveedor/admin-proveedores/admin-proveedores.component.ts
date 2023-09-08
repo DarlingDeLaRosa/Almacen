@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -14,7 +14,7 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, l
   templateUrl: './admin-proveedores.component.html',
   styleUrls: ['./admin-proveedores.component.css']
 })
-export class AdminProveedoresComponent implements OnInit{
+export class AdminProveedoresComponent implements OnInit {
 
   dataFiltered: proveedor[] = []
   filterProveedor: FormGroup;
@@ -29,7 +29,7 @@ export class AdminProveedoresComponent implements OnInit{
     public dialog: MatDialog,
     private api: proveedorService,
     private store: Store<{ app: AppState }>
-    ){
+  ) {
     this.filterProveedor = new FormGroup({
       filter: new FormControl(''),
     })
@@ -54,17 +54,17 @@ export class AdminProveedoresComponent implements OnInit{
     this.loading = true;
 
     this.api.getProveedor(this.url, this.token, this.pagina,)
-      .subscribe((res: any) => {
-
-        this.loading = false;
-
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-        ,() => {
+      .pipe(
+        catchError((error) => {
           this.loading = false
           alertServerDown();
-        } 
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        this.loading = false;
+        this.noPage = res.cantPage
+        this.dataFiltered = res.data
       });
   }
 
@@ -73,14 +73,16 @@ export class AdminProveedoresComponent implements OnInit{
     if (this.filterProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterProveedor.value.filter)
-      .subscribe((res: any)=> {
-        this.noPage = res.cantPage
-        this.dataFiltered = res.data
-
-        ,() => {
-          alertServerDown();
-        } 
-      })
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          this.noPage = res.cantPage
+          this.dataFiltered = res.data
+        })
 
     } else {
       this.getProveedor()
@@ -90,7 +92,7 @@ export class AdminProveedoresComponent implements OnInit{
   openModal(item: proveedor) {
     let dialogRef = this.dialog.open(ProveedorModalComponent, { data: item })
 
-    dialogRef.afterClosed().subscribe(()=> {
+    dialogRef.afterClosed().subscribe(() => {
       this.getProveedor()
     })
   }
@@ -102,33 +104,32 @@ export class AdminProveedoresComponent implements OnInit{
     if (removeChoise) {
       loading(true)
       this.api.removeProveedor(this.url, item, this.token)
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
         .subscribe((res: any) => {
           loading(false)
 
-          if (res) {
-            alertRemoveSuccess()
-            this.getProveedor()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
-          }
+          if (res.data !== null) { alertRemoveSuccess(); this.getProveedor() }
+          else { alertIsSuccess(false) }
         })
     }
   }
 
 
-  nextPage(){
-    if(this.pagina < this.noPage){
+  nextPage() {
+    if (this.pagina < this.noPage) {
       this.pagina += 1
       this.getProveedor()
     }
   }
 
-  previousPage(){
-    if(this.pagina > 1){
+  previousPage() {
+    if (this.pagina > 1) {
       this.pagina -= 1
       this.getProveedor()
     }

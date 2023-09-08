@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
@@ -58,25 +59,30 @@ export class UsuariosComponent implements OnInit {
 
   getRol() {
     this.api.getRol(this.url, this.token)
-      .subscribe((res: any) => {
-        if (res) {
+    .pipe(
+      catchError((error) => {
+        alertServerDown();
+        return error;
+      })
+    )  
+    .subscribe((res: any) => {
+        if (res.data !== null) {
           this.rolesList = res.data
-        }
-
-        () => {
-          alertServerDown();
         }
       })
   }
 
   getRecinto() {
     this.api.getRecinto(this.url, this.token)
-      .subscribe((res: any) => {
-        if (res) {
+    .pipe(
+      catchError((error) => {
+        alertServerDown();
+        return error;
+      })
+    )  
+    .subscribe((res: any) => {
+        if (res !== null) {
           this.recintoList = res.data
-        }
-        () => {
-          alertServerDown();
         }
       })
   }
@@ -85,25 +91,25 @@ export class UsuariosComponent implements OnInit {
     if (this.formUser.value.supervisorInmediato.length >= 4) {
 
       this.api.getPersonByName(this.url, this.token, 1, 10, this.formUser.value.supervisorInmediato)
-        .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )  
+      .subscribe((res: any) => {
           let options = res.data
           this.supInmediatoList = []
-          options.forEach((item: any) => {
 
+          options.forEach((item: any) => {
             this.supInmediatoList.push(item)
             this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
-
           });
-          () => {
-            alertServerDown();
-          }
         })
     }
   }
 
   sendData() {
-    let dataUser: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
-
     let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)
     let recinto = this.recintoList.filter(item => item.nombre === this.formUser.value.idRecinto)
     let selectedId = this.supervisorIdMap[this.formUser.value.supervisorInmediato];
@@ -115,20 +121,17 @@ export class UsuariosComponent implements OnInit {
     if (this.formUser.valid) {
       loading(true)
       this.api.postUser(this.url, this.formUser.value, this.token)
-        .subscribe((res: any) => {
-          
+      .pipe(
+        catchError((error) => {
           loading(false)
-          
-          if (res.success) {
-            alertIsSuccess(true)
-            this.formUser.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
-            loading(false)
-            alertServerDown();
-          }
+          alertServerDown();
+          return error;
+        })
+      )  
+      .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) { alertIsSuccess(true) ;this.formUser.reset()} 
+          else alertIsSuccess(false)
         })
     }
   }

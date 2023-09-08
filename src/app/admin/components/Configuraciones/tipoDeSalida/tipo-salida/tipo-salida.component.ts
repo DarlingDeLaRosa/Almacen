@@ -5,6 +5,7 @@ import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-d
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { GET } from 'src/app/admin/models/interfaces';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-tipo-salida',
@@ -38,19 +39,15 @@ export class TipoSalidaComponent implements OnInit {
     if (this.formTipoSalida.valid) {
 
       this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
-        .subscribe((res: any) => {
-
-          dataTipoSalida = res
-
-          if (dataTipoSalida.success) {
-            alertIsSuccess(true)
-            this.formTipoSalida.reset()
-          } else {
-            alertIsSuccess(false)
-          }
-          () => {
+        .pipe(
+          catchError((error) => {
             alertServerDown();
-          }
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          if (res.data !== null) { alertIsSuccess(true); this.formTipoSalida.reset() }
+          else alertIsSuccess(false)
         })
 
     }

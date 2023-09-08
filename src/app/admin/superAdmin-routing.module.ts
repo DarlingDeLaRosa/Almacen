@@ -35,6 +35,7 @@ import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-e
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
+import { TransferenciaComponent } from './components/Transferencia/transferencia.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,8 @@ const routes: Routes = [
       {path: 'entrada', component: EntradasComponent,},
       {path: 'administrar-entrada', component: AdminEntradasComponent},
       {path: 'editar-entrada/:id', component: EditEntradasComponent},
+
+      {path: 'transferencia', component: TransferenciaComponent},
 
       {path: 'salida', component: SalidasComponent },
       {path: 'administrar-salida', component: AdminSalidasComponent},
