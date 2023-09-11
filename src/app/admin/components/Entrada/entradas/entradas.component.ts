@@ -327,7 +327,6 @@ export class EntradasComponent implements OnInit {
   }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
-    console.log(producto)
 
     if (!this.formDetalleEntrada.valid) {
 
@@ -411,7 +410,6 @@ export class EntradasComponent implements OnInit {
       this.formDetalleEntrada.get('serial')?.reset()
       this.setValueDetailEntradaEdit(producto.idProducto)
 
-      //this.setValueDetailsEntrada(producto.idProducto)
     } else {
       alertUnableEdit()
     }

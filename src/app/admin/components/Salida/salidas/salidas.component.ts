@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -231,11 +231,13 @@ export class SalidasComponent implements OnInit {
         precio: item.precio,
         serial: item.serial,
         existencia: item.existencia,
-        idTipoAlm: item.idTipoAlmacen,
+        idTipoAlm: item.idTipoAlm,
         subTotal: item.subTotal
       })
 
       this.resultSubTotal -= item.subTotal
+    }else {
+      alertUnableEdit()
     }
 
   }
@@ -272,7 +274,6 @@ export class SalidasComponent implements OnInit {
       )
       .subscribe((res: any) => {
 
-        console.log(res)
         if (res.data !== null) {
           if (res.data.serial !== "" && res.data.serial !== null) {
             this.isSerial = true
@@ -314,7 +315,6 @@ export class SalidasComponent implements OnInit {
 
     if (this.formSalida.valid) {
 
-      console.log(this.formSalida.value)
       loading(true)
 
       this.api.postSalida(this.url, this.formSalida.value, this.token)
@@ -362,7 +362,6 @@ export class SalidasComponent implements OnInit {
             alertIsSuccess(false)
           }
         })
-
     }
   }
 

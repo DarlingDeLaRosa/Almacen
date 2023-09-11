@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
-import { alertRemoveSure, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { catchError, combineLatest } from 'rxjs';
+import { alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -36,7 +37,8 @@ export class EditSalidasComponent {
   constructor(
     public dialog: MatDialog,
     private apiProducto: productoService,
-    private apiTipoAlmacen: TipoDeAlmacenService,
+    private router: Router,
+    private route: ActivatedRoute,
     private apiTipoSalida: TipoDeSalidaService,
     private api: salidaService,
     public fb: FormBuilder,
@@ -47,6 +49,7 @@ export class EditSalidasComponent {
       idTipoSalida: new FormControl('', Validators.required),
       idDepar: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
+      idSalida: 0,
       total: 0
     });
 
@@ -59,14 +62,81 @@ export class EditSalidasComponent {
       modelo: new FormControl('', Validators.required),
       serial: new FormControl(''),
       precio: new FormControl(''),
-      subTotal: new FormControl('')
+      subTotal: new FormControl(''),
+      idSalida: 0,
+      idSalidaDet: 0
     })
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
-    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
-    this.store.select(state => state.app.user.role.idRol).subscribe((user: number) => { this.idRol = user; });
+
+    let id: number = 0
+
+    this.route.paramMap.subscribe(params => {
+      const idparam = params.get('id');
+      if (idparam !== null) id = parseInt(idparam)
+      console.log(id)
+    })
+
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol)
+    ]).subscribe(([tokenValue, pathvalue, idRole]) => {
+
+      this.url = pathvalue;
+      this.token = tokenValue;
+      this.idRol = idRole;
+
+      loading(true)
+
+      this.api.getSalidaById(this.url, this.token, id)
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          loading(false)
+          let detalleList: any[] = []
+          console.log(res)
+
+          if (res.success && res.data !== null) {
+            this.formEditSalida.patchValue({
+              fechaCreacion: res.data.fechaCreacion,
+              idTipoSalida: res.data.tipoSalida.descripcion,
+              idDepar: res.data.departamento.nombre,
+              observacion: res.data.observacion,
+              idSalida: res.data.idSalida
+            })
+
+            detalleList = res.data.detalles
+
+            detalleList.map(detalle => {
+
+              this.formDetalleEditSalida.patchValue({
+                idProducto: detalle.producto.nombre,
+                existencia: detalle.producto.stock,
+                cantidad: detalle.cantidad,
+                condicion: detalle.condicion,
+                marca: detalle.marca,
+                modelo: detalle.modelo,
+                serial:detalle.serial,
+                precio: detalle.producto.precio,
+                subTotal: detalle.subTotal,
+                idSalida: detalle.producto.idSalida,
+                idSalidaDet: detalle.producto.idSalidaDet
+              })
+
+              this.addDetail()
+              this.formDetalleEditSalida.reset()
+            })
+          }
+        })
+
+    })
 
     this.getProducto()
     this.getTipoSalida()

@@ -19,16 +19,16 @@ import { catchError, combineLatest } from 'rxjs';
   templateUrl: './edit-entradas.component.html',
   styleUrls: ['./edit-entradas.component.css']
 })
-export class EditEntradasComponent {
-  formEditEntrada: FormGroup;
-  formEditDetalleEntrada: FormGroup;
-  url!: string;
-  token!: string
-  totalResult: number = 0
-  totalItbis: number = 0
-  mostrarTotalItbis: number = 0
-  idRol: number = 0
-  setdetailGroup: boolean = false
+  export class EditEntradasComponent {
+    formEditEntrada: FormGroup;
+    formEditDetalleEntrada: FormGroup;
+    url!: string;
+    token!: string
+    totalResult: number = 0
+    totalItbis: number = 0
+    mostrarTotalItbis: number = 0
+    idRol: number = 0
+    setdetailGroup: boolean = false
 
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
@@ -92,16 +92,13 @@ export class EditEntradasComponent {
 
     this.route.paramMap.subscribe(params => {
       const idparam = params.get('id');
-
-      if (idparam !== null) {
-        id = parseInt(idparam)
-      }
+      if (idparam !== null) id = parseInt(idparam)
     })
 
     combineLatest([
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
-      this.store.select(state => state.app.user.role.idRol),
+      this.store.select(state => state.app.user.role.idRol)
     ]).subscribe(([tokenValue, pathValue, idRole]) => {
 
       this.url = pathValue;
@@ -109,6 +106,7 @@ export class EditEntradasComponent {
       this.idRol = idRole;
 
       loading(true)
+      
       this.api.getEntradaById(this.url, this.token, id)
         .pipe(
           catchError((error) => {
@@ -189,7 +187,7 @@ export class EditEntradasComponent {
               })
 
               this.detalleList = res.data.detalles
-              console.log(this.detalleList)
+
               this.detalleList.map(detalle => {
 
                 this.setdetailGroup = true

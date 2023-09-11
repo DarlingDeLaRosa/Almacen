@@ -35,7 +35,7 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker class="departamento">
         <mat-label>Tipo de departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">
@@ -143,6 +143,7 @@
             <th class="headerCell">Modelo</th>
             <th class="headerCell">Serial</th>
             <th class="headerCell">Valor</th>
+            <th class="headerCell">Monto Total</th>
             <th class="fuctionCell"></th>
             <th class="fuctionCell"></th>
           </tr>
@@ -156,8 +157,8 @@
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell"> <button class="fucEdit"
-                (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell">{{item.precio * item.cantidad| currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
             </td>
           </tr>
@@ -171,7 +172,8 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell">Valor total</td>
+            <td class="footerCell"></td>
+            <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>
