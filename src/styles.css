@@ -1,81 +1,88 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Roboto', "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+}
 
 /* ------------------------------------------------------------------*/
 /* ------------------------------------------------------------------*/
 
-h1{
+h1 {
   margin: 0 !important;
 }
 
-.btnDelete{
-  color:red;
+.btnDelete {
+  color: red;
 }
 
-.btnImprimir{
+.btnImprimir {
   display: flex !important;
   align-items: center !important;
   background-color: #49aa42 !important;
 }
 
-.printIcon{
+.printIcon {
   margin-left: 10px !important;
   font-size: 20px !important;
-  color: white ;
+  color: white;
 }
 
-.btnSend{
+.btnSend {
   color: white !important;
   background-color: #004b8d !important;
 }
 
-.titleLogIn{
+.titleLogIn {
   font-weight: 400 !important;
   font-size: 30px !important;
 }
 
-.logoAlmacen{
+.logoAlmacen {
   width: 80% !important;
 }
 
-.btnNavigate{
+.btnNavigate {
   background-color: #49aa42 !important;
   color: white !important;
-  font-weight: 300 ;
+  font-weight: 300;
 }
 
-.btnContainer{
+.btnContainer {
   display: flex;
   justify-content: flex-end;
 }
 
-.profile{
+.profile {
   height: 75px !important;
   cursor: auto !important;
   border-bottom: 1px solid #ccc !important;
 }
 
-.profile:hover{
+.profile:hover {
   background-color: white !important;
 }
 
-.email{
-  font-weight: 500 ;
+.email {
+  font-weight: 500;
 }
 
-.viewContent{
+.viewContent {
   display: grid;
   grid-template-rows: 8vh auto;
   padding: 16px;
 }
 
-.viewInitContent{
+.viewInitContent {
   padding: 16px;
 }
 
-.title{
+.title {
   padding: 0px;
 }
 
@@ -84,53 +91,53 @@ h1{
   justify-content: space-between;
 }
 
-.formInfo{
+.formInfo {
   border: 1px solid #ccc;
   padding: 15px;
-  margin-top:20px;
+  margin-top: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.formInfo h2{
+.formInfo h2 {
   font-weight: 400;
   font-size: 18px;
 }
 
-.formInfo mat-form-field{
+.formInfo mat-form-field {
   width: 24%;
 }
 
 
-table{
+table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
 }
 
-.headerTable{
+.headerTable {
   height: 6vh;
 }
 
-.headerCell{
+.headerCell {
   text-align: start;
   font-weight: 500;
   padding-left: 15px;
 }
 
-.headerRow{
+.headerRow {
   background-color: #004b8d2a;
 }
 
-.headerRepRow{
+.headerRepRow {
   background-color: #ddd;
 }
 
-.dataCell{
+.dataCell {
   border-top: 1px solid #ccc;
   padding-left: 15px;
 }
 
-.dataRow{
+.dataRow {
   height: 6vh;
 }
 
@@ -138,57 +145,63 @@ table{
   background-color: rgb(245, 245, 245);
 }
 
-.noDataRow{
+.noDataRow {
   display: grid;
   place-items: center;
   height: 10vh;
   background-color: #eee;
 }
 
-.loadingRow{
+.loadingRow {
   display: grid;
   place-items: center;
   height: 20vh;
 }
 
-.noDataRow .msNoData{
+.noDataRow .msNoData {
   font-weight: 300;
 }
 
-.noDataIcon{
+.noDataIcon {
   color: red;
   font-size: 26px;
 }
 
-.fuctionCell{
+.fuctionCell {
   width: 60px;
 }
 
-.NoItems{
+.NoItems {
   margin: 0 !important;
   font-weight: 300;
 }
 
-.fucEdit, .fucRem, .fucSend, .fucDetails{
+.fucEdit,
+.fucRem,
+.fucSend,
+.fucDetails {
   padding: 5px 10px;
   border: none;
   background-color: transparent;
   color: green;
 }
 
-.fucEdit, .fucDetails ,.fucRem, .fucSend:hover{
+.fucEdit,
+.fucDetails,
+.fucRem,
+.fucSend:hover {
   cursor: pointer;
 }
 
-.fucRem{
+.fucRem {
   color: red;
 }
 
-.fucDetails{
+.fucDetails {
   color: #004b8d;
 }
 
-.footerCell{
+.footerCell {
   height: 6vh;
   border-top: 2px solid #004b8d2a;
   border-bottom: 2px solid #004b8d2a;
@@ -196,11 +209,11 @@ table{
 }
 
 
-.fucSend{
+.fucSend {
   color: #004b8d;
 }
 
-#reporteHeader{
+#reporteHeader {
   display: grid;
   grid-template-rows: 8vh 8vh 12vh auto;
   min-height: 60px;
@@ -209,15 +222,15 @@ table{
   border: solid 1px #ccc;
 }
 
-.entradaReporteTitle{
+.entradaReporteTitle {
   grid-row: 1/2;
   display: flex;
   align-items: center;
-  background-color:#004b8d2a;
+  background-color: #004b8d2a;
   padding: 0px 16px;
 }
 
-.entradaReporteSubtitle{
+.entradaReporteSubtitle {
   box-sizing: border-box;
   display: grid;
   grid-row: 2/3;
@@ -233,14 +246,14 @@ table{
   margin: 0;
 }
 
-.entradaReporteSubtitle:last-child{
+.entradaReporteSubtitle:last-child {
   border-right: none;
 }
 
-.entradaReporteDetalle{
+.entradaReporteDetalle {
   grid-row: 3/4;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr ;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 0px 16px;
   box-sizing: border-box;
 }
@@ -250,27 +263,27 @@ table{
   align-items: center;
 }
 
-.observacionReporte{
+.observacionReporte {
   border-top: #ccc solid 1px;
   grid-row: 4/5;
   padding: 15px 16px 0px 16px;
   text-align: justify;
 }
 
-.itemReporte{
+.itemReporte {
   font-weight: 500;
 }
 
-.modal{
+.modal {
   width: 750px;
 }
 
-.modal-title{
+.modal-title {
   font-weight: 400 !important;
   padding: 5px 24px !important;
 }
 
-.modal-content{
+.modal-content {
   padding: 0px 16px;
 }
 
@@ -284,7 +297,7 @@ table{
   display: grid;
   place-items: center;
   height: 9vh;
-  background-color: #004b8d ;
+  background-color: #004b8d;
   color: white;
 }
 
@@ -298,23 +311,23 @@ table{
   padding-left: 30px;
 }
 
-.menuSubmenu{
+.menuSubmenu {
   width: 123px;
   padding-left: 20px;
 }
 
-.btnAdd{
-  color: #004b8d!important;
+.btnAdd {
+  color: #004b8d !important;
 }
 
-.btnClear{
+.btnClear {
   color: rgba(200, 10, 10, 0.918) !important;
 }
 
-.newPro{
-  background-color: #49aa42 !important; 
+.newPro {
+  background-color: #49aa42 !important;
   color: white !important;
-  font-weight: 300 ;
+  font-weight: 300;
 }
 
 .item-menu {
@@ -389,7 +402,7 @@ mat-sidenav {
   margin: 0;
 }
 
-.logout .userName{
+.logout .userName {
   font-weight: 300;
   margin: 0;
 }
@@ -402,16 +415,16 @@ mat-sidenav {
   font-size: 20px;
 }
 
-.almacenOptions mat-icon{
+.almacenOptions mat-icon {
   font-weight: 300;
   font-size: 21px;
 }
 
-.active{
+.active {
   background-color: #49aa42;
 }
 
-.pagination{
+.pagination {
   width: 100%;
   height: 6vh;
   display: flex;
@@ -420,18 +433,18 @@ mat-sidenav {
   border-bottom: 2px solid #004b8d2a;
 }
 
-.btnPag{
+.btnPag {
   margin: 0px 15px;
   width: 50px;
   border: none;
   background-color: transparent;
 }
 
-.btnPag:hover{
+.btnPag:hover {
   cursor: pointer;
 }
 
-.emailSupInmediato{
+.emailSupInmediato {
   font-weight: 300;
   color: #999;
 }
@@ -444,7 +457,7 @@ mat-sidenav {
   justify-content: space-between;
 }
 
-.alertNote{
+.alertNote {
   background-color: rgb(255, 73, 73);
   border: red 1px solid;
   text-align: center;
@@ -453,11 +466,11 @@ mat-sidenav {
   color: white;
 }
 
-.recieveTransfer , .sendTransfer{
+.processTranfer, .recieveTransfer, .sendTransfer {
   display: grid;
   height: 8vh;
   align-items: center;
-  grid-template-columns: 200px 1fr 60px 100px;
+  grid-template-columns: 200px 1fr 50px 50px;
   border-radius: 5px;
   padding: 0px 16px;
   background-color: #49aa4265;
@@ -465,20 +478,31 @@ mat-sidenav {
   margin-bottom: 10px;
 }
 
-.sendTransfer{
+.sendTransfer {
   background-color: rgba(255, 0, 0, 0.26);
   border: 1px solid red
 }
 
-.acceptTransfer{
+.processTranfer {
+  background-color: #ddd;
+  border: 1px solid #999
+}
+
+.acceptTransfer {
   background-color: white !important;
 }
 
-.recieveTransfer h4, .recieveTransfer h3, .sendTransfer h4, .sendTransfer h3{
+.recieveTransfer h4,
+.recieveTransfer h3,
+.sendTransfer h4,
+.sendTransfer h3,
+.processTranfer h3,
+.processTranfer h4 {
   margin: 0;
 }
 
-.sendTransfer h3, .recieveTransfer h3{
+.sendTransfer h3,
+.recieveTransfer h3 {
   max-width: 98px;
   max-height: 48px;
   text-align: center;
@@ -492,12 +516,18 @@ mat-sidenav {
   width: 140px;
   height: 30px;
   box-shadow: 0 3px 0 gray;
-  --g:repeat-x repeating-linear-gradient(90deg,#D2B48C 0 20px,#0000 0 18px,#D2B48C 0 34px,#0000 0 100%);
-  background: var(--g),var(--g);
-  background-size: 60px 14px,60px 14px;
+  --g: repeat-x repeating-linear-gradient(90deg, #D2B48C 0 20px, #0000 0 18px, #D2B48C 0 34px, #0000 0 100%);
+  background: var(--g), var(--g);
+  background-size: 60px 14px, 60px 14px;
   animation: l8 1s infinite linear;
 }
+
 @keyframes l8 {
-  0%   {background-position:0    0,0    100%}
-  100% {background-position:60px 0,60px 100%}
+  0% {
+    background-position: 0 0, 0 100%
+  }
+
+  100% {
+    background-position: 60px 0, 60px 100%
+  }
 }

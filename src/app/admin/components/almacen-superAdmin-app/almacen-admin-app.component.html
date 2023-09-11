@@ -43,8 +43,8 @@
           <div class="menuSubmenu" *ngIf="submenuProductos">
             <a class="item-submenux" [routerLink]="['/almacen/reporteInventario']" routerLinkActive="active">Inventario</a>
             <a class="item-submenux" [routerLink]="['/almacen/reporteStock']" routerLinkActive="active">Escasez</a>
-            <a class="item-submenux" [routerLink]="['/almacen/reporteTransparencia']" routerLinkActive="active">Transparencia</a>
           </div>
+          <a class="item-submenu" [routerLink]="['/almacen/reporteTransparencia']" routerLinkActive="active">Transparencia</a>
           <a class="item-submenu" [routerLink]="['/almacen/reporteProveedor']" routerLinkActive="active">Proveedor</a>
         </div>
         <ng-template #submenuClosed></ng-template>

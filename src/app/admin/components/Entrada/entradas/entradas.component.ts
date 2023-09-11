@@ -30,6 +30,7 @@ export class EntradasComponent implements OnInit {
   mostrarTotalItbis: number = 0
   disableItbis: boolean = false
   idRol: number = 0
+  changeFromToggle: boolean = false
 
   detailGroup: detalleProductoEntrada[] = [];
   generalITBIS: boolean = false;
@@ -230,7 +231,8 @@ export class EntradasComponent implements OnInit {
 
   itbisOption(event: any) {
     this.generalITBIS = event.value;
-    //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
+    this.changeFromToggle = true
+    this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
   }
 
   serialOption(event: any) {
@@ -242,7 +244,7 @@ export class EntradasComponent implements OnInit {
       return productoEspecifico.nombre == producto
     });
 
-    if (!this.generalITBIS) {
+    if (!this.generalITBIS && this.changeFromToggle == false) {
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
         precio: setValuesform[0].precio
@@ -252,6 +254,12 @@ export class EntradasComponent implements OnInit {
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
         itbisProducto: setValuesform[0].itbis,
         precio: setValuesform[0].precio
+      })
+    }
+
+    if (this.generalITBIS  && this.changeFromToggle == true) {
+      this.formDetalleEntrada.patchValue({
+        itbisProducto: setValuesform[0].itbis
       })
     }
   }

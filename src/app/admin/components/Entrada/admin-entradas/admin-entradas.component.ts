@@ -89,8 +89,7 @@ export class AdminEntradasComponent implements OnInit {
   openModal(detailId: number) {
     let dialogRef = this.dialog.open(ShowDetailsComponent, { data: detailId })
 
-    dialogRef.afterClosed().subscribe(() => {
-    })
+    dialogRef.afterClosed().subscribe(() => {})
   }
 
   async removeAlert(item: number) {
