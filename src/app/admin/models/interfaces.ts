@@ -346,16 +346,18 @@ export interface detalleByIdSalida {
 /////////////////////////////////////////////////////////////////
 
 export interface detalleProductoSalida {
-  existencia: number,
-  idProducto: string,
   cantidad: number,
   condicion: string,
+  existencia: number,
+  idProducto: any,
+  idSalida: number,
+  idSalidaDet: number,
+  idTipoAlm: string,
   marca: string,
   modelo: string,
   precio: number,
   serial: string,
   subTotal: number,
-  idTipoAlm: string
 }
 
 /////////////////////////////////////////////////////////////////

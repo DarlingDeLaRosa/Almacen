@@ -198,8 +198,7 @@ export class SalidasComponent implements OnInit {
 
       if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
-        if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1
-          || this.isSerial == false) {
+        if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
 
           this.detailGroup.push(this.formDetalleSalida.value)
           this.resultSubTotal += this.formDetalleSalida.value.subTotal
@@ -220,6 +219,7 @@ export class SalidasComponent implements OnInit {
   editDetail(index: number, item: detalleProductoSalida) {
 
     if (!this.formDetalleSalida.valid) {
+
       this.detailGroup.splice(index, 1)
 
       this.formDetalleSalida.patchValue({
@@ -236,7 +236,7 @@ export class SalidasComponent implements OnInit {
       })
 
       this.resultSubTotal -= item.subTotal
-    }else {
+    } else {
       alertUnableEdit()
     }
 
@@ -313,7 +313,7 @@ export class SalidasComponent implements OnInit {
 
     this.formSalida.value.total = this.resultSubTotal
 
-    if (this.formSalida.valid) {
+    if (this.formSalida.valid && this.detailGroup.length >= 1) {
 
       loading(true)
 
@@ -325,17 +325,16 @@ export class SalidasComponent implements OnInit {
           })
         )
         .subscribe((res: any) => {
-          if (res.success) {
+          if (res.success && res.data !== null) {
 
-            this.detailGroup.map((detail: any) => {
+            this.detailGroup.map((detail: detalleProductoSalida) => {
+
               detail.idSalida = res.data.idSalida
+
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+
               detail.idProducto = idTipoProD[0].idProducto
             })
-
-            JSON.stringify(this.detailGroup)
-
-            console.log(this.detailGroup)
 
             this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
               .pipe(
@@ -350,7 +349,6 @@ export class SalidasComponent implements OnInit {
 
                 if (res.data !== null) {
                   alertIsSuccess(true)
-                  this.formSalida.reset()
                   this.detailGroup = []
                   this.resultSubTotal = 0
                 }
@@ -358,6 +356,8 @@ export class SalidasComponent implements OnInit {
                   alertIsSuccess(false)
                 }
               })
+            this.formDetalleSalida.reset()
+            this.formSalida.reset()
           } else {
             alertIsSuccess(false)
           }

@@ -66,9 +66,8 @@
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
           <input matInput [matAutocomplete]="pro" appearance="fill" formControlName="idProducto"
-            (input)="findProductoByName()" (optionSelected)="setValueFormProductoSalida($event)">
-          <!--.target.producto.value-->
-          <mat-autocomplete #pro='matAutocomplete'>
+            (input)="findProductoByName()" >
+          <mat-autocomplete #pro='matAutocomplete' (optionSelected)="setValueFormProductoSalida($event.option.value)">
 
             <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
               {{producto.nombre}}
@@ -86,7 +85,12 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Cantidad</mat-label>
-          <input type="number" matInput required formControlName="cantidad">
+          <input type="number" matInput required formControlName="cantidad" (input)="subTotalResult()">
+        </mat-form-field>&nbsp;
+
+        <mat-form-field hideRequiredMarker appearance="fill">
+          <mat-label>Tipo de Almacen</mat-label>
+          <input matInput readonly required formControlName="idTipoAlm">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker>
@@ -100,33 +104,34 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input [disabled]="true" matInput required formControlName="marca">
+          <input readonly matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input [disabled]="true" matInput required formControlName="modelo">
+          <input readonly matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input [disabled]="true" matInput required formControlName="serial">
+          <input readonly matInput required formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
-          <input [disabled]="true" type="number" matInput required formControlName="precio">
+          <input readonly type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
-          <input [disabled]="true" type="number" matInput required formControlName="subTotal">
+          <input readonly type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 
         <span class="btnContainer">
-          <button mat-stroked-button class="btnAdd"><mat-icon>add</mat-icon>Agregar</button>
+          <button mat-stroked-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
+          <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
     </div>
@@ -151,7 +156,7 @@
         <tbody>
           <tr class="dataRow" *ngFor="let item of detailGroup; let i = index">
             <td class="dataCell">{{item.idProducto}}</td>
-            <th class="headerCell">{{item.cantidad}}</th>
+            <td class="dataCell">{{item.cantidad}}</td>
             <td class="dataCell">{{item.condicion}}</td>
             <td class="dataCell">{{item.marca}}</td>
             <td class="dataCell">{{item.modelo}}</td>
@@ -173,7 +178,7 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell"></td>
+            <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2' }}</td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>

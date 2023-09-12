@@ -446,7 +446,7 @@ export class EntradasComponent implements OnInit {
   sendData() {
 
     this.formEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-      this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
+    this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
     this.formEntrada.value.total = this.totalResult
 
@@ -461,8 +461,8 @@ export class EntradasComponent implements OnInit {
 
     if (this.formEntrada.valid && this.detailGroup.length >= 1) {
 
-      console.log(this.formEntrada.value)
       loading(true)
+
       this.api.postEntrada(this.url, this.formEntrada.value, this.token)
         .pipe(
           catchError((error) => {
@@ -486,9 +486,7 @@ export class EntradasComponent implements OnInit {
                 detail.itbisProducto = 0
               }
             })
-
-            JSON.stringify(this.detailGroup)
-
+            
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .pipe(
                 catchError((error) => {
@@ -500,7 +498,7 @@ export class EntradasComponent implements OnInit {
               .subscribe((res: any) => {
                 loading(false)
 
-                if (res.success) {
+                if (res.data !== null) {
                   alertIsSuccess(true)
                   this.detailGroup = []
                   this.mostrarTotalItbis = 0

@@ -4,8 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest } from 'rxjs';
-import { alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
-import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { salidaService } from 'src/app/admin/Services/salida.service';
@@ -24,10 +23,12 @@ export class EditSalidasComponent {
   token!: string
   isSerial: boolean = false
   idRol: number = 0
+  resultSubTotal: number = 0
+  respuesta:any 
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = false;
+  serial: boolean = true;
 
   tipoSalidaList: tipoSalida[] = []
   tipoAlmacenList: tipoAlmacen[] = []
@@ -60,6 +61,7 @@ export class EditSalidasComponent {
       condicion: new FormControl('', Validators.required),
       marca: new FormControl('', Validators.required),
       modelo: new FormControl('', Validators.required),
+      idTipoAlm: new FormControl(''),
       serial: new FormControl(''),
       precio: new FormControl(''),
       subTotal: new FormControl(''),
@@ -69,7 +71,6 @@ export class EditSalidasComponent {
   }
 
   ngOnInit(): void {
-
     let id: number = 0
 
     this.route.paramMap.subscribe(params => {
@@ -101,12 +102,13 @@ export class EditSalidasComponent {
         .subscribe((res: any) => {
           loading(false)
           let detalleList: any[] = []
-          console.log(res)
+          this.respuesta = res.data.detalles
+          console.log(this.respuesta)
 
           if (res.success && res.data !== null) {
             this.formEditSalida.patchValue({
               fechaCreacion: res.data.fechaCreacion,
-              idTipoSalida: res.data.tipoSalida.descripcion,
+              idTipoSalida: res.data.tipoSalida.nombre,
               idDepar: res.data.departamento.nombre,
               observacion: res.data.observacion,
               idSalida: res.data.idSalida
@@ -120,14 +122,15 @@ export class EditSalidasComponent {
                 idProducto: detalle.producto.nombre,
                 existencia: detalle.producto.stock,
                 cantidad: detalle.cantidad,
+                idTipoAlm: detalle.producto.tipoAlmacen.nombre,
                 condicion: detalle.condicion,
                 marca: detalle.marca,
                 modelo: detalle.modelo,
-                serial:detalle.serial,
+                serial: detalle.serial,
                 precio: detalle.producto.precio,
                 subTotal: detalle.subTotal,
-                idSalida: detalle.producto.idSalida,
-                idSalidaDet: detalle.producto.idSalidaDet
+                idSalida: detalle.idSalida,
+                idSalidaDet: detalle.idSalidaDet
               })
 
               this.addDetail()
@@ -178,7 +181,6 @@ export class EditSalidasComponent {
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
         this.tipoDepartamentoList = res.data
       });
   }
@@ -253,29 +255,63 @@ export class EditSalidasComponent {
   }
 
   addDetail() {
-    if (this.formDetalleEditSalida.valid) {
+    if (this.formDetalleEditSalida.valid && this.formEditSalida.valid) {
 
-      if (this.formEditSalida.valid) {
-        this.detailGroup.push(this.formDetalleEditSalida.value)
-        this.formDetalleEditSalida.reset()
+      if (this.detailGroup.length >= 1 && this.serial == false) {
+
+        if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase())) {
+          alertSameSerial()
+          return
+        }
       }
+        if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
+
+          this.detailGroup.push(this.formDetalleEditSalida.value)
+          this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+          this.formDetalleEditSalida.reset()
+
+        } else {
+          alertSerial()
+        }
+
+    } else {
+      alertNoValidForm()
     }
+
+    console.log(this.detailGroup)
+  }
+
+  clearDetail() {
+    this.formDetalleEditSalida.reset()
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
+    console.log(item)
+    if (!this.formDetalleEditSalida.valid) {
 
-    this.detailGroup.splice(index, 1)
+      this.detailGroup.splice(index, 1)
+      console.log(this.detailGroup.length)
 
-    this.formDetalleEditSalida.setValue({
-      producto: `${item.idProducto}`,
-      cantidad: `${item.cantidad}`,
-      condicion: `${item.condicion}`,
-      marca: `${item.marca}`,
-      modelo: `${item.modelo}`,
-      precio: `${item.precio}`,
-      noSerial: `${item.serial}`,
-      existencia: `${item.existencia}`,
-    })
+      this.formDetalleEditSalida.patchValue({
+        idProducto: item.idProducto,
+        cantidad: item.cantidad,
+        condicion: item.condicion,
+        marca: item.marca,
+        modelo: item.modelo,
+        precio: item.precio,
+        serial: item.serial,
+        existencia: item.existencia,
+        idTipoAlm: item.idTipoAlm,
+        subTotal: item.subTotal,
+        idSalida: item.idSalida,
+        idSalidaDet: item.idSalidaDet,
+      })
+
+      console.log(this.formDetalleEditSalida.value)
+      this.resultSubTotal -= item.subTotal
+    } else {
+      alertUnableEdit()
+    }
   }
 
   async removeDetail(index: number) {
@@ -288,7 +324,6 @@ export class EditSalidasComponent {
   }
 
   setValueFormProductoSalida(producto: any) {
-    console.log(producto)
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });
@@ -301,52 +336,117 @@ export class EditSalidasComponent {
         })
       )
       .subscribe((res: any) => {
+
         if (res.data !== null) {
-          if (res.data.producto.serial !== null) {
+          if (res.data.serial !== "" && res.data.serial !== null) {
             this.isSerial = true
+
             this.formDetalleEditSalida.patchValue({
-              existencia: new FormControl('', Validators.required),
-              condicion: new FormControl('', Validators.required),
-              marca: new FormControl('', Validators.required),
-              modelo: new FormControl('', Validators.required),
-              serial: new FormControl(''),
-              precio: new FormControl(''),
+              existencia: res.data.producto.stock,
+              condicion: res.data.condicion,
+              marca: res.data.marca,
+              modelo: res.data.modelo,
+              serial: res.data.serial,
+              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+              precio: res.data.producto.precio,
             })
           } else {
             this.isSerial = false
+
             this.formDetalleEditSalida.patchValue({
-              existencia: new FormControl('', Validators.required),
-              condicion: new FormControl('', Validators.required),
-              marca: new FormControl('', Validators.required),
-              modelo: new FormControl('', Validators.required),
-              precio: new FormControl(''),
+              existencia: res.data.producto.stock,
+              condicion: res.data.condicion,
+              marca: res.data.marca,
+              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+              modelo: res.data.modelo,
+              precio: res.data.producto.precio,
             })
           }
         }
-
       })
   }
 
+  subTotalResult() {
+    this.formDetalleEditSalida.patchValue({
+      subTotal: this.formDetalleEditSalida.value.cantidad * this.formDetalleEditSalida.value.precio
+    })
+  }
+
   sendData() {
+    
+    let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formEditSalida.value.idTipoSalida)
+    this.formEditSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
+    
+    let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formEditSalida.value.idDepar)
+    this.formEditSalida.value.idDepar = idTipoDep[0].idDepar
+
+    this.formEditSalida.value.total = this.resultSubTotal
 
     if (this.formEditSalida.valid) {
 
-      //this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
-      //  .subscribe((res: any) => {
-      //
-      //    dataTipoSalida = res
-      //
-      //    if (dataTipoSalida.success) {
-      //      alertIsSuccess(true)
-      //      this.formTipoSalida.reset()
-      //    } else {
-      //      alertIsSuccess(false)
-      //    }
-      //    ()=> {
-      //      alertServerDown();
-      //    }})
+      loading(true)
 
+      this.api.editSalida(this.url, this.formEditSalida.value, this.token)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          if (res.success && res.data !== null) {
+
+            this.detailGroup.map((detail: any) => {
+
+              let idsDetalles = this.respuesta.filter((detalle: any) => {
+                if (detalle.idSalidaDet == detail.idSalidaDet && detalle.producto.nombre == detail.idProducto) {
+                  return detalle
+                }
+              })
+              
+              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+
+              detail.idProducto = idTipoProD[0].idProducto
+              detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
+              detail.idSalida = res.data.idSalida
+
+              if (idsDetalles.length == 0) {
+                detail.idSalidaDet = null
+              } 
+            })
+            
+            this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
+              .pipe(
+                catchError((error) => {
+                  loading(false)
+                  alertServerDown();
+                  return error;
+                })
+              )
+              .subscribe((res: any) => {
+                console.log(res)
+                loading(false)
+
+                if (res.data !== null) {
+                  alertIsSuccess(true)
+
+                  this.formEditSalida.reset()
+                  this.detailGroup = []
+                  this.resultSubTotal = 0
+
+                  this.router.navigate(['/almacen/administrar-salida'])
+
+                }
+                else {
+                  alertIsSuccess(false)
+                }
+              })
+          } else {
+            alertIsSuccess(false)
+          }
+        })
     }
+
   }
 
 }

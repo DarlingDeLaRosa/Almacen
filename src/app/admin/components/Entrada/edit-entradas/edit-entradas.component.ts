@@ -532,9 +532,8 @@ import { catchError, combineLatest } from 'rxjs';
 
   editData() {
 
-    console.log(this.detailGroup)
     this.formEditEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-      this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
+    this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
     this.formEditEntrada.value.total = this.totalResult
 
@@ -587,7 +586,6 @@ import { catchError, combineLatest } from 'rxjs';
               }
             })
 
-            console.log(this.detailGroup)
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .pipe(
                 catchError((error) => {
@@ -600,7 +598,7 @@ import { catchError, combineLatest } from 'rxjs';
                 loading(false)
                 console.log(respuesta)
 
-                if (respuesta.success) {
+                if (respuesta.data !== null) {
                   alertIsSuccess(true)
 
                   this.detailGroup = []
