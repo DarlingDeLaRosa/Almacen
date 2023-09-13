@@ -79,8 +79,8 @@
 
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Existencia</mat-label>
-          <input [disabled]="true" type="number" readonly matInput required formControlName="existencia">
+          <mat-label>Existencia restante</mat-label>
+          <input  type="number" readonly matInput required formControlName="existencia">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -95,7 +95,7 @@
 
         <mat-form-field hideRequiredMarker>
           <mat-label>Condición</mat-label>
-          <mat-select required appearance="fill" formControlName="condicion">
+          <mat-select required appearance="fill" formControlName="condicion" >
             <mat-option value="Bueno">Bueno</mat-option>
             <mat-option value="Regular">Regular</mat-option>
             <mat-option value="Dañado">Dañado</mat-option>
@@ -104,28 +104,28 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input readonly matInput required formControlName="marca">
+          <input  matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input readonly matInput required formControlName="modelo">
+          <input  matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input readonly matInput required formControlName="serial">
+          <input matInput required formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
-          <input readonly type="number" matInput required formControlName="precio" (input)="subTotalResult()">
+          <input  type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
-          <input readonly type="number" matInput required formControlName="subTotal">
+          <input type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 

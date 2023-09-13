@@ -364,8 +364,7 @@ import { catchError, combineLatest } from 'rxjs';
     if (this.formEditDetalleEntrada.valid && this.formEditEntrada.valid) {
 
       if (this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
-        this.serial == true && this.formEditDetalleEntrada.value.cantidad !== 1 ||
+        this.serial == false && this.formEditDetalleEntrada.value.cantidad !== 1 ||
         this.serial == true && this.formEditDetalleEntrada.value.cantidad == 1
       ) {
 
@@ -585,7 +584,7 @@ import { catchError, combineLatest } from 'rxjs';
                 detail.itbisProducto = 0
               }
             })
-
+            console.log(this.detailGroup)
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .pipe(
                 catchError((error) => {

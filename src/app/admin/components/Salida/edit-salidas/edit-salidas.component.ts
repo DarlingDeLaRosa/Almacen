@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { catchError, combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -24,11 +24,11 @@ export class EditSalidasComponent {
   isSerial: boolean = false
   idRol: number = 0
   resultSubTotal: number = 0
-  respuesta:any 
+  respuesta: any
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = true;
+  serial: boolean = false;
 
   tipoSalidaList: tipoSalida[] = []
   tipoAlmacenList: tipoAlmacen[] = []
@@ -255,24 +255,45 @@ export class EditSalidasComponent {
   }
 
   addDetail() {
+    console.log(this.formDetalleEditSalida.value)
+
     if (this.formDetalleEditSalida.valid && this.formEditSalida.valid) {
 
-      if (this.detailGroup.length >= 1 && this.serial == false) {
+      console.log(this.serial)
 
-        if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase())) {
-          alertSameSerial()
-          return
+      if (this.serial == false && this.formDetalleEditSalida.value.cantidad == 1 ||
+        this.serial == false && this.formDetalleEditSalida.value.cantidad !== 1 ||
+        this.serial == true && this.formDetalleEditSalida.value.cantidad == 1
+      ) {
+        
+        if (this.detailGroup.length >= 1 && this.serial == false) {
+          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase())) {
+            alertSameSerial()
+            return
+          }
         }
-      }
-        if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
+        // let editStock: boolean = false
+
+        // if(this.formDetalleEditSalida.value.idSalidaDet !== null || this.formDetalleEditSalida.value.idSalidaDet !== 0
+        //   && this.formDetalleEditSalida.value.cantidad <= 
+        //   this.formDetalleEditSalida.value.existencia + this.formDetalleEditSalida.value.cantidad){
+        //   editStock = true
+        // }else{
+        //   return
+        // }
+
+        //|| editStock
+        if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false ) {
 
           this.detailGroup.push(this.formDetalleEditSalida.value)
           this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
           this.formDetalleEditSalida.reset()
-
-        } else {
-          alertSerial()
+  
         }
+      }
+       else {
+        alertSerial()
+      }
 
     } else {
       alertNoValidForm()
@@ -290,7 +311,6 @@ export class EditSalidasComponent {
     if (!this.formDetalleEditSalida.valid) {
 
       this.detailGroup.splice(index, 1)
-      console.log(this.detailGroup.length)
 
       this.formDetalleEditSalida.patchValue({
         idProducto: item.idProducto,
@@ -336,21 +356,25 @@ export class EditSalidasComponent {
         })
       )
       .subscribe((res: any) => {
-
+        console.log(res)
         if (res.data !== null) {
-          if (res.data.serial !== "" && res.data.serial !== null) {
+
+          if (res.data.serial.length > 0) {
+
             this.isSerial = true
 
             this.formDetalleEditSalida.patchValue({
               existencia: res.data.producto.stock,
               condicion: res.data.condicion,
               marca: res.data.marca,
-              modelo: res.data.modelo,
-              serial: res.data.serial,
               idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+              modelo: res.data.modelo,
               precio: res.data.producto.precio,
+              serial: res.data.serial,
             })
+
           } else {
+
             this.isSerial = false
 
             this.formDetalleEditSalida.patchValue({
@@ -361,6 +385,7 @@ export class EditSalidasComponent {
               modelo: res.data.modelo,
               precio: res.data.producto.precio,
             })
+
           }
         }
       })
@@ -373,10 +398,10 @@ export class EditSalidasComponent {
   }
 
   sendData() {
-    
+
     let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formEditSalida.value.idTipoSalida)
     this.formEditSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
-    
+
     let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formEditSalida.value.idDepar)
     this.formEditSalida.value.idDepar = idTipoDep[0].idDepar
 
@@ -403,7 +428,7 @@ export class EditSalidasComponent {
                   return detalle
                 }
               })
-              
+
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
 
               detail.idProducto = idTipoProD[0].idProducto
@@ -412,15 +437,17 @@ export class EditSalidasComponent {
 
               if (idsDetalles.length == 0) {
                 detail.idSalidaDet = null
-              } 
+              }
             })
-            
-            this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
+
+            console.log(JSON.stringify(this.detailGroup))
+
+            this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
               .pipe(
                 catchError((error) => {
                   loading(false)
                   alertServerDown();
-                  return error;
+                  return throwError(error);
                 })
               )
               .subscribe((res: any) => {

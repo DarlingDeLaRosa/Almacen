@@ -15,7 +15,7 @@
         <a class="item-menu" [routerLink]="['/almacen/administrar-salida']" routerLinkActive="active">
           <mat-icon>indeterminate_check_box</mat-icon>Salidas
         </a>
-        <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active"><mat-icon>compare_arrows</mat-icon>Transferencias</a>
+        <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active"><mat-icon matBadge="1" matBadgeColor="warn">compare_arrows</mat-icon> <span class="cdk-visually-hidden"></span>Transferencias</a>
 
         <a class="item-menu" [routerLink]="['/almacen/administrar-producto']" routerLinkActive="active">
           <mat-icon>category</mat-icon>Productos

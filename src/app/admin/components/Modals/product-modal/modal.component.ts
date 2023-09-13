@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
@@ -248,7 +248,7 @@ export class ModalComponent implements OnInit {
             catchError((error) => {
               loading(false)
               alertServerDown();
-              return error;
+              return throwError(error);
             })
           )
           .subscribe((res: any) => {

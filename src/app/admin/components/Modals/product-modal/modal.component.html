@@ -77,9 +77,9 @@
       <mat-form-field hideRequiredMarker>
         <mat-label>ITBIS</mat-label>
         <mat-select required appearance="fill" formControlName="itbis">
-          <mat-option value=0>Exento</mat-option>
-          <mat-option value=16>16%</mat-option>
-          <mat-option value=18>18%</mat-option>
+          <mat-option [value]="0" >Exento</mat-option>
+          <mat-option [value]="16" >16%</mat-option>
+          <mat-option [value]="18" >18%</mat-option>
         </mat-select>
       </mat-form-field>&nbsp;
 

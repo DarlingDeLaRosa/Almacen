@@ -51,7 +51,7 @@ export class AdminEntradasComponent implements OnInit {
 
   getEntrada() {
     this.loading = true
-
+    
     this.api.getEntrada(this.url, this.token, this.pagina)
       .pipe(
         catchError((error) => {

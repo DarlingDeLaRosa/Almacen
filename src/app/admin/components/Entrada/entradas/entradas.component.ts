@@ -278,8 +278,7 @@ export class EntradasComponent implements OnInit {
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
 
       if (this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
-        this.serial == true && this.formDetalleEntrada.value.cantidad !== 1 ||
+        this.serial == false && this.formDetalleEntrada.value.cantidad !== 1 ||
         this.serial == true && this.formDetalleEntrada.value.cantidad == 1
       ) {
 

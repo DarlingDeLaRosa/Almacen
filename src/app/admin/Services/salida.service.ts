@@ -35,7 +35,7 @@ export class salidaService {
   }
 
   public postSalida(url: string, data: postSalida, token: string) {
-    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const headers: HttpHeaders = new HttpHeaders({'token': token, 'Content-Type': 'application/json'})
     const salidaHeader = {headers: headers}
 
     const postSalida = `${url}/Salida`
@@ -68,8 +68,8 @@ export class salidaService {
     return this.http.get(getDetalleSalida, salidaDetalleHeader)
   }
 
-  public postDetalleSalida(url: string, data: detalleProductoSalida[], token: string) {
-    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+  public postDetalleSalida(url: string, data: any, token: string) {
+    const headers: HttpHeaders = new HttpHeaders({'token': token, 'Content-Type': 'application/json'})
     const detalleSalidaHeader = {headers: headers}
 
     const postDetalleSalida = `${url}/Salida/adddetalle`

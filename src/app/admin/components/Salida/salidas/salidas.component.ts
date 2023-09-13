@@ -2,7 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
@@ -27,7 +27,7 @@ export class SalidasComponent implements OnInit {
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = true;
+  serial: boolean = false ;
 
   tipoSalidaList: tipoSalida[] = []
   tipoDepartamentoList: departamento[] = []
@@ -188,29 +188,36 @@ export class SalidasComponent implements OnInit {
   addDetail() {
 
     if (this.formDetalleSalida.valid && this.formSalida.valid) {
+      console.log(this.serial)
 
-      if (this.detailGroup.length >= 1 && this.serial == false) {
-        if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase())) {
-          alertSameSerial()
-          return
+      if (this.serial == false && this.formDetalleSalida.value.cantidad == 1 ||
+        this.serial == false && this.formDetalleSalida.value.cantidad !== 1 ||
+        this.serial == true && this.formDetalleSalida.value.cantidad == 1
+      ) {
+        if (this.detailGroup.length >= 1 && this.serial == false) {
+          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase())) {
+            alertSameSerial()
+            return
+          }
         }
-      }
 
-      if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
+        if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
-        if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
-
-          this.detailGroup.push(this.formDetalleSalida.value)
-          this.resultSubTotal += this.formDetalleSalida.value.subTotal
-          this.formDetalleSalida.reset()
-
+          if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
+  
+            this.detailGroup.push(this.formDetalleSalida.value)
+            this.resultSubTotal += this.formDetalleSalida.value.subTotal
+            this.formDetalleSalida.reset()
+  
+          } else {
+            alertSerial()
+          }
+  
         } else {
-          alertSerial()
+          alertCantExis()
         }
-
-      } else {
-        alertCantExis()
       }
+      
     } else {
       alertNoValidForm()
     }
@@ -335,19 +342,21 @@ export class SalidasComponent implements OnInit {
 
               detail.idProducto = idTipoProD[0].idProducto
             })
-
-            this.api.postDetalleSalida(this.url, this.detailGroup, this.token)
+            console.log(JSON.stringify(this.detailGroup))
+            this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
               .pipe(
-                catchError((error) => {
+                catchError((error) => {              
                   loading(false)
+                  this.detailGroup = []
                   alertServerDown();
-                  return error;
+                  return throwError(error);
                 })
               )
               .subscribe((res: any) => {
+                console.log(res)
                 loading(false)
 
-                if (res.data !== null) {
+                if (res.success) {
                   alertIsSuccess(true)
                   this.detailGroup = []
                   this.resultSubTotal = 0
