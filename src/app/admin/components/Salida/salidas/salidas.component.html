@@ -24,8 +24,8 @@
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Salida</mat-label>
         <input matInput [matAutocomplete]="Tsal" appearance="fill" formControlName="idTipoSalida"
-          (input)="findTipoSalidaByName()">
-        <mat-autocomplete #Tsal='matAutocomplete'>
+          (input)="findTipoSalidaByName()" >
+        <mat-autocomplete #Tsal='matAutocomplete' (optionSelected)="setValueTransfer($event.option.value)">
 
           <mat-option *ngFor="let tipoSalida of tipoSalidaList" [value]="tipoSalida.nombre">
             {{tipoSalida.nombre}}
@@ -35,10 +35,10 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker class="departamento">
+      <mat-form-field hideRequiredMarker class="departamento" *ngIf="!isTransferencia; else tranferencia">
         <mat-label>Tipo de departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
-          (input)="findTipoDepartamentoByName()">
+          (input)="findTipoDepartamentoByName()" >
         <mat-autocomplete #auto='matAutocomplete'>
 
           <mat-option *ngFor="let tipoDepartamento of tipoDepartamentoList" [value]="tipoDepartamento.nombre">
@@ -48,6 +48,21 @@
         </mat-autocomplete>
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
+
+      <ng-template #tranferencia>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Recinto</mat-label>
+          <input matInput [matAutocomplete]="rec" appearance="fill" formControlName="idRecinto">
+          <mat-autocomplete #rec='matAutocomplete'>
+  
+            <mat-option *ngFor="let recinto of recintoList" [value]="recinto.nombre">
+              {{recinto.nombre}}
+            </mat-option>
+  
+          </mat-autocomplete>
+          <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+        </mat-form-field>&nbsp;
+      </ng-template>
 
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>

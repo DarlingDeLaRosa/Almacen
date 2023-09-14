@@ -278,12 +278,17 @@ export class EntradasComponent implements OnInit {
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
 
       if (this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formDetalleEntrada.value.cantidad !== 1 ||
+        this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
+        this.serial == true && this.formDetalleEntrada.value.cantidad !== 1 ||
         this.serial == true && this.formDetalleEntrada.value.cantidad == 1
       ) {
 
         if (this.detailGroup.length >= 1 && this.serial == false) {
-          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase())) {
+          if (this.detailGroup.some(producto => {
+            if(producto.serial !== null){
+              producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase()
+            }
+          })) {
             alertSameSerial()
             return
           }

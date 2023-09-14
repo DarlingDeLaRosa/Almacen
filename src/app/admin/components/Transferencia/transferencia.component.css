@@ -14,3 +14,7 @@
     grid-template-rows: 8vh auto;
     padding: 16px;
 }
+
+h2{
+    font-weight: 400;
+}

@@ -6,9 +6,10 @@ import { catchError, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
+import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { salidaService } from 'src/app/admin/Services/salida.service';
-import { departamento, detalleProductoSalida, producto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
+import { departamento, detalleProductoSalida, producto, recinto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -22,6 +23,7 @@ export class SalidasComponent implements OnInit {
   url!: string;
   token!: string
   isSerial: boolean = false
+  isTransferencia: boolean = false
   idRol: number = 0
   resultSubTotal: number = 0
 
@@ -32,11 +34,12 @@ export class SalidasComponent implements OnInit {
   tipoSalidaList: tipoSalida[] = []
   tipoDepartamentoList: departamento[] = []
   productoList: producto[] = []
+  recintoList: recinto[] = []
 
   constructor(
     public dialog: MatDialog,
     private apiProducto: productoService,
-    private apiTipoAlmacen: TipoDeAlmacenService,
+    private apiRecinto: UserService,
     private apiTipoSalida: TipoDeSalidaService,
     private api: salidaService,
     public fb: FormBuilder,
@@ -73,8 +76,23 @@ export class SalidasComponent implements OnInit {
     this.getProducto()
     this.getTipoSalida()
     this.getTipoDepartamento()
+    this.getRecinto()
   }
 
+  getRecinto() {
+    this.apiRecinto.getRecinto(this.url, this.token)
+    .pipe(
+      catchError((error) => {
+        alertServerDown();
+        return error;
+      })
+    )  
+    .subscribe((res: any) => {
+        if (res !== null) {
+          this.recintoList = res.data
+        }
+      })
+  }
 
   getProducto() {
     this.apiProducto.getProducto(this.url, this.token, 1)
@@ -267,7 +285,15 @@ export class SalidasComponent implements OnInit {
     this.formDetalleSalida.reset()
   }
 
-  setValueFormProductoSalida(producto: any) {
+  setValueTransfer(producto: string){
+    if(producto === "Prestamo" || producto === 'Donación'){
+      this.isTransferencia = true
+    }else{
+      this.isTransferencia = false
+    }
+  }
+
+  setValueFormProductoSalida(producto: string) {
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });

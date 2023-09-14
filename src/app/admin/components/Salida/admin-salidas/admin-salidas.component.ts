@@ -111,6 +111,7 @@ export class AdminSalidasComponent implements OnInit {
           loading(false)
           if (res.data !== null) alertRemoveSuccess()
           else alertIsSuccess(false)
+          this.getSalida()
         })
     }
   }
