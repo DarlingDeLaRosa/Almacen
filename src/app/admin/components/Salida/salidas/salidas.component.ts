@@ -29,7 +29,7 @@ export class SalidasComponent implements OnInit {
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = false ;
+  serial: boolean = false;
 
   tipoSalidaList: tipoSalida[] = []
   tipoDepartamentoList: departamento[] = []
@@ -48,7 +48,8 @@ export class SalidasComponent implements OnInit {
     this.formSalida = this.fb.group({
       fechaCreacion: new FormControl('', Validators.required),
       idTipoSalida: new FormControl('', Validators.required),
-      idDepar: new FormControl('', Validators.required),
+      idDepar: new FormControl(''),
+      idRecinto: new FormControl(''),
       observacion: new FormControl('', Validators.required),
       total: 0
     });
@@ -81,13 +82,13 @@ export class SalidasComponent implements OnInit {
 
   getRecinto() {
     this.apiRecinto.getRecinto(this.url, this.token)
-    .pipe(
-      catchError((error) => {
-        alertServerDown();
-        return error;
-      })
-    )  
-    .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
         if (res !== null) {
           this.recintoList = res.data
         }
@@ -206,36 +207,44 @@ export class SalidasComponent implements OnInit {
   addDetail() {
 
     if (this.formDetalleSalida.valid && this.formSalida.valid) {
-      console.log(this.serial)
 
-      if (this.serial == false && this.formDetalleSalida.value.cantidad == 1 ||
-        this.serial == false && this.formDetalleSalida.value.cantidad !== 1 ||
-        this.serial == true && this.formDetalleSalida.value.cantidad == 1
+      if (this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 ||
+        this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 ||
+        this.isSerial == true && this.formDetalleSalida.value.cantidad !== 1 ||
+        this.isSerial == true && this.formDetalleSalida.value.cantidad == 1
       ) {
-        if (this.detailGroup.length >= 1 && this.serial == false) {
-          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase())) {
+
+        if (this.detailGroup.length > 0 && this.isSerial == false) {
+          if (this.detailGroup.some(producto => 
+            { 
+              if (producto.serial && this.formDetalleSalida.value.serial) {
+                return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase() 
+              }
+              return false
+            }
+          )) {
             alertSameSerial()
             return
           }
         }
 
         if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
+          
+          console.log(this.isSerial)
+          if (this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == true && this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
-          if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
-  
             this.detailGroup.push(this.formDetalleSalida.value)
             this.resultSubTotal += this.formDetalleSalida.value.subTotal
             this.formDetalleSalida.reset()
-  
-          } else {
-            alertSerial()
-          }
-  
+
+          } 
         } else {
           alertCantExis()
         }
+      } else {
+        alertSerial()
       }
-      
+
     } else {
       alertNoValidForm()
     }
@@ -285,10 +294,10 @@ export class SalidasComponent implements OnInit {
     this.formDetalleSalida.reset()
   }
 
-  setValueTransfer(producto: string){
-    if(producto === "Prestamo" || producto === 'Donación'){
+  setValueTransfer(producto: string) {
+    if (producto === "Prestamo" || producto === 'Donación') {
       this.isTransferencia = true
-    }else{
+    } else {
       this.isTransferencia = false
     }
   }
@@ -306,9 +315,11 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-
+        console.log(res);
+        
         if (res.data !== null) {
-          if (res.data.serial !== "" && res.data.serial !== null) {
+          if (res.data.serial == null || res.data.serial.length == 0) {
+            
             this.isSerial = true
 
             this.formDetalleSalida.patchValue({
@@ -316,11 +327,11 @@ export class SalidasComponent implements OnInit {
               condicion: res.data.condicion,
               marca: res.data.marca,
               modelo: res.data.modelo,
-              serial: res.data.serial,
               idTipoAlm: res.data.producto.tipoAlmacen.nombre,
               precio: res.data.producto.precio,
             })
           } else {
+
             this.isSerial = false
 
             this.formDetalleSalida.patchValue({
@@ -329,6 +340,7 @@ export class SalidasComponent implements OnInit {
               marca: res.data.marca,
               idTipoAlm: res.data.producto.tipoAlmacen.nombre,
               modelo: res.data.modelo,
+              serial: res.data.serial,
               precio: res.data.producto.precio,
             })
           }
@@ -338,27 +350,36 @@ export class SalidasComponent implements OnInit {
 
   sendData() {
 
+    if (this.formSalida.value.idRecinto.length > 0) {
+      let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
+      this.formSalida.value.idRecinto = recinto[0].idRecinto
+      this.formSalida.value.idDepar = null
+    } else {
+      let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
+      this.formSalida.value.idDepar = idTipoDep[0].idDepar
+      this.formSalida.value.idRecinto = null
+    }
+
     let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formSalida.value.idTipoSalida)
     this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
-
-    let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
-    this.formSalida.value.idDepar = idTipoDep[0].idDepar
 
     this.formSalida.value.total = this.resultSubTotal
 
     if (this.formSalida.valid && this.detailGroup.length >= 1) {
 
       loading(true)
+      console.log(JSON.stringify(this.formSalida.value))
 
-      this.api.postSalida(this.url, this.formSalida.value, this.token)
+      this.api.postSalida(this.url, JSON.stringify(this.formSalida.value), this.token)
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
-          if (res.success && res.data !== null) {
+          console.log(res)
+          if (res.success || res.data !== null) {
 
             this.detailGroup.map((detail: detalleProductoSalida) => {
 
@@ -368,10 +389,10 @@ export class SalidasComponent implements OnInit {
 
               detail.idProducto = idTipoProD[0].idProducto
             })
-            console.log(JSON.stringify(this.detailGroup))
+            console.log(this.detailGroup)
             this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
               .pipe(
-                catchError((error) => {              
+                catchError((error) => {
                   loading(false)
                   this.detailGroup = []
                   alertServerDown();

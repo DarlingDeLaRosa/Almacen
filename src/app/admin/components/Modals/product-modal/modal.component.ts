@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
@@ -36,7 +36,7 @@ export class ModalComponent implements OnInit {
     private store: Store<{ app: AppState }>
   ) {
     this.formEditProducto = this.fb.group({
-      idCatalogo: new FormControl('', Validators.required),
+      idCatalogo: new FormControl('', [Validators.required, Validators.maxLength(8)]),
       nombre: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
       precio: new FormControl('', Validators.required),
@@ -87,15 +87,16 @@ export class ModalComponent implements OnInit {
   findByCodeProduct() {
 
     if (this.formEditProducto.value.idCatalogo.length >= 5) {
-
+      console.log(this.formEditProducto.value.idCatalogo)
       this.api.findProductoByCode(this.url, this.token, this.formEditProducto.value.idCatalogo)
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
+          console.log(res)
           if (res.data !== null) {
             this.formEditProducto.patchValue({
               auxiliar: res.data.auxiliar.id,
@@ -106,6 +107,9 @@ export class ModalComponent implements OnInit {
           } else {
             alertProductCodeNoFound()
             this.formEditProducto.get('idCatalogo')?.reset()
+            this.formEditProducto.get('nombre')?.reset()
+            this.formEditProducto.get('auxiliar')?.reset()
+            this.formEditProducto.get('denominacion')?.reset()
           }
         })
     }
@@ -228,7 +232,17 @@ export class ModalComponent implements OnInit {
   }
 
   editData() {
+    console.log(this.unidadMedidaList)
     console.log(this.formEditProducto.value)
+
+    let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
+    let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
+    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
+
+    this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
+    this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
+    this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
+
     if (this.formEditProducto.valid && this.item !== null) {
       if (
         this.formEditProducto.value.idCatalogo !== this.item.catalogo.id
@@ -243,12 +257,13 @@ export class ModalComponent implements OnInit {
         || this.formEditProducto.value.idTipoAlmacen !== this.item.tipoAlmacen.nombre
       ) {
         loading(true)
-        this.api.editProducto(this.url, this.formEditProducto.value, this.token)
+
+        this.api.editProducto(this.url, JSON.stringify(this.formEditProducto.value), this.token)
           .pipe(
             catchError((error) => {
               loading(false)
               alertServerDown();
-              return throwError(error);
+              return error;
             })
           )
           .subscribe((res: any) => {
@@ -265,16 +280,8 @@ export class ModalComponent implements OnInit {
     } else if (this.formEditProducto.valid && this.item == null) {
       this.formEditProducto.removeControl('idProducto')
 
-      let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
-      let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
-      let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
-
-      this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
-      this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
-      this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
-
       loading(true)
-      this.api.postProducto(this.url, this.formEditProducto.value, this.token)
+      this.api.postProducto(this.url, JSON.stringify(this.formEditProducto.value), this.token)
         .pipe(
           catchError((error) => {
             loading(false)

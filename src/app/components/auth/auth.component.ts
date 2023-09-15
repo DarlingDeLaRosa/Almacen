@@ -79,7 +79,7 @@ export class AuthComponent implements OnInit {
               this.formUserLogIn.reset()
             } else {
               alerUserWrong()
-              this.formUserLogIn.reset()
+              this.formUserLogIn.get('password')?.reset()
             }
             () => {
               alertServerDown();

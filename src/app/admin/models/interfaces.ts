@@ -350,6 +350,7 @@ export interface detalleProductoSalida {
   condicion: string,
   existencia: number,
   idProducto: any,
+  idRecinto: any,
   idSalida: number,
   idSalidaDet: number,
   idTipoAlm: string,

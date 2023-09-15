@@ -123,7 +123,7 @@
           <input [disabled]="true" matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!isSerial; else serial">
           <mat-label>Serial</mat-label>
           <input [disabled]="true" matInput formControlName="serial">
         </mat-form-field>&nbsp;

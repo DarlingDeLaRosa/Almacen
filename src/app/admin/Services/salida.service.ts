@@ -26,6 +26,14 @@ export class salidaService {
     return this.http.get(getSalida, salidaHeader)
   }
 
+  public getSalidaTransferencia(url: string, token: string, page:number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const salidaHeader = {headers: headers}
+
+    const getSalida = `${url}/Salida/gettrasferencias/${page}/${this.cantidadItems}`
+    return this.http.get(getSalida, salidaHeader)
+  }
+
   public filterSalida(url: string, token: string, page: number, data: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
@@ -34,7 +42,7 @@ export class salidaService {
     return this.http.get(getSalida, salidaHeader)
   }
 
-  public postSalida(url: string, data: postSalida, token: string) {
+  public postSalida(url: string, data: string, token: string) {
     const headers: HttpHeaders = new HttpHeaders({'token': token, 'Content-Type': 'application/json'})
     const salidaHeader = {headers: headers}
 

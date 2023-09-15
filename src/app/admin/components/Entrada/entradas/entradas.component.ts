@@ -257,7 +257,7 @@ export class EntradasComponent implements OnInit {
       })
     }
 
-    if (this.generalITBIS  && this.changeFromToggle == true) {
+    if (this.generalITBIS && this.changeFromToggle == true) {
       this.formDetalleEntrada.patchValue({
         itbisProducto: setValuesform[0].itbis
       })
@@ -274,6 +274,7 @@ export class EntradasComponent implements OnInit {
   }
 
   addDetail() {
+    if (this.serial) this.formDetalleEntrada.get('serial')?.reset()
 
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
 
@@ -283,12 +284,15 @@ export class EntradasComponent implements OnInit {
         this.serial == true && this.formDetalleEntrada.value.cantidad == 1
       ) {
 
-        if (this.detailGroup.length >= 1 && this.serial == false) {
-          if (this.detailGroup.some(producto => {
-            if(producto.serial !== null){
-              producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase()
+        if (this.detailGroup.length > 0 && this.serial == false) {
+          if (this.detailGroup.some(producto => 
+            { 
+              if (producto.serial && this.formDetalleEntrada.value.serial) {
+                return producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase() 
+              }
+              return false
             }
-          })) {
+          )) {
             alertSameSerial()
             return
           }
@@ -314,6 +318,7 @@ export class EntradasComponent implements OnInit {
           }
         }
 
+
         this.detailGroup.push(this.formDetalleEntrada.value)
         this.formDetalleEntrada.reset()
 
@@ -327,11 +332,10 @@ export class EntradasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
-    console.log(this.detailGroup)
+
   }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
-
     if (!this.formDetalleEntrada.valid) {
 
       let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
@@ -340,9 +344,7 @@ export class EntradasComponent implements OnInit {
 
       this.detailGroup.splice(index, 1)
 
-      this.serialToggle.setValue({
-        serialT: true
-      })
+
 
       this.formDetalleEntrada.patchValue({
         idProducto: producto.idProducto,
@@ -352,11 +354,12 @@ export class EntradasComponent implements OnInit {
         modelo: producto.modelo,
         precio: producto.precio,
         serial: producto.serial,
-        itbisProducto: setValuesform[0].itbis,
         subTotal: producto.subTotal,
         observacion: producto.observacion
       })
+
       this.setValueDetailEntradaEdit(producto.idProducto)
+
 
       this.mostrarTotalItbis -= producto.itbisProducto * producto.cantidad
       this.totalResult -= producto.subTotal
@@ -366,6 +369,8 @@ export class EntradasComponent implements OnInit {
         this.totalItbis = 0
         this.mostrarTotalItbis = 0
       }
+
+      if (producto.itbisProducto.length != 0) this.formDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis })
 
     } else {
       alertUnableEdit()
@@ -450,7 +455,7 @@ export class EntradasComponent implements OnInit {
   sendData() {
 
     this.formEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-    this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
+      this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
 
     this.formEntrada.value.total = this.totalResult
 
@@ -490,7 +495,7 @@ export class EntradasComponent implements OnInit {
                 detail.itbisProducto = 0
               }
             })
-            
+
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .pipe(
                 catchError((error) => {
@@ -507,6 +512,7 @@ export class EntradasComponent implements OnInit {
                   this.detailGroup = []
                   this.mostrarTotalItbis = 0
                   this.totalResult = 0
+                  this.disableItbis = false
                 }
                 else {
                   alertIsSuccess(false)

@@ -364,12 +364,17 @@ import { catchError, combineLatest } from 'rxjs';
     if (this.formEditDetalleEntrada.valid && this.formEditEntrada.valid) {
 
       if (this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formEditDetalleEntrada.value.cantidad !== 1 ||
+        this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
+        this.serial == true && this.formEditDetalleEntrada.value.cantidad !== 1 ||
         this.serial == true && this.formEditDetalleEntrada.value.cantidad == 1
       ) {
 
         if (this.detailGroup.length >= 1 && this.serial == false) {
-          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase())) {
+          if (this.detailGroup.some(producto => {
+            if (producto.serial !== null) {
+              producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase()
+            }
+          })) {
             alertSameSerial()
             return
           }
@@ -604,6 +609,7 @@ import { catchError, combineLatest } from 'rxjs';
                   this.formEditEntrada.reset()
                   this.mostrarTotalItbis = 0
                   this.totalResult = 0
+                  this.disableItbis = false
 
                   this.router.navigate(['/almacen/administrar-entrada'])
 

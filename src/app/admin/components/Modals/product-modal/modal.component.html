@@ -9,7 +9,7 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Codigo de producto</mat-label>
-        <input matInput required formControlName="idCatalogo" (keydown.enter)="findByCodeProduct()">
+        <input maxlength="8" matInput required formControlName="idCatalogo" (keydown.enter)="findByCodeProduct()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">

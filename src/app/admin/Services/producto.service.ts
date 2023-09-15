@@ -34,7 +34,7 @@ export class productoService {
     return this.http.get(getproducto, productoHeader)
   }
 
-  public postProducto(url: string, data: postProducto, token: string) {
+  public postProducto(url: string, data: string, token: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
@@ -42,7 +42,7 @@ export class productoService {
     return this.http.post(postproducto, data, productoHeader)
   }
 
-  public editProducto(url: string, data: producto, token: string) {
+  public editProducto(url: string, data: string, token: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
