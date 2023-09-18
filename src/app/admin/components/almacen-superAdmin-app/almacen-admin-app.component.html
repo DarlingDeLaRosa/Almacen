@@ -15,7 +15,10 @@
         <a class="item-menu" [routerLink]="['/almacen/administrar-salida']" routerLinkActive="active">
           <mat-icon>indeterminate_check_box</mat-icon>Salidas
         </a>
-        <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active"><mat-icon matBadge="1" matBadgeColor="warn">compare_arrows</mat-icon> <span class="cdk-visually-hidden"></span>Transferencias</a>
+        <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active">
+          <mat-icon *ngIf="dataFiltered != 0 ; else noBadge" [matBadge]="dataFiltered" matBadgeColor="warn">compare_arrows</mat-icon>
+          <ng-template #noBadge> <mat-icon>compare_arrows</mat-icon></ng-template>
+          <span class="cdk-visually-hidden"></span>Transferencias</a>
 
         <a class="item-menu" [routerLink]="['/almacen/administrar-producto']" routerLinkActive="active">
           <mat-icon>category</mat-icon>Productos

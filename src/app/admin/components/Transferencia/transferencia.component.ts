@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { salida } from '../../models/interfaces';
+import { salida, salidaTrans } from '../../models/interfaces';
 import { FormGroup } from '@angular/forms';
 import { AppState } from 'src/app/store/state';
 import { salidaService } from '../../Services/salida.service';
 import { Store } from '@ngrx/store';
-import { catchError, combineLatest } from 'rxjs';
-import { alertServerDown } from '../../Helpers/alertsFunctions';
+import { catchError, combineLatest, throwError } from 'rxjs';
+import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from '../../Helpers/alertsFunctions';
+import { ShowDetailsSalidaComponent } from '../Modals/show-details-salida/show-details-salida.component';
+import { MatDialog } from '@angular/material/dialog';
+import { entradaService } from '../../Services/entrada.service';
 
 @Component({
   selector: 'app-transferencia',
@@ -14,16 +17,21 @@ import { alertServerDown } from '../../Helpers/alertsFunctions';
 })
 export class TransferenciaComponent implements OnInit {
 
-  dataFiltered: salida[] = [];
+  dataFiltered: salidaTrans[] = [];
+  dataFilteredAccept: salidaTrans[] = [];
   url: string = ''
   token: string = ''
   pagina: number = 1
   noPage: number = 1
   idRol: number = 0
+  recinto: string = ''
   loading: boolean = false;
+  estado: string = 'EN PROCESO'
 
   constructor(
+    public dialog: MatDialog,
     private api: salidaService,
+    private apiEntrada: entradaService,
     private store: Store<{ app: AppState }>
   ) { }
 
@@ -33,11 +41,13 @@ export class TransferenciaComponent implements OnInit {
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
       this.store.select(state => state.app.user.role.idRol),
-    ]).subscribe(([tokenValue, pathValue, idRole]) => {
+      this.store.select(state => state.app.user.recinto.nombre),
+    ]).subscribe(([tokenValue, pathValue, idRole, recintoNombre]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
       this.idRol = idRole
+      this.recinto = recintoNombre
 
       this.getSalidaTransferencia()
     })
@@ -45,7 +55,7 @@ export class TransferenciaComponent implements OnInit {
 
   getSalidaTransferencia() {
     this.loading = true
-
+    
     this.api.getSalidaTransferencia(this.url, this.token, this.pagina)
       .pipe(
         catchError((error) => {
@@ -58,7 +68,81 @@ export class TransferenciaComponent implements OnInit {
         console.log(res)
         this.loading = false
         this.noPage = res.cantPage
-        this.dataFiltered = res.data
+        this.dataFiltered = []
+        this.dataFilteredAccept = []
+
+
+        res.data.map((estadoSalida: any) => {
+          if (estadoSalida.estado == 'EN PROCESO') {
+            this.dataFiltered.push(estadoSalida)
+          } else {
+            this.dataFilteredAccept.push(estadoSalida)
+          }
+        })
+
+        console.log(this.dataFiltered , this.dataFilteredAccept, this.loading)
       });
+  }
+
+
+  aceptarTransferencia(id: number) {
+    loading(true)
+
+    this.apiEntrada.postTransferenciaEntrada(this.url, id, this.token)
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return throwError(error);
+        })
+      )
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        loading(false)
+        alertIsSuccess(true)
+      });
+  }
+
+  async removeAlert(id: number) {
+    let removeChoise: boolean = await alertRemoveSure()
+
+    if (removeChoise) {
+      loading(true)
+      this.api.removeSalida(this.url, id, this.token)
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return error;
+        })
+      )    
+      .subscribe((res: any) => {
+          loading(false)
+          if (res.data !== null) alertRemoveSuccess()
+          else alertIsSuccess(false)
+          this.getSalidaTransferencia()
+        })
+    }
+  }
+
+  openModal(detailId: salida) {
+    let dialogRef = this.dialog.open(ShowDetailsSalidaComponent, { data: detailId })
+
+    dialogRef.afterClosed().subscribe(() => {
+    })
+  }
+
+  nextPage() {
+    if (this.pagina < this.noPage) {
+      this.pagina += 1
+      this.getSalidaTransferencia()
+    }
+  }
+
+  previousPage() {
+    if (this.pagina > 1) {
+      this.pagina -= 1
+      this.getSalidaTransferencia()
+    }
   }
 }

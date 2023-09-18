@@ -102,4 +102,14 @@ export class entradaService {
     return this.http.get(getDetalleEntrada, EntradaDetalleHeader)
   }
 
+  // Entrada automatica de transferencia
+
+  public postTransferenciaEntrada(url: string, id: number, token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const detalleEntradaHeader = {headers: headers}
+
+    const postDetalleEntrada = `${url}/Entrada/addtrasferencia${id}`
+    return this.http.post(postDetalleEntrada, '', detalleEntradaHeader)
+  }
+
 }

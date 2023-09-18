@@ -2,7 +2,7 @@ import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { catchError, throwError } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
@@ -26,6 +26,7 @@ export class SalidasComponent implements OnInit {
   isTransferencia: boolean = false
   idRol: number = 0
   resultSubTotal: number = 0
+  recintoActual: string = ''
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -70,17 +71,28 @@ export class SalidasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
-    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
-    this.store.select(state => state.app.user.role.idRol).subscribe((user: any) => { this.idRol = user; });
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol),
+      this.store.select(state => state.app.user.recinto.nombre),
+    ]).subscribe(([tokenValue, pathValue, idRole, recintoNombre]) => {
 
-    this.getProducto()
-    this.getTipoSalida()
-    this.getTipoDepartamento()
-    this.getRecinto()
+      this.url = pathValue;
+      this.token = tokenValue;
+      this.idRol = idRole
+      this.recintoActual = recintoNombre
+
+      this.getProducto()
+      this.getTipoSalida()
+      this.getTipoDepartamento()
+      this.getRecinto()
+    })
   }
 
   getRecinto() {
+    this.recintoList = []
+
     this.apiRecinto.getRecinto(this.url, this.token)
       .pipe(
         catchError((error) => {
@@ -90,12 +102,17 @@ export class SalidasComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res !== null) {
-          this.recintoList = res.data
+
+          res.data.map((recinto: any) => {
+            if(recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
+          })
         }
       })
   }
 
   getProducto() {
+    this.productoList = []
+
     this.apiProducto.getProducto(this.url, this.token, 1)
       .pipe(
         catchError((error) => {
@@ -104,7 +121,9 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        this.productoList = res.data
+        res.data.map((producto: any)=> {
+          if(producto.stock !== 0) this.productoList.push(producto)
+        })
       });
   }
 
@@ -150,7 +169,7 @@ export class SalidasComponent implements OnInit {
           this.productoList = []
 
           options.forEach((item: any) => {
-            this.productoList.push(item)
+            if(item.stock !== 0) this.productoList.push()
           });
         })
     } else {

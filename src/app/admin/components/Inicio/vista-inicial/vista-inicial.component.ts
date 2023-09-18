@@ -38,18 +38,15 @@ export class VistaInicialComponent {
   }
 
   getProductoAgotamineto() {
-    this.loading = true
 
     this.api.getProductoEscazes(this.url, this.token, 1)
       .pipe(
         catchError((error) => {
-          this.loading = false
           alertServerDown();
           return error;
         })
       )
       .subscribe((res: any) => {
-        this.loading = false
         this.itemEscasez = res.data.length
       });
   }

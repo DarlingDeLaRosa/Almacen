@@ -18,9 +18,10 @@ export class ShowDetailsSalidaComponent {
   token!: string
   detallesList: detalleByIdSalida[] = []
   id!: number  
+  tipoSalida: string = '' 
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public item: number,
+    @Inject(MAT_DIALOG_DATA) public item: any,
     private api: salidaService,
     private dialogRef: MatDialogRef<ShowDetailsSalidaComponent>,
     private store: Store<{ app: AppState }>
@@ -40,7 +41,7 @@ export class ShowDetailsSalidaComponent {
   }
 
   getDetailsFromSalida(){
-    this.api.getDetalleSalida(this.url, this.token, this.item)
+    this.api.getDetalleSalida(this.url, this.token, this.item.idSalida)
     .pipe(
       catchError((error) => {
         alertServerDown();
@@ -48,8 +49,10 @@ export class ShowDetailsSalidaComponent {
       })
     )
     .subscribe((res: any)=>{
+      console.log(this.item)
       this.detallesList = res.data
       this.id = this.detallesList[0].idSalida
+      this.tipoSalida = this.item.tipoSalida.nombre 
     })
   }
 

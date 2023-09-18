@@ -147,6 +147,8 @@ export class EditSalidasComponent {
   }
 
   getProducto() {
+    this.productoList = []
+
     this.apiProducto.getProducto(this.url, this.token, 1)
       .pipe(
         catchError((error) => {
@@ -155,7 +157,9 @@ export class EditSalidasComponent {
         })
       )
       .subscribe((res: any) => {
-        this.productoList = res.data
+        res.data.map((producto: any)=> {
+          if(producto.stock !== 0) this.productoList.push(producto)
+        })
       });
   }
 
@@ -200,7 +204,7 @@ export class EditSalidasComponent {
           this.productoList = []
 
           options.forEach((item: any) => {
-            this.productoList.push(item)
+              if(item.stock !== 0) this.productoList.push()
           });
         })
     } else {

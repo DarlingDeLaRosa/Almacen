@@ -40,7 +40,7 @@
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
           <td class="dataCell">{{item.creadoPor.nombre}} {{item.creadoPor.apellido}}</td>
           <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"><button class="fucDetails" (click)="openModal(item.idSalida)"> <mat-icon>list</mat-icon></button></td>
+          <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button></td>
           <td class="dataCell">
             <button *ngIf="idRol == 1; else supp" [routerLink]="['/almacen/editar-salida', item.idSalida]" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
             <ng-template #supp>

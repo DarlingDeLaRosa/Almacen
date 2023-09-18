@@ -466,11 +466,11 @@ mat-sidenav {
   color: white;
 }
 
-.processTranfer, .recieveTransfer, .sendTransfer {
+.processTranfer, .recieveTransfer {
   display: grid;
   height: 8vh;
   align-items: center;
-  grid-template-columns: 200px 1fr 50px 50px;
+  grid-template-columns: 50px 200px 1fr 50px ;
   border-radius: 5px;
   padding: 0px 16px;
   background-color: #49aa4265;
@@ -478,18 +478,10 @@ mat-sidenav {
   margin-bottom: 10px;
 }
 
-.sendTransfer {
-  background-color: rgba(255, 0, 0, 0.26);
-  border: 1px solid red
-}
-
 .processTranfer {
-  background-color: #ddd;
+  grid-template-columns: 50px 200px 1fr 50px 50px;
+  background-color: #dddddd88;
   border: 1px solid #999
-}
-
-.acceptTransfer {
-  background-color: white !important;
 }
 
 .recieveTransfer h4,

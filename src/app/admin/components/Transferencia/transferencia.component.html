@@ -13,61 +13,74 @@
     </div>
 
     <div style="padding: 10px;">
-        <h2>Transcurso</h2>
+        <mat-button-toggle-group style="margin-bottom: 10px;" [(ngModel)]="estado">
+            <mat-button-toggle value="EN PROCESO">Transcurso</mat-button-toggle>
+            <mat-button-toggle value="RECIBIDO">Aceptados</mat-button-toggle>
+        </mat-button-toggle-group>
 
-        <div class="processTranfer">
-            <h4>Fecha: 4/09/2023</h4>
-            <h4>Transferencia recibida desde JVM</h4>
-            <Button class="fucDetails"><mat-icon>list</mat-icon></Button>
-            <button class="fucDetails" mat-mini-fab style="background-color: white;"><mat-icon>done</mat-icon></button>
+        <div *ngIf="estado == 'EN PROCESO' ;else estadoAceptado">
+            <div class="processTranfer" *ngFor="let transferencia of dataFiltered">
+                
+                <mat-icon style="color: #49aa42;" *ngIf="transferencia.recinto.nombre == recinto; else rigth">west</mat-icon>
+                <ng-template #rigth><mat-icon style="color:red">east</mat-icon></ng-template>
+
+                <h4><b style="font-weight: 500;">Fecha:</b> {{transferencia.fecha | date: 'dd/MM/yyyy'}}</h4>
+                
+                <h4 *ngIf="transferencia.recinto.nombre == recinto ;else send">Transferencia enviada desde recinto {{transferencia.salida.recinto.nombre}}</h4>
+                
+                <ng-template #send>
+                    <h4> Transferencia enviada al recinto {{transferencia.recinto.nombre}}</h4>
+                </ng-template>
+                
+                <Button class="fucDetails" (click)="openModal(transferencia.salida)"><mat-icon>list</mat-icon></Button>
+                
+                <button *ngIf="transferencia.recinto.nombre == recinto && transferencia.estado == 'EN PROCESO'; else recieve" 
+                class="acceptTrans" mat-mini-fab (click)="aceptarTransferencia(transferencia.id)" ><mat-icon>done</mat-icon></button>
+                
+                <ng-template #recieve>
+                    <button *ngIf="transferencia.estado == 'EN PROCESO'" class="removeTrans" mat-mini-fab (click)="removeAlert(transferencia.salida.idSalida)"><mat-icon>close</mat-icon></button>
+                </ng-template>
+            </div>
+
+            <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
+                <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+            </div>
         </div>
+        <ng-template #estadoAceptado>
+            <div *ngIf="estado == 'RECIBIDO' ">
+                <div class="recieveTransfer" *ngFor="let transferencia of dataFilteredAccept">
+                    
+                    <mat-icon style="color: #49aa42;" *ngIf="transferencia.recinto.nombre == recinto; else rigth">west</mat-icon>
+                    <ng-template #rigth><mat-icon style="color:red">east</mat-icon></ng-template>
+    
+                    <h4><b style="font-weight: 500;">Fecha:</b> {{transferencia.fecha | date: 'dd/MM/yyyy'}}</h4>
+                    
+                    <h4 *ngIf="transferencia.recinto.nombre == recinto ;else send">Transferencia enviada desde recinto {{transferencia.salida.recinto.nombre}}</h4>
+                    
+                    <ng-template #send>
+                        <h4> Transferencia enviada al recinto {{transferencia.recinto.nombre}}</h4>
+                    </ng-template>
+                    
+                    <Button class="fucDetails" (click)="openModal(transferencia.salida)"><mat-icon>list</mat-icon></Button>
+                </div>
+                 
+                <div class="noDataRow" *ngIf="dataFilteredAccept.length == 0 && loading == false;">
+                    <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+                </div>
 
-        <div class="processTranfer">
-            <h4>Fecha: 11/09/2023</h4>
-            <h4>Transferencia recibida desde EPH</h4>
-            <Button class="fucDetails"><mat-icon>list</mat-icon></Button>
-            <button class="fucDetails" mat-mini-fab style="background-color: white;"><mat-icon>close</mat-icon></button>
-        </div>
+            </div>
+        </ng-template>
 
-        <div class="processTranfer">
-            <h4>Fecha: 1/09/2023</h4>
-            <h4>Transferencia recibida desde UM</h4>
-            <Button class="fucDetails"><mat-icon>list</mat-icon></Button>
-            <button class="fucDetails" mat-mini-fab style="background-color: white;"><mat-icon>close</mat-icon></button>
-        </div>
-
-        <h2>Aceptados</h2>
-
-        <div class="recieveTransfer">
-            <h4>Fecha: 11/09/2023</h4>
-            <h4>Transferencia enviada a LNNM</h4>
-            <span></span>
-            <Button class="fucDetails"><mat-icon>list</mat-icon></Button>
-        </div>
-
-
-        <h2>Removidos</h2>
-
-        <div class="sendTransfer">
-            <h4>Fecha: 11/09/2023</h4>
-            <h4>Transferencia enviada a LNNM</h4>
-            <span></span>
-            <Button class="fucDetails"><mat-icon>list</mat-icon></Button>
-        </div>
-
-        <!-- <div *ngIf="loading">
+         <div class="loadingRow" *ngIf="loading">
             <div class="loader"></div>
         </div>
+        
+     
 
-        <div *ngIf="dataFiltered.length == 0 && loading == false;">
-            <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon
-                    class="noDataIcon">info_outline</mat-icon></h1>
-        </div> -->
-
-        <!-- <div class="pagination">
+        <div class="pagination">
             <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
             <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}}</div>
             <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
-        </div> -->
+        </div> 
     </div>
 </div>

@@ -140,7 +140,7 @@ export interface detalleProductoEntrada {
   itbisProducto: any,
   subTotal: number,
   idEntrada: number
-  observacion: string  
+  observacion: string
 }
 
 
@@ -156,7 +156,7 @@ export interface putDetalleProductoEntrada {
   itbisProducto: any,
   subTotal: number,
   idEntrada: number
-  observacion: string  
+  observacion: string
 }
 
 export interface detallePutGroup {
@@ -185,7 +185,7 @@ export interface detalleEditProductoEntrada {
     idTipoArt: number
     idUnidadMe: number
     nombre: string
-    itbis: number 
+    itbis: number
     precio: number
     stock: number
     stockMinimo: number
@@ -204,7 +204,7 @@ export interface detalleEditProductoEntrada {
   idEntradaDet: number
   subTotal: number,
   idEntrada: number
-  observacion: string  
+  observacion: string
 }
 
 export interface detalleByIdEntrada {
@@ -233,7 +233,7 @@ export interface detalleByIdEntrada {
   itbisProducto: any,
   cantidad: number,
   subTotal: number
-  observacion: string  
+  observacion: string
 
 }
 
@@ -299,11 +299,19 @@ export interface salida {
   ]
 }
 
+export interface salidaTrans {
+  estado: string
+  fecha: Date
+  id: number
+  recinto: { idRecinto: number, nombre: string }
+  salida: salida
+}
+
 export interface postSalida {
   fecha: Date,
   idTipoSalida: number,
   idDepar: number,
-  observacion: string, 
+  observacion: string,
   total: number
 }
 

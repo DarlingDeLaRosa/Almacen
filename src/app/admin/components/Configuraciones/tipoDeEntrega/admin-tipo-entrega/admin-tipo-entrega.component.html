@@ -27,8 +27,10 @@
         <tr class="dataRow" *ngFor="let item of dataFiltered">
           <td class="dataCell">{{item.nombre}}</td>
           <td class="dataCell">{{item.descripcion}}</td>
-          <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
-          <td class="dataCell"> <button class="fucRem" (click)="removeAlert(item.idTipoEntrega)"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucEdit" *ngIf="item.nombre !== 'Transferencia' ; else noRemove" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell"> <button class="fucRem" *ngIf="item.nombre !== 'Transferencia' ; else noRemove" (click)="removeAlert(item.idTipoEntrega)"><mat-icon>delete</mat-icon></button></td>
+        
+        <ng-template #noRemove> <td></td></ng-template>
         </tr>
       </tbody>
 

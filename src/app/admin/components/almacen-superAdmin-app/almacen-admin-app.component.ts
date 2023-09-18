@@ -4,18 +4,20 @@ import { AppState } from 'src/app/store/state';
 import { alertLogOut, alertServerDown } from '../../Helpers/alertsFunctions';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, map } from 'rxjs';
+import { catchError, filter, map } from 'rxjs';
+import { salidaService } from '../../Services/salida.service';
 
 @Component({
   selector: 'app-almacen-admin-app',
   templateUrl: './almacen-admin-app.component.html',
   styleUrls: ['./almacen-admin-app.component.css']
 })
-export class AlmacenAdminAppComponent implements OnInit{
+export class AlmacenAdminAppComponent implements OnInit {
 
+  dataFiltered: number = 0;
   url!: string;
   token!: string
   sidenavOpened: boolean = false;
@@ -27,77 +29,105 @@ export class AlmacenAdminAppComponent implements OnInit{
   firstLetter = this.userName$.pipe(map(letter => letter.charAt(0).toUpperCase()))
 
   submenu: boolean = false;
-  submenuConfig:  boolean = false;
+  submenuConfig: boolean = false;
   submenuEntrada: boolean = false;
   submenuSalida: boolean = false;
   submenuProductos: boolean = false;
 
   constructor(
     public dialog: MatDialog,
-    private store: Store< {app: AppState}>,
+    private store: Store<{ app: AppState }>,
+    private apiSalida: salidaService,
     private local: LocalStorageService,
     private api: AuthService,
     private router: Router,
-    ){}
+  ) {}
 
-  toggleSubmenu(){
+  toggleSubmenu() {
     this.submenu = !this.submenu
-    if(this.submenu){
+    if (this.submenu) {
       this.submenuConfig = false;
     }
   }
 
-  toggleSubmenuConfig(){
+  toggleSubmenuConfig() {
     this.submenuConfig = !this.submenuConfig
-    if(this.submenuConfig){
+    if (this.submenuConfig) {
       this.submenu = false;
     }
   }
 
-  toggleSubmenuEntrada(){
+  toggleSubmenuEntrada() {
     this.submenuEntrada = !this.submenuEntrada
-    if(this.submenuEntrada)this.submenuSalida = false;
-    if(this.submenuEntrada)this.submenuProductos = false;
+    if (this.submenuEntrada) this.submenuSalida = false;
+    if (this.submenuEntrada) this.submenuProductos = false;
   }
 
-  toggleSubmenuSalida(){
+  toggleSubmenuSalida() {
     this.submenuSalida = !this.submenuSalida
-    if(this.submenuSalida)this.submenuEntrada = false;
-    if(this.submenuSalida)this.submenuProductos = false;
+    if (this.submenuSalida) this.submenuEntrada = false;
+    if (this.submenuSalida) this.submenuProductos = false;
   }
 
-  toggleSubmenuProductos(){
+  toggleSubmenuProductos() {
     this.submenuProductos = !this.submenuProductos
-    if(this.submenuProductos)this.submenuSalida = false;
-    if(this.submenuProductos)this.submenuEntrada = false;
+    if (this.submenuProductos) this.submenuSalida = false;
+    if (this.submenuProductos) this.submenuEntrada = false;
   }
 
   ngOnInit() {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+
+    // this.router.events.pipe(
+    //   filter(event => event instanceof NavigationEnd)
+    // ).subscribe(() => {
+    // });
+    this.getSalidaTransferencia()
   }
 
-  async logOut(){
+  getSalidaTransferencia() {
 
-    let closeAccount: boolean = await alertLogOut()
-    
-    if(closeAccount){
-      this.local.removeDataLocalStorage('token')
-      this.local.removeDataLocalStorage('userData')
-
-      this.api.IsLoggedIn(false)
-      this.api.logOut(this.url, this.token)
+    this.apiSalida.getSalidaTransferencia(this.url, this.token, 1)
       .pipe(
         catchError((error) => {
           alertServerDown();
           return error;
         })
       )
+      .subscribe((res: any) => {
+        let proceso = [] 
+
+        res.data.map((detalle: any) => {
+          if (detalle.estado == 'EN PROCESO') {
+            proceso.push(detalle)
+            this.dataFiltered = proceso.length
+          }
+        })
+      });
+  }
+
+  async logOut() {
+
+    let closeAccount: boolean = await alertLogOut()
+
+    if (closeAccount) {
+      this.local.removeDataLocalStorage('token')
+      this.local.removeDataLocalStorage('userData')
+
+      this.api.IsLoggedIn(false)
+      this.api.logOut(this.url, this.token)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
       this.router.navigate(['/login'])
     }
   }
 
-  changePassword(){
+  changePassword() {
     this.dialog.open(ChangePasswordComponent)
   }
 }

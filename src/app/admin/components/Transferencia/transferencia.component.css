@@ -18,3 +18,13 @@
 h2{
     font-weight: 400;
 }
+
+.acceptTrans{
+    color: #49aa42;
+    background-color: white;
+}
+
+.removeTrans{
+    color: red;
+    background-color: white;
+}

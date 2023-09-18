@@ -88,7 +88,7 @@ export class AdminSalidasComponent implements OnInit {
     }
   }
 
-  openModal(detailId: number) {
+  openModal(detailId: salida) {
     let dialogRef = this.dialog.open(ShowDetailsSalidaComponent, { data: detailId })
 
     dialogRef.afterClosed().subscribe(() => {

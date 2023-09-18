@@ -1,8 +1,10 @@
 <div class="modal">
     <div class="fuctionContent">
       <h2 class="modal-title" mat-dialog-title>Detalle de productos</h2>
-      <button mat-stroked-button class="btnNavigate"
-      [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
+
+      <button *ngIf="tipoSalida != 'Prestamo' && tipoSalida != 'Donación' " mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
+      <ng-template>Hola</ng-template>
+   
     </div>
     <mat-dialog-content class="modal-content">
         <div>
@@ -26,9 +28,9 @@
                 <td class="dataCell">{{detalles.modelo}}</td>
                 <td class="dataCell">{{detalles.condicion}}</td>
                 <td class="dataCell">{{detalles.serial}}</td>
-                <td class="dataCell">{{detalles.precio}}</td>
+                <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
                 <td class="dataCell">{{detalles.cantidad}}</td>
-                <td class="dataCell">{{detalles.subTotal}}</td>
+                <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
               </tr>
             </tbody>
 
