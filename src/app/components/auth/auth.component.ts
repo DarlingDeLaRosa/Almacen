@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit {
   formUserLogIn: FormGroup;
   url!: string;
   disableBtn: boolean = false;
+  seePass: string = 'password'
 
   constructor(
     public fb: FormBuilder,
@@ -37,6 +38,14 @@ export class AuthComponent implements OnInit {
     this.store.select(state => state.app.path).subscribe((path: string) => {
       this.url = path;
     });
+  }
+
+  seePassword() {
+    if (this.seePass == 'password') {
+      this.seePass = 'text'
+    } else {
+      this.seePass = 'password'
+    }
   }
 
   logIn() {

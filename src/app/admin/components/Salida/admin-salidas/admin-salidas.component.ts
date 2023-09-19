@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
-import { catchError, combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { salida } from 'src/app/admin/models/interfaces';
 import { salidaService } from 'src/app/admin/Services/salida.service';
@@ -57,11 +57,10 @@ export class AdminSalidasComponent implements OnInit {
         catchError((error) => {
           this.loading = false
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data

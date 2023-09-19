@@ -300,6 +300,12 @@ export interface salida {
 }
 
 export interface salidaTrans {
+  creadoPor: {
+    apellido:string
+    cargo:string
+    idUsuario:number
+    nombre:string
+  }
   estado: string
   fecha: Date
   id: number

@@ -61,6 +61,7 @@ export class AdminEntradasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+        console.log(res)
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data

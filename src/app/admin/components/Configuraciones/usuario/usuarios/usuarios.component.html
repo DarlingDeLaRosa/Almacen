@@ -72,7 +72,8 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Constraseña</mat-label>
-        <input matInput type="password" required formControlName="contrasena">
+        <input matInput [type]="seePass" required formControlName="contrasena">
+        <mat-icon matSuffix (click)="seePassword()">visibility</mat-icon>
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">

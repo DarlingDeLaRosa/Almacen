@@ -3,10 +3,10 @@
     <h1 class="title" mat-dialog-title> Editar salida</h1>
     <button *ngIf="idRol == 1 ; else supp" mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      <ng-template #supp>
-        <button mat-stroked-button class="btnNavigate"
+    <ng-template #supp>
+      <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      </ng-template>
+    </ng-template>
   </div>
 
   <div class="form">
@@ -25,7 +25,7 @@
         <mat-label>Tipo de Salida</mat-label>
         <input matInput [matAutocomplete]="Tsal" appearance="fill" formControlName="idTipoSalida"
           (input)="findTipoSalidaByName()">
-        <mat-autocomplete #Tsal='matAutocomplete'>
+        <mat-autocomplete #Tsal='matAutocomplete' (optionSelected)="setValueTransfer($event.option.value)">
 
           <mat-option *ngFor="let tipoSalida of tipoSalidaList" [value]="tipoSalida.nombre">
             {{tipoSalida.nombre}}
@@ -35,7 +35,7 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker class="departamento">
+      <mat-form-field hideRequiredMarker class="departamento" *ngIf="!isTransferencia; else tranferencia">
         <mat-label>Tipo de departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">
@@ -49,6 +49,21 @@
         <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
       </mat-form-field>&nbsp;
 
+      <ng-template #tranferencia>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Recinto</mat-label>
+          <input matInput [matAutocomplete]="rec" appearance="fill" formControlName="idRecinto">
+          <mat-autocomplete #rec='matAutocomplete'>
+  
+            <mat-option *ngFor="let recinto of recintoList" [value]="recinto.nombre">
+              <span>{{recinto.nombre}}</span> 
+            </mat-option>
+  
+          </mat-autocomplete>
+          <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+        </mat-form-field>&nbsp;
+      </ng-template>
+      
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
         <input matInput required formControlName="observacion">
@@ -162,7 +177,7 @@
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.precio * item.cantidad| currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.precio * item.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button>
             </td>

@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <tr class="dataRow" *ngFor="let item of dataFiltered">
-          <td class="dataCell">{{item.fechaFactura | date:'dd/MM/yyyy'}}</td>
+          <td class="dataCell">{{item.fechaCreacion | date:'dd/MM/yyyy'}}</td>
           <td class="dataCell">{{item.recinto.nombre}}</td>
           <td class="dataCell">{{item.idEntrada}}</td>
           <td class="dataCell">{{item.tipoEntrada.nombre}}</td>

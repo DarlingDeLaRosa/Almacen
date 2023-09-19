@@ -19,6 +19,7 @@ export class TransferenciaComponent implements OnInit {
 
   dataFiltered: salidaTrans[] = [];
   dataFilteredAccept: salidaTrans[] = [];
+  dataFilteredCancel: salidaTrans[] = [];
   url: string = ''
   token: string = ''
   pagina: number = 1
@@ -74,9 +75,17 @@ export class TransferenciaComponent implements OnInit {
 
         res.data.map((estadoSalida: any) => {
           if (estadoSalida.estado == 'EN PROCESO') {
+            
             this.dataFiltered.push(estadoSalida)
-          } else {
+
+          } else if(estadoSalida.estado == 'RECIBIDO') {
+            
             this.dataFilteredAccept.push(estadoSalida)
+
+          }else if(estadoSalida.estado == 'CANCELADO'){
+
+            this.dataFilteredCancel.push(estadoSalida)
+            
           }
         })
 
@@ -100,6 +109,8 @@ export class TransferenciaComponent implements OnInit {
         this.noPage = res.cantPage
         loading(false)
         alertIsSuccess(true)
+        this.getSalidaTransferencia()
+
       });
   }
 

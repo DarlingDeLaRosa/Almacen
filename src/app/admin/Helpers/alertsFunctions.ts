@@ -67,6 +67,24 @@ export function alertNoValidForm() {
   })
 }
 
+export function unablePasswordLength() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Contraseña debe ser minimo 6 digitos',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
+export function unableEmail() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Correo Electronico invalido',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertCantExis() {
   Swal.fire({
     icon: 'info',

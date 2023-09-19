@@ -6,9 +6,10 @@ import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
+import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { salidaService } from 'src/app/admin/Services/salida.service';
-import { detalleProductoSalida, producto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
+import { departamento, detalleProductoSalida, producto, recinto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -22,8 +23,10 @@ export class EditSalidasComponent {
   url!: string;
   token!: string
   isSerial: boolean = false
+  isTransferencia: boolean = false
   idRol: number = 0
   resultSubTotal: number = 0
+  recintoActual: string = ''
   respuesta: any
 
   detailGroup: detalleProductoSalida[] = [];
@@ -32,15 +35,17 @@ export class EditSalidasComponent {
 
   tipoSalidaList: tipoSalida[] = []
   tipoAlmacenList: tipoAlmacen[] = []
-  tipoDepartamentoList: any[] = [] //tipoDepartamentoList
+  tipoDepartamentoList: departamento[] = [] 
   productoList: producto[] = []
+  recintoList: recinto[] = []
 
   constructor(
     public dialog: MatDialog,
     private apiProducto: productoService,
+    private apiRecinto: UserService,
+    private apiTipoSalida: TipoDeSalidaService,
     private router: Router,
     private route: ActivatedRoute,
-    private apiTipoSalida: TipoDeSalidaService,
     private api: salidaService,
     public fb: FormBuilder,
     private store: Store<{ app: AppState }>
@@ -50,6 +55,7 @@ export class EditSalidasComponent {
       idTipoSalida: new FormControl('', Validators.required),
       idDepar: new FormControl('', Validators.required),
       observacion: new FormControl('', Validators.required),
+      idRecinto: new FormControl(''),
       idSalida: 0,
       total: 0
     });
@@ -82,12 +88,14 @@ export class EditSalidasComponent {
     combineLatest([
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
-      this.store.select(state => state.app.user.role.idRol)
-    ]).subscribe(([tokenValue, pathvalue, idRole]) => {
+      this.store.select(state => state.app.user.role.idRol),
+      this.store.select(state => state.app.user.recinto.nombre),
+    ]).subscribe(([tokenValue, pathvalue, idRole, recintoNombre]) => {
 
       this.url = pathvalue;
       this.token = tokenValue;
       this.idRol = idRole;
+      this.recintoActual = recintoNombre
 
       loading(true)
 
@@ -140,7 +148,7 @@ export class EditSalidasComponent {
         })
 
     })
-
+    this.getRecinto()
     this.getProducto()
     this.getTipoSalida()
     this.getTipoDepartamento()
@@ -161,6 +169,25 @@ export class EditSalidasComponent {
           if(producto.stock !== 0) this.productoList.push(producto)
         })
       });
+  }
+
+  getRecinto() {
+    this.recintoList = []
+
+    this.apiRecinto.getRecinto(this.url, this.token)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        if (res !== null) {
+          res.data.map((recinto: any) => {
+            if(recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
+          })
+        }
+      })
   }
 
   getTipoSalida() {
@@ -401,13 +428,28 @@ export class EditSalidasComponent {
     })
   }
 
+  setValueTransfer(producto: string) {
+    if (producto === "Prestamo" || producto === 'Donación') {
+      this.isTransferencia = true
+    } else {
+      this.isTransferencia = false
+    }
+  }
+
   sendData() {
+
+    if (this.formEditSalida.value.idRecinto.length > 0) {
+      let recinto = this.recintoList.filter(item => item.nombre === this.formEditSalida.value.idRecinto)
+      this.formEditSalida.value.idRecinto = recinto[0].idRecinto
+      this.formEditSalida.value.idDepar = null
+    } else {
+      let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formEditSalida.value.idDepar)
+      this.formEditSalida.value.idDepar = idTipoDep[0].idDepar
+      this.formEditSalida.value.idRecinto = null
+    }
 
     let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formEditSalida.value.idTipoSalida)
     this.formEditSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
-
-    let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formEditSalida.value.idDepar)
-    this.formEditSalida.value.idDepar = idTipoDep[0].idDepar
 
     this.formEditSalida.value.total = this.resultSubTotal
 
@@ -419,7 +461,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {

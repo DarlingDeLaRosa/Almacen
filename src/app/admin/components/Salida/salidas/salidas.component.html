@@ -5,7 +5,7 @@
       [routerLink]="['/almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
     <ng-template #supp>
       <button mat-stroked-button class="btnNavigate"
-        [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
+      [routerLink]="['/user-almacen/administrar-salida']"><mat-icon>arrow_back</mat-icon>Volver</button>
     </ng-template>
   </div>
 
@@ -24,7 +24,7 @@
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Salida</mat-label>
         <input matInput [matAutocomplete]="Tsal" appearance="fill" formControlName="idTipoSalida"
-          (input)="findTipoSalidaByName()" >
+          (input)="findTipoSalidaByName()">
         <mat-autocomplete #Tsal='matAutocomplete' (optionSelected)="setValueTransfer($event.option.value)">
 
           <mat-option *ngFor="let tipoSalida of tipoSalidaList" [value]="tipoSalida.nombre">
@@ -38,7 +38,7 @@
       <mat-form-field hideRequiredMarker class="departamento" *ngIf="!isTransferencia; else tranferencia">
         <mat-label>Tipo de departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
-          (input)="findTipoDepartamentoByName()" >
+          (input)="findTipoDepartamentoByName()">
         <mat-autocomplete #auto='matAutocomplete'>
 
           <mat-option *ngFor="let tipoDepartamento of tipoDepartamentoList" [value]="tipoDepartamento.nombre">
@@ -63,7 +63,7 @@
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
       </ng-template>
-
+      
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
         <input matInput required formControlName="observacion">
@@ -188,7 +188,7 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell">{{resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>

@@ -1,15 +1,14 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
-import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { salidaService } from 'src/app/admin/Services/salida.service';
-import { departamento, detalleProductoSalida, producto, recinto, tipoAlmacen, tipoSalida } from 'src/app/admin/models/interfaces';
+import { departamento, detalleProductoSalida, producto, recinto, tipoSalida } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({
@@ -33,8 +32,8 @@ export class SalidasComponent implements OnInit {
   serial: boolean = false;
 
   tipoSalidaList: tipoSalida[] = []
-  tipoDepartamentoList: departamento[] = []
   productoList: producto[] = []
+  tipoDepartamentoList: departamento[] = []
   recintoList: recinto[] = []
 
   constructor(
@@ -102,7 +101,6 @@ export class SalidasComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res !== null) {
-
           res.data.map((recinto: any) => {
             if(recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
           })
