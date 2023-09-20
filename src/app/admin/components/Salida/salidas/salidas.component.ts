@@ -253,7 +253,6 @@ export class SalidasComponent implements OnInit {
             this.detailGroup.push(this.formDetalleSalida.value)
             this.resultSubTotal += this.formDetalleSalida.value.subTotal
             this.formDetalleSalida.reset()
-
           } 
         } else {
           alertCantExis()
@@ -299,11 +298,12 @@ export class SalidasComponent implements OnInit {
     })
   }
 
-  async removeDetail(index: number) {
+  async removeDetail(index: number, item: detalleProductoSalida) {
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
+      this.resultSubTotal -= item.subTotal
     }
   }
 
@@ -367,7 +367,7 @@ export class SalidasComponent implements OnInit {
 
   sendData() {
 
-    if (this.formSalida.value.idRecinto.length > 0) {
+    if (this.formSalida.value.idRecinto.length > 0 && this.formSalida.value.idRecinto.length != null) {
       let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
       this.formSalida.value.idRecinto = recinto[0].idRecinto
       this.formSalida.value.idDepar = null
@@ -385,7 +385,7 @@ export class SalidasComponent implements OnInit {
     if (this.formSalida.valid && this.detailGroup.length >= 1) {
 
       loading(true)
-      console.log(JSON.stringify(this.formSalida.value))
+      console.log(this.formSalida.value)
 
       this.api.postSalida(this.url, JSON.stringify(this.formSalida.value), this.token)
         .pipe(
@@ -395,7 +395,8 @@ export class SalidasComponent implements OnInit {
           })
         )
         .subscribe((res: any) => {
-          console.log(res)
+          console.log(this.detailGroup)
+
           if (res.success || res.data !== null) {
 
             this.detailGroup.map((detail: detalleProductoSalida) => {
@@ -424,6 +425,8 @@ export class SalidasComponent implements OnInit {
                   alertIsSuccess(true)
                   this.detailGroup = []
                   this.resultSubTotal = 0
+                  this.formDetalleSalida.reset()
+                  this.formSalida.reset()
                 }
                 else {
                   alertIsSuccess(false)

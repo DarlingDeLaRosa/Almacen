@@ -34,11 +34,11 @@
       <tbody>
         <tr class="dataRow" *ngFor="let item of dataFiltered">
           <td class="dataCell">{{item.fechaCreacion | date:'dd/MM/yyyy'}}</td>
-          <td class="dataCell">{{item.recinto.nombre}}</td>
+          <td class="dataCell">{{item.creadoPorU.recinto.nombre}}</td>
           <td class="dataCell">{{item.idSalida}}</td>
           <td class="dataCell">{{item.departamento.nombre}}</td>
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
-          <td class="dataCell">{{item.creadoPor.nombre}} {{item.creadoPor.apellido}}</td>
+          <td class="dataCell">{{item.creadoPorU.nombre}} {{item.creadoPorU.apellido}}</td>
           <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button></td>
           <td class="dataCell">

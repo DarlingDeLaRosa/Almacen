@@ -32,10 +32,11 @@ export class EditSalidasComponent {
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
   serial: boolean = false;
+  ediExis: number = 0
 
   tipoSalidaList: tipoSalida[] = []
   tipoAlmacenList: tipoAlmacen[] = []
-  tipoDepartamentoList: departamento[] = [] 
+  tipoDepartamentoList: departamento[] = []
   productoList: producto[] = []
   recintoList: recinto[] = []
 
@@ -53,7 +54,7 @@ export class EditSalidasComponent {
     this.formEditSalida = this.fb.group({
       fechaCreacion: new FormControl('', Validators.required),
       idTipoSalida: new FormControl('', Validators.required),
-      idDepar: new FormControl('', Validators.required),
+      idDepar: new FormControl(''),
       observacion: new FormControl('', Validators.required),
       idRecinto: new FormControl(''),
       idSalida: 0,
@@ -104,26 +105,45 @@ export class EditSalidasComponent {
           catchError((error) => {
             loading(false)
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
+          console.log(res)
           loading(false)
           let detalleList: any[] = []
           this.respuesta = res.data.detalles
-          console.log(this.respuesta)
 
           if (res.success && res.data !== null) {
-            this.formEditSalida.patchValue({
-              fechaCreacion: res.data.fechaCreacion,
-              idTipoSalida: res.data.tipoSalida.nombre,
-              idDepar: res.data.departamento.nombre,
-              observacion: res.data.observacion,
-              idSalida: res.data.idSalida
-            })
+
+            if(res.data.departamento != null){
+
+              this.isTransferencia = false
+
+              this.formEditSalida.patchValue({
+                fechaCreacion: res.data.fechaCreacion,
+                idTipoSalida: res.data.tipoSalida.nombre,
+                idDepar: res.data.departamento.nombre,
+                observacion: res.data.observacion,
+                idSalida: res.data.idSalida
+              })
+
+            }else{
+
+              this.isTransferencia = true
+
+              this.formEditSalida.patchValue({
+                fechaCreacion: res.data.fechaCreacion,
+                idTipoSalida: res.data.tipoSalida.nombre,
+                idRecinto: res.data.recinto.nombre,
+                observacion: res.data.observacion,
+                idSalida: res.data.idSalida
+              })
+
+            }
 
             detalleList = res.data.detalles
-
+            console.log(detalleList)
             detalleList.map(detalle => {
 
               this.formDetalleEditSalida.patchValue({
@@ -161,12 +181,12 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
-        res.data.map((producto: any)=> {
-          if(producto.stock !== 0) this.productoList.push(producto)
+        res.data.map((producto: any) => {
+          if (producto.stock !== 0) this.productoList.push(producto)
         })
       });
   }
@@ -178,13 +198,13 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((recinto: any) => {
-            if(recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
+            if (recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
           })
         }
       })
@@ -195,7 +215,7 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
@@ -208,7 +228,7 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
@@ -223,7 +243,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
@@ -231,7 +251,7 @@ export class EditSalidasComponent {
           this.productoList = []
 
           options.forEach((item: any) => {
-              if(item.stock !== 0) this.productoList.push()
+            if (item.stock !== 0) this.productoList.push()
           });
         })
     } else {
@@ -246,7 +266,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
@@ -269,7 +289,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
@@ -296,33 +316,42 @@ export class EditSalidasComponent {
         this.serial == false && this.formDetalleEditSalida.value.cantidad !== 1 ||
         this.serial == true && this.formDetalleEditSalida.value.cantidad == 1
       ) {
-        
-        if (this.detailGroup.length >= 1 && this.serial == false) {
-          if (this.detailGroup.some(producto => producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase())) {
+
+        if (this.detailGroup.length > 0 && this.isSerial == false) {
+          if (this.detailGroup.some(producto => {
+            if (producto.serial && this.formDetalleEditSalida.value.serial) {
+              return producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase()
+            }
+            return false
+          }
+          )) {
             alertSameSerial()
             return
           }
         }
-        // let editStock: boolean = false
 
-        // if(this.formDetalleEditSalida.value.idSalidaDet !== null || this.formDetalleEditSalida.value.idSalidaDet !== 0
-        //   && this.formDetalleEditSalida.value.cantidad <= 
-        //   this.formDetalleEditSalida.value.existencia + this.formDetalleEditSalida.value.cantidad){
-        //   editStock = true
-        // }else{
-        //   return
-        // }
+        // console.log(this.formDetalleEditSalida.value.idSalidaDet);
+        // console.log(this.ediExis);
+        // console.log(this.formDetalleEditSalida.value.cantidad);
+        // console.log(this.formDetalleEditSalida.value.existencia);
 
-        //|| editStock
-        if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false ) {
+
+        if (this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis) {
+          console.log('Hola bob');
 
           this.detailGroup.push(this.formDetalleEditSalida.value)
           this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
           this.formDetalleEditSalida.reset()
-  
+        }
+
+        if (this.isSerial == false && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == true) {
+          console.log('por aqui vine')
+          this.detailGroup.push(this.formDetalleEditSalida.value)
+          this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+          this.formDetalleEditSalida.reset()
         }
       }
-       else {
+      else {
         alertSerial()
       }
 
@@ -363,14 +392,24 @@ export class EditSalidasComponent {
     } else {
       alertUnableEdit()
     }
+
+    if (item.idSalidaDet !== null && this.ediExis == 0) {
+
+      let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
+        return productoEspecifico.producto.nombre == item.idProducto
+      });
+      
+      this.ediExis = setValuesform[0].cantidad
+    }
   }
 
-  async removeDetail(index: number) {
+  async removeDetail(index: number, item: detalleProductoSalida) {
 
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
+      this.resultSubTotal -= item.subTotal
     }
   }
 
@@ -383,7 +422,7 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
@@ -392,7 +431,7 @@ export class EditSalidasComponent {
 
           if (res.data.serial.length > 0) {
 
-            this.isSerial = true
+            this.isSerial = false
 
             this.formDetalleEditSalida.patchValue({
               existencia: res.data.producto.stock,
@@ -406,7 +445,7 @@ export class EditSalidasComponent {
 
           } else {
 
-            this.isSerial = false
+            this.isSerial = true
 
             this.formDetalleEditSalida.patchValue({
               existencia: res.data.producto.stock,
@@ -416,7 +455,6 @@ export class EditSalidasComponent {
               modelo: res.data.modelo,
               precio: res.data.producto.precio,
             })
-
           }
         }
       })
@@ -437,8 +475,9 @@ export class EditSalidasComponent {
   }
 
   sendData() {
-
-    if (this.formEditSalida.value.idRecinto.length > 0) {
+    console.log(this.formEditSalida.value);
+    
+    if (this.formEditSalida.value.idRecinto.length > 0 ) {
       let recinto = this.recintoList.filter(item => item.nombre === this.formEditSalida.value.idRecinto)
       this.formEditSalida.value.idRecinto = recinto[0].idRecinto
       this.formEditSalida.value.idDepar = null
@@ -465,7 +504,9 @@ export class EditSalidasComponent {
           })
         )
         .subscribe((res: any) => {
-          if (res.success && res.data !== null) {
+          console.log(res);
+          
+          if (res.success ) {
 
             this.detailGroup.map((detail: any) => {
 
@@ -474,7 +515,7 @@ export class EditSalidasComponent {
                   return detalle
                 }
               })
-
+              console.log(idsDetalles)
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
 
               detail.idProducto = idTipoProD[0].idProducto
@@ -504,6 +545,7 @@ export class EditSalidasComponent {
                   alertIsSuccess(true)
 
                   this.formEditSalida.reset()
+                  this.formDetalleEditSalida.reset()
                   this.detailGroup = []
                   this.resultSubTotal = 0
 

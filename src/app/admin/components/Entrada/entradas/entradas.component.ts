@@ -11,7 +11,7 @@ import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
-import { catchError } from 'rxjs';
+import { catchError, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-entradas',
@@ -22,19 +22,19 @@ export class EntradasComponent implements OnInit {
 
   formEntrada: FormGroup;
   formDetalleEntrada: FormGroup;
-  serialToggle: FormGroup;
   url!: string;
   token!: string
   totalResult: number = 0
-  totalItbis: number = 0
+  //totalItbis: number = 0
   mostrarTotalItbis: number = 0
   disableItbis: boolean = false
   idRol: number = 0
-  changeFromToggle: boolean = false
+  //serialToggle: FormGroup;
+  //changeFromToggle: boolean = false
 
   detailGroup: detalleProductoEntrada[] = [];
-  generalITBIS: boolean = false;
-  serial: boolean = true;
+  generalITBIS: boolean = true;
+  isSerial: boolean = false;
 
   proveedorList: proveedor[] = []
   tipoEntradaList: tipoEntrada[] = []
@@ -79,20 +79,27 @@ export class EntradasComponent implements OnInit {
       idEntrada: 0,
     })
 
-    this.serialToggle = this.fb.group({
-      serialT: new FormControl(''),
-    })
+    // this.serialToggle = this.fb.group({
+    //   serialT: new FormControl(''),
+    // })
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
-    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
-    this.store.select(state => state.app.user.role.idRol).subscribe((user: any) => { this.idRol = user; });
+    combineLatest([
+      this.store.select(state => state.app.token),
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol),
+    ]).subscribe(([tokenValue, pathValue, idRol]) => {
 
-    this.getProveedor()
-    this.getProducto()
-    this.getTipoEntrada()
-    this.getTipoEntrega()
+      this.url = pathValue;
+      this.token = tokenValue;
+      this.idRol = idRol
+
+      this.getProveedor()
+      this.getProducto()
+      this.getTipoEntrada()
+      this.getTipoEntrega()
+    })
   }
 
   getProveedor() {
@@ -231,100 +238,131 @@ export class EntradasComponent implements OnInit {
 
   itbisOption(event: any) {
     this.generalITBIS = event.value;
-    this.changeFromToggle = true
-    this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
+
+    if (this.generalITBIS == false) {
+      this.formEntrada.get('itbisGeneral')?.reset()
+    } else {
+      this.formDetalleEntrada.get('itbisProducto')?.reset()
+    }
+    //this.changeFromToggle = true
+    //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
   }
 
   serialOption(event: any) {
-    this.serial = event.value
+    this.isSerial = event.value
+
+    if (this.isSerial == false) {
+      this.formDetalleEntrada.get('serial')?.reset()
+    }
   }
 
   setValueDetailsEntrada(producto: string) {
+
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
     });
 
-    if (!this.generalITBIS && this.changeFromToggle == false) {
+    //this.formDetalleEntrada.reset()
+
+    if (this.generalITBIS) { //&& this.changeFromToggle == false
+
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
         precio: setValuesform[0].precio
       })
+
     } else {
+
       this.formDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        precio: setValuesform[0].precio,
         itbisProducto: setValuesform[0].itbis,
-        precio: setValuesform[0].precio
       })
+
     }
 
-    if (this.generalITBIS && this.changeFromToggle == true) {
-      this.formDetalleEntrada.patchValue({
-        itbisProducto: setValuesform[0].itbis
-      })
-    }
+    // if (this.generalITBIS) { //&& this.changeFromToggle == true
+    //   this.formDetalleEntrada.patchValue({
+    //     itbisProducto: setValuesform[0].itbis
+    //   })
+    // }
   }
 
-  setValueDetailEntradaEdit(producto: string) {
-    let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
-      return productoEspecifico.nombre == producto
-    });
-    this.formDetalleEntrada.patchValue({
-      idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
-    })
-  }
+  // setValueDetailEntradaEdit(producto: string) {
+  //   let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
+  //     return productoEspecifico.nombre == producto
+  //   });
+  //   this.formDetalleEntrada.patchValue({
+  //     idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+  //   })
+  // }
 
   addDetail() {
-    if (this.serial) this.formDetalleEntrada.get('serial')?.reset()
-
+    //if (this.isSerial) this.formDetalleEntrada.get('serial')?.reset()
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
 
-      if (this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formDetalleEntrada.value.cantidad == 1 ||
-        this.serial == true && this.formDetalleEntrada.value.cantidad !== 1 ||
-        this.serial == true && this.formDetalleEntrada.value.cantidad == 1
-      ) {
+      if (this.isSerial == true && this.formDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
 
-        if (this.detailGroup.length > 0 && this.serial == false) {
-          if (this.detailGroup.some(producto => 
-            { 
-              if (producto.serial && this.formDetalleEntrada.value.serial) {
-                return producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase() 
-              }
-              return false
+        if (this.detailGroup.length > 0 && this.isSerial == true) {
+          if (this.detailGroup.some(producto => {
+            if (producto.serial && this.formDetalleEntrada.value.serial) {
+              return producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase()
             }
+            return false
+          }
           )) {
             alertSameSerial()
             return
           }
         }
 
-        this.totalResult += this.formDetalleEntrada.value.subTotal
+        //this.totalResult += this.formDetalleEntrada.value.subTotal
 
+        // if (this.generalITBIS == false) {
+        //   console.log('por aqui ');
+
+        //   this.mostrarTotalItbis = 0
+        //   this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
+
+        // } else {
+        // if (this.formDetalleEntrada.value.itbisProducto !== 0) {
+
+        //   this.subTotalResult()
+        //   //this.mostrarTotalItbis += this.totalItbis
+
+        //   this.formDetalleEntrada.value.itbisProducto
+        //     = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+        // }
+        // }
         if (this.generalITBIS == false) {
 
-          this.mostrarTotalItbis = 0
-          this.totalItbis = this.formEntrada.value.itbisGeneral
-          this.mostrarTotalItbis = this.totalItbis
+          this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+          //this.sumaTotal()
+          this.detailGroup.push(this.formDetalleEntrada.value)
+
+          //this.detailGroup.map((detalle: any) => {
+          //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+          //  this.totalResult += detalle.subTotal
+          //})
 
         } else {
-          if (this.formDetalleEntrada.value.itbisProducto !== 0) {
 
-            this.subTotalResult()
+          this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
+          //sumaTotal()
 
-            this.mostrarTotalItbis += this.totalItbis
+          this.detailGroup.push(this.formDetalleEntrada.value)
 
-            this.formDetalleEntrada.value.itbisProducto
-              = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
-          }
+          //this.detailGroup.map((detalle: any) => {
+          //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+          //  this.totalResult += detalle.subTotal
+          //})
+
         }
-
-
-        this.detailGroup.push(this.formDetalleEntrada.value)
+        this.sumaTotal()
         this.formDetalleEntrada.reset()
+        //this.detailGroup.push(this.formDetalleEntrada.value)
 
-        if (this.detailGroup.length >= 1) {
-          this.disableItbis = true
-        }
+        if (this.detailGroup.length >= 1) this.disableItbis = true
 
       } else {
         alertSerial()
@@ -332,7 +370,6 @@ export class EntradasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
-
   }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
@@ -344,8 +381,6 @@ export class EntradasComponent implements OnInit {
 
       this.detailGroup.splice(index, 1)
 
-
-
       this.formDetalleEntrada.patchValue({
         idProducto: producto.idProducto,
         cantidad: producto.cantidad,
@@ -355,27 +390,24 @@ export class EntradasComponent implements OnInit {
         precio: producto.precio,
         serial: producto.serial,
         subTotal: producto.subTotal,
-        observacion: producto.observacion
+        observacion: producto.observacion,
+        idTipoAlm: producto.idTipoAlm
       })
 
-      this.setValueDetailEntradaEdit(producto.idProducto)
-
-
-      this.mostrarTotalItbis -= producto.itbisProducto * producto.cantidad
-      this.totalResult -= producto.subTotal
+      //this.setValueDetailEntradaEdit(producto.idProducto)
 
       if (this.detailGroup.length == 0) {
         this.disableItbis = false
-        this.totalItbis = 0
-        this.mostrarTotalItbis = 0
+        //this.totalItbis = 0
+        //this.mostrarTotalItbis = 0
       }
 
-      if (producto.itbisProducto.length != 0) this.formDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis })
+      if (this.generalITBIS == false) this.formDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis })
 
     } else {
       alertUnableEdit()
     }
-
+    this.sumaTotal()
   }
 
   async removeDetail(index: number, item: detalleProductoEntrada) {
@@ -385,16 +417,18 @@ export class EntradasComponent implements OnInit {
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
 
-      if ((this.generalITBIS == false && this.detailGroup.length == 0)) {
-        this.totalItbis = 0
-      }
-      this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
-      this.totalResult -= item.subTotal
+      //if ((this.generalITBIS == false && this.detailGroup.length == 0)) {
+      //  this.totalItbis = 0
+      //}
+      //this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
+      //this.totalResult -= item.subTotal
     }
 
-    if (this.detailGroup.length == 0) {
-      this.disableItbis = false
-    }
+    //if (this.detailGroup.length == 0) {
+    //  this.disableItbis = false
+    //}
+
+    this.sumaTotal()
   }
 
   clearDetail() {
@@ -402,6 +436,7 @@ export class EntradasComponent implements OnInit {
   }
 
   duplicateDetail(producto: detalleProductoEntrada) {
+    console.log(producto);
 
     if (!this.formDetalleEntrada.valid) {
       this.formDetalleEntrada.patchValue({
@@ -413,43 +448,68 @@ export class EntradasComponent implements OnInit {
         precio: producto.precio,
         itbisProducto: producto.itbisProducto,
         subTotal: producto.subTotal,
-        observacion: producto.observacion
+        observacion: producto.observacion,
+        idTipoAlm: producto.idTipoAlm
       })
 
       this.formDetalleEntrada.get('serial')?.reset()
-      this.setValueDetailEntradaEdit(producto.idProducto)
+      //this.setValueDetailEntradaEdit(producto.idProducto)
 
     } else {
       alertUnableEdit()
     }
+    this.sumaTotal()
   }
 
   subTotalResult() {
-    let form = this.formDetalleEntrada.value
-
     if (this.formDetalleEntrada.get('cantidad')?.valid || this.formDetalleEntrada.get('precio')?.valid) {
 
-      if (this.formDetalleEntrada.value.itbisProducto >= 0.001) {
+      //if (this.generalITBIS) { //this.formDetalleEntrada.value.itbisProducto > 0
 
-        form.itbisProducto = form.itbisProducto * 0.01 * form.precio
+      let total = this.formDetalleEntrada.value.precio * this.formDetalleEntrada.value.cantidad
+      this.formDetalleEntrada.patchValue({ subTotal: total })
 
-        this.totalItbis = form.cantidad * form.itbisProducto
+      //this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
 
-        let total = form.precio * form.cantidad
+      //this.totalItbis = form.cantidad * form.itbisProducto
 
-        total += this.totalItbis
+      //total += this.totalItbis
 
-        this.formDetalleEntrada.patchValue(
-          { subTotal: total }
-        )
-
-      } else {
-        let total = form.precio * form.cantidad
-        this.formDetalleEntrada.patchValue({
-          subTotal: total
-        })
-      }
+      //} else {
+      //let total = this.formDetalleEntrada.value.precio * this.formDetalleEntrada.value.cantidad
+      //this.formDetalleEntrada.patchValue({
+      //  subTotal: total
+      //})
+      //}
     }
+  }
+
+  sumaTotal() {
+
+    //if (this.generalITBIS == false) {
+
+    this.totalResult = 0
+    this.mostrarTotalItbis = 0
+
+    //this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+    //this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral     
+
+    this.detailGroup.map((detalle: any) => {
+      this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+      this.totalResult += detalle.subTotal + this.mostrarTotalItbis
+    })
+
+    //} else {
+    //this.totalResult = 0
+    //this.mostrarTotalItbis = 0
+
+    //this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
+
+    //this.detailGroup.map((detalle: any) => {
+    //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+    //  this.totalResult += detalle.subTotal
+    //})
+    //}
   }
 
   sendData() {

@@ -17,8 +17,8 @@
       <div class="ITBIS">
         <h4>El ITBIS de la factura es general?</h4>
         <mat-radio-group (change)="itbisOption($event)" formControlName="itbisGeneralEstado">
-          <mat-radio-button [disabled]="disableItbis" [value]="false" [checked]="true" color="primary">Si</mat-radio-button>
-          <mat-radio-button [disabled]="disableItbis" [value]="true" color="primary">No</mat-radio-button>
+          <mat-radio-button matTooltip="Todos Los productos seran calculados con un 18% de ITBIS." [disabled]="disableItbis" [value]="true" [checked]="true" color="primary">Si</mat-radio-button>
+          <mat-radio-button matTooltip="Los productos tomaran el porcentaje de ITBIS especificado al momento de la creación." [disabled]="disableItbis" [value]="false" color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -86,11 +86,11 @@
         <input matInput formControlName="observacion">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else generalItbis">
+      <!-- <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else generalItbis">
         <mat-label>ITBIS General</mat-label>
-        <input type="number" matInput formControlName="itbisGeneral">
+        <input type="number" matInput formControlName="itbisGeneral" (input)="sumaTotal()">
       </mat-form-field>&nbsp;
-      <ng-template #generalItbis></ng-template>
+      <ng-template #generalItbis></ng-template> -->
 
     </div>
   </div>
@@ -105,11 +105,11 @@
 
     <div>
 
-      <div class="ITBIS" [formGroup]="serialToggle">
+      <div class="ITBIS" ><!--[formGroup]="serialToggle"-->
         <h4>El producto contiene numero serial?</h4>
-        <mat-radio-group (change)="serialOption($event)" formControlName="serialT">
-          <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
-          <mat-radio-button [value]="true" [checked]="true" color="primary">No</mat-radio-button>
+        <mat-radio-group (change)="serialOption($event)"> <!--formControlName="serialT"-->
+          <mat-radio-button [value]="true" color="primary">Si</mat-radio-button>
+          <mat-radio-button [value]="false" [checked]="true" color="primary">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -136,7 +136,7 @@
         <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="generalITBIS; else noGeneralItbis">
+      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else noGeneralItbis">
         <mat-label>Porcentaje de ITBIS</mat-label>
         <input readonly matInput formControlName="itbisProducto" (input)="subTotalResult()">
       </mat-form-field>&nbsp;
@@ -166,7 +166,7 @@
         <input matInput required formControlName="modelo">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
+      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else noElectronicProduct">
         <mat-label>No. Serial</mat-label>
         <input matInput formControlName="serial">
       </mat-form-field>&nbsp;
@@ -200,8 +200,8 @@
           <th class="headerCell">Condición</th>
           <th class="headerCell">Marca</th>
           <th class="headerCell">Modelo</th>
-          <th class="headerCell">Precio</th>
           <th class="headerCell">Serial</th>
+          <th class="headerCell">Precio</th>
           <th class="headerCell">ITBIS</th>
           <th class="headerCell">Total ITBIS</th>
           <th class="headerCell">Subtotal</th>
@@ -216,8 +216,8 @@
           <td class="dataCell">{{item.condicion}}</td>
           <td class="dataCell">{{item.marca}}</td>
           <td class="dataCell">{{item.modelo}}</td>
-          <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.serial}}</td>
+          <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.itbisProducto * item.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>

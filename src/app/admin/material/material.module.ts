@@ -19,6 +19,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 const materialComponents = [
   MatButtonModule,
@@ -40,7 +41,8 @@ const materialComponents = [
   MatMenuModule,
   MatProgressSpinnerModule,
   MatBadgeModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatTooltipModule
 ]
 
 @NgModule({

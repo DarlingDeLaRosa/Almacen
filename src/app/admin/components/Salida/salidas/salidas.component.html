@@ -175,7 +175,7 @@
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i)"><mat-icon>delete</mat-icon></button></td>
+            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
           </tr>
 
         </tbody>

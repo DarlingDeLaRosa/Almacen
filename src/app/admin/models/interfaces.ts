@@ -138,6 +138,7 @@ export interface detalleProductoEntrada {
   precio: number,
   cantidad: number,
   itbisProducto: any,
+  idTipoAlm: any,
   subTotal: number,
   idEntrada: number
   observacion: string
@@ -259,11 +260,15 @@ export interface salida {
     idDepar: number,
     nombre: string
   },
-  creadoPor: {
+  creadoPorU: {
     idUsuario: number,
     nombre: string,
     apellido: string,
     cargo: string
+    recinto:{
+      idRecinto: number
+      nombre: string
+    }
   },
   fechaCreacion: Date,
   observacion: string,
