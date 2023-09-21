@@ -115,7 +115,7 @@ export class EntradasComponent implements OnInit {
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrada: any) => {
-            if(tentrada.nombre != 'Donación' && tentrada.nombre != 'Prestamo' ) this.tipoEntradaList.push(tentrada)
+            if (tentrada.nombre != 'Donación' && tentrada.nombre != 'Prestamo') this.tipoEntradaList.push(tentrada)
           })
         }
       });
@@ -126,7 +126,7 @@ export class EntradasComponent implements OnInit {
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrega: any) => {
-            if(tentrega.nombre != 'Transferencia') this.tipoEntregaList.push(tentrega)
+            if (tentrega.nombre != 'Transferencia') this.tipoEntregaList.push(tentrega)
           })
         }
       });
@@ -249,12 +249,12 @@ export class EntradasComponent implements OnInit {
     this.generalITBIS = event.value;
 
     //if (this.generalITBIS == false) {
-      //this.formDetalleEntrada.get('itbisProducto')?.reset()
-      //this.formEntrada.get('itbisGeneral')?.reset()
-      //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
+    //this.formDetalleEntrada.get('itbisProducto')?.reset()
+    //this.formEntrada.get('itbisGeneral')?.reset()
+    //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
     //} else {
-      this.formDetalleEntrada.get('itbisProducto')?.reset()
-      this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
+    this.formDetalleEntrada.get('itbisProducto')?.reset()
+    this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
     //}
     //this.changeFromToggle = true
     //this.setValueDetailsEntrada(this.formDetalleEntrada.value.idProducto)
@@ -348,7 +348,7 @@ export class EntradasComponent implements OnInit {
         // }
         if (this.generalITBIS) {
 
-          
+
           this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
           //sumaTotal()
 
@@ -382,7 +382,7 @@ export class EntradasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
-    }
+  }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
     console.log(producto)
@@ -396,7 +396,7 @@ export class EntradasComponent implements OnInit {
       });
 
       console.log(setValuesform);
-      
+
       this.detailGroup.splice(index, 1)
 
       this.formDetalleEntrada.patchValue({
@@ -413,17 +413,17 @@ export class EntradasComponent implements OnInit {
         //itbisProducto: producto.itbisProducto
       })
 
-      if(producto.serial != null && producto.serial.length > 0 ) {
+      if (producto.serial != null && producto.serial.length > 0) {
         this.isSerial = true
         this.formDetalleEntrada.patchValue({ serial: producto.serial })
-      }else{
+      } else {
         this.isSerial = false
       }
 
       if (this.generalITBIS) {
         this.formDetalleEntrada.patchValue({ itbisProducto: 18 })
-      }else{
-        this.formDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis})
+      } else {
+        this.formDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis })
       }
 
       //this.setValueDetailEntradaEdit(producto.idProducto)
@@ -455,9 +455,9 @@ export class EntradasComponent implements OnInit {
       //this.totalResult -= item.subTotal
     }
 
-    //if (this.detailGroup.length == 0) {
-    //  this.disableItbis = false
-    //}
+    if (this.detailGroup.length == 0) {
+      this.disableItbis = false
+    }
 
     this.sumaTotal()
   }
@@ -483,10 +483,10 @@ export class EntradasComponent implements OnInit {
         idTipoAlm: producto.idTipoAlm
       })
 
-      if(producto.serial != null && producto.serial.length > 0 ) {
+      if (producto.serial != null && producto.serial.length > 0) {
         this.isSerial = true
         this.formDetalleEntrada.get('serial')?.reset()
-      }else{
+      } else {
         this.isSerial = false
       }
       //this.setValueDetailEntradaEdit(producto.idProducto)
@@ -502,7 +502,7 @@ export class EntradasComponent implements OnInit {
 
       //if (this.generalITBIS) { //this.formDetalleEntrada.value.itbisProducto > 0
 
-      let total = this.formDetalleEntrada.value.precio * this.formDetalleEntrada.value.cantidad 
+      let total = this.formDetalleEntrada.value.precio * this.formDetalleEntrada.value.cantidad
       this.formDetalleEntrada.patchValue({ subTotal: total })
 
       //this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
@@ -532,7 +532,7 @@ export class EntradasComponent implements OnInit {
 
     this.detailGroup.map((detalle: any) => {
       this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
-      this.totalResult += detalle.subTotal 
+      this.totalResult += detalle.subTotal
     })
 
     this.totalResult += this.mostrarTotalItbis
@@ -553,7 +553,7 @@ export class EntradasComponent implements OnInit {
   sendData() {
 
     this.formEntrada.value.itbisGeneralEstado = this.generalITBIS,
-    this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
+      this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
     this.formEntrada.value.total = this.totalResult
 
     let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
@@ -604,7 +604,7 @@ export class EntradasComponent implements OnInit {
                 loading(false)
 
                 if (res.data !== null) {
-                  
+
                   alertIsSuccess(true)
 
                   this.detailGroup = []
