@@ -17,8 +17,8 @@
       <div class="ITBIS">
         <h4>El ITBIS de la factura es general?</h4>
         <mat-radio-group formControlName="itbisGeneralEstado" (change)="itbisOption($event)">
-          <mat-radio-button [value]="false" [disabled]="disableItbis" color="primary">Si</mat-radio-button>
-          <mat-radio-button [value]="true"  [disabled]="disableItbis" color="primary">No</mat-radio-button>
+          <mat-radio-button matTooltip="Todos Los productos seran calculados con un 18% de ITBIS." [disabled]="disableItbis" [value]="true"  color="primary" [checked]="isSerial" >Si</mat-radio-button>
+          <mat-radio-button matTooltip="Los productos tomaran el porcentaje de ITBIS especificado al momento de la creación." [disabled]="disableItbis" [value]="false" color="primary" [checked]="!isSerial">No</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -86,11 +86,11 @@
         <input matInput required formControlName="observacion">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else generalItbis">
+      <!-- <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else generalItbis">
         <mat-label>ITBIS General</mat-label>
         <input type="number" matInput formControlName="itbisGeneral">
       </mat-form-field>&nbsp;
-      <ng-template #generalItbis></ng-template>
+      <ng-template #generalItbis></ng-template> -->
 
     </div>
 
@@ -105,9 +105,9 @@
       <div>
         <div class="ITBIS">
           <h4>El producto contiene numero serial?</h4>
-          <mat-radio-group (change)="serialOption($event)">
-            <mat-radio-button [value]="false" color="primary">Si</mat-radio-button>
-            <mat-radio-button [value]="true" [checked]="true" color="primary">No</mat-radio-button>
+          <mat-radio-group  (change)="serialOption($event)">
+            <mat-radio-button [value]="true" [checked]="isSerial" color="primary">Si</mat-radio-button>
+            <mat-radio-button [value]="false" [checked]="!isSerial" color="primary">No</mat-radio-button>
           </mat-radio-group>
         </div>
 
@@ -164,7 +164,7 @@
           <input matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!serial; else noElectronicProduct">
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else noElectronicProduct">
           <mat-label>No. Serial</mat-label>
           <input matInput formControlName="serial">
         </mat-form-field>&nbsp;
@@ -218,7 +218,7 @@
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.itbisProducto | currency: '':  'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.itbisProducto * item.cantidad | currency: '':  'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal + item.itbisProducto * item.cantidad| currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
             </td>

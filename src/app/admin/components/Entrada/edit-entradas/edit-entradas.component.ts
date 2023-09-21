@@ -19,29 +19,31 @@ import { catchError, combineLatest } from 'rxjs';
   templateUrl: './edit-entradas.component.html',
   styleUrls: ['./edit-entradas.component.css']
 })
-  export class EditEntradasComponent {
-    formEditEntrada: FormGroup;
-    formEditDetalleEntrada: FormGroup;
-    url!: string;
-    token!: string
-    totalResult: number = 0
-    totalItbis: number = 0
-    mostrarTotalItbis: number = 0
-    idRol: number = 0
-    setdetailGroup: boolean = false
+export class EditEntradasComponent {
+
+  formEditEntrada: FormGroup;
+  formEditDetalleEntrada: FormGroup;
+  url!: string;
+  token!: string
+  totalResult: number = 0
+  //totalItbis: number = 0
+  mostrarTotalItbis: number = 0
+  disableItbis: boolean = false
+  idRol: number = 0
+  setdetailGroup: boolean = false
 
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
-  serial: boolean = true;
+  isSerial: boolean = false;
+  //serial: boolean = true;
   respuesta!: any
-  disableItbis: boolean = false
 
   proveedorList: proveedor[] = []
   tipoAlmacenList: tipoAlmacen[] = []
   tipoEntradaList: tipoEntrada[] = []
   tipoEntregaList: tipoEntrega[] = []
   productoList: producto[] = []
-  detalleList: detalleEditProductoEntrada[] = []
+  //detalleList: detalleEditProductoEntrada[] = []
 
   constructor(
     public dialog: MatDialog,
@@ -89,7 +91,6 @@ import { catchError, combineLatest } from 'rxjs';
   ngOnInit(): void {
 
     let id: number = 0
-
     this.route.paramMap.subscribe(params => {
       const idparam = params.get('id');
       if (idparam !== null) id = parseInt(idparam)
@@ -106,7 +107,7 @@ import { catchError, combineLatest } from 'rxjs';
       this.idRol = idRole;
 
       loading(true)
-      
+
       this.api.getEntradaById(this.url, this.token, id)
         .pipe(
           catchError((error) => {
@@ -123,96 +124,105 @@ import { catchError, combineLatest } from 'rxjs';
 
           if (res.success && res.data !== null) {
 
-            if (res.data.itbisGeneralEstado == false) {
-              this.generalITBIS = true
-              this.disableItbis = true
+            //if (res.data.itbisGeneralEstado) {
+            //this.generalITBIS = true
+            //this.disableItbis = true
+            this.generalITBIS = res.data.itbisGeneralEstado;
 
-              this.formEditEntrada.patchValue({
-                fechaFactura: res.data.fechaFactura,
-                idProveedor: res.data.proveedor.razonSocial,
-                idTipoEntrada: res.data.tipoEntrada.nombre,
-                idTipoEntrega: res.data.tipoEntrega.nombre,
-                numOrden: res.data.numOrden,
-                noFactura: res.data.noFactura,
-                observacion: res.data.observacion,
-                itbisGeneralEstado: !res.data.itbisGeneralEstado,
-                total: res.data.total,
-                idEntrada: res.data.idEntrada
+            this.formEditEntrada.patchValue({
+              fechaFactura: res.data.fechaFactura,
+              idProveedor: res.data.proveedor.razonSocial,
+              idTipoEntrada: res.data.tipoEntrada.nombre,
+              idTipoEntrega: res.data.tipoEntrega.nombre,
+              numOrden: res.data.numOrden,
+              noFactura: res.data.noFactura,
+              observacion: res.data.observacion,
+              itbisGeneralEstado: res.data.itbisGeneralEstado,
+              total: res.data.total,
+              idEntrada: res.data.idEntrada
+            })
+
+            //this.detalleList = res.data.detalles
+
+            //this.detalleList.map(detalle => {
+            res.data.detalles.map((detalle: any) => {
+              //this.setdetailGroup = true
+
+              this.formEditDetalleEntrada.patchValue({
+                idProducto: detalle.producto.nombre,
+                cantidad: detalle.cantidad,
+                condicion: detalle.condicion,
+                marca: detalle.marca,
+                modelo: detalle.modelo,
+                precio: detalle.precio,
+                serial: detalle.serial,
+                observacion: detalle.observacion,
+                subTotal: detalle.subTotal,
+                //itbisProducto: detalle.itbisProducto,
+                idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+                idEntrada: detalle.idEntrada,
+                idEntradaDet: detalle.idEntradaDet,
               })
 
-              this.detalleList = res.data.detalles
+              if (this.generalITBIS) {
+                this.formEditDetalleEntrada.patchValue({ itbisProducto: 18 })
+              } else {
+                this.formEditDetalleEntrada.patchValue({ itbisProducto: detalle.itbisProducto })
+              }
 
-              this.detalleList.map(detalle => {
+              this.addDetail()
+              //this.setdetailGroup = false
+              this.formEditDetalleEntrada.reset()
+            })
 
-                this.setdetailGroup = true
 
-                this.formEditDetalleEntrada.patchValue({
-                  idProducto: detalle.producto.nombre,
-                  cantidad: detalle.cantidad,
-                  condicion: detalle.condicion,
-                  marca: detalle.marca,
-                  modelo: detalle.modelo,
-                  precio: detalle.precio,
-                  serial: detalle.serial,
-                  observacion: detalle.observacion,
-                  subTotal: detalle.subTotal,
-                  itbisProducto: detalle.itbisProducto,
-                  idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-                  idEntrada: detalle.idEntrada,
-                  idEntradaDet: detalle.idEntradaDet,
-                })
+            //} 
+            // else {
 
-                this.addDetail()
-                this.setdetailGroup = false
-                this.formEditDetalleEntrada.reset()
-              })
+            //   this.generalITBIS = false
+            //   this.disableItbis = true
 
-            } else {
+            //   this.formEditEntrada.setValue({
+            //     fechaFactura: res.data.fechaFactura,
+            //     idProveedor: res.data.proveedor.razonSocial,
+            //     idTipoEntrada: res.data.tipoEntrada.nombre,
+            //     idTipoEntrega: res.data.tipoEntrega.nombre,
+            //     numOrden: res.data.numOrden,
+            //     noFactura: res.data.noFactura,
+            //     observacion: res.data.observacion,
+            //     itbisGeneral: res.data.itbisGeneral,
+            //     itbisGeneralEstado: !res.data.itbisGeneralEstado,
+            //     total: res.data.total,
+            //     idEntrada: res.data.idEntrada
+            //   })
 
-              this.generalITBIS = false
-              this.disableItbis = true
+            //   this.detalleList = res.data.detalles
 
-              this.formEditEntrada.setValue({
-                fechaFactura: res.data.fechaFactura,
-                idProveedor: res.data.proveedor.razonSocial,
-                idTipoEntrada: res.data.tipoEntrada.nombre,
-                idTipoEntrega: res.data.tipoEntrega.nombre,
-                numOrden: res.data.numOrden,
-                noFactura: res.data.noFactura,
-                observacion: res.data.observacion,
-                itbisGeneral: res.data.itbisGeneral,
-                itbisGeneralEstado: !res.data.itbisGeneralEstado,
-                total: res.data.total,
-                idEntrada: res.data.idEntrada
-              })
+            //   this.detalleList.map(detalle => {
 
-              this.detalleList = res.data.detalles
+            //     //this.setdetailGroup = true
 
-              this.detalleList.map(detalle => {
+            //     this.formEditDetalleEntrada.patchValue({
+            //       idProducto: detalle.producto.nombre,
+            //       cantidad: detalle.cantidad,
+            //       condicion: detalle.condicion,
+            //       marca: detalle.marca,
+            //       modelo: detalle.modelo,
+            //       precio: detalle.precio,
+            //       serial: detalle.serial,
+            //       observacion: detalle.observacion,
+            //       subTotal: detalle.subTotal,
+            //       itbisProducto: detalle.itbisProducto,
+            //       idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+            //       idEntrada: detalle.idEntrada,
+            //       idEntradaDet: detalle.idEntradaDet,
+            //     })
 
-                this.setdetailGroup = true
-
-                this.formEditDetalleEntrada.patchValue({
-                  idProducto: detalle.producto.nombre,
-                  cantidad: detalle.cantidad,
-                  condicion: detalle.condicion,
-                  marca: detalle.marca,
-                  modelo: detalle.modelo,
-                  precio: detalle.precio,
-                  serial: detalle.serial,
-                  observacion: detalle.observacion,
-                  subTotal: detalle.subTotal,
-                  itbisProducto: detalle.itbisProducto,
-                  idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-                  idEntrada: detalle.idEntrada,
-                  idEntradaDet: detalle.idEntradaDet,
-                })
-
-                this.addDetail()
-                this.setdetailGroup = false
-                this.formEditDetalleEntrada.reset()
-              })
-            }
+            //     this.addDetail()
+            //     //this.setdetailGroup = false
+            //     this.formEditDetalleEntrada.reset()
+            //   })
+            // }
           }
         })
 
@@ -233,14 +243,22 @@ import { catchError, combineLatest } from 'rxjs';
   getTipoEntrada() {
     this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1)
       .subscribe((res: any) => {
-        this.tipoEntradaList = res.data
+        if (res !== null) {
+          res.data.map((tentrada: any) => {
+            if(tentrada.nombre != 'Donación' && tentrada.nombre != 'Prestamo' ) this.tipoEntradaList.push(tentrada)
+          })
+        }
       });
   }
 
   getTipoEntrega() {
     this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1)
       .subscribe((res: any) => {
-        this.tipoEntregaList = res.data
+        if (res !== null) {
+          res.data.map((tentrega: any) => {
+            if(tentrega.nombre != 'Transferencia') this.tipoEntregaList.push(tentrega)
+          })
+        }
       });
   }
 
@@ -333,29 +351,43 @@ import { catchError, combineLatest } from 'rxjs';
 
   itbisOption(event: any) {
     this.generalITBIS = event.value;
+
+    this.formEditDetalleEntrada.get('itbisProducto')?.reset()
+    this.setValueDetailsEntrada(this.formEditDetalleEntrada.value.idProducto)
   }
 
   serialOption(event: any) {
-    this.serial = event.value
+    this.isSerial = event.value
+
+    if (this.isSerial == false) this.formEditDetalleEntrada.get('serial')?.reset()
   }
 
 
   setValueDetailsEntrada(producto: string) {
+
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
       return productoEspecifico.nombre == producto
     });
-    if (!this.generalITBIS) {
+
+    if (this.generalITBIS) {
+
       this.formEditDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
-        precio: setValuesform[0].precio
+        precio: setValuesform[0].precio,
+        itbisProducto: 18,
       })
+
     } else {
+
       this.formEditDetalleEntrada.patchValue({
         idTipoAlm: setValuesform[0].tipoAlmacen.nombre,
+        precio: setValuesform[0].precio,
         itbisProducto: setValuesform[0].itbis,
-        precio: setValuesform[0].precio
       })
+
     }
+
+    this.subTotalResult()
   }
 
 
@@ -363,56 +395,66 @@ import { catchError, combineLatest } from 'rxjs';
 
     if (this.formEditDetalleEntrada.valid && this.formEditEntrada.valid) {
 
-      if (this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
-        this.serial == false && this.formEditDetalleEntrada.value.cantidad == 1 ||
-        this.serial == true && this.formEditDetalleEntrada.value.cantidad !== 1 ||
-        this.serial == true && this.formEditDetalleEntrada.value.cantidad == 1
-      ) {
+      if (this.isSerial == true && this.formEditDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
 
-        if (this.detailGroup.length >= 1 && this.serial == false) {
+        if (this.detailGroup.length > 0 && this.isSerial) {
           if (this.detailGroup.some(producto => {
-            if (producto.serial !== null) {
-              producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase()
+            if (producto.serial && this.formEditDetalleEntrada.value.serial) {
+              return producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase()
             }
-          })) {
+            return false
+          }
+          )) {
             alertSameSerial()
             return
           }
         }
 
-        this.totalResult += this.formEditDetalleEntrada.value.subTotal
+        //this.totalResult += this.formEditDetalleEntrada.value.subTotal
 
-        if (this.generalITBIS == false) {
+        // if (this.generalITBIS == false) {
 
-          this.mostrarTotalItbis = 0
-          this.totalItbis = this.formEditEntrada.value.itbisGeneral
-          this.mostrarTotalItbis = this.totalItbis
+        //   this.mostrarTotalItbis = 0
+        //   this.totalItbis = this.formEditEntrada.value.itbisGeneral
+        //   this.mostrarTotalItbis = this.totalItbis
+
+        // } else {
+
+        //   if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == false) {
+
+        //     this.subTotalResult()
+
+        //     this.mostrarTotalItbis += this.totalItbis
+
+        //     this.formEditDetalleEntrada.value.itbisProducto
+        //       = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
+
+        //   } else if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true) {
+
+        //     this.totalItbis = this.formEditDetalleEntrada.value.itbisProducto * this.formEditDetalleEntrada.value.cantidad
+        //     this.mostrarTotalItbis += this.totalItbis
+        //   }
+
+        // }
+
+        if (this.generalITBIS) {
+
+          this.formEditDetalleEntrada.value.itbisProducto = 0.18 * this.formEditDetalleEntrada.value.precio
+          this.detailGroup.push(this.formEditDetalleEntrada.value)
 
         } else {
 
-          if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == false) {
-
-            this.subTotalResult()
-
-            this.mostrarTotalItbis += this.totalItbis
-
-            this.formEditDetalleEntrada.value.itbisProducto
-              = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
-
-          } else if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true) {
-
-            this.totalItbis = this.formEditDetalleEntrada.value.itbisProducto * this.formEditDetalleEntrada.value.cantidad
-            this.mostrarTotalItbis += this.totalItbis
-          }
+          this.formEditDetalleEntrada.value.itbisProducto = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
+          this.detailGroup.push(this.formEditDetalleEntrada.value)
 
         }
 
-        this.detailGroup.push(this.formEditDetalleEntrada.value)
+        // this.detailGroup.push(this.formEditDetalleEntrada.value)
+        this.sumaTotal()
+
         this.formEditDetalleEntrada.reset()
 
-        if (this.detailGroup.length >= 1) {
-          this.disableItbis = true
-        }
+        if (this.detailGroup.length >= 1) this.disableItbis = true
 
       } else {
         alertSerial()
@@ -442,13 +484,23 @@ import { catchError, combineLatest } from 'rxjs';
         modelo: detalle.modelo,
         precio: detalle.precio,
         serial: detalle.serial,
-        itbisProducto: setValuesform[0].itbis,
+        //itbisProducto: setValuesform[0].itbis,
         subTotal: detalle.subTotal,
         idTipoAlm: detalle.idTipoAlm,
         observacion: detalle.observacion,
         idEntrada: detalle.idEntrada,
         idEntradaDet: detalle.idEntradaDet,
       })
+
+      if(detalle.serial != null && detalle.serial.length > 0) {
+        this.isSerial = true
+        this.formEditDetalleEntrada.patchValue({ serial: detalle.serial })
+      }else{
+        this.isSerial = false
+      }
+
+      if (this.generalITBIS) this.formEditDetalleEntrada.patchValue({ itbisProducto: 18 })
+      else this.formEditDetalleEntrada.patchValue({ itbisProducto: setValuesform[0].itbis })
       // } 
       //else {
       //   this.formEditDetalleEntrada.patchValue({
@@ -468,19 +520,20 @@ import { catchError, combineLatest } from 'rxjs';
 
       console.log(this.formEditDetalleEntrada.value)
 
-      this.mostrarTotalItbis -= detalle.itbisProducto * detalle.cantidad
-      this.totalResult -= detalle.subTotal
+      //this.mostrarTotalItbis -= detalle.itbisProducto * detalle.cantidad
+      //this.totalResult -= detalle.subTotal
 
       if (this.detailGroup.length == 0) {
-        this.totalItbis = 0
-        this.totalResult = 0
+        //this.totalItbis = 0
+        //this.totalResult = 0
         this.disableItbis = false
-        this.mostrarTotalItbis = 0
+        //this.mostrarTotalItbis = 0
       }
 
     } else {
       alertUnableEdit()
     }
+    this.sumaTotal()
   }
 
   async removeDetail(index: number, item: detalleProductoEntrada) {
@@ -490,55 +543,105 @@ import { catchError, combineLatest } from 'rxjs';
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
 
-      if ((this.generalITBIS == false && this.detailGroup.length == 0)) {
-        this.totalItbis = 0
-      }
-      this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
-      this.totalResult -= item.subTotal
+      //if ((this.generalITBIS == false && this.detailGroup.length == 0)) {
+      //  this.totalItbis = 0
+      //}
+      //this.mostrarTotalItbis -= item.itbisProducto * item.cantidad
+      //this.totalResult -= item.subTotal
     }
 
     if (this.detailGroup.length == 0) {
       this.disableItbis = false
     }
+    this.sumaTotal()
   }
 
   clearDetail() {
     this.formEditDetalleEntrada.reset()
   }
 
-  subTotalResult() {
-    let form = this.formEditDetalleEntrada.value
+  duplicateDetail(producto: detallePutGroup) {
+    console.log(producto);
 
+    if (!this.formEditDetalleEntrada.valid ) {
+      this.formEditDetalleEntrada.patchValue({
+        idProducto: producto.idProducto,
+        cantidad: producto.cantidad,
+        condicion: producto.condicion,
+        marca: producto.marca,
+        modelo: producto.modelo,
+        precio: producto.precio,
+        serial: producto.serial,
+        //itbisProducto: setValuesform[0].itbis,
+        subTotal: producto.subTotal,
+        idTipoAlm: producto.idTipoAlm,
+        observacion: producto.observacion,
+        idEntrada: producto.idEntrada,
+        idEntradaDet: producto.idEntradaDet,
+      })
+
+      this.formEditDetalleEntrada.get('serial')?.reset()
+      //this.setValueDetailEntradaEdit(producto.idProducto)
+
+    } else {
+      alertUnableEdit()
+    }
+    this.sumaTotal()
+  }
+
+  subTotalResult() {
     if (this.formEditDetalleEntrada.get('cantidad')?.valid || this.formEditDetalleEntrada.get('precio')?.valid) {
 
-      if (this.formEditDetalleEntrada.value.itbisProducto >= 0.001) {
+      let total = this.formEditDetalleEntrada.value.precio * this.formEditDetalleEntrada.value.cantidad
+      this.formEditDetalleEntrada.patchValue({ subTotal: total })
 
-        form.itbisProducto = form.itbisProducto * 0.01 * form.precio
-
-        this.totalItbis = form.cantidad * form.itbisProducto
-
-        let total = form.precio * form.cantidad
-
-        total += this.totalItbis
-
-        this.formEditDetalleEntrada.patchValue(
-          { subTotal: total }
-        )
-
-      } else {
-        let total = form.precio * form.cantidad
-        this.formEditDetalleEntrada.patchValue({
-          subTotal: total
-        })
-      }
     }
+
+    //let form = this.formEditDetalleEntrada.value
+
+    // if (this.formEditDetalleEntrada.get('cantidad')?.valid || this.formEditDetalleEntrada.get('precio')?.valid) {
+
+    // if (this.formEditDetalleEntrada.value.itbisProducto >= 0.001) {
+
+    // form.itbisProducto = form.itbisProducto * 0.01 * form.precio
+
+    // this.totalItbis = form.cantidad * form.itbisProducto
+
+    // let total = form.precio * form.cantidad
+
+    // total += this.totalItbis
+
+    // this.formEditDetalleEntrada.patchValue(
+    // { subTotal: total }
+    // )
+
+    //   } else {
+    //     let total = form.precio * form.cantidad
+    //     this.formEditDetalleEntrada.patchValue({
+    //       subTotal: total
+    //     })
+    //   }
+    // }
   }
+
+  sumaTotal() {
+
+    this.totalResult = 0
+    this.mostrarTotalItbis = 0
+
+    this.detailGroup.map((detalle: any) => {
+      this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+      this.totalResult += detalle.subTotal
+    })
+
+    this.totalResult += this.mostrarTotalItbis
+  }
+
 
   editData() {
 
-    this.formEditEntrada.value.itbisGeneralEstado = !this.generalITBIS,
-    this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
-
+    this.formEditEntrada.value.itbisGeneralEstado = this.generalITBIS,
+      this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
     this.formEditEntrada.value.total = this.totalResult
 
     let idTipoEn = this.tipoEntradaList.filter(tEntrada => tEntrada.nombre === this.formEditEntrada.value.idTipoEntrada)
@@ -552,8 +655,8 @@ import { catchError, combineLatest } from 'rxjs';
 
     if (this.formEditEntrada.valid && this.detailGroup.length >= 1) {
 
-      console.log(this.formEditEntrada.value)
       loading(true)
+
       this.api.putEntrada(this.url, this.formEditEntrada.value, this.token)
         .pipe(
           catchError((error) => {
@@ -569,11 +672,11 @@ import { catchError, combineLatest } from 'rxjs';
             this.detailGroup.map((detail: any) => {
               console.log(detail)
 
-              let idsDetalles = this.respuesta.filter((detalle: any) => {
-                if (detalle.idEntradaDet == detail.idEntradaDet && detalle.producto.nombre == detail.idProducto) {
-                  return detalle
-                }
-              })
+              //let idsDetalles = this.respuesta.filter((detalle: any) => {
+              //  if (detalle.idEntradaDet == detail.idEntradaDet && detalle.producto.nombre == detail.idProducto) {
+              //    return detalle
+              //  }
+              //})
 
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
 
@@ -581,15 +684,15 @@ import { catchError, combineLatest } from 'rxjs';
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
               detail.idEntrada = res.data.idEntrada
 
-              if (idsDetalles.length == 0) {
-                detail.idEntradaDet = null
-              }
+              //if (idsDetalles.length == 0) {
+              //  detail.idEntradaDet = null
+              //}
 
-              if (detail.itbisProducto == "") {
-                detail.itbisProducto = 0
-              }
+              //if (detail.itbisProducto == "") {
+              //  detail.itbisProducto = 0
+              //}
             })
-            console.log(this.detailGroup)
+
             this.api.postDetalleEntrada(this.url, this.detailGroup, this.token)
               .pipe(
                 catchError((error) => {
@@ -598,15 +701,14 @@ import { catchError, combineLatest } from 'rxjs';
                   return error;
                 })
               )
-              .subscribe((respuesta: any) => {
+              .subscribe((res: any) => {
                 loading(false)
-                console.log(respuesta)
 
-                if (respuesta.data !== null) {
+                if (res.data !== null) {
+
                   alertIsSuccess(true)
 
                   this.detailGroup = []
-                  this.formEditEntrada.reset()
                   this.mostrarTotalItbis = 0
                   this.totalResult = 0
                   this.disableItbis = false
@@ -617,6 +719,8 @@ import { catchError, combineLatest } from 'rxjs';
                   alertIsSuccess(false)
                 }
               })
+            this.formEditDetalleEntrada.reset()
+            this.formEditEntrada.reset()
 
           } else {
             alertIsSuccess(false)

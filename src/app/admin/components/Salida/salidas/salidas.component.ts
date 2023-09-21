@@ -102,7 +102,7 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((recinto: any) => {
-            if(recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
+            if (recinto.nombre !== this.recintoActual) this.recintoList.push(recinto)
           })
         }
       })
@@ -119,8 +119,8 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        res.data.map((producto: any)=> {
-          if(producto.stock !== 0) this.productoList.push(producto)
+        res.data.map((producto: any) => {
+          if (producto.stock !== 0) this.productoList.push(producto)
         })
       });
   }
@@ -167,7 +167,7 @@ export class SalidasComponent implements OnInit {
           this.productoList = []
 
           options.forEach((item: any) => {
-            if(item.stock !== 0) this.productoList.push()
+            if (item.stock !== 0) this.productoList.push(item)
           });
         })
     } else {
@@ -225,20 +225,15 @@ export class SalidasComponent implements OnInit {
 
     if (this.formDetalleSalida.valid && this.formSalida.valid) {
 
-      if (this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 ||
-        this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 ||
-        this.isSerial == true && this.formDetalleSalida.value.cantidad !== 1 ||
-        this.isSerial == true && this.formDetalleSalida.value.cantidad == 1
-      ) {
+      if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
 
-        if (this.detailGroup.length > 0 && this.isSerial == false) {
-          if (this.detailGroup.some(producto => 
-            { 
-              if (producto.serial && this.formDetalleSalida.value.serial) {
-                return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase() 
-              }
-              return false
+        if (this.detailGroup.length > 0 && this.isSerial) {
+          if (this.detailGroup.some(producto => {
+            if (producto.serial && this.formDetalleSalida.value.serial) {
+              return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase()
             }
+            return false
+          }
           )) {
             alertSameSerial()
             return
@@ -246,21 +241,18 @@ export class SalidasComponent implements OnInit {
         }
 
         if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
-          
-          console.log(this.isSerial)
-          if (this.isSerial == false && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == true && this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
-            this.detailGroup.push(this.formDetalleSalida.value)
-            this.resultSubTotal += this.formDetalleSalida.value.subTotal
-            this.formDetalleSalida.reset()
-          } 
+          this.detailGroup.push(this.formDetalleSalida.value)
+          //this.resultSubTotal += this.formDetalleSalida.value.subTotal
+          this.sumaTotal()
+          this.formDetalleSalida.reset()
+
         } else {
           alertCantExis()
         }
       } else {
         alertSerial()
       }
-
     } else {
       alertNoValidForm()
     }
@@ -285,10 +277,11 @@ export class SalidasComponent implements OnInit {
         subTotal: item.subTotal
       })
 
-      this.resultSubTotal -= item.subTotal
+      //this.resultSubTotal -= item.subTotal
     } else {
       alertUnableEdit()
     }
+    this.sumaTotal()
 
   }
 
@@ -303,8 +296,9 @@ export class SalidasComponent implements OnInit {
 
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
-      this.resultSubTotal -= item.subTotal
+      //this.resultSubTotal -= item.subTotal
     }
+    this.sumaTotal()
   }
 
   clearDetail() {
@@ -333,36 +327,53 @@ export class SalidasComponent implements OnInit {
       )
       .subscribe((res: any) => {
         console.log(res);
-        
+
         if (res.data !== null) {
-          if (res.data.serial == null || res.data.serial.length == 0) {
-            
+
+          this.formDetalleSalida.patchValue({
+            existencia: res.data.producto.stock,
+            condicion: res.data.condicion,
+            marca: res.data.marca,
+            modelo: res.data.modelo,
+            idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+            precio: res.data.producto.precio,
+          })
+
+          if (res.data.serial != null && res.data.serial.length != 0) {
             this.isSerial = true
-
             this.formDetalleSalida.patchValue({
-              existencia: res.data.producto.stock,
-              condicion: res.data.condicion,
-              marca: res.data.marca,
-              modelo: res.data.modelo,
-              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
-              precio: res.data.producto.precio,
-            })
-          } else {
-
-            this.isSerial = false
-
-            this.formDetalleSalida.patchValue({
-              existencia: res.data.producto.stock,
-              condicion: res.data.condicion,
-              marca: res.data.marca,
-              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
-              modelo: res.data.modelo,
               serial: res.data.serial,
-              precio: res.data.producto.precio,
+              cantidad: 1
             })
+            this.subTotalResult()
+          } else {
+            this.isSerial = false
           }
+          //else {
+
+          //   this.isSerial = false
+
+          //   this.formDetalleSalida.patchValue({
+          //     existencia: res.data.producto.stock,
+          //     condicion: res.data.condicion,
+          //     marca: res.data.marca,
+          //     idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+          //     modelo: res.data.modelo,
+          //     serial: res.data.serial,
+          //     precio: res.data.producto.precio,
+          //   })
+          // }
         }
       })
+    this.subTotalResult()
+  }
+
+  sumaTotal() {
+    this.resultSubTotal = 0
+
+    this.detailGroup.map((detalle: any) => {
+      this.resultSubTotal += detalle.subTotal
+    })
   }
 
   sendData() {
@@ -385,7 +396,6 @@ export class SalidasComponent implements OnInit {
     if (this.formSalida.valid && this.detailGroup.length >= 1) {
 
       loading(true)
-      console.log(this.formSalida.value)
 
       this.api.postSalida(this.url, JSON.stringify(this.formSalida.value), this.token)
         .pipe(
@@ -402,12 +412,11 @@ export class SalidasComponent implements OnInit {
             this.detailGroup.map((detail: detalleProductoSalida) => {
 
               detail.idSalida = res.data.idSalida
-
               let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
-
               detail.idProducto = idTipoProD[0].idProducto
+
             })
-            console.log(this.detailGroup)
+
             this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
               .pipe(
                 catchError((error) => {
@@ -422,7 +431,9 @@ export class SalidasComponent implements OnInit {
                 loading(false)
 
                 if (res.success) {
+
                   alertIsSuccess(true)
+
                   this.detailGroup = []
                   this.resultSubTotal = 0
                   this.formDetalleSalida.reset()
@@ -434,6 +445,7 @@ export class SalidasComponent implements OnInit {
               })
             this.formDetalleSalida.reset()
             this.formSalida.reset()
+
           } else {
             alertIsSuccess(false)
           }

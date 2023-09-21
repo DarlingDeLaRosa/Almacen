@@ -91,7 +91,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Existencia</mat-label>
-          <input [disabled]="true" type="number" readonly matInput required formControlName="existencia">
+          <input type="number" readonly matInput required formControlName="existencia">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -104,28 +104,24 @@
           <input matInput readonly required formControlName="idTipoAlm">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker>
+        <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Condición</mat-label>
-          <mat-select required appearance="fill" formControlName="condicion">
-            <mat-option value="Bueno">Bueno</mat-option>
-            <mat-option value="Regular">Regular</mat-option>
-            <mat-option value="Dañado">Dañado</mat-option>
-          </mat-select>
+          <input required readonly matInput formControlName="condicion">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input [disabled]="true" matInput required formControlName="marca">
+          <input readonly matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input [disabled]="true" matInput required formControlName="modelo">
+          <input  readonly matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!isSerial; else serial">
+        <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input [disabled]="true" matInput formControlName="serial">
+          <input readonly matInput formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
@@ -136,7 +132,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
-          <input [disabled]="true" type="number" matInput required formControlName="subTotal">
+          <input readonly type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 
