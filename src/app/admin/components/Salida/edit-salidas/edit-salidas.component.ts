@@ -31,7 +31,7 @@ export class EditSalidasComponent {
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = false;
+  //serial: boolean = false;
   ediExis: number = 0
 
   tipoSalidaList: tipoSalida[] = []
@@ -109,42 +109,51 @@ export class EditSalidasComponent {
           })
         )
         .subscribe((res: any) => {
-          console.log(res)
+
           loading(false)
-          let detalleList: any[] = []
+          //let detalleList: any[] = []
           this.respuesta = res.data.detalles
 
           if (res.success && res.data !== null) {
 
-            if(res.data.departamento != null){
+            this.formEditSalida.patchValue({
+              fechaCreacion: res.data.fechaCreacion,
+              idTipoSalida: res.data.tipoSalida.nombre,
+              //idDepar: res.data.departamento.nombre,
+              observacion: res.data.observacion,
+              idSalida: res.data.idSalida
+            })
+
+            if (res.data.departamento != null) {
 
               this.isTransferencia = false
-
               this.formEditSalida.patchValue({
-                fechaCreacion: res.data.fechaCreacion,
-                idTipoSalida: res.data.tipoSalida.nombre,
-                idDepar: res.data.departamento.nombre,
-                observacion: res.data.observacion,
-                idSalida: res.data.idSalida
+                idDepar: res.data.departamento.nombre
               })
 
-            }else{
+            } else {
 
-              this.isTransferencia = true
-
+              this.isTransferencia = false
               this.formEditSalida.patchValue({
-                fechaCreacion: res.data.fechaCreacion,
-                idTipoSalida: res.data.tipoSalida.nombre,
-                idRecinto: res.data.recinto.nombre,
-                observacion: res.data.observacion,
-                idSalida: res.data.idSalida
+                idRecinto: res.data.recinto.nombre
               })
 
             }
 
-            detalleList = res.data.detalles
-            console.log(detalleList)
-            detalleList.map(detalle => {
+            // this.isTransferencia = true
+
+            // this.formEditSalida.patchValue({
+            //   fechaCreacion: res.data.fechaCreacion,
+            //   idTipoSalida: res.data.tipoSalida.nombre,
+            //   //idRecinto: res.data.recinto.nombre,
+            //   observacion: res.data.observacion,
+            //   idSalida: res.data.idSalida
+            // })
+
+
+            //detalleList = res.data.detalles
+            //detalleList.map(detalle => {
+            res.data.detalles.map((detalle: any) => {
 
               this.formDetalleEditSalida.patchValue({
                 idProducto: detalle.producto.nombre,
@@ -181,7 +190,7 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return throwError(error);
+          return error;
         })
       )
       .subscribe((res: any) => {
@@ -243,7 +252,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return throwError(error);
+            return error;
           })
         )
         .subscribe((res: any) => {
@@ -251,7 +260,7 @@ export class EditSalidasComponent {
           this.productoList = []
 
           options.forEach((item: any) => {
-            if (item.stock !== 0) this.productoList.push()
+            if (item.stock !== 0) this.productoList.push(item)
           });
         })
     } else {
@@ -266,7 +275,7 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return throwError(error);
+            return error;
           })
         )
         .subscribe((res: any) => {
@@ -306,18 +315,12 @@ export class EditSalidasComponent {
   }
 
   addDetail() {
-    console.log(this.formDetalleEditSalida.value)
 
     if (this.formDetalleEditSalida.valid && this.formEditSalida.valid) {
 
-      console.log(this.serial)
+      if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
 
-      if (this.serial == false && this.formDetalleEditSalida.value.cantidad == 1 ||
-        this.serial == false && this.formDetalleEditSalida.value.cantidad !== 1 ||
-        this.serial == true && this.formDetalleEditSalida.value.cantidad == 1
-      ) {
-
-        if (this.detailGroup.length > 0 && this.isSerial == false) {
+        if (this.detailGroup.length > 0 && this.isSerial) {
           if (this.detailGroup.some(producto => {
             if (producto.serial && this.formDetalleEditSalida.value.serial) {
               return producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase()
@@ -336,20 +339,25 @@ export class EditSalidasComponent {
         // console.log(this.formDetalleEditSalida.value.existencia);
 
 
-        if (this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis) {
-          console.log('Hola bob');
+        if (
+          this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
+          || this.formDetalleEditSalida.value.idSalidaDet == null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia
+        ) {
 
           this.detailGroup.push(this.formDetalleEditSalida.value)
-          this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+          //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+          this.sumaTotal()
           this.formDetalleEditSalida.reset()
+        } else {
+          alertCantExis()
         }
 
-        if (this.isSerial == false && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == true) {
-          console.log('por aqui vine')
-          this.detailGroup.push(this.formDetalleEditSalida.value)
-          this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
-          this.formDetalleEditSalida.reset()
-        }
+        // if (this.isSerial == false && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == true) {
+
+        //   this.detailGroup.push(this.formDetalleEditSalida.value)
+        //   //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+        //   this.formDetalleEditSalida.reset()
+        // }
       }
       else {
         alertSerial()
@@ -358,8 +366,6 @@ export class EditSalidasComponent {
     } else {
       alertNoValidForm()
     }
-
-    console.log(this.detailGroup)
   }
 
   clearDetail() {
@@ -367,7 +373,7 @@ export class EditSalidasComponent {
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
-    console.log(item)
+
     if (!this.formDetalleEditSalida.valid) {
 
       this.detailGroup.splice(index, 1)
@@ -387,20 +393,29 @@ export class EditSalidasComponent {
         idSalidaDet: item.idSalidaDet,
       })
 
-      console.log(this.formDetalleEditSalida.value)
-      this.resultSubTotal -= item.subTotal
+      // console.log(this.formDetalleEditSalida.value)
+      // this.resultSubTotal -= item.subTotal
     } else {
       alertUnableEdit()
     }
 
-    if (item.idSalidaDet !== null && this.ediExis == 0) {
+    if (item.idSalidaDet != null && this.ediExis == 0) {
 
       let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
         return productoEspecifico.producto.nombre == item.idProducto
       });
-      
+
       this.ediExis = setValuesform[0].cantidad
     }
+
+    this.sumaTotal()
+
+  }
+
+  subTotalResult() {
+    this.formDetalleEditSalida.patchValue({
+      subTotal: this.formDetalleEditSalida.value.cantidad * this.formDetalleEditSalida.value.precio
+    })
   }
 
   async removeDetail(index: number, item: detalleProductoSalida) {
@@ -409,9 +424,20 @@ export class EditSalidasComponent {
 
     if (removeChoise) {
       this.detailGroup.splice(index, 1)
-      this.resultSubTotal -= item.subTotal
+      //this.resultSubTotal -= item.subTotal
+    }
+    this.sumaTotal()
+  }
+
+
+  setValueTransfer(producto: string) {
+    if (producto === "Prestamo" || producto === 'Donación') {
+      this.isTransferencia = true
+    } else {
+      this.isTransferencia = false
     }
   }
+
 
   setValueFormProductoSalida(producto: any) {
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
@@ -422,62 +448,67 @@ export class EditSalidasComponent {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return throwError(error);
+          return error;
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
+
         if (res.data !== null) {
 
-          if (res.data.serial.length > 0) {
+          // if (res.data.serial.length > 0) {
 
-            this.isSerial = false
+          //   this.isSerial = false
 
-            this.formDetalleEditSalida.patchValue({
-              existencia: res.data.producto.stock,
-              condicion: res.data.condicion,
-              marca: res.data.marca,
-              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
-              modelo: res.data.modelo,
-              precio: res.data.producto.precio,
-              serial: res.data.serial,
-            })
+          //   this.formDetalleEditSalida.patchValue({
+          //     existencia: res.data.producto.stock,
+          //     condicion: res.data.condicion,
+          //     marca: res.data.marca,
+          //     idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+          //     modelo: res.data.modelo,
+          //     precio: res.data.producto.precio,
+          //     serial: res.data.serial,
+          //   })
 
-          } else {
+          //} else {
 
+          //this.isSerial = true
+
+          this.formDetalleEditSalida.patchValue({
+            existencia: res.data.producto.stock,
+            condicion: res.data.condicion,
+            marca: res.data.marca,
+            idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+            modelo: res.data.modelo,
+            precio: res.data.producto.precio,
+          })
+
+          if (res.data.serial != null && res.data.serial.length != 0) {
             this.isSerial = true
-
             this.formDetalleEditSalida.patchValue({
-              existencia: res.data.producto.stock,
-              condicion: res.data.condicion,
-              marca: res.data.marca,
-              idTipoAlm: res.data.producto.tipoAlmacen.nombre,
-              modelo: res.data.modelo,
-              precio: res.data.producto.precio,
+              serial: res.data.serial,
+              cantidad: 1
             })
+            this.subTotalResult()
+          } else {
+            this.isSerial = false
           }
+          //}
         }
       })
+    this.subTotalResult()
   }
 
-  subTotalResult() {
-    this.formDetalleEditSalida.patchValue({
-      subTotal: this.formDetalleEditSalida.value.cantidad * this.formDetalleEditSalida.value.precio
+  sumaTotal() {
+    this.resultSubTotal = 0
+
+    this.detailGroup.map((detalle: any) => {
+      this.resultSubTotal += detalle.subTotal
     })
   }
 
-  setValueTransfer(producto: string) {
-    if (producto === "Prestamo" || producto === 'Donación') {
-      this.isTransferencia = true
-    } else {
-      this.isTransferencia = false
-    }
-  }
-
   sendData() {
-    console.log(this.formEditSalida.value);
-    
-    if (this.formEditSalida.value.idRecinto.length > 0 ) {
+
+    if (this.formEditSalida.value.idRecinto.length > 0 && this.formEditSalida.value.idRecinto.length != null) {
       let recinto = this.recintoList.filter(item => item.nombre === this.formEditSalida.value.idRecinto)
       this.formEditSalida.value.idRecinto = recinto[0].idRecinto
       this.formEditSalida.value.idDepar = null
@@ -492,7 +523,7 @@ export class EditSalidasComponent {
 
     this.formEditSalida.value.total = this.resultSubTotal
 
-    if (this.formEditSalida.valid) {
+    if (this.formEditSalida.valid && this.detailGroup.length >= 1) {
 
       loading(true)
 
@@ -500,62 +531,61 @@ export class EditSalidasComponent {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return throwError(error);
+            return error;
           })
         )
         .subscribe((res: any) => {
-          console.log(res);
-          
-          if (res.success ) {
+
+          if (res.success || res.data !== null) {
 
             this.detailGroup.map((detail: any) => {
 
-              let idsDetalles = this.respuesta.filter((detalle: any) => {
-                if (detalle.idSalidaDet == detail.idSalidaDet && detalle.producto.nombre == detail.idProducto) {
-                  return detalle
-                }
-              })
-              console.log(idsDetalles)
-              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              //  let idsDetalles = this.respuesta.filter((detalle: any) => {
+              //    if (detalle.idSalidaDet == detail.idSalidaDet && detalle.producto.nombre == detail.idProducto) {
+              //      return detalle
+              //    }
+              //  })
+              //  console.log(idsDetalles)
 
+              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
               detail.idSalida = res.data.idSalida
 
-              if (idsDetalles.length == 0) {
-                detail.idSalidaDet = null
-              }
+              // if (idsDetalles.length == 0) {
+              //   detail.idSalidaDet = null
+              // }
             })
-
-            console.log(JSON.stringify(this.detailGroup))
 
             this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
               .pipe(
                 catchError((error) => {
                   loading(false)
                   alertServerDown();
-                  return throwError(error);
+                  return error;
                 })
               )
               .subscribe((res: any) => {
-                console.log(res)
+
                 loading(false)
 
-                if (res.data !== null) {
+                if (res.success || res.data !== null) {
+
                   alertIsSuccess(true)
 
-                  this.formEditSalida.reset()
-                  this.formDetalleEditSalida.reset()
                   this.detailGroup = []
                   this.resultSubTotal = 0
 
                   this.router.navigate(['/almacen/administrar-salida'])
-
                 }
                 else {
                   alertIsSuccess(false)
                 }
               })
+
+            this.formEditSalida.reset()
+            this.formDetalleEditSalida.reset()
+
           } else {
             alertIsSuccess(false)
           }

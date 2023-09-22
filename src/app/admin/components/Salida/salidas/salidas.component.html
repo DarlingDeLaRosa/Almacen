@@ -54,16 +54,16 @@
           <mat-label>Recinto</mat-label>
           <input matInput [matAutocomplete]="rec" appearance="fill" formControlName="idRecinto">
           <mat-autocomplete #rec='matAutocomplete'>
-  
+
             <mat-option *ngFor="let recinto of recintoList" [value]="recinto.nombre">
-              <span>{{recinto.nombre}}</span> 
+              <span>{{recinto.nombre}}</span>
             </mat-option>
-  
+
           </mat-autocomplete>
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
       </ng-template>
-      
+
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
         <input matInput required formControlName="observacion">
@@ -106,7 +106,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Condición</mat-label>
-          <input required readonly matInput formControlName="condicion">
+          <input readonly required matInput formControlName="condicion">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -116,7 +116,7 @@
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input  readonly matInput required formControlName="modelo">
+          <input readonly matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">

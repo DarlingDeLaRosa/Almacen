@@ -29,7 +29,6 @@ export class SalidasComponent implements OnInit {
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
-  serial: boolean = false;
 
   tipoSalidaList: tipoSalida[] = []
   productoList: producto[] = []
@@ -292,6 +291,7 @@ export class SalidasComponent implements OnInit {
   }
 
   async removeDetail(index: number, item: detalleProductoSalida) {
+
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
@@ -326,7 +326,6 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
 
         if (res.data !== null) {
 
@@ -405,7 +404,6 @@ export class SalidasComponent implements OnInit {
           })
         )
         .subscribe((res: any) => {
-          console.log(this.detailGroup)
 
           if (res.success || res.data !== null) {
 
@@ -427,22 +425,21 @@ export class SalidasComponent implements OnInit {
                 })
               )
               .subscribe((res: any) => {
-                console.log(res)
+
                 loading(false)
 
-                if (res.success) {
+                if (res.success || res.data !== null) {
 
                   alertIsSuccess(true)
 
                   this.detailGroup = []
                   this.resultSubTotal = 0
-                  this.formDetalleSalida.reset()
-                  this.formSalida.reset()
                 }
                 else {
                   alertIsSuccess(false)
                 }
               })
+
             this.formDetalleSalida.reset()
             this.formSalida.reset()
 

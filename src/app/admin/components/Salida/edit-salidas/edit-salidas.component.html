@@ -54,24 +54,21 @@
           <mat-label>Recinto</mat-label>
           <input matInput [matAutocomplete]="rec" appearance="fill" formControlName="idRecinto">
           <mat-autocomplete #rec='matAutocomplete'>
-  
+
             <mat-option *ngFor="let recinto of recintoList" [value]="recinto.nombre">
-              <span>{{recinto.nombre}}</span> 
+              <span>{{recinto.nombre}}</span>
             </mat-option>
-  
+
           </mat-autocomplete>
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
       </ng-template>
-      
+
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
         <input matInput required formControlName="observacion">
       </mat-form-field>&nbsp;
-
     </div>
-
-
 
     <div [formGroup]="formDetalleEditSalida" class="formInfo">
 
@@ -81,7 +78,7 @@
         <mat-form-field hideRequiredMarker>
           <mat-label>Producto</mat-label>
           <input matInput [matAutocomplete]="pro" appearance="fill" formControlName="idProducto"
-            (input)="findProductoByName()" >
+            (input)="findProductoByName()">
           <mat-autocomplete #pro='matAutocomplete' (optionSelected)="setValueFormProductoSalida($event.option.value)">
 
             <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
@@ -92,10 +89,9 @@
           <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
         </mat-form-field>&nbsp;
 
-
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Existencia restante</mat-label>
-          <input  type="number" readonly matInput required formControlName="existencia">
+          <input type="number" readonly matInput required formControlName="existencia">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
@@ -108,39 +104,35 @@
           <input matInput readonly required formControlName="idTipoAlm">
         </mat-form-field>&nbsp;
 
-        <mat-form-field hideRequiredMarker>
+        <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Condición</mat-label>
-          <mat-select required appearance="fill" formControlName="condicion" >
-            <mat-option value="Bueno">Bueno</mat-option>
-            <mat-option value="Regular">Regular</mat-option>
-            <mat-option value="Dañado">Dañado</mat-option>
-          </mat-select>
+          <input readonly required matInput formControlName="condicion">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Marca</mat-label>
-          <input  matInput required formControlName="marca">
+          <input readonly matInput required formControlName="marca">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Modelo</mat-label>
-          <input  matInput required formControlName="modelo">
+          <input readonly matInput required formControlName="modelo">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill" *ngIf="isSerial; else serial">
           <mat-label>Serial</mat-label>
-          <input matInput required formControlName="serial">
+          <input readonly matInput formControlName="serial">
         </mat-form-field>&nbsp;
         <ng-template #serial></ng-template>
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Valor</mat-label>
-          <input  type="number" matInput required formControlName="precio" (input)="subTotalResult()">
+          <input type="number" matInput required formControlName="precio" (input)="subTotalResult()">
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
           <mat-label>Subtotal</mat-label>
-          <input type="number" matInput required formControlName="subTotal">
+          <input readonly type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 
 
@@ -177,10 +169,9 @@
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.precio * item.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
-            </td>
+            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
           </tr>
 
         </tbody>
@@ -193,7 +184,7 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2' }}</td>
+            <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
             <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
           </tr>
