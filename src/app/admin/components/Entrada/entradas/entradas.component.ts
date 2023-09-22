@@ -611,6 +611,8 @@ export class EntradasComponent implements OnInit {
                   this.mostrarTotalItbis = 0
                   this.totalResult = 0
                   this.disableItbis = false
+                  this.generalITBIS = true;
+
                 }
                 else {
                   alertIsSuccess(false)

@@ -169,7 +169,7 @@ export class EditSalidasComponent {
                 idSalida: detalle.idSalida,
                 idSalidaDet: detalle.idSalidaDet
               })
-
+              
               this.addDetail()
               this.formDetalleEditSalida.reset()
             })
@@ -337,7 +337,11 @@ export class EditSalidasComponent {
         // console.log(this.ediExis);
         // console.log(this.formDetalleEditSalida.value.cantidad);
         // console.log(this.formDetalleEditSalida.value.existencia);
-
+        let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
+          return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
+        });
+  
+        this.ediExis = setValuesform[0].cantidad
 
         if (
           this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
@@ -348,6 +352,7 @@ export class EditSalidasComponent {
           //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
           this.sumaTotal()
           this.formDetalleEditSalida.reset()
+
         } else {
           alertCantExis()
         }
@@ -399,17 +404,16 @@ export class EditSalidasComponent {
       alertUnableEdit()
     }
 
-    if (item.idSalidaDet != null && this.ediExis == 0) {
-
-      let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
-        return productoEspecifico.producto.nombre == item.idProducto
-      });
-
-      this.ediExis = setValuesform[0].cantidad
-    }
+    //if (item.idSalidaDet != null) {
+//
+    //  let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
+    //    return productoEspecifico.producto.nombre == item.idProducto
+    //  });
+//
+    //  this.ediExis = setValuesform[0].cantidad
+    //}
 
     this.sumaTotal()
-
   }
 
   subTotalResult() {

@@ -1,14 +1,167 @@
 <div class="viewInitContent">
-<div class="stadsContainer">
+  <div class="stadsContainer">
+
     <div class="alertNotifications">
       <div class="fuctionContentInicial"> <!--Conpletar el diseño y traer el badged-->
-        <span><h1>Estadisticas</h1></span>
-          <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0" [matBadge]="itemEscasez" matBadgeColor="warn">category</mat-icon> <span class="cdk-visually-hidden">
+        <span>
+          <h1>Estadisticas</h1>
+        </span>
+        <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0" [matBadge]="itemEscasez"
+          matBadgeColor="warn">category</mat-icon> <span class="cdk-visually-hidden">
         </span>
       </div>
     </div>
-    <div class="stadsEntradaSalida">
-      <iframe title="Report Section" width="100%" height="100%" src="https://app.powerbi.com/view?r=eyJrIjoiMWFlMDA4MWMtODYxMS00MDk2LWIxNDAtZmFlNTljN2VkYzk0IiwidCI6IjI4Y2MwYzZmLWUzMDMtNDU2OC05NmY1LWQ4OGQwOTJmZDgzNSIsImMiOjF9" frameborder="0" allowFullScreen="true"></iframe>
+
+    <div class="EstadisticsContainer">
+
+      <mat-card class="infoCard">
+        <div class="content">
+          <div>
+            <mat-card-title>Entradas</mat-card-title>
+            <mat-card-subtitle>Mensuales</mat-card-subtitle>
+          </div>
+
+          <div class="cardContent">
+            <h1 class="numberOf">{{numEntradaMes}}</h1>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="infoCard">
+        <div class="content">
+          <div>
+            <mat-card-title>Entradas</mat-card-title>
+            <mat-card-subtitle>Diarias</mat-card-subtitle>
+          </div>
+
+          <div class="cardContent">
+            <h1 class="numberOf">{{numEntradaDay}}</h1>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="infoCardSalida">
+        <div class="content">
+          <div>
+            <mat-card-title>Salidas</mat-card-title>
+            <mat-card-subtitle>Mensuales</mat-card-subtitle>
+          </div>
+
+          <div class="cardContent">
+            <h1 class="numberOf">{{numSalidaMes}}</h1>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="infoCardSalida">
+        <div class="content">
+          <div>
+            <mat-card-title>Salidas</mat-card-title>
+            <mat-card-subtitle>Diarias</mat-card-subtitle>
+          </div>
+
+          <div class="cardContent">
+            <h1 class="numberOf">{{numSalidaDay}}</h1>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="cardLastOnesEntradas">
+        <div class="contentLast">
+          <div>
+            <mat-card-title>Ultimas Entradas</mat-card-title>
+          </div>
+          <table>
+            <thead class="headerTable">
+              <th class="headerCell">Fecha</th>
+              <th class="headerCell">No. Contrato</th>
+              <th class="headerCell">Proveedor</th>
+              <th class="headerCell">Monto</th>
+            </thead>
+            <tbody>
+              <tr class="dataRow" *ngFor="let entrada of dataFiltered">
+                <td class="dataCell">{{entrada.fechaCreacion | date:'dd/MM/yyyy'}}</td>
+                <td class="dataCell">{{entrada.numOrden}}</td>
+                <td class="dataCell">{{entrada.proveedor.razonSocial}}</td>
+                <td class="dataCell">{{entrada.total | currency: '': 'symbol': '1.2-2'}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </mat-card>
+
+      <mat-card class="cardLastOnes">
+        <div class="contentLast">
+          <div>
+            <mat-card-title>Ultimas Salidas</mat-card-title>
+          </div>
+          <table>
+            <thead class="headerTable">
+              <th class="headerCell">Fecha</th>
+              <th class="headerCell">T.Salida</th>
+              <th class="headerCell">Responsable</th>
+              <th class="headerCell">Monto</th>
+            </thead>
+            <tbody>
+              <tr class="dataRow" *ngFor="let salida of dataFilteredS">
+                <td class="dataCell">{{salida.fechaCreacion | date:'dd/MM/yyyy'}}</td>
+                <td class="dataCell">{{salida.tipoSalida.nombre}}</td>
+                <td class="dataCell">{{salida.creadoPorU.nombre}} {{salida.creadoPorU.apellido}}</td>
+                <td class="dataCell">{{salida.total | currency: '': 'symbol': '1.2-2'}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </mat-card>
+
+      <mat-card class="cardExistencia">
+        <div class="contentLast">
+          <div>
+            <mat-card-title>Productos en escasez</mat-card-title>
+          </div>
+          <table>
+            <thead class="headerTable">
+              <th class="headerCell">Codigo</th>
+              <th class="headerCell">Nombre</th>
+              <th class="headerCell">Stock actual</th>
+              <th class="headerCell">Stock Minimo</th>
+            </thead>
+            <tbody>
+              <tr class="dataRow" *ngFor="let producto of dataFilteredP" (click)="getProductoAgotaminetoRecinto(producto.idProducto)">
+                <td class="dataCell">{{producto.catalogo.id}}</td>
+                <td class="dataCell">{{producto.nombre}}</td>
+                <td class="dataCell" style="color: red;">{{producto.stock}}</td>
+                <td class="dataCell">{{producto.stockMinimo}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </mat-card>
+
+      <div class="recintoExistencia">
+
+        <mat-card class="cardRecinto" *ngFor="let recinto of dataRecintoEscasez">
+
+            <div class="contentRecinto">
+              <div>
+                <mat-card-title>{{recinto.recinto.nombre}}:</mat-card-title>
+              </div>
+    
+              <div class="cardContent">
+                <mat-card-subtitle *ngIf="recinto.recinto.producto != null; else noStock"> {{recinto.recinto.producto.stock}}/{{recinto.recinto.producto.stockMinimo}}</mat-card-subtitle>
+                <ng-template #noStock><h1 class="numberOf">0</h1></ng-template>
+              </div>
+            </div>
+        </mat-card>
+
+      </div>
     </div>
+
+
   </div>
+
+
 </div>

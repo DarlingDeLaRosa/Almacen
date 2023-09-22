@@ -10,11 +10,11 @@ export class salidaService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getSalida(url: string, token: string, page: number) {
+  public getSalida(url: string, token: string, page: number, itemsPorPage:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
 
-    const getSalida = `${url}/Salida?page=${page}&CantItems=${this.cantidadItems}`
+    const getSalida = `${url}/Salida?page=${page}&CantItems=${itemsPorPage}`
     return this.http.get(getSalida, salidaHeader)
   }
 

@@ -35,7 +35,7 @@ export class productoService {
   }
 
   public postProducto(url: string, data: string, token: string) {
-    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const headers: HttpHeaders = new HttpHeaders({'token': token, 'Content-Type': 'application/json'})
     const productoHeader = {headers: headers}
 
     const postproducto = `${url}/Producto`
@@ -64,7 +64,17 @@ export class productoService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
-    const getTipoproducto = `${url}/Producto/getproductoreport${page}-${this.cantidadItems}`
-    return this.http.get(getTipoproducto, productoHeader)
+    const getproductoEzcases = `${url}/Producto/getproductoreport${page}-${this.cantidadItems}`
+    return this.http.get(getproductoEzcases, productoHeader)
+  }
+
+  // Productos por recintos 
+
+  public getProductoEscazesRecinto(url: string, token: string, id: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const productoHeader = {headers: headers}
+
+    const getProductoproductoEscazes = `${url}/Producto/getproductorecinto/${id}`
+    return this.http.get(getProductoproductoEscazes, productoHeader)
   }
 }

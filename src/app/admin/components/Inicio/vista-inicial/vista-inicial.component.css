@@ -1,7 +1,7 @@
 .stadsContainer{
   display: grid;
   height: 86vh;
-  grid-template-rows: 7vh 79vh;
+  grid-template-rows: 7vh auto;
 }
 
 .alertNotifications{
@@ -12,4 +12,100 @@
 
 .iconStock{
   cursor: pointer;
+}
+
+.contentLast, .content, .contentRecinto{
+  display: grid;
+  padding: 16px;
+}
+
+.content, .contentRecinto{
+  grid-template-columns: 1fr 1fr;
+}
+
+.contentRecinto{
+  width: 85%;
+  box-sizing: border-box;
+}
+
+.EstadisticsContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 16vh 40vh 40vh;
+}
+
+.infoCard, .infoCardSalida{
+  border-left: 5px rgba(0, 128, 0, 0.801) solid;
+  width: 100;
+  margin: 10px 10px;
+}
+
+.infoCardSalida{
+  border-left: 5px #004b8d solid;
+}
+.cardLastOnes, .cardLastOnesEntradas{
+  border-left: 5px #004b8d solid;
+  grid-column: 3/5;
+  width: 100%;
+  margin: 10px 10px;
+}
+
+.cardLastOnesEntradas{
+  border-left: 5px rgba(0, 128, 0, 0.801) solid;
+  grid-column: 1/3;
+}
+
+.cardExistencia{
+  border-left: 5px rgba(255, 102, 0, 0.808) solid;
+  grid-column: 1/3;
+  width: 100;
+  margin: 10px 10px;
+}
+
+.recintoExistencia{
+  grid-column: 3/5;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr ;
+  grid-template-rows: 20vh 20vh;
+}
+
+.cardRecinto{
+  display: grid;
+  place-items: center;
+  background-color: rgba(255, 111, 16, 0.808);
+  width: 100;
+  margin: 10px 10px;
+  color: white;
+}
+
+
+.cardContent{
+  display: grid;
+  height: 100%;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  place-items: center;
+}
+
+.numberOf{
+  font-size: 50px; 
+  font-weight: 100;
+}
+
+.headerTable{
+  height: 4vh;
+}
+
+table {
+  margin-top: 5px;
+}
+
+.headerCell {
+  text-align: start;
+  font-weight: 500;
+  padding: 0;
+}
+
+.dataCell{
+  padding: 0;
 }

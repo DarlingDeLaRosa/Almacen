@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 const materialComponents = [
   MatButtonModule,
@@ -42,7 +43,8 @@ const materialComponents = [
   MatProgressSpinnerModule,
   MatBadgeModule,
   MatButtonToggleModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatProgressBarModule
 ]
 
 @NgModule({

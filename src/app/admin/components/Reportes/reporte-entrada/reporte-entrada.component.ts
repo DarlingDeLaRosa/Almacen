@@ -64,7 +64,7 @@ export class ReporteEntradaComponent implements OnInit {
 
   getEntrada() {
     this.loading = true
-    this.api.getEntrada(this.url, this.token, this.pagina)
+    this.api.getEntrada(this.url, this.token, this.pagina, 10)
       .pipe(
         catchError((error) => {
           this.loading = false

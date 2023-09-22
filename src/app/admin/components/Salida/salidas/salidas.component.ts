@@ -326,7 +326,7 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-
+        console.log(res)
         if (res.data !== null) {
 
           this.formDetalleSalida.patchValue({

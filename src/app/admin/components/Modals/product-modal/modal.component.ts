@@ -286,12 +286,11 @@ export class ModalComponent implements OnInit {
           catchError((error) => {
             loading(false)
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {
           loading(false)
-
           if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
           else { alertIsSuccess(false); this.closeModal(); }
         })

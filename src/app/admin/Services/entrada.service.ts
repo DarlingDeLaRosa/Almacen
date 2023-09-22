@@ -10,11 +10,11 @@ export class entradaService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getEntrada(url: string, token: string, page: number) {
+  public getEntrada(url: string, token: string, page: number, itemPorPage: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}
 
-    const getEntrada = `${url}/Entrada?page=${page}&CantItems=${this.cantidadItems}`
+    const getEntrada = `${url}/Entrada?page=${page}&CantItems=${itemPorPage}`
     return this.http.get(getEntrada, EntradaHeader)
   }
 
