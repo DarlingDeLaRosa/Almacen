@@ -50,7 +50,7 @@ export class AdminTipoMedidaComponent implements OnInit {
   getTipoMedida() {
     this.loading = true
 
-    this.api.getTipoMedida(this.url, this.token, this.pagina,)
+    this.api.getTipoMedida(this.url, this.token, this.pagina, 15)
       .pipe(
         catchError((error) => {
           this.loading = false

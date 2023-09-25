@@ -25,6 +25,7 @@ export class VistaInicialComponent {
   dataFilteredP: producto[] = []
   dataRecintoEscasez: any[] = []
   recintoActual: string = ''
+  rol: number = 0
 
   fechaActual = new Date()
   mesActual = this.fechaActual.getMonth() + 1
@@ -47,11 +48,13 @@ export class VistaInicialComponent {
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
       this.store.select(state => state.app.user.recinto.nombre),
-    ]).subscribe(([tokenValue, pathValue, recinto]) => {
+      this.store.select(state => state.app.user.role.idRol),
+    ]).subscribe(([tokenValue, pathValue, recinto, rolActual]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
       this.recintoActual = recinto
+      this.rol = rolActual
 
       this.getProductoAgotamineto()
       this.getEntrada()
@@ -93,7 +96,6 @@ export class VistaInicialComponent {
     this.loading = true
     let lastFour = 0
 
-
     this.apiSalida.getSalida(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
@@ -131,9 +133,9 @@ export class VistaInicialComponent {
       )
       .subscribe((res: any) => {
         this.itemEscasez = res.data.length
+        
         if (res.data != null) {
-          console.log(res)
-          this.getProductoAgotaminetoRecinto(res.data[0].idProducto)
+          this.getProductoAgotaminetoRecinto(res.data[0].catalogo.id)
 
           res.data.map((detalle: any) => {
             if (lastFour < 4) this.dataFilteredP.push(detalle)
@@ -161,8 +163,9 @@ export class VistaInicialComponent {
         res.data.map((recintos: any) => {
           if (this.recintoActual != recintos.recinto.nombre) {
             this.dataRecintoEscasez.push(recintos)
-          }
+          }          
         })
+        console.log(this.dataRecintoEscasez);
       });
   }
 }

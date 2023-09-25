@@ -557,7 +557,7 @@ export interface producto {
     idUnidadMe: number,
     descripcion: string
   },
-  idTipoArt: {
+  tipoArt: {
     idTipoArt: number,
     nombre: string
   },

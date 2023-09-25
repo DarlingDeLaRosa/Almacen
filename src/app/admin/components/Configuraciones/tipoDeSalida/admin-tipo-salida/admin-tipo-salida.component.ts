@@ -52,7 +52,7 @@ export class AdminTipoSalidaComponent implements OnInit {
   getTipoSalida() {
     this.loading = true
 
-    this.api.getTipoSalida(this.url, this.token, this.pagina,)
+    this.api.getTipoSalida(this.url, this.token, this.pagina, 15)
       .pipe(
         catchError((error) => {
           this.loading = false

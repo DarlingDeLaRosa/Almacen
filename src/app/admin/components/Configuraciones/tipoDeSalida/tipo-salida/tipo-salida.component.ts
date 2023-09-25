@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { alertIsSuccess, alertServerDown } from '../../../../Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertServerDown } from '../../../../Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
@@ -34,8 +34,6 @@ export class TipoSalidaComponent implements OnInit {
   }
 
   sendData() {
-    let dataTipoSalida: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
-
     if (this.formTipoSalida.valid) {
 
       this.api.postTipoSalida(this.url, this.formTipoSalida.value, this.token)
@@ -50,6 +48,8 @@ export class TipoSalidaComponent implements OnInit {
           else alertIsSuccess(false)
         })
 
+    }else{
+      alertNoValidForm()
     }
   }
 }

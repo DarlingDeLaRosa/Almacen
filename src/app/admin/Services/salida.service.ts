@@ -94,11 +94,11 @@ export class salidaService {
 
   // Salida Departamento
 
-  public getTipoDepartamento(url: string, token: string, page: number){
+  public getTipoDepartamento(url: string, token: string, page: number,  noPage:number){
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const departamentoHeader = {headers: headers}
 
-    const getDepartamento = `${url}/Departamento?page=${page}&CantItems=${this.cantidadItems}` // arreglar esto
+    const getDepartamento = `${url}/Departamento?page=${page}&CantItems=${noPage}`
     return this.http.get(getDepartamento, departamentoHeader)
   }
 

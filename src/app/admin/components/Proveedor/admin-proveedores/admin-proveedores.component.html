@@ -3,13 +3,13 @@
   <div class="fuctionContent">
     <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/proveedores']">Crear nuevo proveedor</button>
 
-    <div [formGroup]="filterProveedor" class="filtrarContent">
+    <form [formGroup]="filterProveedor" class="filtrarContent">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
         <input matInput formControlName="filter" (input)="dataFilter()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
-    </div>
+    </form>
   </div>
 
   <div>

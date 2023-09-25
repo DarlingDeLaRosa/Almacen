@@ -10,7 +10,7 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { detalleEditProductoEntrada, detalleProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, combineLatest } from 'rxjs';
 
@@ -234,36 +234,36 @@ export class EditEntradasComponent {
   }
 
   getProveedor() {
-    this.apiProveedor.getProveedor(this.url, this.token, 1)
+    this.apiProveedor.getProveedor(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         this.proveedorList = res.data
       });
   }
 
   getTipoEntrada() {
-    this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1)
+    this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrada: any) => {
-            if(tentrada.nombre != 'Donación' && tentrada.nombre != 'Prestamo' ) this.tipoEntradaList.push(tentrada)
+            if (tentrada.nombre != 'Donación' && tentrada.nombre != 'Prestamo') this.tipoEntradaList.push(tentrada)
           })
         }
       });
   }
 
   getTipoEntrega() {
-    this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1)
+    this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrega: any) => {
-            if(tentrega.nombre != 'Transferencia') this.tipoEntregaList.push(tentrega)
+            if (tentrega.nombre != 'Transferencia') this.tipoEntregaList.push(tentrega)
           })
         }
       });
   }
 
   getProducto() {
-    this.apiProducto.getProducto(this.url, this.token, 1)
+    this.apiProducto.getProducto(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         this.productoList = res.data
       });
@@ -393,71 +393,79 @@ export class EditEntradasComponent {
 
   addDetail() {
 
+    const exisProducto = this.productoList.some(producto => {
+      return producto.nombre === this.formEditDetalleEntrada.value.idProducto;
+    });
+
     if (this.formEditDetalleEntrada.valid && this.formEditEntrada.valid) {
+      if (exisProducto) {
 
-      if (this.isSerial == true && this.formEditDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
+        if (this.isSerial == true && this.formEditDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
 
-        if (this.detailGroup.length > 0 && this.isSerial) {
-          if (this.detailGroup.some(producto => {
-            if (producto.serial && this.formEditDetalleEntrada.value.serial) {
-              return producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase()
+          if (this.detailGroup.length > 0 && this.isSerial) {
+            if (this.detailGroup.some(producto => {
+              if (producto.serial && this.formEditDetalleEntrada.value.serial) {
+                return producto.serial.toUpperCase() == this.formEditDetalleEntrada.value.serial.toUpperCase()
+              }
+              return false
             }
-            return false
+            )) {
+              alertSameSerial()
+              return
+            }
           }
-          )) {
-            alertSameSerial()
-            return
+
+          //this.totalResult += this.formEditDetalleEntrada.value.subTotal
+
+          // if (this.generalITBIS == false) {
+
+          //   this.mostrarTotalItbis = 0
+          //   this.totalItbis = this.formEditEntrada.value.itbisGeneral
+          //   this.mostrarTotalItbis = this.totalItbis
+
+          // } else {
+
+          //   if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == false) {
+
+          //     this.subTotalResult()
+
+          //     this.mostrarTotalItbis += this.totalItbis
+
+          //     this.formEditDetalleEntrada.value.itbisProducto
+          //       = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
+
+          //   } else if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true) {
+
+          //     this.totalItbis = this.formEditDetalleEntrada.value.itbisProducto * this.formEditDetalleEntrada.value.cantidad
+          //     this.mostrarTotalItbis += this.totalItbis
+          //   }
+
+          // }
+
+          if (this.generalITBIS) {
+
+            this.formEditDetalleEntrada.value.itbisProducto = 0.18 * this.formEditDetalleEntrada.value.precio
+            this.detailGroup.push(this.formEditDetalleEntrada.value)
+
+          } else {
+
+            this.formEditDetalleEntrada.value.itbisProducto = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
+            this.detailGroup.push(this.formEditDetalleEntrada.value)
+
           }
-        }
 
-        //this.totalResult += this.formEditDetalleEntrada.value.subTotal
+          // this.detailGroup.push(this.formEditDetalleEntrada.value)
+          this.sumaTotal()
 
-        // if (this.generalITBIS == false) {
+          this.formEditDetalleEntrada.reset()
 
-        //   this.mostrarTotalItbis = 0
-        //   this.totalItbis = this.formEditEntrada.value.itbisGeneral
-        //   this.mostrarTotalItbis = this.totalItbis
-
-        // } else {
-
-        //   if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == false) {
-
-        //     this.subTotalResult()
-
-        //     this.mostrarTotalItbis += this.totalItbis
-
-        //     this.formEditDetalleEntrada.value.itbisProducto
-        //       = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
-
-        //   } else if (this.formEditDetalleEntrada.value.itbisProducto !== 0 && this.setdetailGroup == true) {
-
-        //     this.totalItbis = this.formEditDetalleEntrada.value.itbisProducto * this.formEditDetalleEntrada.value.cantidad
-        //     this.mostrarTotalItbis += this.totalItbis
-        //   }
-
-        // }
-
-        if (this.generalITBIS) {
-
-          this.formEditDetalleEntrada.value.itbisProducto = 0.18 * this.formEditDetalleEntrada.value.precio
-          this.detailGroup.push(this.formEditDetalleEntrada.value)
+          if (this.detailGroup.length >= 1) this.disableItbis = true
 
         } else {
-
-          this.formEditDetalleEntrada.value.itbisProducto = this.formEditDetalleEntrada.value.itbisProducto * 0.01 * this.formEditDetalleEntrada.value.precio
-          this.detailGroup.push(this.formEditDetalleEntrada.value)
-
+          alertSerial()
         }
-
-        // this.detailGroup.push(this.formEditDetalleEntrada.value)
-        this.sumaTotal()
-
-        this.formEditDetalleEntrada.reset()
-
-        if (this.detailGroup.length >= 1) this.disableItbis = true
-
-      } else {
-        alertSerial()
+      }else{
+        productNameNoExist()
       }
     } else {
       alertNoValidForm()
@@ -492,10 +500,10 @@ export class EditEntradasComponent {
         idEntradaDet: detalle.idEntradaDet,
       })
 
-      if(detalle.serial != null && detalle.serial.length > 0) {
+      if (detalle.serial != null && detalle.serial.length > 0) {
         this.isSerial = true
         this.formEditDetalleEntrada.patchValue({ serial: detalle.serial })
-      }else{
+      } else {
         this.isSerial = false
       }
 
@@ -563,7 +571,7 @@ export class EditEntradasComponent {
   duplicateDetail(producto: detallePutGroup) {
     console.log(producto);
 
-    if (!this.formEditDetalleEntrada.valid ) {
+    if (!this.formEditDetalleEntrada.valid) {
       this.formEditDetalleEntrada.patchValue({
         idProducto: producto.idProducto,
         cantidad: producto.cantidad,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertIsSuccess, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -36,8 +36,6 @@ export class TipoEntregaComponent implements OnInit {
   }
 
   sendData() {
-    let dataTipoEntrega: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
-
     if (this.formTipoEntrega.valid) {
 
       this.api.postTipoEntrega(this.url, this.formTipoEntrega.value, this.token)
@@ -52,6 +50,8 @@ export class TipoEntregaComponent implements OnInit {
           else alertIsSuccess(false)
         })
 
+    }else{
+      alertNoValidForm()
     }
   }
 

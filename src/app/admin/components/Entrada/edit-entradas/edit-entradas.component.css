@@ -19,3 +19,7 @@
 .formInfo .observacion{
   width: 48.5% !important;
 }
+
+.btnSend{
+  margin-top:10px;
+}

@@ -51,7 +51,7 @@ export class AdminTipoEntradaComponent implements OnInit {
   getTipoEntrada() {
     this.loading = true
 
-    this.api.getTipoEntrada(this.url, this.token, this.pagina,)
+    this.api.getTipoEntrada(this.url, this.token, this.pagina, 15)
     .pipe(
       catchError((error) => {
         this.loading = false

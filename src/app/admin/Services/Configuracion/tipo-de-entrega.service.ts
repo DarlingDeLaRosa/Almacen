@@ -10,11 +10,11 @@ export class TipoDeEntregaService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoEntrega(url: string, token: string, page: number) {
+  public getTipoEntrega(url: string, token: string, page: number,  noPage:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoEntregaHeader = {headers: headers}
 
-    const getTipoEntrega = `${url}/TipoEntrega?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoEntrega = `${url}/TipoEntrega?page=${page}&CantItems=${noPage}`
     return this.http.get(getTipoEntrega, tipoEntregaHeader)
   }
 

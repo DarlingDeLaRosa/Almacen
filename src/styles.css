@@ -72,15 +72,15 @@ h1 {
   font-weight: 500;
 }
 
-.viewContent {
+.viewContent, .viewInitContent {
   display: grid;
   grid-template-rows: 8vh auto;
   padding: 16px;
 }
-
+/* 
 .viewInitContent {
   padding: 16px;
-}
+} */
 
 .title {
   padding: 0px;
@@ -135,6 +135,10 @@ table {
 .dataCell {
   border-top: 1px solid #ccc;
   padding-left: 15px;
+  max-width: 130px;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
 .dataRow {
@@ -299,6 +303,7 @@ table {
   height: 9vh;
   background-color: #004b8d;
   color: white;
+  cursor: pointer;
 }
 
 .almacenOptions {

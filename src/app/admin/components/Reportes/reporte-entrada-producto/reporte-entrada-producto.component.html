@@ -3,7 +3,7 @@
   <h1>Reportes de entradas por producto</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent" [formGroup]="filterRepEntrada" class="filtrarContent">
+    <form class="filtrarContent" [formGroup]="filterRepEntrada" class="filtrarContent">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -25,7 +25,7 @@
       </mat-form-field> 
     -->
 
-    </div>
+    </form>
 
     <span>
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntradaProducto" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>

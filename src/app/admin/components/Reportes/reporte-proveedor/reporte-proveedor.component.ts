@@ -53,7 +53,7 @@ export class ReporteProveedorComponent implements OnInit {
   getProveedor() {
     this.loading = true;
 
-    this.api.getProveedor(this.url, this.token, this.pagina,)
+    this.api.getProveedor(this.url, this.token, this.pagina, 15)
     .pipe(
       catchError((error) => {
         this.loading = false

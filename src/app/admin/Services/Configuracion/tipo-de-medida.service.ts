@@ -10,11 +10,11 @@ export class TipoDeMedidaService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoMedida(url: string, token: string, page: number) {
+  public getTipoMedida(url: string, token: string, page: number, noPage: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoMedidaHeader = {headers: headers}
 
-    const getTipoMedida = `${url}/UnidadMedida?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoMedida = `${url}/UnidadMedida?page=${page}&CantItems=${noPage}`
     return this.http.get(getTipoMedida, tipoMedidaHeader)
   }
 

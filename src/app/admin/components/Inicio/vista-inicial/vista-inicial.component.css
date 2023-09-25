@@ -14,18 +14,22 @@
   cursor: pointer;
 }
 
-.contentLast, .content, .contentRecinto{
+.contentLast, .content, .contentRecinto, .contentRecintoRec{
   display: grid;
   padding: 16px;
 }
 
-.content, .contentRecinto{
+.content, .contentRecinto, .contentRecintoRec{
   grid-template-columns: 1fr 1fr;
 }
 
-.contentRecinto{
+.contentRecinto, .contentRecintoRec{
   width: 85%;
   box-sizing: border-box;
+}
+
+.contentRecintoRec{
+  padding: 16px 10px;
 }
 
 .EstadisticsContainer{
@@ -87,9 +91,13 @@
   place-items: center;
 }
 
-.numberOf{
+.numberOf, .numberOfRec{
   font-size: 50px; 
   font-weight: 100;
+}
+
+.numberOfRec{
+  color: white;
 }
 
 .headerTable{

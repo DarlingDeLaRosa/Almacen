@@ -10,11 +10,11 @@ export class productoService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getProducto(url: string, token: string, page: number) {
+  public getProducto(url: string, token: string, page: number,  noPage:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
-    const getTipoproducto = `${url}/Producto?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoproducto = `${url}/Producto?page=${page}&CantItems=${noPage}`
     return this.http.get(getTipoproducto, productoHeader)
   }
 
@@ -43,7 +43,7 @@ export class productoService {
   }
 
   public editProducto(url: string, data: string, token: string) {
-    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const headers: HttpHeaders = new HttpHeaders({'token': token, 'Content-Type': 'application/json'})
     const productoHeader = {headers: headers}
 
     const editproducto = `${url}/Producto`

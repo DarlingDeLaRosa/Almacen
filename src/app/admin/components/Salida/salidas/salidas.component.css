@@ -2,3 +2,7 @@
 .formInfo .departamento{
   width: 48% !important;
 }
+
+.btnSend{
+  margin-top:10px;
+}

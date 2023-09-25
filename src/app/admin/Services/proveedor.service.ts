@@ -10,11 +10,11 @@ export class proveedorService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getProveedor(url: string, token: string, page: number) {
+  public getProveedor(url: string, token: string, page: number, noPage:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const proveedorHeader = {headers: headers}
 
-    const getTipoProveedor = `${url}/Proveedor?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoProveedor = `${url}/Proveedor?page=${page}&CantItems=${noPage}`
     return this.http.get(getTipoProveedor, proveedorHeader)
   }
 

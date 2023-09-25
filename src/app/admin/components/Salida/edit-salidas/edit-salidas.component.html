@@ -10,7 +10,7 @@
   </div>
 
   <div class="form">
-    <div [formGroup]="formEditSalida" class="formInfo">
+    <form [formGroup]="formEditSalida" class="formInfo">
 
       <h2>Informacion de salidas</h2>
 
@@ -68,9 +68,9 @@
         <mat-label>Observacion</mat-label>
         <input matInput required formControlName="observacion">
       </mat-form-field>&nbsp;
-    </div>
+    </form>
 
-    <div [formGroup]="formDetalleEditSalida" class="formInfo">
+    <form [formGroup]="formDetalleEditSalida" class="formInfo">
 
       <h4>Informacion de producto</h4>
       <div>
@@ -141,7 +141,7 @@
           <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
-    </div>
+    </form>
 
     <div>
 
@@ -186,10 +186,16 @@
             <td class="footerCell"></td>
             <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
-            <td class="footerCell"> <button class="fucSend" (click)="sendData()"><mat-icon>send</mat-icon></button></td>
+            <td class="footerCell"> </td>
           </tr>
         </tfoot>
       </table>
+      <span class="btnContainer">
+        <button class="btnSend" mat-stroked-button (click)="sendData()">
+          <mat-icon>send</mat-icon>
+          Editar
+        </button>
+      </span>
     </div>
 
   </div>

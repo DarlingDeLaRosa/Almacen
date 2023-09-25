@@ -10,11 +10,11 @@ export class TipoDeProductoService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoProducto(url: string, token: string, page: number) {
+  public getTipoProducto(url: string, token: string, page: number, noPage:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoProductoHeader = {headers: headers}
 
-    const getTipoProducto = `${url}/TipoArticulo?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoProducto = `${url}/TipoArticulo?page=${page}&CantItems=${noPage}`
     return this.http.get(getTipoProducto, tipoProductoHeader)
   }
 

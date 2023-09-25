@@ -2,7 +2,7 @@ import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertIsSuccess, alertProductCodeNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertProductCodeNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -87,7 +87,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -100,7 +100,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getUnidadMedida() {
-    this.apiTipoMedida.getTipoMedida(this.url, this.token, 1)
+    this.apiTipoMedida.getTipoMedida(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -115,7 +115,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getTipoProducto() {
-    this.apiTipoProducto.getTipoProducto(this.url, this.token, 1)
+    this.apiTipoProducto.getTipoProducto(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -199,31 +199,37 @@ export class ProductosComponent implements OnInit {
   }
 
   sendData() {
-
-    let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formProducto.value.idUnidadMe)
-    let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formProducto.value.idTipoArt)
-    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formProducto.value.idTipoAlmacen)
-
-    this.formProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
-    this.formProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
-    this.formProducto.value.idTipoArt = idTipoP[0].idTipoArt
-
     if (this.formProducto.valid) {
 
+      let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formProducto.value.idUnidadMe)
+      let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formProducto.value.idTipoArt)
+      let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formProducto.value.idTipoAlmacen)
+
+      this.formProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
+      this.formProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
+      this.formProducto.value.idTipoArt = idTipoP[0].idTipoArt
+
+
       loading(true)
+      console.log(JSON.stringify(this.formProducto.value));
+
       this.api.postProducto(this.url, this.formProducto.value, this.token)
-      .pipe(
-        catchError((error) => {
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+          console.log(res);
+
           loading(false)
-          alertServerDown();
-          return error;
+          if (res.data != null) { alertIsSuccess(true); this.formProducto.reset() }
+          else { alertBackMessage(res.message) }
         })
-      )  
-      .subscribe((res: any) => {
-          loading(false)
-          if (res.success) {alertIsSuccess(true); this.formProducto.reset()} 
-          else {alertIsSuccess(false)}
-        })
+    }else{
+      alertNoValidForm()
     }
   }
 }

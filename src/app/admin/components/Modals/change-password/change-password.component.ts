@@ -17,6 +17,9 @@ export class ChangePasswordComponent implements OnInit {
   formChangePassword: FormGroup;
   url!: string;
   token!: string
+  seePass: string = 'password'
+  seepassnew: string = 'password'
+  seepassConfirm :string = 'password'
 
   constructor(
     public fb: FormBuilder,
@@ -35,6 +38,30 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit() {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+  }
+
+  seePassword() {
+    if (this.seePass == 'password') {
+      this.seePass = 'text'
+    } else {
+      this.seePass = 'password'
+    }
+  }
+
+  seePasswordNew() {
+    if (this.seepassnew == 'password') {
+      this.seepassnew = 'text'
+    } else {
+      this.seepassnew = 'password'
+    }
+  }
+
+  seePasswordConfirm() {
+    if (this.seepassConfirm == 'password') {
+      this.seepassConfirm = 'text'
+    } else {
+      this.seepassConfirm = 'password'
+    }
   }
 
   closeModal() {

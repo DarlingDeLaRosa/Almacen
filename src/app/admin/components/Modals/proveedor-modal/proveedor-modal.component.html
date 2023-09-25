@@ -1,7 +1,7 @@
 <div class="modal">
   <h2 class="modal-title" mat-dialog-title> Editar Proveedor </h2>
   <mat-dialog-content class="modal-content">
-    <div [formGroup]="formEditProveedor" class="formInfo">
+    <form [formGroup]="formEditProveedor" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>RNC</mat-label>
@@ -36,7 +36,7 @@
         <input matInput required formControlName="telRepresentante">
       </mat-form-field>&nbsp;
 
-    </div>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cancelar</button>

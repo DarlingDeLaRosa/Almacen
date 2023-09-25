@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -50,6 +50,8 @@ export class TipoAlmacenComponent {
           if (res.data !== null) { alertIsSuccess(true); this.formTipoAlmacen.reset() }
           else alertIsSuccess(false)
         })
+    }else{
+      alertNoValidForm()
     }
   }
 }

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } f
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
-import { alertIsSuccess, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -64,7 +64,7 @@ export class ModalComponent implements OnInit {
         precio: this.item.precio,
         stockMinimo: this.item.stockMinimo,
         idUnidadMe: this.item.unidadMedida.descripcion,
-        idTipoArt: this.item.idTipoArt.nombre,
+        idTipoArt: this.item.tipoArt.nombre,
         auxiliar: this.item.catalogo.auxiliar.id,
         denominacion: this.item.catalogo.auxiliar.denominacion,
         idTipoAlmacen: this.item.tipoAlmacen.nombre,
@@ -116,7 +116,7 @@ export class ModalComponent implements OnInit {
   }
 
   getTipoAlmacen() {
-    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1)
+    this.apiTipoAlmacen.getTipoAlmacen(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -129,7 +129,7 @@ export class ModalComponent implements OnInit {
   }
 
   getUnidadMedida() {
-    this.apiTipoMedida.getTipoMedida(this.url, this.token, 1)
+    this.apiTipoMedida.getTipoMedida(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -144,7 +144,7 @@ export class ModalComponent implements OnInit {
   }
 
   getTipoProducto() {
-    this.apiTipoProducto.getTipoProducto(this.url, this.token, 1)
+    this.apiTipoProducto.getTipoProducto(this.url, this.token, 1, 200)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -235,15 +235,22 @@ export class ModalComponent implements OnInit {
     console.log(this.unidadMedidaList)
     console.log(this.formEditProducto.value)
 
-    let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
-    let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
-    let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
+    console.log(this.formEditProducto.valid);
+    console.log(this.item);
 
-    this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
-    this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
-    this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
+    if (this.formEditProducto.valid && this.item != null) {
 
-    if (this.formEditProducto.valid && this.item !== null) {
+      let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
+      let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
+      let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
+
+      console.log(idUnidadM);
+      this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
+      this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
+      this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
+
+      console.log(this.formEditProducto.value.idTipoAlmacen);
+
       if (
         this.formEditProducto.value.idCatalogo !== this.item.catalogo.id
         || this.formEditProducto.value.nombre !== this.item.nombre
@@ -251,19 +258,20 @@ export class ModalComponent implements OnInit {
         || this.formEditProducto.value.precio !== this.item.precio
         || this.formEditProducto.value.stockMinimo !== this.item.stockMinimo
         || this.formEditProducto.value.idUnidadMe !== this.item.unidadMedida.idUnidadMe
-        || this.formEditProducto.value.idTipoArt !== this.item.idTipoArt.idTipoArt
+        || this.formEditProducto.value.idTipoArt !== this.item.tipoArt.idTipoArt
         || this.formEditProducto.value.stockMinimo !== this.item.stockMinimo
         || this.formEditProducto.value.itbis !== this.item.itbis
         || this.formEditProducto.value.idTipoAlmacen !== this.item.tipoAlmacen.nombre
       ) {
         loading(true)
+        console.log( this.formEditProducto.value );
 
         this.api.editProducto(this.url, JSON.stringify(this.formEditProducto.value), this.token)
           .pipe(
             catchError((error) => {
               loading(false)
               alertServerDown();
-              return error;
+              return throwError(error);
             })
           )
           .subscribe((res: any) => {
@@ -278,9 +286,21 @@ export class ModalComponent implements OnInit {
         this.closeModal();
       }
     } else if (this.formEditProducto.valid && this.item == null) {
+
       this.formEditProducto.removeControl('idProducto')
+      
+      let idUnidadM = this.unidadMedidaList.filter(item => item.descripcion === this.formEditProducto.value.idUnidadMe)
+      let idTipoP = this.tipoProductoList.filter(item => item.nombre === this.formEditProducto.value.idTipoArt)
+      let idTipoAl = this.tipoAlmacenList.filter(item => item.nombre === this.formEditProducto.value.idTipoAlmacen)
+
+      console.log(idUnidadM);
+      this.formEditProducto.value.idTipoAlmacen = idTipoAl[0].idTipoAlm
+      this.formEditProducto.value.idUnidadMe = idUnidadM[0].idUnidadMe
+      this.formEditProducto.value.idTipoArt = idTipoP[0].idTipoArt
 
       loading(true)
+      console.log(this.formEditProducto.value);
+      
       this.api.postProducto(this.url, JSON.stringify(this.formEditProducto.value), this.token)
         .pipe(
           catchError((error) => {
@@ -294,6 +314,9 @@ export class ModalComponent implements OnInit {
           if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
           else { alertIsSuccess(false); this.closeModal(); }
         })
+
+    } else {
+      alertNoValidForm()
     }
   }
 

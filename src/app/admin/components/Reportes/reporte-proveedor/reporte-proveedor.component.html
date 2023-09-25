@@ -3,7 +3,7 @@
   <h1>Reportes de Proveedores</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent" [formGroup]="filterRepProveedor" class="filtrarContent">
+    <form class="filtrarContent" [formGroup]="filterRepProveedor" >
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -24,7 +24,7 @@
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> 
       </mat-form-field> -->
 
-    </div>
+    </form>
 
     <span>
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesProveedor" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>

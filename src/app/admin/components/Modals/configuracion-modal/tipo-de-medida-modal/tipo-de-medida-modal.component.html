@@ -1,14 +1,14 @@
 <div class="modal">
   <h1 class="modal-title" mat-dialog-title>Editar tipo de medida</h1>
   <mat-dialog-content class="modal-content">
-    <div [formGroup]="formEditTipoMedida" class="formInfo">
+    <form [formGroup]="formEditTipoMedida" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Unidad de medida</mat-label>
         <input matInput required formControlName="descripcion">
       </mat-form-field>&nbsp;
 
-    </div>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cancelar</button>

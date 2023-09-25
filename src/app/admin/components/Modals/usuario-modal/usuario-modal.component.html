@@ -1,7 +1,7 @@
 <div class="modal">
   <h2 class="modal-title" mat-dialog-title> Editar Usuario </h2>
   <mat-dialog-content class="modal-content">
-    <div [formGroup]="formEditUser" class="formInfo">
+    <form [formGroup]="formEditUser" class="formInfo">
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Rol</mat-label>
@@ -83,7 +83,7 @@
         <input type="number" matInput required formControlName="celular">
       </mat-form-field>&nbsp;
 
-    </div>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cancelar</button>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertIsSuccess, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -34,7 +34,6 @@ export class TipoEntradaComponent implements OnInit {
   }
 
   sendData() {
-    let dataTipoEntrada: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formTipoEntrada.valid) {
       loading(true)
@@ -52,6 +51,8 @@ export class TipoEntradaComponent implements OnInit {
           else alertIsSuccess(false)
         })
 
+    }else{
+      alertNoValidForm()
     }
   }
 }

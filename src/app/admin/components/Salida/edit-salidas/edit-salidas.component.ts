@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -169,7 +169,7 @@ export class EditSalidasComponent {
                 idSalida: detalle.idSalida,
                 idSalidaDet: detalle.idSalidaDet
               })
-              
+
               this.addDetail()
               this.formDetalleEditSalida.reset()
             })
@@ -186,7 +186,7 @@ export class EditSalidasComponent {
   getProducto() {
     this.productoList = []
 
-    this.apiProducto.getProducto(this.url, this.token, 1)
+    this.apiProducto.getProducto(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -220,7 +220,7 @@ export class EditSalidasComponent {
   }
 
   getTipoSalida() {
-    this.apiTipoSalida.getTipoSalida(this.url, this.token, 1)
+    this.apiTipoSalida.getTipoSalida(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -233,7 +233,7 @@ export class EditSalidasComponent {
   }
 
   getTipoDepartamento() {
-    this.api.getTipoDepartamento(this.url, this.token, 1)
+    this.api.getTipoDepartamento(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -316,58 +316,64 @@ export class EditSalidasComponent {
 
   addDetail() {
 
+    const exisProducto = this.productoList.some(producto => {
+      return producto.nombre === this.formDetalleEditSalida.value.idProducto;
+    });
+
     if (this.formDetalleEditSalida.valid && this.formEditSalida.valid) {
+      if (exisProducto) {
+        if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
 
-      if (this.isSerial == true && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
-
-        if (this.detailGroup.length > 0 && this.isSerial) {
-          if (this.detailGroup.some(producto => {
-            if (producto.serial && this.formDetalleEditSalida.value.serial) {
-              return producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase()
+          if (this.detailGroup.length > 0 && this.isSerial) {
+            if (this.detailGroup.some(producto => {
+              if (producto.serial && this.formDetalleEditSalida.value.serial) {
+                return producto.serial.toUpperCase() == this.formDetalleEditSalida.value.serial.toUpperCase()
+              }
+              return false
             }
-            return false
+            )) {
+              alertSameSerial()
+              return
+            }
           }
-          )) {
-            alertSameSerial()
-            return
+
+          // console.log(this.formDetalleEditSalida.value.idSalidaDet);
+          // console.log(this.ediExis);
+          // console.log(this.formDetalleEditSalida.value.cantidad);
+          // console.log(this.formDetalleEditSalida.value.existencia);
+          let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
+            return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
+          });
+
+          this.ediExis = setValuesform[0].cantidad
+
+          if (
+            this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
+            || this.formDetalleEditSalida.value.idSalidaDet == null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia
+          ) {
+
+            this.detailGroup.push(this.formDetalleEditSalida.value)
+            //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+            this.sumaTotal()
+            this.formDetalleEditSalida.reset()
+
+          } else {
+            alertCantExis()
           }
+
+          // if (this.isSerial == false && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == true) {
+
+          //   this.detailGroup.push(this.formDetalleEditSalida.value)
+          //   //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+          //   this.formDetalleEditSalida.reset()
+          // }
         }
-
-        // console.log(this.formDetalleEditSalida.value.idSalidaDet);
-        // console.log(this.ediExis);
-        // console.log(this.formDetalleEditSalida.value.cantidad);
-        // console.log(this.formDetalleEditSalida.value.existencia);
-        let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
-          return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
-        });
-  
-        this.ediExis = setValuesform[0].cantidad
-
-        if (
-          this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
-          || this.formDetalleEditSalida.value.idSalidaDet == null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia
-        ) {
-
-          this.detailGroup.push(this.formDetalleEditSalida.value)
-          //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
-          this.sumaTotal()
-          this.formDetalleEditSalida.reset()
-
-        } else {
-          alertCantExis()
+        else {
+          alertSerial()
         }
-
-        // if (this.isSerial == false && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == true) {
-
-        //   this.detailGroup.push(this.formDetalleEditSalida.value)
-        //   //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
-        //   this.formDetalleEditSalida.reset()
-        // }
+      } else {
+        productNameNoExist()
       }
-      else {
-        alertSerial()
-      }
-
     } else {
       alertNoValidForm()
     }
@@ -405,11 +411,11 @@ export class EditSalidasComponent {
     }
 
     //if (item.idSalidaDet != null) {
-//
+    //
     //  let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
     //    return productoEspecifico.producto.nombre == item.idProducto
     //  });
-//
+    //
     //  this.ediExis = setValuesform[0].cantidad
     //}
 

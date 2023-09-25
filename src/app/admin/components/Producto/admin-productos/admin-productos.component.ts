@@ -50,20 +50,22 @@ export class AdminProductosComponent implements OnInit {
 
   getProducto() {
     this.loading = true
-    
-    this.api.getProducto(this.url, this.token, this.pagina)
-      .subscribe((res: any) => {
+
+    this.api.getProducto(this.url, this.token, this.pagina, 15)
+    .pipe(
+      catchError((error) => {
+        this.loading = false
+        alertServerDown();
+        return error;
+      })
+    ) 
+    .subscribe((res: any) => {
+        console.log(res)
 
         this.loading = false
 
-        console.log(res)
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-
-          , () => {
-            this.loading = false
-            alertServerDown();
-          }
       });
   }
 
@@ -97,16 +99,16 @@ export class AdminProductosComponent implements OnInit {
       if (removeChoise) {
         loading(true)
         this.api.removeProducto(this.url, item, this.token)
-        .pipe(
-          catchError((error) => {
+          .pipe(
+            catchError((error) => {
+              loading(false)
+              alertServerDown();
+              return error;
+            })
+          )
+          .subscribe((res: any) => {
             loading(false)
-            alertServerDown();
-            return error;
-          })
-        )  
-        .subscribe((res: any) => {
-            loading(false)
-            if (res !== null) { alertRemoveSuccess(); this.getProducto()} 
+            if (res !== null) { alertRemoveSuccess(); this.getProducto() }
             else { alertIsSuccess(false) }
           })
       }

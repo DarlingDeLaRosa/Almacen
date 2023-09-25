@@ -2,7 +2,7 @@ import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
-import { alertIsSuccess, alertRncNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRncNoFound, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -91,7 +91,6 @@ export class ProveedoresComponent implements OnInit {
   }
 
   sendData() {
-    let dataProveedor: GET = { data: [], message: '', success: false, cantItem: 0, cantPage: 0, currentPage: 0 };
 
     if (this.formProveedor.valid) {
       loading(true)
@@ -106,15 +105,16 @@ export class ProveedoresComponent implements OnInit {
         .subscribe((res: any) => {
 
           loading(false)
-          dataProveedor = res
 
-          if (dataProveedor.success) {
+          if (res.data != null) {
             alertIsSuccess(true)
             this.formProveedor.reset()
           } else {
             alertIsSuccess(false)
           }
         })
+    }else{
+      alertNoValidForm()
     }
   }
 

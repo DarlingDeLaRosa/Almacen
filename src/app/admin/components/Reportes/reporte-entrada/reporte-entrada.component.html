@@ -4,7 +4,7 @@
 
   <div class="fuctionContent">
 
-    <div class="filtrarContent" [formGroup]="filterReporteEntrada">
+    <form class="filtrarContent" [formGroup]="filterReporteEntrada">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -26,7 +26,7 @@
        
       </mat-form-field> -->
 
-    </div>
+    </form>
 
     <span>
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon class="printIcon">print</mat-icon></button>

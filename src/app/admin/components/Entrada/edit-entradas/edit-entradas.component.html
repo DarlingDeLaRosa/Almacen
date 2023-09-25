@@ -10,7 +10,7 @@
   </div>
 
   <div class="form">
-    <div [formGroup]="formEditEntrada" class="formInfo">
+    <form [formGroup]="formEditEntrada" class="formInfo">
 
       <h2>Informacion de entrada</h2>
 
@@ -92,9 +92,9 @@
       </mat-form-field>&nbsp;
       <ng-template #generalItbis></ng-template> -->
 
-    </div>
+    </form>
 
-    <div [formGroup]="formEditDetalleEntrada" class="formInfo">
+    <form [formGroup]="formEditDetalleEntrada" class="formInfo">
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
@@ -186,7 +186,7 @@
         <button mat-stroked-button class="btnClear" (click)="clearDetail()"><mat-icon>clear</mat-icon>Limpiar</button>&nbsp;
         <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
       </span>
-    </div>
+    </form>
 
     <div>
 
@@ -237,10 +237,16 @@
             <td class="footerCell" >{{mostrarTotalItbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             <td class="footerCell">{{totalResult | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
-            <td class="footerCell"> <button class="fucSend" (click)="editData()"><mat-icon>send</mat-icon></button></td>
+            <td class="footerCell"></td>
           </tr>
         </tfoot>
       </table>
+      <span class="btnContainer">
+        <button class="btnSend" mat-stroked-button (click)="editData()">
+          <mat-icon>send</mat-icon>
+          Editar
+        </button>
+      </span>
     </div>
 
   </div>

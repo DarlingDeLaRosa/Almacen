@@ -51,7 +51,7 @@ export class AdminTipoAlmacenComponent implements OnInit {
   getTipoAlmacen() {
     this.loading = true
 
-    this.api.getTipoAlmacen(this.url, this.token, this.pagina,)
+    this.api.getTipoAlmacen(this.url, this.token, this.pagina, 15)
     .pipe(
       catchError((error) => {
         this.loading = false

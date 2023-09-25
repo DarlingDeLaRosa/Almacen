@@ -5,7 +5,7 @@
   </ng-template>
   <mat-dialog-content class="modal-content">
 
-    <div [formGroup]="formEditProducto" class="formInfo">
+    <form [formGroup]="formEditProducto" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Codigo de producto</mat-label>
@@ -93,7 +93,7 @@
         <input type="number" matInput required formControlName="stockMinimo">
       </mat-form-field>&nbsp;
 
-    </div>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cancelar</button>

@@ -10,11 +10,11 @@ export class TipoDeAlmacenService {
   cantidadItems = 15
   constructor(private http: HttpClient) { }
 
-  public getTipoAlmacen(url: string, token: string, page: number) {
+  public getTipoAlmacen(url: string, token: string, page: number, noIntems: number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const tipoAlmacenHeader = {headers: headers}
 
-    const getTipoAlmacen = `${url}/TipoAlmacen?page=${page}&CantItems=${this.cantidadItems}`
+    const getTipoAlmacen = `${url}/TipoAlmacen?page=${page}&CantItems=${noIntems}`
     return this.http.get(getTipoAlmacen, tipoAlmacenHeader)
   }
 

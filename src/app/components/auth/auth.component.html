@@ -9,7 +9,7 @@
     <mat-card class="logInCard">
       <mat-card-title class="titleLogIn">Bienvenido</mat-card-title>
       <mat-card-content>
-        <div [formGroup]="formUserLogIn">
+        <form [formGroup]="formUserLogIn">
           <mat-form-field hideRequiredMarker appearance="fill" class="inputLogIn">
             <mat-label>Usuario</mat-label>
             <input matInput required formControlName="usuario">
@@ -25,7 +25,7 @@
           <mat-card-actions align="end">
             <button mat-raised-button class="logIn" (click)="logIn()" [disabled]="disableBtn" >Iniciar Sesion</button>
           </mat-card-actions>
-        </div>
+        </form>
       </mat-card-content>
     </mat-card>
   </div>

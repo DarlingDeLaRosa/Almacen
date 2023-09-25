@@ -119,9 +119,9 @@ export class UsuariosComponent implements OnInit {
   }
 
   sendData() {
-    if (this.formUser.get('correo')?.valid) {
-      if (this.formUser.value.contrasena.length > 6) {
-        if (this.formUser.valid) {
+    if (this.formUser.valid) {
+      if (this.formUser.get('correo')?.valid) {
+        if (this.formUser.value.contrasena.length > 6) {
 
 
           let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)
@@ -148,16 +148,16 @@ export class UsuariosComponent implements OnInit {
               if (res.data !== null) { alertIsSuccess(true); this.formUser.reset() }
               else alertIsSuccess(false)
             })
-            
+
         } else {
-          alertNoValidForm()
+          unablePasswordLength()
         }
 
       } else {
-        unablePasswordLength()
+        unableEmail()
       }
     } else {
-      unableEmail()
+      alertNoValidForm()
     }
   }
 }

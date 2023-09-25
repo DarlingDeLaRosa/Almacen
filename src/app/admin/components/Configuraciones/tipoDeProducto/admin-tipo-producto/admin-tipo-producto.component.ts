@@ -50,7 +50,7 @@ export class AdminTipoProductoComponent implements OnInit {
   getTipoProducto() {
     this.loading = true
 
-    this.api.getTipoProducto(this.url, this.token, this.pagina,)
+    this.api.getTipoProducto(this.url, this.token, this.pagina, 15)
       .pipe(
         catchError((error) => {
           this.loading = false

@@ -1,7 +1,7 @@
 <div class="modal">
   <h1 class="modal-title" mat-dialog-title>Editar tipo de entrada</h1>
   <mat-dialog-content class="modal-content">
-    <div  [formGroup]="formEditTipoEntrada" class="formInfo">
+    <form  [formGroup]="formEditTipoEntrada" class="formInfo">
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Nombre</mat-label>
@@ -13,7 +13,7 @@
         <input matInput required formControlName="descripcion">
       </mat-form-field>&nbsp;
 
-    </div>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions class="form-actions">
     <button mat-stroked-button class="btnCancel" (click)="closeModal()">Cancelar</button>

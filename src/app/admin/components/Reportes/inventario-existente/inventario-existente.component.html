@@ -3,7 +3,7 @@
   <h1>Reporte de Inventario</h1>
 
   <div class="fuctionContent">
-    <div class="filtrarContent" [formGroup]="filterRepInventario" class="filtrarContent">
+    <form class="filtrarContent" [formGroup]="filterRepInventario" class="filtrarContent">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -20,7 +20,7 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field> -->
-    </div>
+    </form>
 
     <span>
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesInventario" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
@@ -48,7 +48,7 @@
           <td class="dataCell">{{producto.nombre}}</td>
           <td class="dataCell">{{producto.descripcion}}</td>
           <td class="dataCell">{{producto.tipoAlmacen.nombre}}</td>
-          <td class="dataCell">{{producto.idTipoArt.nombre}}</td>
+          <td class="dataCell">{{producto.tipoArt.nombre}}</td>
           <td class="dataCell">{{producto.unidadMedida.descripcion}}</td>
           <td class="dataCell">{{producto.stock}}</td>
           <td class="dataCell">{{producto.precio | currency: 'RD$ ': 'symbol': '1.2-2' }}</td>

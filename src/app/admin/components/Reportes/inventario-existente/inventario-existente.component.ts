@@ -49,7 +49,7 @@ export class InventarioExistenteComponent implements OnInit {
   getProducto() {
     this.loading = true
 
-    this.api.getProducto(this.url, this.token, this.pagina)
+    this.api.getProducto(this.url, this.token, this.pagina, 15)
     .pipe(
       catchError((error) => {
         this.loading = false

@@ -30,6 +30,15 @@ export function alertSameData() {
   })
 }
 
+export function alertBackMessage(message: string) {
+  Swal.fire({
+    icon: 'info',
+    title: message,
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertSameSerial() {
   Swal.fire({
     icon: 'info',
@@ -51,8 +60,7 @@ export function alertUnableToRemove() {
 export function alertSerial() {
   Swal.fire({
     icon: 'info',
-    title: 'Campo cantidad no debe ser mayor a uno.',
-    text: 'El producto debe ser unico cuando posee numero serial.',
+    title: 'Campo cantidad deber ser uno',
     showConfirmButton: false,
     timer: 3000
   })
@@ -61,7 +69,7 @@ export function alertSerial() {
 export function alertNoValidForm() {
   Swal.fire({
     icon: 'info',
-    title: 'Completa los campos requeridos para realizar la acción ',
+    title: 'Completa los campos requeridos para realizar la acción',
     showConfirmButton: false,
     timer: 2000
   })
@@ -75,6 +83,16 @@ export function unablePasswordLength() {
     timer: 2000
   })
 }
+
+export function productNameNoExist() {
+  Swal.fire({
+    icon: 'info',
+    title: 'El producto no existe',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 
 export function unableEmail() {
   Swal.fire({

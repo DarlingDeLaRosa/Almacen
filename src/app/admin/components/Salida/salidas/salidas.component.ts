@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -26,6 +26,7 @@ export class SalidasComponent implements OnInit {
   idRol: number = 0
   resultSubTotal: number = 0
   recintoActual: string = ''
+  listadeProducto: any[] = []
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -110,7 +111,7 @@ export class SalidasComponent implements OnInit {
   getProducto() {
     this.productoList = []
 
-    this.apiProducto.getProducto(this.url, this.token, 1)
+    this.apiProducto.getProducto(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -125,7 +126,7 @@ export class SalidasComponent implements OnInit {
   }
 
   getTipoSalida() {
-    this.apiTipoSalida.getTipoSalida(this.url, this.token, 1)
+    this.apiTipoSalida.getTipoSalida(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -138,7 +139,7 @@ export class SalidasComponent implements OnInit {
   }
 
   getTipoDepartamento() {
-    this.api.getTipoDepartamento(this.url, this.token, 1)
+    this.api.getTipoDepartamento(this.url, this.token, 1, 400)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -221,36 +222,43 @@ export class SalidasComponent implements OnInit {
   }
 
   addDetail() {
+    const exisProducto = this.productoList.some(producto => {
+      return producto.nombre === this.formDetalleSalida.value.idProducto;
+    });
 
     if (this.formDetalleSalida.valid && this.formSalida.valid) {
+      if (exisProducto) {
 
-      if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
+        if (this.isSerial == true && this.formDetalleSalida.value.cantidad == 1 || this.isSerial == false) {
 
-        if (this.detailGroup.length > 0 && this.isSerial) {
-          if (this.detailGroup.some(producto => {
-            if (producto.serial && this.formDetalleSalida.value.serial) {
-              return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase()
+          if (this.detailGroup.length > 0 && this.isSerial) {
+            if (this.detailGroup.some(producto => {
+              if (producto.serial && this.formDetalleSalida.value.serial) {
+                return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase()
+              }
+              return false
             }
-            return false
+            )) {
+              alertSameSerial()
+              return
+            }
           }
-          )) {
-            alertSameSerial()
-            return
+
+          if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
+
+            this.detailGroup.push(this.formDetalleSalida.value)
+            //this.resultSubTotal += this.formDetalleSalida.value.subTotal
+            this.sumaTotal()
+            this.formDetalleSalida.reset()
+
+          } else {
+            alertCantExis()
           }
-        }
-
-        if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
-
-          this.detailGroup.push(this.formDetalleSalida.value)
-          //this.resultSubTotal += this.formDetalleSalida.value.subTotal
-          this.sumaTotal()
-          this.formDetalleSalida.reset()
-
         } else {
-          alertCantExis()
+          alertSerial()
         }
-      } else {
-        alertSerial()
+      }else{
+        productNameNoExist()
       }
     } else {
       alertNoValidForm()
@@ -314,10 +322,15 @@ export class SalidasComponent implements OnInit {
   }
 
   setValueFormProductoSalida(producto: string) {
+    this.formDetalleSalida.reset()
+    this.formDetalleSalida.patchValue({idProducto: producto})
+    
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });
 
+    console.log(setValuesform);
+    
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .pipe(
         catchError((error) => {
@@ -328,25 +341,65 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res)
         if (res.data !== null) {
+          
+          // this.formDetalleSalida.patchValue({
+          //   existencia: res.data.producto.stock,
+          //   condicion: res.data.condicion,
+          //   marca: res.data.marca,
+          //   modelo: res.data.modelo,
+          //   idTipoAlm: res.data.producto.tipoAlmacen.nombre,
+          //   precio: res.data.producto.precio,
+          // })
 
-          this.formDetalleSalida.patchValue({
-            existencia: res.data.producto.stock,
-            condicion: res.data.condicion,
-            marca: res.data.marca,
-            modelo: res.data.modelo,
-            idTipoAlm: res.data.producto.tipoAlmacen.nombre,
-            precio: res.data.producto.precio,
-          })
-
-          if (res.data.serial != null && res.data.serial.length != 0) {
+          if (res.data.productosLoteSerial.length > 0 ) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
             this.isSerial = true
+            
+            const exisProducto = this.detailGroup.some(producto => {
+              return producto.idProducto === this.formDetalleSalida.value.idProducto;
+            });
+            
+            console.log(exisProducto)
+
+            if(this.listadeProducto.length == 0 || !exisProducto){
+              this.listadeProducto = res.data.productosLoteSerial
+            }
+
             this.formDetalleSalida.patchValue({
-              serial: res.data.serial,
-              cantidad: 1
+              existencia: this.listadeProducto[0].producto.stock,
+              condicion: this.listadeProducto[0].condicion,
+              marca: this.listadeProducto[0].marca,
+              modelo: this.listadeProducto[0].modelo,
+              idTipoAlm: this.listadeProducto[0].producto.tipoAlmacen.nombre,
+              precio: this.listadeProducto[0].producto.precio,
+              serial: this.listadeProducto[0].serial,
+              cantidad: 1,
             })
+
+            this.listadeProducto.shift()
+            console.log(this.listadeProducto);
             this.subTotalResult()
+
           } else {
+            //let numberOfItems: number = 0
             this.isSerial = false
+
+            // if(this.detailGroup.length > 0){
+            //   this.detailGroup.map((detalle:any)=>{
+            //     console.log(detalle)
+            //     if(detalle.idProducto == producto){
+            //       numberOfItems += detalle.cantidad
+            //     }
+            //   })
+            // }
+            
+            this.formDetalleSalida.patchValue({
+              existencia: res.data.productoLote.producto.stock,
+              condicion: res.data.productoLote.condicion,
+              marca: res.data.productoLote.marca,
+              modelo: res.data.productoLote.modelo,
+              idTipoAlm: res.data.productoLote.producto.tipoAlmacen.nombre,
+              precio: res.data.productoLote.producto.precio,
+            })
           }
           //else {
 
@@ -377,22 +430,23 @@ export class SalidasComponent implements OnInit {
 
   sendData() {
 
-    if (this.formSalida.value.idRecinto.length > 0 && this.formSalida.value.idRecinto.length != null) {
-      let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
-      this.formSalida.value.idRecinto = recinto[0].idRecinto
-      this.formSalida.value.idDepar = null
-    } else {
-      let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
-      this.formSalida.value.idDepar = idTipoDep[0].idDepar
-      this.formSalida.value.idRecinto = null
-    }
+    if (this.formSalida.valid && this.detailGroup.length > 0) {
 
-    let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formSalida.value.idTipoSalida)
-    this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
+      if (this.formSalida.value.idRecinto.length > 0 && this.formSalida.value.idRecinto.length != null) {
+        let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
+        this.formSalida.value.idRecinto = recinto[0].idRecinto
+        this.formSalida.value.idDepar = null
+      } else {
+        let idTipoDep = this.tipoDepartamentoList.filter(item => item.nombre === this.formSalida.value.idDepar)
+        this.formSalida.value.idDepar = idTipoDep[0].idDepar
+        this.formSalida.value.idRecinto = null
+      }
 
-    this.formSalida.value.total = this.resultSubTotal
+      let idTipoSa = this.tipoSalidaList.filter(item => item.nombre === this.formSalida.value.idTipoSalida)
+      this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
 
-    if (this.formSalida.valid && this.detailGroup.length >= 1) {
+      this.formSalida.value.total = this.resultSubTotal
+
 
       loading(true)
 
@@ -447,6 +501,8 @@ export class SalidasComponent implements OnInit {
             alertIsSuccess(false)
           }
         })
+    } else {
+      alertNoValidForm()
     }
   }
 

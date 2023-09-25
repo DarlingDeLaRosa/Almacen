@@ -6,13 +6,13 @@
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva entrada</button>
     </ng-template>
 
-    <div [formGroup]="filterEntrada">
+    <form [formGroup]="filterEntrada">
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
         <input matInput formControlName="filter" (input)="onInputFilterChange()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
-    </div>
+    </form>
   </div>
 
   <div>

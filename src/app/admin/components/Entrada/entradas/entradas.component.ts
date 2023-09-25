@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { detalleProductoEntrada, producto, proveedor, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
@@ -104,14 +104,14 @@ export class EntradasComponent implements OnInit {
   }
 
   getProveedor() {
-    this.apiProveedor.getProveedor(this.url, this.token, 1)
+    this.apiProveedor.getProveedor(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         this.proveedorList = res.data
       });
   }
 
   getTipoEntrada() {
-    this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1)
+    this.apiTipoEntrada.getTipoEntrada(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrada: any) => {
@@ -122,7 +122,7 @@ export class EntradasComponent implements OnInit {
   }
 
   getTipoEntrega() {
-    this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1)
+    this.apiTipoEntrega.getTipoEntrega(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         if (res !== null) {
           res.data.map((tentrega: any) => {
@@ -133,7 +133,7 @@ export class EntradasComponent implements OnInit {
   }
 
   getProducto() {
-    this.apiProducto.getProducto(this.url, this.token, 1)
+    this.apiProducto.getProducto(this.url, this.token, 1, 400)
       .subscribe((res: any) => {
         this.productoList = res.data
       });
@@ -310,75 +310,83 @@ export class EntradasComponent implements OnInit {
   // }
 
   addDetail() {
+    const exisProducto = this.productoList.some(producto => {
+      return producto.nombre === this.formDetalleEntrada.value.idProducto;
+    });
+
     //if (this.isSerial) this.formDetalleEntrada.get('serial')?.reset()
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
-
-      if (this.isSerial == true && this.formDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
-
-        if (this.detailGroup.length > 0 && this.isSerial) {
-          if (this.detailGroup.some(producto => {
-            if (producto.serial && this.formDetalleEntrada.value.serial) {
-              return producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase()
+      if (exisProducto) {
+        if (this.isSerial == true && this.formDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
+  
+          if (this.detailGroup.length > 0 && this.isSerial) {
+            if (this.detailGroup.some(producto => {
+              if (producto.serial && this.formDetalleEntrada.value.serial) {
+                return producto.serial.toUpperCase() == this.formDetalleEntrada.value.serial.toUpperCase()
+              }
+              return false
             }
-            return false
+            )) {
+              alertSameSerial()
+              return
+            }
           }
-          )) {
-            alertSameSerial()
-            return
+  
+          //this.totalResult += this.formDetalleEntrada.value.subTotal
+  
+          // if (this.generalITBIS == false) {
+          //   console.log('por aqui ');
+  
+          //   this.mostrarTotalItbis = 0
+          //   this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
+  
+          // } else {
+          // if (this.formDetalleEntrada.value.itbisProducto !== 0) {
+  
+          //   this.subTotalResult()
+          //   //this.mostrarTotalItbis += this.totalItbis
+  
+          //   this.formDetalleEntrada.value.itbisProducto
+          //     = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+          // }
+          // }
+          if (this.generalITBIS) {
+  
+  
+            this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
+            //sumaTotal()
+  
+            this.detailGroup.push(this.formDetalleEntrada.value)
+  
+            //this.detailGroup.map((detalle: any) => {
+            //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+            //  this.totalResult += detalle.subTotal
+            //})
+  
+          } else {
+  
+            this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
+            //this.sumaTotal()
+            this.detailGroup.push(this.formDetalleEntrada.value)
+            //this.detailGroup.map((detalle: any) => {
+            //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
+            //  this.totalResult += detalle.subTotal
+            //})
+  
           }
-        }
-
-        //this.totalResult += this.formDetalleEntrada.value.subTotal
-
-        // if (this.generalITBIS == false) {
-        //   console.log('por aqui ');
-
-        //   this.mostrarTotalItbis = 0
-        //   this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
-
-        // } else {
-        // if (this.formDetalleEntrada.value.itbisProducto !== 0) {
-
-        //   this.subTotalResult()
-        //   //this.mostrarTotalItbis += this.totalItbis
-
-        //   this.formDetalleEntrada.value.itbisProducto
-        //     = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
-        // }
-        // }
-        if (this.generalITBIS) {
-
-
-          this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
-          //sumaTotal()
-
-          this.detailGroup.push(this.formDetalleEntrada.value)
-
-          //this.detailGroup.map((detalle: any) => {
-          //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
-          //  this.totalResult += detalle.subTotal
-          //})
-
+          this.sumaTotal()
+          this.formDetalleEntrada.reset()
+          //this.detailGroup.push(this.formDetalleEntrada.value)
+  
+          if (this.detailGroup.length >= 1) this.disableItbis = true
+  
         } else {
-
-          this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
-          //this.sumaTotal()
-          this.detailGroup.push(this.formDetalleEntrada.value)
-          //this.detailGroup.map((detalle: any) => {
-          //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
-          //  this.totalResult += detalle.subTotal
-          //})
-
+          alertSerial()
         }
-        this.sumaTotal()
-        this.formDetalleEntrada.reset()
-        //this.detailGroup.push(this.formDetalleEntrada.value)
-
-        if (this.detailGroup.length >= 1) this.disableItbis = true
-
-      } else {
-        alertSerial()
+      }else {
+        productNameNoExist()
       }
+      
     } else {
       alertNoValidForm()
     }
@@ -552,20 +560,20 @@ export class EntradasComponent implements OnInit {
 
   sendData() {
 
-    this.formEntrada.value.itbisGeneralEstado = this.generalITBIS,
+    if (this.formEntrada.valid && this.detailGroup.length > 0) {
+
+      this.formEntrada.value.itbisGeneralEstado = this.generalITBIS
       this.formEntrada.value.itbisGeneral = this.mostrarTotalItbis
-    this.formEntrada.value.total = this.totalResult
+      this.formEntrada.value.total = this.totalResult
 
-    let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
-    this.formEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
+      let idTipoEn = this.tipoEntradaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrada)
+      this.formEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
 
-    let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrega)
-    this.formEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
+      let idTipoEnt = this.tipoEntregaList.filter(item => item.nombre === this.formEntrada.value.idTipoEntrega)
+      this.formEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
 
-    let idTipoPro = this.proveedorList.filter(item => item.razonSocial === this.formEntrada.value.idProveedor)
-    this.formEntrada.value.idProveedor = idTipoPro[0].idProveedor
-
-    if (this.formEntrada.valid && this.detailGroup.length >= 1) {
+      let idTipoPro = this.proveedorList.filter(item => item.razonSocial === this.formEntrada.value.idProveedor)
+      this.formEntrada.value.idProveedor = idTipoPro[0].idProveedor
 
       loading(true)
 
@@ -626,6 +634,8 @@ export class EntradasComponent implements OnInit {
           }
         })
 
+    } else {
+      alertNoValidForm()
     }
   }
 }
