@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -147,7 +147,6 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
         this.tipoDepartamentoList = res.data
       });
   }
@@ -246,7 +245,37 @@ export class SalidasComponent implements OnInit {
 
           if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
+            if(!this.isSerial){
+              let cantidadTotal: number = 0
+              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleSalida.value.idProducto )
+
+              if(detailSerialNoExist.length > 0){
+
+                detailSerialNoExist.map((detalle:any)=> {
+                  cantidadTotal += detalle.cantidad
+                })
+                
+                console.log(cantidadTotal);
+
+                if(cantidadTotal + this.formDetalleSalida.value.cantidad > this.formDetalleSalida.value.existencia){
+                  alertNumItems(this.formDetalleSalida.value.existencia - cantidadTotal)
+                  return
+                }
+              }
+            }
+
             this.detailGroup.push(this.formDetalleSalida.value)
+
+            if(this.isSerial){
+              const exisProducts = this.detailGroup.some(producto => {
+                return producto.idProducto === this.formDetalleSalida.value.idProducto;
+              });
+              
+              if(exisProducts && this.listadeProducto.length == 0  ) { //|| !exisProducts && this.detailGroup.length > 0
+                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleSalida.value.idProducto)
+              }  
+            }
+
             //this.resultSubTotal += this.formDetalleSalida.value.subTotal
             this.sumaTotal()
             this.formDetalleSalida.reset()
@@ -263,6 +292,9 @@ export class SalidasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
+
+    console.log(this.detailGroup);
+    
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
@@ -283,13 +315,20 @@ export class SalidasComponent implements OnInit {
         idTipoAlm: item.idTipoAlm,
         subTotal: item.subTotal
       })
-
+      
+      if (item.serial != null && item.serial.length > 0) {
+        this.isSerial = true
+        this.formDetalleSalida.patchValue({ serial: item.serial })
+      } else {
+        this.isSerial = false
+      }
       //this.resultSubTotal -= item.subTotal
     } else {
       alertUnableEdit()
     }
-    this.sumaTotal()
+    
 
+    this.sumaTotal()
   }
 
   subTotalResult() {
@@ -322,6 +361,7 @@ export class SalidasComponent implements OnInit {
   }
 
   setValueFormProductoSalida(producto: string) {
+    
     this.formDetalleSalida.reset()
     this.formDetalleSalida.patchValue({idProducto: producto})
     
@@ -329,8 +369,6 @@ export class SalidasComponent implements OnInit {
       return productoEspecifico.nombre == producto
     });
 
-    console.log(setValuesform);
-    
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .pipe(
         catchError((error) => {
@@ -339,7 +377,6 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
         if (res.data !== null) {
           
           // this.formDetalleSalida.patchValue({
@@ -358,9 +395,13 @@ export class SalidasComponent implements OnInit {
               return producto.idProducto === this.formDetalleSalida.value.idProducto;
             });
             
-            console.log(exisProducto)
+            if(this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.nombre != producto){
 
-            if(this.listadeProducto.length == 0 || !exisProducto){
+              let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null )
+              
+              if( this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.nombre != producto){
+                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.listadeProducto[0].producto.nombre)
+              }
               this.listadeProducto = res.data.productosLoteSerial
             }
 
@@ -376,7 +417,8 @@ export class SalidasComponent implements OnInit {
             })
 
             this.listadeProducto.shift()
-            console.log(this.listadeProducto);
+            //console.log(this.listadeProducto);
+            
             this.subTotalResult()
 
           } else {

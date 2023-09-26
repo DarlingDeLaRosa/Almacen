@@ -70,9 +70,13 @@
       </mat-form-field>&nbsp;
     </form>
 
-    <form [formGroup]="formDetalleSalida" class="formInfo">
-
-      <h4>Informacion de producto</h4>
+    <div [formGroup]="formDetalleSalida" class="formInfo">
+      
+      <span class="infoProductoAlert">
+        <h4 style="margin: 0;">Informacion de producto</h4> 
+        <button class="questionMark" matTooltip="Los productos que contienen serial deben estar en secuencia(arreglar)" mat-stroked-button><mat-icon matSuffix style="margin-left: 5px;">question_mark</mat-icon></button>
+      </span>
+      
       <div>
 
         <mat-form-field hideRequiredMarker>
@@ -141,7 +145,7 @@
           <button mat-stroked-button class="btnAdd" (click)="addDetail()"><mat-icon>add</mat-icon>Agregar</button>
         </span>
       </div>
-    </form>
+    </div>
 
     <div>
 
@@ -170,8 +174,9 @@
             <td class="dataCell">{{item.serial}}</td>
             <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
-            <td class="dataCell"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
+            <td class="dataCell" *ngIf=" item.serial == null || item.serial.length == 0; else noEditSerial"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
+            <td class="dataCell" *ngIf=" item.serial == null || item.serial.length == 0; else noEditSerial"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
+            <ng-template #noEditSerial><td class="dataCell"></td></ng-template>
           </tr>
 
         </tbody>

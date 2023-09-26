@@ -112,6 +112,15 @@ export function alertCantExis() {
   })
 }
 
+export function alertNumItems(restante: number) {
+  Swal.fire({
+    icon: 'info',
+    title: `La cantidad restante disponible es ${restante}`,
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alertRncNoFound() {
   Swal.fire({
     icon: 'info',

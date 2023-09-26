@@ -97,6 +97,7 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   async removeAlert(item: number) {
+    console.log(item)
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {
@@ -111,6 +112,8 @@ export class AdminSalidasComponent implements OnInit {
       )    
       .subscribe((res: any) => {
           loading(false)
+          console.log(res);
+          
           if (res.data !== null) alertRemoveSuccess()
           else alertIsSuccess(false)
           this.getSalida()
