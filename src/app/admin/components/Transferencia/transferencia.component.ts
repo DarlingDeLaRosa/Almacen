@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { salida, salidaTrans } from '../../models/interfaces';
-import { FormGroup } from '@angular/forms';
 import { AppState } from 'src/app/store/state';
 import { salidaService } from '../../Services/salida.service';
 import { Store } from '@ngrx/store';
@@ -56,7 +55,7 @@ export class TransferenciaComponent implements OnInit {
 
   getSalidaTransferencia() {
     this.loading = true
-    
+
     this.api.getSalidaTransferencia(this.url, this.token, this.pagina)
       .pipe(
         catchError((error) => {
@@ -75,21 +74,19 @@ export class TransferenciaComponent implements OnInit {
 
         res.data.map((estadoSalida: any) => {
           if (estadoSalida.estado == 'EN PROCESO') {
-            
+
             this.dataFiltered.push(estadoSalida)
 
-          } else if(estadoSalida.estado == 'RECIBIDO') {
-            
+          } else if (estadoSalida.estado == 'RECIBIDO') {
+
             this.dataFilteredAccept.push(estadoSalida)
 
-          }else if(estadoSalida.estado == 'CANCELADO'){
+          } else if (estadoSalida.estado == 'CANCELADO') {
 
             this.dataFilteredCancel.push(estadoSalida)
-            
+
           }
         })
-
-        console.log(this.dataFiltered , this.dataFilteredAccept, this.loading)
       });
   }
 
@@ -106,6 +103,7 @@ export class TransferenciaComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+
         this.noPage = res.cantPage
         loading(false)
         alertIsSuccess(true)
@@ -120,14 +118,15 @@ export class TransferenciaComponent implements OnInit {
     if (removeChoise) {
       loading(true)
       this.api.removeSalida(this.url, id, this.token)
-      .pipe(
-        catchError((error) => {
-          loading(false)
-          alertServerDown();
-          return error;
-        })
-      )    
-      .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
+            loading(false)
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
+
           loading(false)
           if (res.data !== null) alertRemoveSuccess()
           else alertIsSuccess(false)

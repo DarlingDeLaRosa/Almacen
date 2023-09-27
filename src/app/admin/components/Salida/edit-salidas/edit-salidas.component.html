@@ -84,8 +84,8 @@
             (input)="findProductoByName()">
           <mat-autocomplete #pro='matAutocomplete' (optionSelected)="setValueFormProductoSalida($event.option.value)">
 
-            <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
-              {{producto.nombre}}
+            <mat-option *ngFor="let producto of productoList" [value]="producto.nombre" [disabled]="producto.stock === 0">
+                {{producto.nombre}}
             </mat-option>
 
           </mat-autocomplete>

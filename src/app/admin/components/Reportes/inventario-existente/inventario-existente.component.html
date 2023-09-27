@@ -1,7 +1,5 @@
 <div class="viewContent">
 
-  <h1>Reporte de Inventario</h1>
-
   <div class="fuctionContent">
     <form class="filtrarContent" [formGroup]="filterRepInventario" class="filtrarContent">
 
@@ -22,12 +20,17 @@
       </mat-form-field> -->
     </form>
 
-    <span>
-      <button class="btnImprimir" mat-stroked-button printSectionId="reportesInventario" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+    <span style="display: flex; ">
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesInventario" [useExistingCss]="true"
+        ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
   <div id="reportesInventario">
+
+    <h1>Reporte de Inventario</h1>
 
     <table>
       <thead class="headerTable">
@@ -59,7 +62,7 @@
   </div>
   <div class="loadingRow" *ngIf="loading">
     <div class="loader"></div>
-  </div>  
+  </div>
 
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
     <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>

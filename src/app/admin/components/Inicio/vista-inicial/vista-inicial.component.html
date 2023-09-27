@@ -6,7 +6,7 @@
         <span>
           <h1>Estadisticas</h1>
         </span>
-        <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0" [matBadge]="itemEscasez"
+        <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0 && rol == 1 " [matBadge]="itemEscasez"
           matBadgeColor="warn">category</mat-icon> <span class="cdk-visually-hidden">
         </span>
       </div>

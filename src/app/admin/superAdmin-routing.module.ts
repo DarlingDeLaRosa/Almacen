@@ -83,7 +83,7 @@ const routes: Routes = [
       { path: 'reporteProveedor', component: ReporteProveedorComponent },
       { path: 'reporteProductoEntrada', component: ReporteEntradaProductoComponent},
       { path: 'reporteProductoSalida', component: ReporteSalidaProductoComponent},
-      { path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
+      //{ path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
       { path: 'reporteStock', component: MinStockProductComponent},
     ]
   },

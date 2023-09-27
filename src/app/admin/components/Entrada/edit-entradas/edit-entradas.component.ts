@@ -10,7 +10,7 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { detalleEditProductoEntrada, detalleProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, combineLatest } from 'rxjs';
 
@@ -31,6 +31,7 @@ export class EditEntradasComponent {
   disableItbis: boolean = false
   idRol: number = 0
   setdetailGroup: boolean = false
+  id: number = 0
 
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
@@ -90,10 +91,9 @@ export class EditEntradasComponent {
 
   ngOnInit(): void {
 
-    let id: number = 0
     this.route.paramMap.subscribe(params => {
       const idparam = params.get('id');
-      if (idparam !== null) id = parseInt(idparam)
+      if (idparam !== null) this.id = parseInt(idparam)
     })
 
     combineLatest([
@@ -106,131 +106,133 @@ export class EditEntradasComponent {
       this.token = tokenValue;
       this.idRol = idRole;
 
-      loading(true)
-
-      this.api.getEntradaById(this.url, this.token, id)
-        .pipe(
-          catchError((error) => {
-            loading(false)
-            alertServerDown();
-            return error;
-          })
-        )
-        .subscribe((res: any) => {
-          loading(false)
-
-          console.log(res.data)
-          this.respuesta = res.data.detalles
-
-          if (res.success && res.data !== null) {
-
-            //if (res.data.itbisGeneralEstado) {
-            //this.generalITBIS = true
-            //this.disableItbis = true
-            this.generalITBIS = res.data.itbisGeneralEstado;
-
-            this.formEditEntrada.patchValue({
-              fechaFactura: res.data.fechaFactura,
-              idProveedor: res.data.proveedor.razonSocial,
-              idTipoEntrada: res.data.tipoEntrada.nombre,
-              idTipoEntrega: res.data.tipoEntrega.nombre,
-              numOrden: res.data.numOrden,
-              noFactura: res.data.noFactura,
-              observacion: res.data.observacion,
-              itbisGeneralEstado: res.data.itbisGeneralEstado,
-              total: res.data.total,
-              idEntrada: res.data.idEntrada
-            })
-
-            //this.detalleList = res.data.detalles
-
-            //this.detalleList.map(detalle => {
-            res.data.detalles.map((detalle: any) => {
-              //this.setdetailGroup = true
-
-              this.formEditDetalleEntrada.patchValue({
-                idProducto: detalle.producto.nombre,
-                cantidad: detalle.cantidad,
-                condicion: detalle.condicion,
-                marca: detalle.marca,
-                modelo: detalle.modelo,
-                precio: detalle.precio,
-                serial: detalle.serial,
-                observacion: detalle.observacion,
-                subTotal: detalle.subTotal,
-                //itbisProducto: detalle.itbisProducto,
-                idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-                idEntrada: detalle.idEntrada,
-                idEntradaDet: detalle.idEntradaDet,
-              })
-
-              if (this.generalITBIS) {
-                this.formEditDetalleEntrada.patchValue({ itbisProducto: 18 })
-              } else {
-                this.formEditDetalleEntrada.patchValue({ itbisProducto: detalle.itbisProducto })
-              }
-
-              this.addDetail()
-              //this.setdetailGroup = false
-              this.formEditDetalleEntrada.reset()
-            })
-
-
-            //} 
-            // else {
-
-            //   this.generalITBIS = false
-            //   this.disableItbis = true
-
-            //   this.formEditEntrada.setValue({
-            //     fechaFactura: res.data.fechaFactura,
-            //     idProveedor: res.data.proveedor.razonSocial,
-            //     idTipoEntrada: res.data.tipoEntrada.nombre,
-            //     idTipoEntrega: res.data.tipoEntrega.nombre,
-            //     numOrden: res.data.numOrden,
-            //     noFactura: res.data.noFactura,
-            //     observacion: res.data.observacion,
-            //     itbisGeneral: res.data.itbisGeneral,
-            //     itbisGeneralEstado: !res.data.itbisGeneralEstado,
-            //     total: res.data.total,
-            //     idEntrada: res.data.idEntrada
-            //   })
-
-            //   this.detalleList = res.data.detalles
-
-            //   this.detalleList.map(detalle => {
-
-            //     //this.setdetailGroup = true
-
-            //     this.formEditDetalleEntrada.patchValue({
-            //       idProducto: detalle.producto.nombre,
-            //       cantidad: detalle.cantidad,
-            //       condicion: detalle.condicion,
-            //       marca: detalle.marca,
-            //       modelo: detalle.modelo,
-            //       precio: detalle.precio,
-            //       serial: detalle.serial,
-            //       observacion: detalle.observacion,
-            //       subTotal: detalle.subTotal,
-            //       itbisProducto: detalle.itbisProducto,
-            //       idTipoAlm: detalle.producto.tipoAlmacen.nombre,
-            //       idEntrada: detalle.idEntrada,
-            //       idEntradaDet: detalle.idEntradaDet,
-            //     })
-
-            //     this.addDetail()
-            //     //this.setdetailGroup = false
-            //     this.formEditDetalleEntrada.reset()
-            //   })
-            // }
-          }
-        })
-
-      this.getProveedor()
       this.getProducto()
+      this.getProveedor()
       this.getTipoEntrada()
       this.getTipoEntrega()
     })
+  }
+
+  loadData() {
+    loading(true)
+
+    this.api.getEntradaById(this.url, this.token, this.id)
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        loading(false)
+
+        console.log(res.data)
+        this.respuesta = res.data.detalles
+
+        if (res.success && res.data !== null) {
+
+          //if (res.data.itbisGeneralEstado) {
+          //this.generalITBIS = true
+          //this.disableItbis = true
+          this.generalITBIS = res.data.itbisGeneralEstado;
+
+          this.formEditEntrada.patchValue({
+            fechaFactura: res.data.fechaFactura,
+            idProveedor: res.data.proveedor.razonSocial,
+            idTipoEntrada: res.data.tipoEntrada.nombre,
+            idTipoEntrega: res.data.tipoEntrega.nombre,
+            numOrden: res.data.numOrden,
+            noFactura: res.data.noFactura,
+            observacion: res.data.observacion,
+            itbisGeneralEstado: res.data.itbisGeneralEstado,
+            total: res.data.total,
+            idEntrada: res.data.idEntrada
+          })
+
+          //this.detalleList = res.data.detalles
+
+          //this.detalleList.map(detalle => {
+          res.data.detalles.map((detalle: any) => {
+            //this.setdetailGroup = true
+
+            this.formEditDetalleEntrada.patchValue({
+              idProducto: detalle.producto.nombre,
+              cantidad: detalle.cantidad,
+              condicion: detalle.condicion,
+              marca: detalle.marca,
+              modelo: detalle.modelo,
+              precio: detalle.precio,
+              serial: detalle.serial,
+              observacion: detalle.observacion,
+              subTotal: detalle.subTotal,
+              //itbisProducto: detalle.itbisProducto,
+              idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+              idEntrada: detalle.idEntrada,
+              idEntradaDet: detalle.idEntradaDet,
+            })
+
+            if (this.generalITBIS) {
+              this.formEditDetalleEntrada.patchValue({ itbisProducto: 18 })
+            } else {
+              this.formEditDetalleEntrada.patchValue({ itbisProducto: detalle.itbisProducto })
+            }
+
+            this.addDetail()
+            //this.setdetailGroup = false
+            this.formEditDetalleEntrada.reset()
+          })
+
+
+          //} 
+          // else {
+
+          //   this.generalITBIS = false
+          //   this.disableItbis = true
+
+          //   this.formEditEntrada.setValue({
+          //     fechaFactura: res.data.fechaFactura,
+          //     idProveedor: res.data.proveedor.razonSocial,
+          //     idTipoEntrada: res.data.tipoEntrada.nombre,
+          //     idTipoEntrega: res.data.tipoEntrega.nombre,
+          //     numOrden: res.data.numOrden,
+          //     noFactura: res.data.noFactura,
+          //     observacion: res.data.observacion,
+          //     itbisGeneral: res.data.itbisGeneral,
+          //     itbisGeneralEstado: !res.data.itbisGeneralEstado,
+          //     total: res.data.total,
+          //     idEntrada: res.data.idEntrada
+          //   })
+
+          //   this.detalleList = res.data.detalles
+
+          //   this.detalleList.map(detalle => {
+
+          //     //this.setdetailGroup = true
+
+          //     this.formEditDetalleEntrada.patchValue({
+          //       idProducto: detalle.producto.nombre,
+          //       cantidad: detalle.cantidad,
+          //       condicion: detalle.condicion,
+          //       marca: detalle.marca,
+          //       modelo: detalle.modelo,
+          //       precio: detalle.precio,
+          //       serial: detalle.serial,
+          //       observacion: detalle.observacion,
+          //       subTotal: detalle.subTotal,
+          //       itbisProducto: detalle.itbisProducto,
+          //       idTipoAlm: detalle.producto.tipoAlmacen.nombre,
+          //       idEntrada: detalle.idEntrada,
+          //       idEntradaDet: detalle.idEntradaDet,
+          //     })
+
+          //     this.addDetail()
+          //     //this.setdetailGroup = false
+          //     this.formEditDetalleEntrada.reset()
+          //   })
+          // }
+        }
+      })
   }
 
   getProveedor() {
@@ -264,8 +266,17 @@ export class EditEntradasComponent {
 
   getProducto() {
     this.apiProducto.getProducto(this.url, this.token, 1, 400)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
       .subscribe((res: any) => {
-        this.productoList = res.data
+        if (res.data != null) {
+          this.loadData()
+          this.productoList = res.data
+        }
       });
   }
 
@@ -464,7 +475,7 @@ export class EditEntradasComponent {
         } else {
           alertSerial()
         }
-      }else{
+      } else {
         productNameNoExist()
       }
     } else {
@@ -648,20 +659,25 @@ export class EditEntradasComponent {
 
   editData() {
 
-    this.formEditEntrada.value.itbisGeneralEstado = this.generalITBIS,
-      this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
-    this.formEditEntrada.value.total = this.totalResult
-
-    let idTipoEn = this.tipoEntradaList.filter(tEntrada => tEntrada.nombre === this.formEditEntrada.value.idTipoEntrada)
-    this.formEditEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
-
-    let idTipoEnt = this.tipoEntregaList.filter(tEntrega => tEntrega.nombre === this.formEditEntrada.value.idTipoEntrega)
-    this.formEditEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
-
-    let idTipoPro = this.proveedorList.filter(proveedor => proveedor.razonSocial === this.formEditEntrada.value.idProveedor)
-    this.formEditEntrada.value.idProveedor = idTipoPro[0].idProveedor
-
     if (this.formEditEntrada.valid && this.detailGroup.length >= 1) {
+
+      if (this.formEditDetalleEntrada.valid) {
+        alertUnableSend()
+        return
+      }
+
+      this.formEditEntrada.value.itbisGeneralEstado = this.generalITBIS,
+        this.formEditEntrada.value.itbisGeneral = this.mostrarTotalItbis
+      this.formEditEntrada.value.total = this.totalResult
+
+      let idTipoEn = this.tipoEntradaList.filter(tEntrada => tEntrada.nombre === this.formEditEntrada.value.idTipoEntrada)
+      this.formEditEntrada.value.idTipoEntrada = idTipoEn[0].idTipoEntrada
+
+      let idTipoEnt = this.tipoEntregaList.filter(tEntrega => tEntrega.nombre === this.formEditEntrada.value.idTipoEntrega)
+      this.formEditEntrada.value.idTipoEntrega = idTipoEnt[0].idTipoEntrega
+
+      let idTipoPro = this.proveedorList.filter(proveedor => proveedor.razonSocial === this.formEditEntrada.value.idProveedor)
+      this.formEditEntrada.value.idProveedor = idTipoPro[0].idProveedor
 
       loading(true)
 

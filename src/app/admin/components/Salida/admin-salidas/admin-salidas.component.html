@@ -1,7 +1,8 @@
-  <div class="viewContent">
+<div class="viewContent">
 
   <div class="fuctionContent">
-    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear nueva salida</button>
+    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear
+      nueva salida</button>
     <ng-template #sup>
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva salida</button>
     </ng-template>
@@ -27,8 +28,9 @@
           <th class="headerCell">Creado por</th>
           <th class="headerCell">Valor</th>
           <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th>
+          <th class="fuctionCell" *ngIf="idRol == 1; else remove" ></th>
+          <th class="fuctionCell" *ngIf="idRol == 1; else remove" ></th>
+          <ng-template #remove></ng-template>
         </tr>
       </thead>
       <tbody>
@@ -40,13 +42,18 @@
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
           <td class="dataCell">{{item.creadoPorU.nombre}} {{item.creadoPorU.apellido}}</td>
           <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button></td>
-          <td class="dataCell">
-            <button *ngIf="idRol == 1; else supp" [routerLink]="['/almacen/editar-salida', item.idSalida]" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
-            <ng-template #supp>
-              <button [routerLink]="['/user-almacen/editar-salida', item.idSalida]" class="fucEdit"><mat-icon>edit</mat-icon></button>
-            </ng-template>
-          <td class="dataCell"><button (click)="removeAlert(item.idSalida)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
+          </td>
+          <td class="dataCell" *ngIf="idRol == 1; else supp"><button
+              *ngIf="idRol == 1 && item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
+              [routerLink]="['/almacen/editar-salida', item.idSalida]"
+              class="fucEdit"><mat-icon>edit</mat-icon></button>
+          </td>
+          <ng-template #supp></ng-template>
+          <td class="dataCell" *ngIf="idRol == 1; else btnremove"><button (click)="removeAlert(item.idSalida)"
+              class="fucRem"><mat-icon>delete</mat-icon></button>
+          </td>
+          <ng-template #btnremove></ng-template>
         </tr>
       </tbody>
 
@@ -56,7 +63,8 @@
     </div>
 
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
-      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon>
+      </h1>
     </div>
 
     <div class="pagination">

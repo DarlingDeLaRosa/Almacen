@@ -58,25 +58,27 @@ export class ProveedoresComponent implements OnInit {
   }
 
   findByRNC() {
-    this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
-      .pipe(
-        catchError((error) => {
-          alertServerDown();
-          return error;
-        })
-      )
-      .subscribe((res: any) => {
-        if (res.data !== null) {
-
-          this.formProveedor.patchValue({
-            razonSocial: res.data.razonSocial,
-            nombreComercial: res.data.nombreComercial,
+    if (this.formProveedor.value.rnc.length >= 5) {
+      this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
           })
-        } else {
-          alertRncNoFound()
-          this.formProveedor.get('rnc')?.reset()
-        }
-      })
+        )
+        .subscribe((res: any) => {
+          if (res.data !== null) {
+
+            this.formProveedor.patchValue({
+              razonSocial: res.data.razonSocial,
+              nombreComercial: res.data.nombreComercial,
+            })
+          } else {
+            alertRncNoFound()
+            this.formProveedor.get('rnc')?.reset()
+          }
+        })
+    }
   }
 
   setValueFormProveedores(proveedor: any) {
@@ -113,7 +115,7 @@ export class ProveedoresComponent implements OnInit {
             alertIsSuccess(false)
           }
         })
-    }else{
+    } else {
       alertNoValidForm()
     }
   }

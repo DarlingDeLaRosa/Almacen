@@ -1,15 +1,12 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { catchError, combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
-import { Entrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-reporte-entrada-producto',
@@ -58,7 +55,7 @@ export class ReporteEntradaProductoComponent implements OnInit {
       catchError((error) => {
         this.loading = false
         alertServerDown();
-        return error;
+        return throwError(error);
       })
     )    
     .subscribe((res: any) => {
@@ -88,6 +85,15 @@ export class ReporteEntradaProductoComponent implements OnInit {
     }
   }
 
+  exportExcel(){
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+
+    XLSX.writeFile(wb, 'exported-data.xlsx');
+  }
+  
   nextPage() {
     if (this.pagina < this.noPage) {
       this.pagina += 1

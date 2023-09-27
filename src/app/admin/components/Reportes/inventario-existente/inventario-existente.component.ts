@@ -6,6 +6,8 @@ import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { productoService } from 'src/app/admin/Services/producto.service';
 import { producto } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-inventario-existente',
@@ -24,7 +26,7 @@ export class InventarioExistenteComponent implements OnInit {
 
   constructor(
     private api: productoService,
-    private store: Store<{ app: AppState }>
+    private store: Store<{ app: AppState }>,
   ) {
     this.filterRepInventario = new FormGroup({
       filter: new FormControl(''),
@@ -58,6 +60,8 @@ export class InventarioExistenteComponent implements OnInit {
       })
     )  
     .subscribe((res: any) => {
+      console.log(res);
+      
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -84,6 +88,15 @@ export class InventarioExistenteComponent implements OnInit {
     }
   }
 
+  exportExcel(){
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+
+    XLSX.writeFile(wb, 'exported-data.xlsx');
+  }
+  
   nextPage() {
     if (this.pagina < this.noPage) {
       this.pagina += 1

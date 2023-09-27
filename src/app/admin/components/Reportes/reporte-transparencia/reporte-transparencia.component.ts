@@ -32,8 +32,8 @@ export class ReporteTransparenciaComponent implements OnInit{
     ){
     this.filterRepProveedor = new FormGroup({
       filter: new FormControl(''),
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
+      // start: new FormControl<Date | null>(null),
+      // end: new FormControl<Date | null>(null),
     })
   }
 

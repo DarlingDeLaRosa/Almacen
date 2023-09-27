@@ -103,7 +103,7 @@ import { TransferenciaComponent } from './components/Transferencia/transferencia
     ShowDetailsComponent,
     ShowDetailsSalidaComponent,
     MinStockProductComponent,
-    TransferenciaComponent
+    TransferenciaComponent,
   ],
   imports: [
     CommonModule,
@@ -120,7 +120,8 @@ import { TransferenciaComponent } from './components/Transferencia/transferencia
     EntradasComponent,
     SalidasComponent,
     AdminSalidasComponent,
-    EditSalidasComponent
+    EditSalidasComponent,
+    VistaInicialComponent,
   ], 
   providers: [
     DatePipe, 

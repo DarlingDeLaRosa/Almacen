@@ -1,3 +1,9 @@
 .dataRow{
   height: 6vh;
 }
+
+.viewContent, .viewInitContent {
+  display: grid;
+  grid-template-rows: 12vh auto;
+  padding: 16px;
+}

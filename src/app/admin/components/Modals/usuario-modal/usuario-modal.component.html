@@ -46,7 +46,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Supervisor Inmediato</mat-label>
-        <input matInput [matAutocomplete]="sup" appearance="fill" formControlName="supervisorInmediato" (keydown.enter)="findSupInmediatoByName()">
+        <input matInput [matAutocomplete]="sup" appearance="fill" formControlName="supervisorInmediato" (blur)="findSupInmediatoByName()">
         <mat-autocomplete #sup='matAutocomplete'>
 
           <mat-option *ngFor="let supInmediato of supInmediatoList" [value]="supInmediato.nombre + ' ' + supInmediato.apellido" >

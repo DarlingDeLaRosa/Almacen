@@ -61,8 +61,6 @@ export class AdminSalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
-        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -97,7 +95,6 @@ export class AdminSalidasComponent implements OnInit {
   }
 
   async removeAlert(item: number) {
-    console.log(item)
     let removeChoise: boolean = await alertRemoveSure()
 
     if (removeChoise) {

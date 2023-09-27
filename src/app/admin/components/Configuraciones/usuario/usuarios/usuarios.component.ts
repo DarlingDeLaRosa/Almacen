@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
-import { alertIsSuccess, alertNoValidForm, alertServerDown, loading, unableEmail, unablePasswordLength } from 'src/app/admin/Helpers/alertsFunctions';
+import { catchError, throwError } from 'rxjs';
+import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertServerDown, loading, unableEmail, unablePasswordLength } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
@@ -140,19 +140,21 @@ export class UsuariosComponent implements OnInit {
               catchError((error) => {
                 loading(false)
                 alertServerDown();
-                return error;
+                return throwError(error);
               })
             )
             .subscribe((res: any) => {
+              console.log(res);
+              
               loading(false)
               if (res.data !== null) { alertIsSuccess(true); this.formUser.reset() }
+              else if(res.message == 'Este email ya existe.'){alertBackMessage(res.message)}
               else alertIsSuccess(false)
             })
 
         } else {
           unablePasswordLength()
         }
-
       } else {
         unableEmail()
       }

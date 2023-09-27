@@ -7,7 +7,7 @@ import { productoService } from 'src/app/admin/Services/producto.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { catchError, combineLatest } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-productos',
@@ -108,8 +108,9 @@ export class AdminProductosComponent implements OnInit {
           )
           .subscribe((res: any) => {
             loading(false)
-            if (res !== null) { alertRemoveSuccess(); this.getProducto() }
-            else { alertIsSuccess(false) }
+            
+            if (res.data != null) { alertRemoveSuccess(); this.getProducto() }
+            else { alertBackMessage(res.message) }
           })
       }
     } else {

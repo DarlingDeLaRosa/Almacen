@@ -2,8 +2,8 @@
     <div class="fuctionContent">
       <h2 class="modal-title" mat-dialog-title>Detalle de productos</h2>
 
-      <button *ngIf="tipoSalida != 'Prestamo' && tipoSalida != 'Donación' " mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/editar-entrada', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
-      <ng-template>Hola</ng-template>
+      <button *ngIf="tipoSalida != 'Prestamo' && tipoSalida != 'Donación' && idRol == 1 ; else noEdit" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/editar-salida', id]" (click)="closeModal()"><mat-icon>edit</mat-icon> Editar</button>
+      <ng-template #noEdit></ng-template>
    
     </div>
     <mat-dialog-content class="modal-content">

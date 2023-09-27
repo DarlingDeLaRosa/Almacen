@@ -26,7 +26,7 @@ export function alertSameData() {
     icon: 'info',
     title: 'No se encontraron diferencias.',
     showConfirmButton: false,
-    timer: 2000
+    timer: 2500
   })
 }
 
@@ -34,8 +34,8 @@ export function alertBackMessage(message: string) {
   Swal.fire({
     icon: 'info',
     title: message,
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -43,8 +43,8 @@ export function alertSameSerial() {
   Swal.fire({
     icon: 'info',
     title: 'Numero Serial Duplicado.',
-    showConfirmButton: false,
-    timer: 2500
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -52,8 +52,8 @@ export function alertUnableToRemove() {
   Swal.fire({
     icon: 'error',
     title: 'No puedes eliminar este producto',
-    showConfirmButton: false,
-    timer: 2500
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -61,8 +61,8 @@ export function alertSerial() {
   Swal.fire({
     icon: 'info',
     title: 'Campo cantidad deber ser uno',
-    showConfirmButton: false,
-    timer: 3000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -70,8 +70,8 @@ export function alertNoValidForm() {
   Swal.fire({
     icon: 'info',
     title: 'Completa los campos requeridos para realizar la acción',
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -79,17 +79,17 @@ export function unablePasswordLength() {
   Swal.fire({
     icon: 'info',
     title: 'Contraseña debe ser minimo 6 digitos',
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
 export function productNameNoExist() {
   Swal.fire({
     icon: 'info',
-    title: 'El producto no existe',
-    showConfirmButton: false,
-    timer: 2000
+    title: 'El producto no existe, Verifique el nombre del producto que esta tratando de agregar',
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -98,8 +98,8 @@ export function unableEmail() {
   Swal.fire({
     icon: 'info',
     title: 'Correo Electronico invalido',
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -107,8 +107,8 @@ export function alertCantExis() {
   Swal.fire({
     icon: 'info',
     title: 'Cantidad saliente no puede ser mayor a la cantidad existente.',
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -116,8 +116,8 @@ export function alertNumItems(restante: number) {
   Swal.fire({
     icon: 'info',
     title: `La cantidad restante disponible es ${restante}`,
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 
@@ -126,7 +126,7 @@ export function alertRncNoFound() {
     icon: 'info',
     title: 'No se encontro RNC que coincida.',
     showConfirmButton: false,
-    timer: 2000
+    timer: 2500
   })
 }
 
@@ -135,7 +135,7 @@ export function alertProductCodeNoFound() {
     icon: 'info',
     title: 'No se encontro codigo de producto que coincida.',
     showConfirmButton: false,
-    timer: 2000
+    timer: 2500
   })
 }
 
@@ -223,8 +223,17 @@ export function alertUnableEdit() {
   Swal.fire({
     icon: 'error',
     title: 'Agregar o Limpiar contenido antes de editar o duplicar',
-    showConfirmButton: false,
-    timer: 2000
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
+  })
+}
+
+export function alertUnableSend() {
+  Swal.fire({
+    icon: 'error',
+    title: 'Agregar o Limpiar informacion de producto antes de enviar',
+    showConfirmButton: true,
+    confirmButtonColor: '#004b8d'
   })
 }
 

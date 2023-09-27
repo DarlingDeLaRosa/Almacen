@@ -1,7 +1,5 @@
 <div class="viewContent">
 
-  <h1>Reportes de Proveedores</h1>
-
   <div class="fuctionContent">
     <form class="filtrarContent" [formGroup]="filterRepProveedor" >
 
@@ -26,12 +24,17 @@
 
     </form>
 
-    <span>
+    <span style="display: flex; ">
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesProveedor" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
   <div id="reportesProveedor">
+
+    <h1>Reportes de Proveedores</h1>
+
     <table>
       <thead class="headerTable">
         <tr class="headerRow">

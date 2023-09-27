@@ -12,12 +12,12 @@
 
       <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>RNC</mat-label>
-        <input matInput required formControlName="rnc" (keydown.enter)="findByRNC()">
+        <input matInput required formControlName="rnc" (blur)="findByRNC()">
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Razon social</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (keydown.enter)="findByName()">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (blur)="findByName()">
         <mat-autocomplete #auto='matAutocomplete' (optionSelected)="setValueFormProveedores($event.option.value)">
 
           <mat-option *ngFor="let option of filterOptions" [value]="option.razonSocial">

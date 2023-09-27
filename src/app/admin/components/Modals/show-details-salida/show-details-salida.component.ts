@@ -17,8 +17,9 @@ export class ShowDetailsSalidaComponent {
   url!: string;
   token!: string
   detallesList: detalleByIdSalida[] = []
-  id!: number  
-  tipoSalida: string = '' 
+  id!: number 
+  idRol: number = 0;
+  tipoSalida: string = ''
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public item: any,
@@ -30,12 +31,14 @@ export class ShowDetailsSalidaComponent {
   ngOnInit() {
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol)
+    ]).subscribe(([tokenValue, pathValue, idRol]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
-
+      this.idRol = idRol
+      
       this.getDetailsFromSalida()
     })
   }

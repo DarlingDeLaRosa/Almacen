@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -29,6 +29,8 @@ export class EditSalidasComponent {
   recintoActual: string = ''
   respuesta: any
   listadeProducto: any[] = []
+  idProductoList: any[] = []
+  id: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -79,12 +81,10 @@ export class EditSalidasComponent {
   }
 
   ngOnInit(): void {
-    let id: number = 0
 
     this.route.paramMap.subscribe(params => {
       const idparam = params.get('id');
-      if (idparam !== null) id = parseInt(idparam)
-      console.log(id)
+      if (idparam !== null) this.id = parseInt(idparam)
     })
 
     combineLatest([
@@ -99,30 +99,37 @@ export class EditSalidasComponent {
       this.idRol = idRole;
       this.recintoActual = recintoNombre
 
-      
+      this.getProducto()
       this.getRecinto()
       this.getTipoSalida()
       this.getTipoDepartamento()
-      this.getProducto()
 
+      this.loadData() //momentaneo
+    })
+  }
 
-      loading(true)
+  loadData() {
+    loading(true)
 
-      this.api.getSalidaById(this.url, this.token, id)
-        .pipe(
-          catchError((error) => {
-            loading(false)
-            alertServerDown();
-            return throwError(error);
-          })
-        )
-        .subscribe((res: any) => {
+    this.api.getSalidaById(this.url, this.token, this.id)
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return throwError(error);
+        })
+      )
+      .subscribe((res: any) => {
+        if (res.data != null) {
 
           loading(false)
-          //let detalleList: any[] = []
+          
           this.respuesta = res.data.detalles
-
-          console.log(res.data.detalles);
+          this.respuesta.map((detalle:any)=>{
+            this.idProductoList.filter((item: any) => { 
+              if (item.nombre == detalle.producto.nombre && this.productoList.filter(pitem=> pitem.nombre == item.nombre).length == 0 ) this.productoList.push(item) 
+            });
+          })
 
           if (res.success && res.data !== null) {
 
@@ -179,13 +186,12 @@ export class EditSalidasComponent {
                 idSalida: detalle.idSalida,
                 idSalidaDet: detalle.idSalidaDet
               })
-
               this.addDetail()
               this.formDetalleEditSalida.reset()
             })
           }
-        })
-    })
+        }
+      })
   }
 
   getProducto() {
@@ -199,11 +205,14 @@ export class EditSalidasComponent {
         })
       )
       .subscribe((res: any) => {
-        
-        res.data.map((producto: any) => {
-          //if (producto.stock !== 0 || this.respuesta.includes((item:any) => {item.producto.nombre == producto.nombre}))
-          this.productoList.push(producto) //
-        })
+        if (res.data != null) {
+          this.idProductoList = res.data
+
+          res.data.map((producto: any) => {
+            if (producto.stock !== 0) 
+              this.productoList.push(producto)
+          })
+        }
       });
   }
 
@@ -348,22 +357,58 @@ export class EditSalidasComponent {
           // console.log(this.ediExis);
           // console.log(this.formDetalleEditSalida.value.cantidad);
           // console.log(this.formDetalleEditSalida.value.existencia);
-          let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
-            return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
-          });
+
+          if(this.formDetalleEditSalida.value.idSalidaDet !== null){
+            let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
+              return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
+            });
+
+            this.ediExis = setValuesform[0].cantidad
+            
+          }
+
           //
           //console.log(setValuesform[0].cantidad)
           //console.log(this.formDetalleEditSalida.value);
 
-          this.ediExis = setValuesform[0].cantidad
 
           if (
             this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
             || this.formDetalleEditSalida.value.idSalidaDet == null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia
           ) {
 
+            if(this.formDetalleEditSalida.value.idSalidaDet == null && !this.isSerial){
+              let cantidadTotal: number = 0
+              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleEditSalida.value.idProducto )
+
+              if(detailSerialNoExist.length > 0){
+
+                detailSerialNoExist.map((detalle:any)=> {
+                  cantidadTotal += detalle.cantidad
+                })
+                
+                console.log(cantidadTotal);
+
+                if(cantidadTotal + this.formDetalleEditSalida.value.cantidad > this.formDetalleEditSalida.value.existencia){
+                  alertNumItems(this.formDetalleEditSalida.value.existencia - cantidadTotal)
+                  if(this.formDetalleEditSalida.value.existencia - cantidadTotal == 0) this.formDetalleEditSalida.reset()
+                  return
+                }
+              }
+            }
+
             this.detailGroup.push(this.formDetalleEditSalida.value)
             //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
+
+            if(this.formDetalleEditSalida.value.idSalidaDet == null && this.isSerial){
+              const exisProducts = this.detailGroup.some(producto => {
+                return producto.idProducto === this.formDetalleEditSalida.value.idProducto;
+              });
+              
+              if(exisProducts && this.listadeProducto.length == 0  ) { //|| !exisProducts && this.detailGroup.length > 0
+                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleEditSalida.value.idProducto)
+              }  
+            }
             this.sumaTotal()
             this.formDetalleEditSalida.reset()
 
@@ -464,6 +509,7 @@ export class EditSalidasComponent {
   }
 
   setValueFormProductoSalida(producto: string) {
+
     // let setValuesform = this.productoList.filter((productoEspecifico: any) => {
     //   return productoEspecifico.nombre == producto
     // });
@@ -631,7 +677,12 @@ export class EditSalidasComponent {
 
   sendData() {
 
-    if (this.formEditSalida.valid && this.detailGroup.length >= 1) {
+    if (this.formEditSalida.valid && this.detailGroup.length > 0) {
+
+      if(this.formDetalleEditSalida.valid){
+        alertUnableSend()
+        return
+      }
 
       if (this.formEditSalida.value.idRecinto.length > 0 && this.formEditSalida.value.idRecinto.length != null) {
         let recinto = this.recintoList.filter(item => item.nombre === this.formEditSalida.value.idRecinto)
@@ -671,7 +722,7 @@ export class EditSalidasComponent {
               //  })
               //  console.log(idsDetalles)
 
-              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              let idTipoProD = this.idProductoList.filter(item => item.nombre === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
               detail.idSalida = res.data.idSalida

@@ -1,7 +1,5 @@
 <div class="viewContent">
 
-  <h1>Reportes de salidas por producto</h1>
-
   <div class="fuctionContent">
     <div class="filtrarContent" [formGroup]="filterRepSalida">
 
@@ -26,12 +24,15 @@
 
     </div>
 
-    <span>
+    <span style="display: flex;">
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesProSalidas" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
   <div>
+
+    <h1>Reportes de salidas por producto</h1>
 
     <table class="tableReporte">
       <thead class="headerTable">

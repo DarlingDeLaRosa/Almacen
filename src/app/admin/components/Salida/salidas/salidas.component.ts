@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -27,6 +27,7 @@ export class SalidasComponent implements OnInit {
   resultSubTotal: number = 0
   recintoActual: string = ''
   listadeProducto: any[] = []
+  idProductoList: producto[] = []
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -119,6 +120,7 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+        this.idProductoList = res.data
         res.data.map((producto: any) => {
           if (producto.stock !== 0) this.productoList.push(producto)
         })
@@ -259,6 +261,7 @@ export class SalidasComponent implements OnInit {
 
                 if(cantidadTotal + this.formDetalleSalida.value.cantidad > this.formDetalleSalida.value.existencia){
                   alertNumItems(this.formDetalleSalida.value.existencia - cantidadTotal)
+                  if(this.formDetalleSalida.value.existencia - cantidadTotal == 0) this.formDetalleSalida.reset()
                   return
                 }
               }
@@ -473,7 +476,12 @@ export class SalidasComponent implements OnInit {
   sendData() {
 
     if (this.formSalida.valid && this.detailGroup.length > 0) {
-
+      
+      if(this.formDetalleSalida.valid){
+        alertUnableSend()
+        return
+      }
+      
       if (this.formSalida.value.idRecinto.length > 0 && this.formSalida.value.idRecinto.length != null) {
         let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
         this.formSalida.value.idRecinto = recinto[0].idRecinto
@@ -501,14 +509,13 @@ export class SalidasComponent implements OnInit {
         )
         .subscribe((res: any) => {
 
-          if (res.success || res.data !== null) {
+          if (res.data !== null) {
 
             this.detailGroup.map((detail: detalleProductoSalida) => {
 
+              let idTipoProD = this.idProductoList.filter(item => item.nombre == detail.idProducto)
               detail.idSalida = res.data.idSalida
-              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto
-
             })
 
             this.api.postDetalleSalida(this.url, JSON.stringify(this.detailGroup), this.token)
@@ -547,5 +554,4 @@ export class SalidasComponent implements OnInit {
       alertNoValidForm()
     }
   }
-
 }

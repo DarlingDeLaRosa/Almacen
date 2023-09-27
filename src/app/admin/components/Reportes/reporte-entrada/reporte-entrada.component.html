@@ -1,7 +1,5 @@
 <div class="viewContent">
 
-  <h1>Reportes de Entradas</h1>
-
   <div class="fuctionContent">
 
     <form class="filtrarContent" [formGroup]="filterReporteEntrada">
@@ -28,12 +26,16 @@
 
     </form>
 
-    <span>
+    <span style="display: flex; ">
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+
       <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
-  <div id="reportesEntrada">
+  <div id="reportesEntrada"> 
+
+  <h1>Reportes de Entradas</h1>
 
     <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
       <div class="entradaReporteTitle">

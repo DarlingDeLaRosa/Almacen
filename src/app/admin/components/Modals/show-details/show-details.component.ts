@@ -17,6 +17,7 @@ export class ShowDetailsComponent {
   url!: string;
   token!: string
   detallesList: detalleByIdEntrada[] = []
+  idRol: number = 0;
   id!: number  
 
   constructor(
@@ -29,11 +30,13 @@ export class ShowDetailsComponent {
   ngOnInit() {
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol)
+    ]).subscribe(([tokenValue, pathValue, idRol]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
+      this.idRol = idRol
 
       this.getDetailsFromEntrada()
     })
