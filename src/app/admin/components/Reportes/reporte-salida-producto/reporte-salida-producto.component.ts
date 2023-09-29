@@ -58,7 +58,9 @@ export class ReporteSalidaProductoComponent implements OnInit {
         return error;
       })
     )    
-    .subscribe((res: any) => {        
+    .subscribe((res: any) => {  
+      console.log(res);
+            
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -88,11 +90,30 @@ export class ReporteSalidaProductoComponent implements OnInit {
 
   exportExcel(){
     
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+    let data: any[] = []
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    this.dataFiltered.map((detalles: any) => {
+      data.push({
+        Numero_de_Salida: detalles.salida.idSalida,
+        Producto: detalles.producto.nombre,
+        Marca: detalles.marca,
+        Modelo: detalles.modelo,
+        Condición: detalles.condicion,
+        Unidad_de_Medida: detalles.producto.unidadMe.descripcion,
+        Serial: detalles.serial,
+        Precio: detalles.precio,
+        Cantidad: detalles.cantidad,
+        SubTotal: detalles.subTotal
+      })
+    })
+
+    data.reverse()
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Salida_Productos');
+
+    XLSX.writeFile(wb, 'Reporte_Detalle_Salida.xlsx');
   }
 
   nextPage(){

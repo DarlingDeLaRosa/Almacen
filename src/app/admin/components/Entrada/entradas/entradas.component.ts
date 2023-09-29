@@ -318,7 +318,7 @@ export class EntradasComponent implements OnInit {
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
       if (exisProducto) {
         if (this.isSerial == true && this.formDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
-  
+
           if (this.detailGroup.length > 0 && this.isSerial) {
             if (this.detailGroup.some(producto => {
               if (producto.serial && this.formDetalleEntrada.value.serial) {
@@ -331,40 +331,40 @@ export class EntradasComponent implements OnInit {
               return
             }
           }
-  
+
           //this.totalResult += this.formDetalleEntrada.value.subTotal
-  
+
           // if (this.generalITBIS == false) {
           //   console.log('por aqui ');
-  
+
           //   this.mostrarTotalItbis = 0
           //   this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
-  
+
           // } else {
           // if (this.formDetalleEntrada.value.itbisProducto !== 0) {
-  
+
           //   this.subTotalResult()
           //   //this.mostrarTotalItbis += this.totalItbis
-  
+
           //   this.formDetalleEntrada.value.itbisProducto
           //     = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
           // }
           // }
           if (this.generalITBIS) {
-  
-  
+
+
             this.formDetalleEntrada.value.itbisProducto = 0.18 * this.formDetalleEntrada.value.precio
             //sumaTotal()
-  
+
             this.detailGroup.push(this.formDetalleEntrada.value)
-  
+
             //this.detailGroup.map((detalle: any) => {
             //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
             //  this.totalResult += detalle.subTotal
             //})
-  
+
           } else {
-  
+
             this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
             //this.sumaTotal()
             this.detailGroup.push(this.formDetalleEntrada.value)
@@ -372,21 +372,21 @@ export class EntradasComponent implements OnInit {
             //  this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
             //  this.totalResult += detalle.subTotal
             //})
-  
+
           }
           this.sumaTotal()
           this.formDetalleEntrada.reset()
           //this.detailGroup.push(this.formDetalleEntrada.value)
-  
+
           if (this.detailGroup.length >= 1) this.disableItbis = true
-  
+
         } else {
           alertSerial()
         }
-      }else {
+      } else {
         productNameNoExist()
       }
-      
+
     } else {
       alertNoValidForm()
     }
@@ -562,7 +562,7 @@ export class EntradasComponent implements OnInit {
 
     if (this.formEntrada.valid && this.detailGroup.length > 0) {
 
-      if(this.formDetalleEntrada.valid){
+      if (this.formDetalleEntrada.valid) {
         alertUnableSend()
         return
       }
@@ -626,6 +626,10 @@ export class EntradasComponent implements OnInit {
                   this.disableItbis = false
                   this.generalITBIS = true;
 
+                  this.getProveedor()
+                  this.getProducto()
+                  this.getTipoEntrada()
+                  this.getTipoEntrega()
                 }
                 else {
                   alertIsSuccess(false)

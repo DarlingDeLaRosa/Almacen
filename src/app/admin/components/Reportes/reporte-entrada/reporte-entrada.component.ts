@@ -75,6 +75,8 @@ export class ReporteEntradaComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+        console.log(res);
+        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -84,7 +86,7 @@ export class ReporteEntradaComponent implements OnInit {
   onInputFilterChange() {
     if (this.filterReporteEntrada.value.nombre.length >= 2) {
 
-      this.api.filterEntrada(this.url, this.token, this.pagina, this.filterReporteEntrada.value.nombre)
+      this.api.getEntradaReport(this.url, this.token, this.pagina, '', '', this.filterReporteEntrada.value.nombre)
         .pipe(
           catchError((error) => {
             alertServerDown();
@@ -115,12 +117,30 @@ export class ReporteEntradaComponent implements OnInit {
   }
 
   exportExcel(){
-    
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+    let data : any[] = []
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    this.dataFiltered.map((detalles: any)=>{
+      data.push({
+        Fecha:  detalles.fechaCreacion,
+        Fecha_Modificacion:  detalles.fechaModif,
+        Numero_de_Factura: detalles.noFactura,
+        Numero_de_Contrato: detalles.numOrden,
+        Recinto: detalles.recinto.nombre,
+        Tipo_de_Entrega: detalles.tipoEntrega.nombre,
+        Tipo_de_Entrada: detalles.tipoEntrada.nombre,
+        Proveedor: detalles.proveedor.razonSocial, 
+        Creado_por: detalles.creadoPor.nombre + detalles.creadoPor.apellido,
+        Monto_Total: detalles.total,
+        Observacion: detalles.observacion,
+      })
+    })
+
+    data.reverse()
+
+     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+     const wb: XLSX.WorkBook = XLSX.utils.book_new();
+     XLSX.utils.book_append_sheet(wb, ws, 'Entradas')
+     XLSX.writeFile(wb, 'Reporte_Entradas.xlsx');
   }
 
   nextPage() {

@@ -32,16 +32,14 @@
 
   <div>
 
-    <h1>Reportes de salidas por producto</h1>
+    <h3 class="title">Reportes de salidas por producto</h3>
 
     <table class="tableReporte">
       <thead class="headerTable">
         <tr class="headerRow">
           <th class="headerCell">Fecha</th>
-          <th class="headerCell">Codigo</th>
           <th class="headerCell">Producto</th>
           <th class="headerCell">No. Salida</th>
-          <th class="headerCell">Descripcion</th>
           <th class="headerCell">Marca</th>
           <th class="headerCell">Modelo</th>
           <th class="headerCell">Serial</th>
@@ -53,10 +51,8 @@
       <tbody>
         <tr class="dataRow" *ngFor="let salida of dataFiltered">
           <td class="dataCell">{{salida.salida.fechaCreacion | date:"dd/MM/yyyy"}}</td>
-          <td class="dataCell">{{salida.producto.codInstitucional}}</td>
           <td class="dataCell">{{salida.producto.nombre}}</td>
           <td class="dataCell">{{salida.salida.idSalida}}</td>
-          <td class="dataCell">{{salida.producto.descripcion}}</td>
           <td class="dataCell">{{salida.marca}}</td>
           <td class="dataCell">{{salida.modelo}}</td>
           <td class="dataCell">{{salida.serial}}</td>

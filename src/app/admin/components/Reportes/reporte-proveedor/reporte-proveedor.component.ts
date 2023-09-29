@@ -56,14 +56,16 @@ export class ReporteProveedorComponent implements OnInit {
     this.loading = true;
 
     this.api.getProveedor(this.url, this.token, this.pagina, 15)
-    .pipe(
-      catchError((error) => {
-        this.loading = false
-        alertServerDown();
-        return error;
-      })
-    )    
-    .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        console.log(res);
+
         this.loading = false;
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -75,13 +77,13 @@ export class ReporteProveedorComponent implements OnInit {
     if (this.filterRepProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)
-      .pipe(
-        catchError((error) => {
-          alertServerDown();
-          return error;
-        })
-      )    
-      .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return error;
+          })
+        )
+        .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
         })
@@ -91,15 +93,29 @@ export class ReporteProveedorComponent implements OnInit {
     }
   }
 
-  exportExcel(){
-    
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+  exportExcel() {
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    let data: any[] = []
+
+    this.dataFiltered.map((detalles: any) => {
+      data.push({
+        nombre_Comercial: detalles.nombreComercial,
+        Razon_Social: detalles.razonSocial,
+        Representante: detalles.representante,
+        RNC: detalles.rnc,
+        Telefono_Representante: detalles.telRepresentante,
+      })
+    })
+
+    data.reverse()
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Proveedores');
+
+    XLSX.writeFile(wb, 'Reporte_Proveedores.xlsx');
   }
-  
+
   nextPage() {
     if (this.pagina < this.noPage) {
       this.pagina += 1

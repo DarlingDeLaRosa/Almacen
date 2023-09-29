@@ -17,7 +17,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Razon social</mat-label>
-        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (blur)="findByName()">
+        <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="razonSocial" (input)="findByName()">
         <mat-autocomplete #auto='matAutocomplete' (optionSelected)="setValueFormProveedores($event.option.value)">
 
           <mat-option *ngFor="let option of filterOptions" [value]="option.razonSocial">

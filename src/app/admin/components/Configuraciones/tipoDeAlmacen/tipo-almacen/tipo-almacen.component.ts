@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { catchError } from 'rxjs';
 import { alertIsSuccess, alertNoValidForm, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
-import { GET } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 
 @Component({

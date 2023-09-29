@@ -94,11 +94,28 @@ export class ReporteSalidaComponent {
   
   exportExcel(){
     
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+    let data: any[] = []
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    this.dataFiltered.map((detalles: any)=>{
+      data.push({
+        Fecha:  detalles.fechaCreacion,
+        Fecha_Modificacion: detalles.fechaModif,
+        Recinto: detalles.recinto.nombre,
+        Tipo_de_Salida: detalles.tipoSalida.nombre,
+        Departamento: detalles.departamento.nombre, 
+        Creado_por: detalles.creadoPorU.nombre + detalles.creadoPorU.apellido,
+        Monto_Total: detalles.total,
+        Observacion: detalles.observacion,
+      })
+    })
+
+    data.reverse()
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Salidas');
+
+    XLSX.writeFile(wb, 'Reporte_Salidas.xlsx');
   }
 
   nextPage() {

@@ -28,19 +28,17 @@
 
                 <h4><b style="font-weight: 500;">Fecha:</b> {{transferencia.fecha | date: 'dd/MM/yyyy'}}</h4>
 
-                <h4 *ngIf="transferencia.recinto.nombre == recinto ;else send">Transferencia enviada desde recinto
-                    {{transferencia.salida.recinto.nombre}}</h4>
-
+                <h4 *ngIf="transferencia.recinto.nombre == recinto ;else send">
+                    Transferencia enviada desde recinto {{transferencia.creadoPor.recinto.nombre}}
+                </h4>
                 <ng-template #send>
-                    <h4> Transferencia enviada al recinto {{transferencia.recinto.nombre}}</h4>
+                    <h4> Transferencia enviada hacia recinto {{transferencia.salida.recinto.nombre}}</h4>
                 </ng-template>
 
-                <h4 *ngIf="transferencia.recinto.nombre == recinto; else responsable">Enviado por
-                    {{transferencia.creadoPor.nombre}} {{transferencia.creadoPor.apellido}}</h4>
+                <h4>
+                    Enviado por {{transferencia.creadoPor.nombre}} {{transferencia.creadoPor.apellido}} ({{transferencia.creadoPor.recinto.nombre}})
+                </h4>
 
-                <ng-template #responsable>
-                    <h4></h4>
-                </ng-template>
 
                 <Button class="fucDetails" (click)="openModal(transferencia.salida)"><mat-icon>list</mat-icon></Button>
 

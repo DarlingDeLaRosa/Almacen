@@ -50,8 +50,10 @@
               class="fucEdit"><mat-icon>edit</mat-icon></button>
           </td>
           <ng-template #supp></ng-template>
-          <td class="dataCell" *ngIf="idRol == 1; else btnremove"><button (click)="removeAlert(item.idSalida)"
-              class="fucRem"><mat-icon>delete</mat-icon></button>
+          <td class="dataCell" *ngIf="idRol == 1; else btnremove">
+            <button *ngIf="idRol == 1 && item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
+            (click)="removeAlert(item.idSalida)"
+              class="fucRem" ><mat-icon>delete</mat-icon></button>
           </td>
           <ng-template #btnremove></ng-template>
         </tr>

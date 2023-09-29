@@ -51,14 +51,16 @@ export class ReporteEntradaProductoComponent implements OnInit {
     this.loading = true
 
     this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '', this.pagina)
-    .pipe(
-      catchError((error) => {
-        this.loading = false
-        alertServerDown();
-        return throwError(error);
-      })
-    )    
-    .subscribe((res: any) => {
+      .pipe(
+        catchError((error) => {
+          this.loading = false
+          alertServerDown();
+          return throwError(error);
+        })
+      )
+      .subscribe((res: any) => {
+        console.log(res);
+        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -69,13 +71,13 @@ export class ReporteEntradaProductoComponent implements OnInit {
     if (this.filterRepEntrada.value.filter.length >= 2) {
 
       this.api.getAllDetalleEntrada(this.url, this.token, this.filterRepEntrada.value.filter, '', '', this.pagina)
-      .pipe(
-        catchError((error) => {
-          alertServerDown();
-          return error;
-        })
-      )    
-      .subscribe((res: any) => {
+        .pipe(
+          catchError((error) => {
+            alertServerDown();
+            return throwError(error);
+          })
+        )
+        .subscribe((res: any) => {
           this.noPage = res.cantPage
           this.dataFiltered = res.data
         })
@@ -85,15 +87,34 @@ export class ReporteEntradaProductoComponent implements OnInit {
     }
   }
 
-  exportExcel(){
-    
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+  exportExcel() {
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    let data: any[] = []
+
+    this.dataFiltered.map((detalles: any) => {
+      data.push({
+        Numero_de_Entrada: detalles.entrada.idEntrada,
+        Producto: detalles.producto.nombre,
+        Marca: detalles.marca,
+        Modelo: detalles.modelo,
+        Condición: detalles.condicion,
+        Unidad_de_Medida: detalles.producto.unidadMe.descripcion,
+        Serial: detalles.serial,
+        Precio: detalles.precio,
+        Cantidad: detalles.cantidad,
+        SubTotal: detalles.subTotal
+      })
+    })
+
+    data.reverse()
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Entrada_Productos');
+
+    XLSX.writeFile(wb, 'Reporte_Detalle_Entrada.xlsx');
   }
-  
+
   nextPage() {
     if (this.pagina < this.noPage) {
       this.pagina += 1

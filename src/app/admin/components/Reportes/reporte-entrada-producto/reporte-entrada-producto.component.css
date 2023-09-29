@@ -1,5 +1,12 @@
-.viewContent, .viewInitContent {
-    display: grid;
-    grid-template-rows: 12vh auto;
-    padding: 16px;
-  }
+.viewContent,
+.viewInitContent {
+  display: grid;
+  grid-template-rows: 12vh auto;
+  padding: 16px;
+}
+
+.title {
+  margin-left: 10px;
+  margin-top: 20px;
+  font-size: 25px;
+}

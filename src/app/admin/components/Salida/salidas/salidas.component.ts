@@ -120,6 +120,8 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+        console.log(res);
+
         this.idProductoList = res.data
         res.data.map((producto: any) => {
           if (producto.stock !== 0) this.productoList.push(producto)
@@ -247,21 +249,21 @@ export class SalidasComponent implements OnInit {
 
           if (this.formDetalleSalida.value.cantidad <= this.formDetalleSalida.value.existencia) {
 
-            if(!this.isSerial){
+            if (!this.isSerial) {
               let cantidadTotal: number = 0
-              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleSalida.value.idProducto )
+              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleSalida.value.idProducto)
 
-              if(detailSerialNoExist.length > 0){
+              if (detailSerialNoExist.length > 0) {
 
-                detailSerialNoExist.map((detalle:any)=> {
+                detailSerialNoExist.map((detalle: any) => {
                   cantidadTotal += detalle.cantidad
                 })
-                
+
                 console.log(cantidadTotal);
 
-                if(cantidadTotal + this.formDetalleSalida.value.cantidad > this.formDetalleSalida.value.existencia){
+                if (cantidadTotal + this.formDetalleSalida.value.cantidad > this.formDetalleSalida.value.existencia) {
                   alertNumItems(this.formDetalleSalida.value.existencia - cantidadTotal)
-                  if(this.formDetalleSalida.value.existencia - cantidadTotal == 0) this.formDetalleSalida.reset()
+                  if (this.formDetalleSalida.value.existencia - cantidadTotal == 0) this.formDetalleSalida.reset()
                   return
                 }
               }
@@ -269,14 +271,14 @@ export class SalidasComponent implements OnInit {
 
             this.detailGroup.push(this.formDetalleSalida.value)
 
-            if(this.isSerial){
+            if (this.isSerial) {
               const exisProducts = this.detailGroup.some(producto => {
                 return producto.idProducto === this.formDetalleSalida.value.idProducto;
               });
-              
-              if(exisProducts && this.listadeProducto.length == 0  ) { //|| !exisProducts && this.detailGroup.length > 0
+
+              if (exisProducts && this.listadeProducto.length == 0) { //|| !exisProducts && this.detailGroup.length > 0
                 this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleSalida.value.idProducto)
-              }  
+              }
             }
 
             //this.resultSubTotal += this.formDetalleSalida.value.subTotal
@@ -289,7 +291,7 @@ export class SalidasComponent implements OnInit {
         } else {
           alertSerial()
         }
-      }else{
+      } else {
         productNameNoExist()
       }
     } else {
@@ -297,7 +299,7 @@ export class SalidasComponent implements OnInit {
     }
 
     console.log(this.detailGroup);
-    
+
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
@@ -318,7 +320,7 @@ export class SalidasComponent implements OnInit {
         idTipoAlm: item.idTipoAlm,
         subTotal: item.subTotal
       })
-      
+
       if (item.serial != null && item.serial.length > 0) {
         this.isSerial = true
         this.formDetalleSalida.patchValue({ serial: item.serial })
@@ -329,7 +331,7 @@ export class SalidasComponent implements OnInit {
     } else {
       alertUnableEdit()
     }
-    
+
 
     this.sumaTotal()
   }
@@ -364,10 +366,10 @@ export class SalidasComponent implements OnInit {
   }
 
   setValueFormProductoSalida(producto: string) {
-    
+
     this.formDetalleSalida.reset()
-    this.formDetalleSalida.patchValue({idProducto: producto})
-    
+    this.formDetalleSalida.patchValue({ idProducto: producto })
+
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.nombre == producto
     });
@@ -381,7 +383,7 @@ export class SalidasComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res.data !== null) {
-          
+
           // this.formDetalleSalida.patchValue({
           //   existencia: res.data.producto.stock,
           //   condicion: res.data.condicion,
@@ -391,18 +393,18 @@ export class SalidasComponent implements OnInit {
           //   precio: res.data.producto.precio,
           // })
 
-          if (res.data.productosLoteSerial.length > 0 ) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
+          if (res.data.productosLoteSerial.length > 0) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
             this.isSerial = true
-            
+
             const exisProducto = this.detailGroup.some(producto => {
               return producto.idProducto === this.formDetalleSalida.value.idProducto;
             });
-            
-            if(this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.nombre != producto){
 
-              let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null )
-              
-              if( this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.nombre != producto){
+            if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.nombre != producto) {
+
+              let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null)
+
+              if (this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.nombre != producto) {
                 this.productoList = this.productoList.filter(detalle => detalle.nombre != this.listadeProducto[0].producto.nombre)
               }
               this.listadeProducto = res.data.productosLoteSerial
@@ -421,7 +423,7 @@ export class SalidasComponent implements OnInit {
 
             this.listadeProducto.shift()
             //console.log(this.listadeProducto);
-            
+
             this.subTotalResult()
 
           } else {
@@ -436,7 +438,7 @@ export class SalidasComponent implements OnInit {
             //     }
             //   })
             // }
-            
+
             this.formDetalleSalida.patchValue({
               existencia: res.data.productoLote.producto.stock,
               condicion: res.data.productoLote.condicion,
@@ -476,12 +478,12 @@ export class SalidasComponent implements OnInit {
   sendData() {
 
     if (this.formSalida.valid && this.detailGroup.length > 0) {
-      
-      if(this.formDetalleSalida.valid){
+
+      if (this.formDetalleSalida.valid) {
         alertUnableSend()
         return
       }
-      
+
       if (this.formSalida.value.idRecinto.length > 0 && this.formSalida.value.idRecinto.length != null) {
         let recinto = this.recintoList.filter(item => item.nombre === this.formSalida.value.idRecinto)
         this.formSalida.value.idRecinto = recinto[0].idRecinto
@@ -537,6 +539,10 @@ export class SalidasComponent implements OnInit {
 
                   this.detailGroup = []
                   this.resultSubTotal = 0
+                  this.getProducto()
+                  this.getTipoSalida()
+                  this.getTipoDepartamento()
+                  this.getRecinto()
                 }
                 else {
                   alertIsSuccess(false)

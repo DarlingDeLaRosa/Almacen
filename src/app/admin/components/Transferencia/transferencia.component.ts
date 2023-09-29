@@ -61,7 +61,7 @@ export class TransferenciaComponent implements OnInit {
         catchError((error) => {
           this.loading = false
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
@@ -122,7 +122,7 @@ export class TransferenciaComponent implements OnInit {
           catchError((error) => {
             loading(false)
             alertServerDown();
-            return error;
+            return throwError(error);
           })
         )
         .subscribe((res: any) => {

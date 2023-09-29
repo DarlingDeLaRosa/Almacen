@@ -60,7 +60,10 @@ export interface Entrada {
         itbis: number,
         stock: number,
         stockMinimo: number,
-        idUnidadMe: number,
+        unidadMe: {
+          descripcion :string
+          idUnidadMe:number
+        },
         idTipoArt: number,
         idTipoAlmacen: number
       },
@@ -265,7 +268,7 @@ export interface salida {
     nombre: string,
     apellido: string,
     cargo: string
-    recinto:{
+    recinto: {
       idRecinto: number
       nombre: string
     }
@@ -306,10 +309,11 @@ export interface salida {
 
 export interface salidaTrans {
   creadoPor: {
-    apellido:string
-    cargo:string
-    idUsuario:number
-    nombre:string
+    apellido: string
+    cargo: string
+    idUsuario: number
+    nombre: string
+    recinto: { idRecinto: number, nombre: string }
   }
   estado: string
   fecha: Date

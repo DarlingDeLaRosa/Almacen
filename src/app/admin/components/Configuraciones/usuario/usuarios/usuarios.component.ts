@@ -121,7 +121,7 @@ export class UsuariosComponent implements OnInit {
   sendData() {
     if (this.formUser.valid) {
       if (this.formUser.get('correo')?.valid) {
-        if (this.formUser.value.contrasena.length > 6) {
+        if (this.formUser.value.contrasena.length >= 6) {
 
 
           let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)

@@ -89,12 +89,28 @@ export class InventarioExistenteComponent implements OnInit {
   }
 
   exportExcel(){
+    let data : any[] = []
     
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltered);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+    this.dataFiltered.map((detalles: any)=>{
+      data.push({
+        Codigo: detalles.codInstitucional,
+        Nombre: detalles.nombre,
+        Descripción: detalles.descripcion, 
+        Tipo_de_almacen: detalles.tipoAlmacen.nombre,
+        Tipo_de_producto: detalles.tipoArt.nombre,
+        Unidad_de_medida: detalles.unidadMedida.descripcion,
+        Existencia:  detalles.stock,
+        Precio:  detalles.precio
+      })
+    })
 
-    XLSX.writeFile(wb, 'exported-data.xlsx');
+    data.reverse()
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventario');
+
+    XLSX.writeFile(wb, 'Reporte_Inventario.xlsx');
   }
   
   nextPage() {

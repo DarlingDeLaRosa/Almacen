@@ -42,6 +42,7 @@
   border-left: 5px rgba(0, 128, 0, 0.801) solid;
   width: 100;
   margin: 10px 10px;
+  cursor: pointer;
 }
 
 .infoCardSalida{
@@ -52,6 +53,7 @@
   grid-column: 3/5;
   width: 100%;
   margin: 10px 10px;
+  cursor: pointer;
 }
 
 .cardLastOnesEntradas{
@@ -116,4 +118,12 @@ table {
 
 .dataCell{
   padding: 0;
+}
+
+.dataRow{
+  cursor: pointer;
+}
+
+.cardExistencia .contentLast table tbody .dataRow:hover{
+  background-color: rgba(255, 112, 16, 0.144);
 }

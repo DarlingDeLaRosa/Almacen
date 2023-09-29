@@ -36,7 +36,7 @@
 
   <div id="reportesSalidas">
 
-    <h1>Reportes de Salidas</h1>
+    <h3 class="title">Reportes de Salidas</h3>
 
     <div id="reporteHeader" *ngFor="let salidas of dataFiltered">
       <div class="entradaReporteTitle">
@@ -70,7 +70,6 @@
               <th class="headerCell">Marca</th>
               <th class="headerCell">Modelo</th>
               <th class="headerCell">Condición</th>
-              <th class="headerCell">Unidad De Medida</th>
               <th class="headerCell">Serial</th>
               <th class="headerCell">Stock restante</th>
               <th class="headerCell">Precio</th>
@@ -84,7 +83,6 @@
               <td class="dataCell">{{detalles.marca}}</td>
               <td class="dataCell">{{detalles.modelo}}</td>
               <td class="dataCell">{{detalles.condicion}}</td>
-              <td class="dataCell">{{detalles.producto.idUnidadMe}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
               <td class="dataCell">{{detalles.producto.stock}}</td>
               <td class="dataCell">{{detalles.precio}}</td>
