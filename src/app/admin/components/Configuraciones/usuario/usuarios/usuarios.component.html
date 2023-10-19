@@ -51,19 +51,22 @@
         <input matInput required appearance="fill" formControlName="cargo">
       </mat-form-field>&nbsp;
 
-      <mat-form-field hideRequiredMarker>
+      <mat-form-field hideRequiredMarker appearance="fill">
         <mat-label>Supervisor Inmediato</mat-label>
-        <input matInput required appearance="fill" formControlName="supervisorInmediato">
         <!-- <input matInput [matAutocomplete]="sup" appearance="fill" formControlName="supervisorInmediato" (input)="findSupInmediatoByName()">
         <mat-autocomplete #sup='matAutocomplete'>
 
           <mat-option *ngFor="let supInmediato of supInmediatoList" [value]="supInmediato.nombre + ' ' + supInmediato.apellido" >
-            {{supInmediato.nombre}} {{supInmediato.apellido}} <br>
+            {{supInmediato.nombre}} {{supInmediato.apellido}}{{supInmediato.nombre}} {{supInmediato.apellido}} <br>
             <span class="emailSupInmediato">{{supInmediato.correo}}</span>
           </mat-option>
 
-        </mat-autocomplete>
-        <mat-icon matSuffix>search</mat-icon> -->
+        </mat-autocomplete> -->
+        <mat-select disableRipple formControlName="supervisorInmediato"> <!--(selectionChange)="selectedRecinto($event.value)"-->
+          <mat-option [value]="supInmediato.nombre + ' ' + supInmediato.apellido"
+            *ngFor="let supInmediato of supInmediatoList">{{supInmediato.nombre}} {{supInmediato.apellido}}</mat-option>
+        </mat-select>
+        <!--<mat-icon matSuffix>search</mat-icon>--> 
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker appearance="fill">

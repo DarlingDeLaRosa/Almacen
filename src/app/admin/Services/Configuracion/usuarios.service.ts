@@ -13,6 +13,14 @@ export class UserService {
 
   //Obtener Persona
 
+  public getPerson(url: string, token: string, page: number, cantItem: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const personHeader = {headers: headers}
+
+    const getPerson = `${url}/Persona/${page}/${cantItem}`
+    return this.http.get(getPerson, personHeader)
+  }
+
   public getPersonByName(url: string, token: string, page: number, cantItem: number, name: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const personHeader = {headers: headers}

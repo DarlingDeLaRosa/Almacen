@@ -52,6 +52,7 @@ export class UsuariosComponent implements OnInit {
 
     this.getRol();
     this.getRecinto();
+    this.getPersona()
   }
 
   itbisOption(event: any) {
@@ -88,27 +89,50 @@ export class UsuariosComponent implements OnInit {
       })
   }
 
-  findSupInmediatoByName() {
-    if (this.formUser.value.supervisorInmediato.length >= 4) {
-
-      this.api.getPersonByName(this.url, this.token, 1, 10, this.formUser.value.supervisorInmediato)
-        .pipe(
-          catchError((error) => {
-            alertServerDown();
-            return error;
-          })
-        )
-        .subscribe((res: any) => {
+  getPersona() {
+    this.api.getPerson(this.url, this.token, 1, 400)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return error;
+        })
+      )
+      .subscribe((res: any) => {
+        if (res !== null) {
           let options = res.data
-          this.supInmediatoList = []
 
           options.forEach((item: any) => {
             this.supInmediatoList.push(item)
             this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
           });
-        })
-    }
+
+        }
+      })
   }
+
+  // findSupInmediatoByName() {
+  //   if (this.formUser.value.supervisorInmediato.length >= 4) {
+
+  //     this.api.getPersonByName(this.url, this.token, 1, 10, this.formUser.value.supervisorInmediato)
+  //       .pipe(
+  //         catchError((error) => {
+  //           alertServerDown();
+  //           return error;
+  //         })
+  //       )
+  //       .subscribe((res: any) => {
+  //         console.log(res);
+          
+  //         let options = res.data
+  //         this.supInmediatoList = []
+
+  //         options.forEach((item: any) => {
+  //           this.supInmediatoList.push(item)
+  //           this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
+  //         });
+  //       })
+  //   }
+  // }
 
   seePassword() {
     if (this.seePass == 'password') {
@@ -122,7 +146,6 @@ export class UsuariosComponent implements OnInit {
     if (this.formUser.valid) {
       if (this.formUser.get('correo')?.valid) {
         if (this.formUser.value.contrasena.length >= 6) {
-
 
           let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)
           let recinto = this.recintoList.filter(item => item.nombre === this.formUser.value.idRecinto)
