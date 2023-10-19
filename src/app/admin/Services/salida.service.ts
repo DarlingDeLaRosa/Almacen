@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { detalleProductoSalida, postSalida, putSalida } from '../models/interfaces';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { detalleProductoSalida, postSalida, putSalida } from '../models/interfac
 export class salidaService {
 
   cantidadItems = 15
+
   constructor(private http: HttpClient) { }
 
   public getSalida(url: string, token: string, page: number, itemsPorPage:number) {
@@ -25,7 +26,7 @@ export class salidaService {
     const getSalida = `${url}/Salida/${id}`
     return this.http.get(getSalida, salidaHeader)
   }
-
+  
   public getSalidaTransferencia(url: string, token: string, page:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}

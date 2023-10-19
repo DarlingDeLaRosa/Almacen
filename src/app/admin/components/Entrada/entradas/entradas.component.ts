@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { detalleProductoEntrada, producto, proveedor, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { TipoDeEntradaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrada.service';
 import { TipoDeEntregaService } from 'src/app/admin/Services/Configuracion/tipo-de-entrega.service';
@@ -314,7 +314,11 @@ export class EntradasComponent implements OnInit {
       return producto.nombre === this.formDetalleEntrada.value.idProducto;
     });
 
-    //if (this.isSerial) this.formDetalleEntrada.get('serial')?.reset()
+    if (this.formDetalleEntrada.value.cantidad < 1) {
+      noLessThanO()
+      return
+    }
+
     if (this.formDetalleEntrada.valid && this.formEntrada.valid) {
       if (exisProducto) {
         if (this.isSerial == true && this.formDetalleEntrada.value.cantidad == 1 || this.isSerial == false) {
@@ -610,6 +614,15 @@ export class EntradasComponent implements OnInit {
                 catchError((error) => {
                   loading(false)
                   alertServerDown();
+
+                  this.detailGroup = []
+                  this.mostrarTotalItbis = 0
+                  this.totalResult = 0
+                  this.disableItbis = false
+                  this.generalITBIS = true;
+                  this.formDetalleEntrada.reset()
+                  this.formEntrada.reset()
+
                   return error;
                 })
               )

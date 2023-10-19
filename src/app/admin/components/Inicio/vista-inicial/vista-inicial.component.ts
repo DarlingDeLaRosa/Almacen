@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { catchError, combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertServerDown } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -71,7 +71,7 @@ export class VistaInicialComponent {
         catchError((error) => {
           this.loading = false;
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {

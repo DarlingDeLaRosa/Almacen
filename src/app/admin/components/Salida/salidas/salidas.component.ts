@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -228,6 +228,11 @@ export class SalidasComponent implements OnInit {
     const exisProducto = this.productoList.some(producto => {
       return producto.nombre === this.formDetalleSalida.value.idProducto;
     });
+
+    if (this.formDetalleSalida.value.cantidad < 1) {
+      noLessThanO()
+      return
+    }
 
     if (this.formDetalleSalida.valid && this.formSalida.valid) {
       if (exisProducto) {
@@ -524,8 +529,13 @@ export class SalidasComponent implements OnInit {
               .pipe(
                 catchError((error) => {
                   loading(false)
-                  this.detailGroup = []
                   alertServerDown();
+
+                  this.detailGroup = []
+                  this.resultSubTotal = 0
+                  this.formSalida.reset()
+                  this.formDetalleSalida.reset()
+
                   return throwError(error);
                 })
               )

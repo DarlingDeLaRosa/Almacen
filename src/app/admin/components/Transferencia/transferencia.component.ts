@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, Output, OnInit, EventEmitter  } from '@angular/core';
 import { salida, salidaTrans } from '../../models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { salidaService } from '../../Services/salida.service';
@@ -27,6 +27,8 @@ export class TransferenciaComponent implements OnInit {
   recinto: string = ''
   loading: boolean = false;
   estado: string = 'EN PROCESO'
+  
+  // @Output() transferChange = new EventEmitter<void>()
 
   constructor(
     public dialog: MatDialog,
@@ -92,6 +94,7 @@ export class TransferenciaComponent implements OnInit {
 
 
   aceptarTransferencia(id: number) {
+    //this.apiEntrada.miVariable$.next(!this.apiEntrada.miVariable$);
     loading(true)
 
     this.apiEntrada.postTransferenciaEntrada(this.url, id, this.token)

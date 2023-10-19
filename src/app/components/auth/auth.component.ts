@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { catchError } from 'rxjs';
 import { alerUserWrong, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -35,9 +36,7 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.select(state => state.app.path).subscribe((path: string) => {
-      this.url = path;
-    });
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path;});
   }
 
   seePassword() {
@@ -54,7 +53,14 @@ export class AuthComponent implements OnInit {
       
       loading(true)
         this.api.logIn(this.url, this.formUserLogIn.value)
-          .subscribe((res: any) => {
+        .pipe(
+          catchError((error)=>{
+            loading(false)
+            alertServerDown()
+            return error
+          })
+        )  
+        .subscribe((res: any) => {
             loading(false)
 
             let userResponse: GETUser = res
@@ -72,13 +78,14 @@ export class AuthComponent implements OnInit {
               this.store.dispatch(Token({ token: userResponse.token }))
 
               if (userResponse.data.role.idRol === 1) {
-                loading(false)
+                // loading(false)
                 this.router.navigate(['/almacen/inicio'])
 
               } else if (userResponse.data.role.idRol === 2) {
                 //this.router.navigate(['/user-almacen/inicio'])
 
               } else if (userResponse.data.role.idRol === 3) {
+                // loading(false)
                 this.router.navigate(['/user-almacen/inicio'])
 
               } else {
@@ -88,11 +95,9 @@ export class AuthComponent implements OnInit {
               this.formUserLogIn.reset()
             } else {
               alerUserWrong()
-              this.formUserLogIn.get('password')?.reset()
+              //this.formUserLogIn.get('password')?.reset()
             }
-            () => {
-              alertServerDown();
-            }
+            
           })
 
     }

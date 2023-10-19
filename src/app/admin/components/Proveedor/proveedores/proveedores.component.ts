@@ -38,35 +38,45 @@ export class ProveedoresComponent implements OnInit {
   }
 
   findByName() {
-    if (this.formProveedor.value.razonSocial.length >= 5) {
-
+    if (this.formProveedor.value.razonSocial.length >= 4) {
+      //loading(true)
       this.api.findProveedorByRS(this.url, this.token, this.formProveedor.value.razonSocial)
         .pipe(
           catchError((error) => {
             alertServerDown();
+            //loading(false)
             return error;
           })
         )
         .subscribe((res: any) => {
+          //loading(false)
+
           let options = res.data
           this.filterOptions = []
+          
           options.forEach((item: any) => {
             this.filterOptions.push(item)
           });
+          
         })
     }
   }
 
   findByRNC() {
     if (this.formProveedor.value.rnc.length >= 5) {
+      loading(true)
       this.api.findProveedorByRNC(this.url, this.token, this.formProveedor.value.rnc)
         .pipe(
           catchError((error) => {
             alertServerDown();
+            loading(false)
+
             return error;
           })
         )
         .subscribe((res: any) => {
+          loading(false)
+
           if (res.data !== null) {
 
             this.formProveedor.patchValue({

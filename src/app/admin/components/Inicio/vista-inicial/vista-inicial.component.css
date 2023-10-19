@@ -51,7 +51,7 @@
 .cardLastOnes, .cardLastOnesEntradas{
   border-left: 5px #004b8d solid;
   grid-column: 3/5;
-  width: 100%;
+  width: 97%;
   margin: 10px 10px;
   cursor: pointer;
 }
@@ -78,7 +78,7 @@
 .cardRecinto{
   display: grid;
   place-items: center;
-  background-color: rgba(255, 111, 16, 0.808);
+  background-color: rgba(255, 112, 16, 0.603);
   width: 100;
   margin: 10px 10px;
   color: white;

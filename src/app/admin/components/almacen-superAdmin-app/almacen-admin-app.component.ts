@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { alertLogOut, alertServerDown } from '../../Helpers/alertsFunctions';
@@ -7,8 +7,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, filter, map } from 'rxjs';
+import { catchError, filter, map, throwError } from 'rxjs';
 import { salidaService } from '../../Services/salida.service';
+import { App } from 'src/app/store/actions';
+import { inicialState } from 'src/app/store/reducer';
+import { TransferenciaComponent } from '../Transferencia/transferencia.component';
+import { entradaService } from '../../Services/entrada.service';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -38,10 +42,38 @@ export class AlmacenAdminAppComponent implements OnInit {
     public dialog: MatDialog,
     private store: Store<{ app: AppState }>,
     private apiSalida: salidaService,
+    //private apiEntrada: entradaService,
     private local: LocalStorageService,
     private api: AuthService,
+    //private transferCom: TransferenciaComponent,
     private router: Router,
-  ) {}
+  ) {
+
+    // this.apiEntrada.eventoEmitido.subscribe(() => {
+    //   this.getSalidaTransferencia();
+    // });
+  }
+
+  ngOnInit() {
+    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+    
+    //this.apiEntrada.miVariable$.subscribe(() => { this.getSalidaTransferencia(); console.log("klk mi loco");
+    //});
+    
+    this.getSalidaTransferencia();
+    // this.router.events.pipe(
+    //   filter(event => event instanceof NavigationEnd)
+    // ).subscribe(() => {
+    // });
+    // this.hearingTransferChanges()
+  }
+
+  // hearingTransferChanges(){
+  //   this.transferCom.transferChange.subscribe(()=>{
+  //     this.getSalidaTransferencia()
+  //   })
+  // }
 
   toggleSubmenu() {
     this.submenu = !this.submenu
@@ -75,16 +107,7 @@ export class AlmacenAdminAppComponent implements OnInit {
     if (this.submenuProductos) this.submenuEntrada = false;
   }
 
-  ngOnInit() {
-    this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
-    this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
 
-    // this.router.events.pipe(
-    //   filter(event => event instanceof NavigationEnd)
-    // ).subscribe(() => {
-    // });
-    this.getSalidaTransferencia()
-  }
 
   getSalidaTransferencia() {
 
@@ -96,7 +119,7 @@ export class AlmacenAdminAppComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        let proceso = [] 
+        let proceso = []
 
         res.data.map((detalle: any) => {
           if (detalle.estado == 'EN PROCESO') {
@@ -112,18 +135,25 @@ export class AlmacenAdminAppComponent implements OnInit {
     let closeAccount: boolean = await alertLogOut()
 
     if (closeAccount) {
-      this.local.removeDataLocalStorage('token')
-      this.local.removeDataLocalStorage('userData')
 
-      this.api.IsLoggedIn(false)
+      console.log(this.token);
+
       this.api.logOut(this.url, this.token)
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error);
           })
-        )
+        ).subscribe((res: any) => {
+          console.log(res);
+        })
+
+      this.local.removeDataLocalStorage('token')
+      this.local.removeDataLocalStorage('userData')
+
+      //this.store.dispatch(App({ app: inicialState }))
       this.router.navigate(['/login'])
+      this.api.IsLoggedIn(false)
     }
   }
 

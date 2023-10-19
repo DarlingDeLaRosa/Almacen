@@ -5,7 +5,7 @@ import { authGuard, authGuardBackToLogIn } from './guards/auth-guard';
 import { roleSuperAdminGuard, roleUserGuard } from './guards/role-guards';
 
 const routes: Routes = [
-  { path: 'login', component: AuthComponent, canActivate: [authGuardBackToLogIn]},
+  { path: 'login', component: AuthComponent, canActivate: []},
   {
     path: 'almacen',
     canActivate: [authGuard, roleSuperAdminGuard],

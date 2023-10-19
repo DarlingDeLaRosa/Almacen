@@ -210,6 +210,15 @@ export function alertRemoveSuccess() {
   })
 }
 
+export function noLessThanO() {
+  Swal.fire({
+    icon: 'error',
+    title: 'Cantidad no puede ser cero.',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
 export function alerUserWrong() {
   Swal.fire({
     icon: 'error',

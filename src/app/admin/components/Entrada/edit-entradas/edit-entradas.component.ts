@@ -10,7 +10,7 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { detalleEditProductoEntrada, detalleProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, combineLatest } from 'rxjs';
 
@@ -408,6 +408,11 @@ export class EditEntradasComponent {
       return producto.nombre === this.formEditDetalleEntrada.value.idProducto;
     });
 
+    if (this.formEditDetalleEntrada.value.cantidad < 1) {
+      noLessThanO()
+      return
+    }
+
     if (this.formEditDetalleEntrada.valid && this.formEditEntrada.valid) {
       if (exisProducto) {
 
@@ -722,6 +727,14 @@ export class EditEntradasComponent {
                 catchError((error) => {
                   loading(false)
                   alertServerDown();
+
+                  this.detailGroup = []
+                  this.mostrarTotalItbis = 0
+                  this.totalResult = 0
+                  this.disableItbis = false
+                  this.formEditDetalleEntrada.reset()
+                  this.formEditEntrada.reset()
+
                   return error;
                 })
               )

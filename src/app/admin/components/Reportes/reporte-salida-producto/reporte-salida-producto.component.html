@@ -26,11 +26,12 @@
 
     <span style="display: flex;">
       <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
-      <button class="btnImprimir" mat-stroked-button printSectionId="reportesProSalidas" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesSalidasProducto" [useExistingCss]="true"
+        ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
-  <div>
+  <div id="reportesSalidasProducto">
 
     <h3 class="title">Reportes de salidas por producto</h3>
 

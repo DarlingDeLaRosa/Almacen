@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { changePassword, userAccount } from '../models/interfaces';
+import { userAccount } from '../models/interfaces';
 import { LocalStorageService } from './local-storage.service';
 import { AppState } from '../store/state';
 import { Store } from '@ngrx/store';
@@ -26,8 +26,11 @@ export class AuthService {
   }
 
   public logOut(url: string, token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const logOutHeader = { headers: headers}
+    
     const getUser = `${url}/Usuario/logout`
-    return this.http.post(getUser, token)
+    return this.http.post(getUser, '' ,logOutHeader)
   }
 
   public checkIsLoggedIn() {
@@ -38,8 +41,6 @@ export class AuthService {
     if(token && userData){
       this.store.dispatch(logIn({ user: userData }))
       this.store.dispatch(Token({ token: token }))
-
-      console.log(userData.role)
 
       this.IsLoggedIn(true)
       this.IsAdminRole(userData.role.idRol)

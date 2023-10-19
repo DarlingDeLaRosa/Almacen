@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -123,11 +123,11 @@ export class EditSalidasComponent {
         if (res.data != null) {
 
           loading(false)
-          
+
           this.respuesta = res.data.detalles
-          this.respuesta.map((detalle:any)=>{
-            this.idProductoList.filter((item: any) => { 
-              if (item.nombre == detalle.producto.nombre && this.productoList.filter(pitem=> pitem.nombre == item.nombre).length == 0 ) this.productoList.push(item) 
+          this.respuesta.map((detalle: any) => {
+            this.idProductoList.filter((item: any) => {
+              if (item.nombre == detalle.producto.nombre && this.productoList.filter(pitem => pitem.nombre == item.nombre).length == 0) this.productoList.push(item)
             });
           })
 
@@ -209,7 +209,7 @@ export class EditSalidasComponent {
           this.idProductoList = res.data
 
           res.data.map((producto: any) => {
-            if (producto.stock !== 0) 
+            if (producto.stock !== 0)
               this.productoList.push(producto)
           })
         }
@@ -336,6 +336,11 @@ export class EditSalidasComponent {
       return producto.nombre === this.formDetalleEditSalida.value.idProducto;
     });
 
+    if (this.formDetalleEditSalida.value.cantidad < 1) {
+      noLessThanO()
+      return
+    }
+
     if (this.formDetalleEditSalida.valid && this.formEditSalida.valid) {
       if (exisProducto) {
         if (this.isSerial && this.formDetalleEditSalida.value.cantidad == 1 || this.isSerial == false) {
@@ -358,13 +363,13 @@ export class EditSalidasComponent {
           // console.log(this.formDetalleEditSalida.value.cantidad);
           // console.log(this.formDetalleEditSalida.value.existencia);
 
-          if(this.formDetalleEditSalida.value.idSalidaDet !== null){
+          if (this.formDetalleEditSalida.value.idSalidaDet !== null) {
             let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
               return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
             });
 
             this.ediExis = setValuesform[0].cantidad
-            
+
           }
 
           //
@@ -377,21 +382,21 @@ export class EditSalidasComponent {
             || this.formDetalleEditSalida.value.idSalidaDet == null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia
           ) {
 
-            if(this.formDetalleEditSalida.value.idSalidaDet == null && !this.isSerial){
+            if (this.formDetalleEditSalida.value.idSalidaDet == null && !this.isSerial) {
               let cantidadTotal: number = 0
-              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleEditSalida.value.idProducto )
+              let detailSerialNoExist = this.detailGroup.filter(detalle => detalle.serial == null && detalle.idProducto == this.formDetalleEditSalida.value.idProducto)
 
-              if(detailSerialNoExist.length > 0){
+              if (detailSerialNoExist.length > 0) {
 
-                detailSerialNoExist.map((detalle:any)=> {
+                detailSerialNoExist.map((detalle: any) => {
                   cantidadTotal += detalle.cantidad
                 })
-                
+
                 console.log(cantidadTotal);
 
-                if(cantidadTotal + this.formDetalleEditSalida.value.cantidad > this.formDetalleEditSalida.value.existencia){
+                if (cantidadTotal + this.formDetalleEditSalida.value.cantidad > this.formDetalleEditSalida.value.existencia) {
                   alertNumItems(this.formDetalleEditSalida.value.existencia - cantidadTotal)
-                  if(this.formDetalleEditSalida.value.existencia - cantidadTotal == 0) this.formDetalleEditSalida.reset()
+                  if (this.formDetalleEditSalida.value.existencia - cantidadTotal == 0) this.formDetalleEditSalida.reset()
                   return
                 }
               }
@@ -400,14 +405,14 @@ export class EditSalidasComponent {
             this.detailGroup.push(this.formDetalleEditSalida.value)
             //this.resultSubTotal += this.formDetalleEditSalida.value.subTotal
 
-            if(this.formDetalleEditSalida.value.idSalidaDet == null && this.isSerial){
+            if (this.formDetalleEditSalida.value.idSalidaDet == null && this.isSerial) {
               const exisProducts = this.detailGroup.some(producto => {
                 return producto.idProducto === this.formDetalleEditSalida.value.idProducto;
               });
-              
-              if(exisProducts && this.listadeProducto.length == 0  ) { //|| !exisProducts && this.detailGroup.length > 0
+
+              if (exisProducts && this.listadeProducto.length == 0) { //|| !exisProducts && this.detailGroup.length > 0
                 this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleEditSalida.value.idProducto)
-              }  
+              }
             }
             this.sumaTotal()
             this.formDetalleEditSalida.reset()
@@ -679,7 +684,7 @@ export class EditSalidasComponent {
 
     if (this.formEditSalida.valid && this.detailGroup.length > 0) {
 
-      if(this.formDetalleEditSalida.valid){
+      if (this.formDetalleEditSalida.valid) {
         alertUnableSend()
         return
       }
@@ -737,6 +742,12 @@ export class EditSalidasComponent {
                 catchError((error) => {
                   loading(false)
                   alertServerDown();
+
+                  this.detailGroup = []
+                  this.resultSubTotal = 0
+                  this.formEditSalida.reset()
+                  this.formDetalleEditSalida.reset()
+                  
                   return throwError(error);
                 })
               )

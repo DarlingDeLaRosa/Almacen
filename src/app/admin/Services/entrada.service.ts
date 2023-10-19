@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { detalleProductoEntrada, detallePutGroup, postEntrada, putEntrada } from '../models/interfaces';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import { detalleProductoEntrada, detallePutGroup, postEntrada, putEntrada } from
 export class entradaService {
 
   cantidadItems = 15
+  //public miVariable$ = new BehaviorSubject<boolean>(false);
+
   constructor(private http: HttpClient) { }
 
   public getEntrada(url: string, token: string, page: number, itemPorPage: number) {
@@ -105,6 +108,7 @@ export class entradaService {
   // Entrada automatica de transferencia
 
   public postTransferenciaEntrada(url: string, id: number, token: string) {
+    
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const detalleEntradaHeader = {headers: headers}
 
