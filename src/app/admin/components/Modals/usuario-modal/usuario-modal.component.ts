@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { alertIsSuccess, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { persona, recinto, rol } from 'src/app/admin/models/interfaces';
@@ -67,6 +67,8 @@ export class UsuarioModalComponent implements OnInit {
 
     this.getRol();
     this.getRecinto();
+    this.getPersona()
+
   }
 
   closeModal() {
@@ -82,8 +84,33 @@ export class UsuarioModalComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        if (res) {
-          this.rolesList = res.data
+        if (res.data !== null) {
+          
+          res.data.map((rol:any)=>{
+            if (rol.idRol != 2) {
+              this.rolesList.push(rol)
+            }
+          })
+        }
+      })
+  }
+
+  getPersona() {
+    this.api.getPerson(this.url, this.token, 1, 400)
+      .pipe(
+        catchError((error) => {
+          alertServerDown();
+          return throwError(error);
+        })
+      )
+      .subscribe((res: any) => {
+        if (res !== null) {
+          let options = res.data
+
+          options.forEach((item: any) => {
+            this.supInmediatoList.push(item)
+            this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
+          });
         }
       })
   }

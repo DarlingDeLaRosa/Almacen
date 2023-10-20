@@ -5,7 +5,7 @@ import { AppState, User } from 'src/app/store/state';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { Store } from '@ngrx/store';
-import { catchError, combineLatest } from 'rxjs';
+import { catchError, combineLatest, throwError } from 'rxjs';
 import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
@@ -22,6 +22,7 @@ export class AdminUsuariosComponent implements OnInit {
   token: string = ''
   pagina: number = 1
   loading: boolean = false;
+  userEmail: string = '';
 
   constructor(
     public dialog: MatDialog,
@@ -37,9 +38,11 @@ export class AdminUsuariosComponent implements OnInit {
 
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.correo),
+    ]).subscribe(([tokenValue, pathValue, user]) => {
 
+      this.userEmail = user
       this.url = pathValue;
       this.token = tokenValue;
 
@@ -59,8 +62,6 @@ export class AdminUsuariosComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
-        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -74,7 +75,7 @@ export class AdminUsuariosComponent implements OnInit {
         .pipe(
           catchError((error) => {
             alertServerDown();
-            return error;
+            return throwError(error) ;
           })
         )
         .subscribe((res: any) => {

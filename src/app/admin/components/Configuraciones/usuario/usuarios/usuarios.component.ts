@@ -69,7 +69,12 @@ export class UsuariosComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res.data !== null) {
-          this.rolesList = res.data
+          
+          res.data.map((rol:any)=>{
+            if (rol.idRol != 2) {
+              this.rolesList.push(rol)
+            }
+          })
         }
       })
   }
@@ -94,7 +99,7 @@ export class UsuariosComponent implements OnInit {
       .pipe(
         catchError((error) => {
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {

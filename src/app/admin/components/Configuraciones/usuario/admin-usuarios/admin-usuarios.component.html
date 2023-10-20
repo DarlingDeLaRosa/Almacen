@@ -16,7 +16,7 @@
 
 <table>
   <thead class="headerTable">
-    <tr class="headerRow">
+    <tr class="headerRow" >
       <th class="headerCell">Rol</th>
       <th class="headerCell">Recinto</th>
       <th class="headerCell">Cedula</th>
@@ -47,8 +47,16 @@
       <td class="dataCell">{{item.celular}}</td>
       <td class="dataCell">{{item.creadoPor.nombre}}</td>
       <td class="dataCell">{{item.supervisor.nombre}} {{item.supervisor.apellido}}</td>
-      <td class="dataCell"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button></td>
-      <td class="dataCell"> <button class="fucRem" (click)="removeAlert(item.idUsuario)"><mat-icon>delete</mat-icon></button></td>
+      <td class="dataCell"> 
+        <button class="fucEdit" *ngIf="userEmail == 'elisandre.polanco@isfodosu.edu.do' && item.correo != 'elisandre.polanco@isfodosu.edu.do'" (click)="openModal(item)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+      <td class="dataCell"> 
+        <button class="fucRem" *ngIf="userEmail == 'elisandre.polanco@isfodosu.edu.do'  && item.correo != 'elisandre.polanco@isfodosu.edu.do'" (click)="removeAlert(item.idUsuario)"> <!--*ngIf="item.correo != 'elisandre.polanco@isfodosu.edu.do' && item.correo !=  userEmail "-->
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
     </tr>
   </tbody>
 
