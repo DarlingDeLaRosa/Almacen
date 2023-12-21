@@ -18,12 +18,12 @@ const routes: Routes = [
     loadChildren: ()=>
     import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
   },
-  {
-    path: 'admin-almacen',
-    loadChildren: ()=>
-    //crear modulo admin
-    import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
-  },
+  // {
+  //   path: 'admin-almacen',
+  //   loadChildren: ()=>
+  //   //crear modulo admin
+  //   import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
+  // },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login'},
 ];

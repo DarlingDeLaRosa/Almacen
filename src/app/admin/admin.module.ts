@@ -115,6 +115,8 @@ import { TransferenciaComponent } from './components/Transferencia/transferencia
     NgxPrintModule,
   ],
   exports:[
+    AdminProductosComponent,
+    ProductosComponent,
     AdminEntradasComponent,
     EditEntradasComponent,
     EntradasComponent,

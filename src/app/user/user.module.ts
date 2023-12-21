@@ -12,6 +12,8 @@ import { AdminUserSalidasComponent } from './components/salidas/admin-user-salid
 import { EditUserEntradasComponent } from './components/entradas/edit-user-entradas/edit-user-entradas.component';
 import { AdminUserEntradasComponent } from './components/entradas/admin-user-entradas/admin-user-entradas.component';
 import { UserEntradasComponent } from './components/entradas/user-entradas/user-entradas.component';
+import { AdminProductoComponent } from './components/productos/admin-producto/admin-producto.component';
+import { ProductosComponent } from './components/productos/productos/productos.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { UserEntradasComponent } from './components/entradas/user-entradas/user-
     AdminUserSalidasComponent,
     EditUserEntradasComponent,
     AdminUserEntradasComponent,
-    UserEntradasComponent
+    UserEntradasComponent,
+    AdminProductoComponent,
+    ProductosComponent
   ],
   imports: [
     AdminModule,

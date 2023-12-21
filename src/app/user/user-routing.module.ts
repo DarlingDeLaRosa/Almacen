@@ -8,6 +8,8 @@ import { UserEntradasComponent } from './components/entradas/user-entradas/user-
 import { UserSalidasComponent } from './components/salidas/user-salidas/user-salidas.component';
 import { EditUserSalidasComponent } from './components/salidas/edit-user-salidas/edit-user-salidas.component';
 import { EditUserEntradasComponent } from './components/entradas/edit-user-entradas/edit-user-entradas.component';
+import { AdminProductoComponent } from './components/productos/admin-producto/admin-producto.component';
+import { ProductosComponent } from './components/productos/productos/productos.component';
 
 // Tengo que saber si podre usar los componentes del admin debido a la ruta que utiliza.. TODO
 const routes: Routes = [
@@ -17,9 +19,11 @@ const routes: Routes = [
     children: [
       { path: 'administrar-entrada', component: AdminUserEntradasComponent },
       { path: 'administrar-salida', component: AdminUserSalidasComponent },
+      { path: 'administrar-producto', component: AdminProductoComponent},
 
       { path: 'entrada', component: UserEntradasComponent },
       { path: 'salida', component: UserSalidasComponent },
+      { path: 'producto', component: ProductosComponent },
 
       { path: 'editar-entrada/:id', component: EditUserSalidasComponent },
       { path: 'editar-salida/:id', component: EditUserEntradasComponent },
