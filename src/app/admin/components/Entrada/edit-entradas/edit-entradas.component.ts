@@ -127,7 +127,6 @@ export class EditEntradasComponent {
       .subscribe((res: any) => {
         loading(false)
 
-        console.log(res.data)
         this.respuesta = res.data.detalles
 
         if (res.success && res.data !== null) {
@@ -490,7 +489,6 @@ export class EditEntradasComponent {
 
   editDetail(index: number, detalle: detallePutGroup) {
 
-    console.log(detalle)
     if (!this.formEditDetalleEntrada.valid) {
 
       let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
@@ -542,7 +540,6 @@ export class EditEntradasComponent {
       //   })
       // }
 
-      console.log(this.formEditDetalleEntrada.value)
 
       //this.mostrarTotalItbis -= detalle.itbisProducto * detalle.cantidad
       //this.totalResult -= detalle.subTotal
@@ -585,7 +582,6 @@ export class EditEntradasComponent {
   }
 
   duplicateDetail(producto: detallePutGroup) {
-    console.log(producto);
 
     if (!this.formEditDetalleEntrada.valid) {
       this.formEditDetalleEntrada.patchValue({
@@ -695,11 +691,9 @@ export class EditEntradasComponent {
         )
         .subscribe((res: any) => {
 
-          console.log(res)
           if (res.data !== null) {
 
             this.detailGroup.map((detail: any) => {
-              console.log(detail)
 
               //let idsDetalles = this.respuesta.filter((detalle: any) => {
               //  if (detalle.idEntradaDet == detail.idEntradaDet && detalle.producto.nombre == detail.idProducto) {

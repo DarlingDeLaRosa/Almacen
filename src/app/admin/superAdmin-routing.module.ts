@@ -36,55 +36,187 @@ import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-sa
 import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
 import { TransferenciaComponent } from './components/Transferencia/transferencia.component';
+import { userPermissionGuard } from './guards/user-permission-guard';
+import { authGuard } from '../guards/auth-guard';
 
 const routes: Routes = [
   {
     path: 'almacen',
     component: AlmacenAdminAppComponent,
+    canActivate: [authGuard],
     children: [
-      {path: 'inicio', component: VistaInicialComponent,},
+      {
+        path: 'inicio',
+        component: VistaInicialComponent,
 
-      {path: 'entrada', component: EntradasComponent,},
-      {path: 'administrar-entrada', component: AdminEntradasComponent},
-      {path: 'editar-entrada/:id', component: EditEntradasComponent},
+      },
 
-      {path: 'transferencia', component: TransferenciaComponent},
+      {
+        path: 'entrada',
+        component: EntradasComponent,
 
-      {path: 'salida', component: SalidasComponent },
-      {path: 'administrar-salida', component: AdminSalidasComponent},
-      {path: 'editar-salida/:id', component: EditSalidasComponent},
+      },
+      {
+        path: 'administrar-entrada',
+        component: AdminEntradasComponent,
 
-      { path: 'productos', component: ProductosComponent },
-      { path: 'administrar-producto', component: AdminProductosComponent },
+      },
+      {
+        path: 'editar-entrada/:id',
+        component: EditEntradasComponent,
 
-      { path: 'proveedores', component: ProveedoresComponent },
-      { path: 'administrar-proveedores', component: AdminProveedoresComponent },
+      },
 
-      { path: 'usuarios', component: UsuariosComponent },
-      { path: 'administrar-usuarios', component: AdminUsuariosComponent },
+      {
+        path: 'transferencia',
+        component: TransferenciaComponent,
 
-      { path: 'tipo-medida', component: TipoMedidaComponent },
-      { path: 'tipo-entrada', component: TipoEntradaComponent },
-      { path: 'tipo-salida', component: TipoSalidaComponent },
-      { path: 'tipo-producto', component: TipoProductoComponent },
-      { path: 'tipo-entrega', component: TipoEntregaComponent },
-      { path: 'tipo-almacen', component: TipoAlmacenComponent },
+      },
 
-      { path: 'administrar-tipo-almacen', component: AdminTipoAlmacenComponent },
-      { path: 'administrar-tipo-entrada', component: AdminTipoEntradaComponent },
-      { path: 'administrar-tipo-medida', component: AdminTipoMedidaComponent },
-      { path: 'administrar-tipo-salida', component: AdminTipoSalidaComponent },
-      { path: 'administrar-tipo-producto', component: AdminTipoProductoComponent },
-      { path: 'administrar-tipo-entrega', component: AdminTipoEntregaComponent },
+      {
+        path: 'salida',
+        component: SalidasComponent,
 
-      { path: 'reporteInventario', component: InventarioExistenteComponent },
-      { path: 'reporteEntrada', component: ReporteEntradaComponent },
-      { path: 'reporteSalida', component: ReporteSalidaComponent },
-      { path: 'reporteProveedor', component: ReporteProveedorComponent },
-      { path: 'reporteProductoEntrada', component: ReporteEntradaProductoComponent},
-      { path: 'reporteProductoSalida', component: ReporteSalidaProductoComponent},
-      //{ path: 'reporteTransparencia', component: ReporteTransparenciaComponent},
-      { path: 'reporteStock', component: MinStockProductComponent},
+      },
+      {
+        path: 'administrar-salida',
+        component: AdminSalidasComponent,
+
+      },
+      {
+        path: 'editar-salida/:id',
+        component: EditSalidasComponent,
+
+      },
+
+      {
+        path: 'productos',
+        component: ProductosComponent,
+
+      },
+      {
+        path: 'administrar-producto',
+        component: AdminProductosComponent,
+
+      },
+
+      {
+        path: 'proveedores',
+        component: ProveedoresComponent,
+
+      },
+      {
+        path: 'administrar-proveedores',
+        component: AdminProveedoresComponent,
+
+      },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-usuarios',
+        component: AdminUsuariosComponent,
+        canActivate: [userPermissionGuard]
+      },
+
+      {
+        path: 'tipo-medida',
+        component: TipoMedidaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'tipo-entrada',
+        component: TipoEntradaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'tipo-salida',
+        component: TipoSalidaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'tipo-producto',
+        component: TipoProductoComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'tipo-entrega',
+        component: TipoEntregaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'tipo-almacen',
+        component: TipoAlmacenComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-almacen',
+        component: AdminTipoAlmacenComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-entrada',
+        component: AdminTipoEntradaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-medida',
+        component: AdminTipoMedidaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-salida',
+        component: AdminTipoSalidaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-producto',
+        component: AdminTipoProductoComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'administrar-tipo-entrega',
+        component: AdminTipoEntregaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteInventario',
+        component: InventarioExistenteComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteEntrada',
+        component: ReporteEntradaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteSalida',
+        component: ReporteSalidaComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteProveedor',
+        component: ReporteProveedorComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteProductoEntrada',
+        component: ReporteEntradaProductoComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteProductoSalida',
+        component: ReporteSalidaProductoComponent,
+        canActivate: [userPermissionGuard]
+      },
+      {
+        path: 'reporteStock',
+        component: MinStockProductComponent,
+        canActivate: [userPermissionGuard]
+      },
+      // { path: '**', redirectTo: '/almacen/inicio', pathMatch: 'full' },
     ]
   },
 

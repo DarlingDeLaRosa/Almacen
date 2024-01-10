@@ -60,7 +60,6 @@ export class InventarioExistenteComponent implements OnInit {
       })
     )  
     .subscribe((res: any) => {
-      console.log(res);
       
         this.loading = false
         this.noPage = res.cantPage

@@ -60,8 +60,6 @@ export class AdminProductosComponent implements OnInit {
       })
     ) 
     .subscribe((res: any) => {
-        console.log(res)
-
         this.loading = false
 
         this.noPage = res.cantPage
@@ -70,7 +68,6 @@ export class AdminProductosComponent implements OnInit {
   }
 
   dataFilter() {
-    console.log(this.filterProducto.value.filter)
     if (this.filterProducto.value.filter.length >= 3) {
 
       this.api.filterProducto(this.url, this.token, this.pagina, this.filterProducto.value.filter)

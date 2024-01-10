@@ -6,7 +6,7 @@ import { catchError } from 'rxjs';
 import { alerUserWrong, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { Loading, Token, logIn } from 'src/app/store/actions';
+import { Token, logIn } from 'src/app/store/actions';
 import { AppState, GETUser, User } from 'src/app/store/state';
 
 
@@ -78,15 +78,16 @@ export class AuthComponent implements OnInit {
               this.store.dispatch(Token({ token: userResponse.token }))
 
               if (userResponse.data.role.idRol === 1) {
-                // loading(false)
                 this.router.navigate(['/almacen/inicio'])
+                // loading(false)
 
               } else if (userResponse.data.role.idRol === 2) {
                 //this.router.navigate(['/user-almacen/inicio'])
 
               } else if (userResponse.data.role.idRol === 3) {
                 // loading(false)
-                this.router.navigate(['/user-almacen/inicio'])
+                // this.router.navigate(['/user-almacen/inicio'])
+                this.router.navigate(['/almacen/inicio'])
 
               } else {
                 this.router.navigate(['/login'])

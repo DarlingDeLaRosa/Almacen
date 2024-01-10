@@ -8,9 +8,9 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
 
   auth.checkIsLoggedIn()
-  console.log(auth.LoggedIn);
   
   if(auth.LoggedIn){
+    // router.navigate(['/almacen'])
     return true
   }else{
     router.navigate(['/login'])
@@ -18,29 +18,29 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 };
 
-// export const authGuardBackToApp: CanActivateFn = (route, state) => {
+// export const rediretGuard: CanActivateFn = (route, state) => {
 
 //   const auth = inject(AuthService)
 //   const router = inject(Router)
 
 //   auth.checkIsLoggedIn()
 
-//   if(auth.LoggedIn == false){
-//     router.navigate(['/login'])
-//     return false
+//   if(auth.LoggedIn){
+//     return router.createUrlTree(['almacen/inicio']);
+//   }else{
+//     return router.createUrlTree(['login'])
 //   }
-//   return true
 // };
 
 export const authGuardBackToLogIn: CanActivateFn = (route, state) => {
 
   const auth = inject(AuthService)
-  const router = inject(Router)
+  // const router = inject(Router)
 
   auth.checkIsLoggedIn()
 
   if(auth.LoggedIn){
-    router.navigate(['/almacen/inicio'])
+    // router.navigate(['/almacen/inicio'])
     return false
   }else{
     return true

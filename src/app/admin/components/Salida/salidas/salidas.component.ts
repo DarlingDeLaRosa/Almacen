@@ -120,7 +120,6 @@ export class SalidasComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
 
         this.idProductoList = res.data
         res.data.map((producto: any) => {
@@ -264,8 +263,6 @@ export class SalidasComponent implements OnInit {
                   cantidadTotal += detalle.cantidad
                 })
 
-                console.log(cantidadTotal);
-
                 if (cantidadTotal + this.formDetalleSalida.value.cantidad > this.formDetalleSalida.value.existencia) {
                   alertNumItems(this.formDetalleSalida.value.existencia - cantidadTotal)
                   if (this.formDetalleSalida.value.existencia - cantidadTotal == 0) this.formDetalleSalida.reset()
@@ -302,9 +299,6 @@ export class SalidasComponent implements OnInit {
     } else {
       alertNoValidForm()
     }
-
-    console.log(this.detailGroup);
-
   }
 
   editDetail(index: number, item: detalleProductoSalida) {
@@ -427,7 +421,6 @@ export class SalidasComponent implements OnInit {
             })
 
             this.listadeProducto.shift()
-            //console.log(this.listadeProducto);
 
             this.subTotalResult()
 
@@ -437,7 +430,6 @@ export class SalidasComponent implements OnInit {
 
             // if(this.detailGroup.length > 0){
             //   this.detailGroup.map((detalle:any)=>{
-            //     console.log(detalle)
             //     if(detalle.idProducto == producto){
             //       numberOfItems += detalle.cantidad
             //     }

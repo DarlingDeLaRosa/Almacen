@@ -64,8 +64,6 @@ export class ReporteProveedorComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
-
         this.loading = false;
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -73,7 +71,6 @@ export class ReporteProveedorComponent implements OnInit {
   }
 
   dataFilter() {
-    console.log(this.filterRepProveedor.value.filter)
     if (this.filterRepProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)

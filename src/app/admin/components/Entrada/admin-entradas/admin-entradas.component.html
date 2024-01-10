@@ -1,10 +1,10 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button *ngIf="idRol == 1; else sup" mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button>
-    <ng-template #sup>
+    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button> <!--*ngIf="idRol == 1; else sup"-->
+    <!-- <ng-template #sup>
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva entrada</button>
-    </ng-template>
+    </ng-template> -->
 
     <form [formGroup]="filterEntrada">
       <mat-form-field appearance="fill">
@@ -30,8 +30,8 @@
           <th class="headerCell">Creado por</th>
           <th class="headerCell">Monto</th>
           <th class="fuctionCell"></th>
-          <th class="fuctionCell" *ngIf="idRol == 1; else remove"></th>
-          <th class="fuctionCell" *ngIf="idRol == 1; else remove"></th>
+          <th class="fuctionCell"></th> <!--*ngIf="idRol == 1; else remove"-->
+          <th class="fuctionCell"></th> <!--*ngIf="idRol == 1; else remove"-->
           <ng-template #remove></ng-template>
         </tr>
       </thead>
@@ -48,11 +48,12 @@
           <td class="dataCell">{{item.creadoPor.nombre}}</td>
           <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"> <button class="fucDetails" (click)="openModal(item.idEntrada)"><mat-icon>list</mat-icon></button></td>
-          <td class="dataCell" *ngIf="idRol == 1 && item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else supp"> <button  [routerLink]="['/almacen/editar-entrada', item.idEntrada]" class="fucEdit"><mat-icon>edit</mat-icon></button></td>
+          <td class="dataCell" *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else supp"> <button  [routerLink]="['/almacen/editar-entrada', item.idEntrada]" class="fucEdit">
+            <mat-icon>edit</mat-icon></button></td> <!--idRol == 1 && -->
           <ng-template #supp><td class="dataCell"></td></ng-template>
 
-          <td *ngIf="idRol == 1 && item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else btnremove" class="dataCell"> <button (click)="removeAlert(item.idEntrada)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
-          <ng-template #btnremove><td class="dataCell"></td></ng-template>
+          <td *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else btnremove" class="dataCell"> <button (click)="removeAlert(item.idEntrada)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <ng-template #btnremove><td class="dataCell"></td></ng-template> <!--idRol == 1 && -->
         </tr>
       </tbody>
 

@@ -1,18 +1,14 @@
-import { Component, OnInit, effect } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { alertLogOut, alertServerDown } from '../../Helpers/alertsFunctions';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ChangePasswordComponent } from '../Modals/change-password/change-password.component';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, filter, map, throwError } from 'rxjs';
 import { salidaService } from '../../Services/salida.service';
-import { App } from 'src/app/store/actions';
-import { inicialState } from 'src/app/store/reducer';
-import { TransferenciaComponent } from '../Transferencia/transferencia.component';
-import { entradaService } from '../../Services/entrada.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-almacen-admin-app',
@@ -24,6 +20,7 @@ export class AlmacenAdminAppComponent implements OnInit {
   dataFiltered: number = 0;
   url!: string;
   token!: string
+  rol!: number
   sidenavOpened: boolean = false;
   userName$ = this.store.select(state => state.app.user.nombre)
   userLastName$ = this.store.select(state => state.app.user.apellido)
@@ -56,11 +53,10 @@ export class AlmacenAdminAppComponent implements OnInit {
 
   ngOnInit() {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
+    this.store.select(state => state.app.user.role.idRol).subscribe((rol: number) => { this.rol = rol; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
-    
-    //this.apiEntrada.miVariable$.subscribe(() => { this.getSalidaTransferencia(); console.log("klk mi loco");
-    //});
-    
+
+
     this.getSalidaTransferencia();
     // this.router.events.pipe(
     //   filter(event => event instanceof NavigationEnd)
@@ -136,8 +132,6 @@ export class AlmacenAdminAppComponent implements OnInit {
 
     if (closeAccount) {
 
-      console.log(this.token);
-
       this.api.logOut(this.url, this.token)
         .pipe(
           catchError((error) => {
@@ -145,15 +139,15 @@ export class AlmacenAdminAppComponent implements OnInit {
             return throwError(error);
           })
         ).subscribe((res: any) => {
-          console.log(res);
+          
+          this.local.removeDataLocalStorage('token')
+          this.local.removeDataLocalStorage('userData')
+
+          this.api.IsLoggedIn(false)
+          this.router.navigate(['/login'])
         })
-
-      this.local.removeDataLocalStorage('token')
-      this.local.removeDataLocalStorage('userData')
-
       //this.store.dispatch(App({ app: inicialState }))
-      this.router.navigate(['/login'])
-      this.api.IsLoggedIn(false)
+      // this.router.navigate(['/login'])
     }
   }
 

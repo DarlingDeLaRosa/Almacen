@@ -1,31 +1,26 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './components/auth/auth.component';
-import { authGuard, authGuardBackToLogIn } from './guards/auth-guard';
-import { roleSuperAdminGuard, roleUserGuard } from './guards/role-guards';
+import { authGuardBackToLogIn } from './guards/auth-guard'; 
 
 const routes: Routes = [
-  { path: 'login', component: AuthComponent, canActivate: []},
+  {
+    path: 'login',
+    component: AuthComponent, 
+    canActivate: [authGuardBackToLogIn]
+  },
   {
     path: 'almacen',
-    canActivate: [authGuard, roleSuperAdminGuard],
-    loadChildren: ()=>
-    import('./admin/superAdmin-routing.module').then((m)=>m.AdminRoutingModule)
+    loadChildren: () =>
+      import('./admin/superAdmin-routing.module').then((m) => m.AdminRoutingModule)
   },
   {
     path: 'user-almacen',
-    canActivate: [roleUserGuard],
-    loadChildren: ()=>
-    import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
+    loadChildren: () =>
+      import('./user/user-routing.module').then((m) => m.UserRoutingModule)
   },
-  // {
-  //   path: 'admin-almacen',
-  //   loadChildren: ()=>
-  //   //crear modulo admin
-  //   import('./user/user-routing.module').then((m)=>m.UserRoutingModule)
-  // },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login'},
+  { path: '', pathMatch: 'full', redirectTo: 'almacen/inicio' }, 
+  { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

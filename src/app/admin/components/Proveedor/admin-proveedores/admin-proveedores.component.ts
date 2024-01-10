@@ -69,7 +69,6 @@ export class AdminProveedoresComponent implements OnInit {
   }
 
   dataFilter() {
-    console.log(this.filterProveedor.value.filter)
     if (this.filterProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterProveedor.value.filter)

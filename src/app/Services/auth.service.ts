@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { userAccount } from '../models/interfaces';
-import { LocalStorageService } from './local-storage.service';
 import { AppState } from '../store/state';
 import { Store } from '@ngrx/store';
 import { Token, logIn } from '../store/actions';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +56,5 @@ export class AuthService {
   IsAdminRole(id: number){
     this.idRol = id;
   }
-
+  
 }

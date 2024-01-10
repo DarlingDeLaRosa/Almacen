@@ -67,7 +67,6 @@ export class ReporteTransparenciaComponent implements OnInit{
   }
 
   dataFilter() {
-    console.log(this.filterRepProveedor.value.filter)
     if (this.filterRepProveedor.value.filter.length >= 3) {
 
       this.api.filterProveedor(this.url, this.token, this.pagina, this.filterRepProveedor.value.filter)

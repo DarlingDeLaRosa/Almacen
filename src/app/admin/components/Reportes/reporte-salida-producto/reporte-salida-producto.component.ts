@@ -59,7 +59,6 @@ export class ReporteSalidaProductoComponent implements OnInit {
       })
     )    
     .subscribe((res: any) => {  
-      console.log(res);
             
         this.loading = false
         this.noPage = res.cantPage
@@ -69,7 +68,6 @@ export class ReporteSalidaProductoComponent implements OnInit {
 
   applyFilter() {
     if (this.filterRepSalida.value.filter.length >= 2) {
-      console.log(this.filterRepSalida.value.filter)
 
       this.api.getAllDetalleSalida(this.url, this.token, this.filterRepSalida.value.filter, '', '',this.pagina)
       .pipe(

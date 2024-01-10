@@ -358,10 +358,6 @@ export class EditSalidasComponent {
             }
           }
 
-          // console.log(this.formDetalleEditSalida.value.idSalidaDet);
-          // console.log(this.ediExis);
-          // console.log(this.formDetalleEditSalida.value.cantidad);
-          // console.log(this.formDetalleEditSalida.value.existencia);
 
           if (this.formDetalleEditSalida.value.idSalidaDet !== null) {
             let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
@@ -371,11 +367,6 @@ export class EditSalidasComponent {
             this.ediExis = setValuesform[0].cantidad
 
           }
-
-          //
-          //console.log(setValuesform[0].cantidad)
-          //console.log(this.formDetalleEditSalida.value);
-
 
           if (
             this.formDetalleEditSalida.value.idSalidaDet != null && this.formDetalleEditSalida.value.cantidad <= this.formDetalleEditSalida.value.existencia + this.ediExis
@@ -392,7 +383,6 @@ export class EditSalidasComponent {
                   cantidadTotal += detalle.cantidad
                 })
 
-                console.log(cantidadTotal);
 
                 if (cantidadTotal + this.formDetalleEditSalida.value.cantidad > this.formDetalleEditSalida.value.existencia) {
                   alertNumItems(this.formDetalleEditSalida.value.existencia - cantidadTotal)
@@ -470,7 +460,6 @@ export class EditSalidasComponent {
       } else {
         this.isSerial = false
       }
-      // console.log(this.formDetalleEditSalida.value)
       // this.resultSubTotal -= item.subTotal
     } else {
       alertUnableEdit()
@@ -627,7 +616,6 @@ export class EditSalidasComponent {
             })
 
             this.listadeProducto.shift()
-            //console.log(this.listadeProducto);
 
             this.subTotalResult()
 
@@ -637,7 +625,6 @@ export class EditSalidasComponent {
 
             // if(this.detailGroup.length > 0){
             //   this.detailGroup.map((detalle:any)=>{
-            //     console.log(detalle)
             //     if(detalle.idProducto == producto){
             //       numberOfItems += detalle.cantidad
             //     }
@@ -725,7 +712,6 @@ export class EditSalidasComponent {
               //      return detalle
               //    }
               //  })
-              //  console.log(idsDetalles)
 
               let idTipoProD = this.idProductoList.filter(item => item.nombre === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto

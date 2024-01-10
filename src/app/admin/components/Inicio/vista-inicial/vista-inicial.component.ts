@@ -146,7 +146,6 @@ export class VistaInicialComponent {
   }
 
   getProductoAgotaminetoRecinto(producto: number) {
-    console.log(producto);
     
     this.api.getProductoEscazesRecinto(this.url, this.token, producto)
       .pipe(
@@ -156,7 +155,6 @@ export class VistaInicialComponent {
         })
       )
       .subscribe((res: any) => {
-        console.log(res)
         this.dataRecintoEscasez = []
 
         res.data.map((recintos: any) => {
@@ -164,7 +162,6 @@ export class VistaInicialComponent {
             this.dataRecintoEscasez.push(recintos)
           }          
         })
-        console.log(this.dataRecintoEscasez);
       });
   }
 }

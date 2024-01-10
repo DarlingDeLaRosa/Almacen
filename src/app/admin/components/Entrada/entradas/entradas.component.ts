@@ -230,7 +230,6 @@ export class EntradasComponent implements OnInit {
             this.productoList.push(item)
           });
 
-          console.log(this.productoList)
         })
     } else {
       this.getProducto()
@@ -339,7 +338,6 @@ export class EntradasComponent implements OnInit {
           //this.totalResult += this.formDetalleEntrada.value.subTotal
 
           // if (this.generalITBIS == false) {
-          //   console.log('por aqui ');
 
           //   this.mostrarTotalItbis = 0
           //   this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral
@@ -397,7 +395,6 @@ export class EntradasComponent implements OnInit {
   }
 
   editDetail(index: number, producto: detalleProductoEntrada) {
-    console.log(producto)
     if (!this.formDetalleEntrada.valid) {
 
       //this.formDetalleEntrada.get('cantidad')?.reset 
@@ -406,8 +403,6 @@ export class EntradasComponent implements OnInit {
       let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
         return productoEspecifico.nombre == producto.idProducto
       });
-
-      console.log(setValuesform);
 
       this.detailGroup.splice(index, 1)
 
@@ -479,7 +474,6 @@ export class EntradasComponent implements OnInit {
   }
 
   duplicateDetail(producto: detalleProductoEntrada) {
-    console.log(producto);
 
     if (!this.formDetalleEntrada.valid) {
       this.formDetalleEntrada.patchValue({

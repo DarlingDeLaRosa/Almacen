@@ -126,7 +126,6 @@ export class UsuariosComponent implements OnInit {
   //         })
   //       )
   //       .subscribe((res: any) => {
-  //         console.log(res);
           
   //         let options = res.data
   //         this.supInmediatoList = []
@@ -161,7 +160,6 @@ export class UsuariosComponent implements OnInit {
           this.formUser.value.idRol = id[0].idRol
 
           loading(true)
-          console.log(this.formUser.value);
 
           this.api.postUser(this.url, this.formUser.value, this.token)
             .pipe(
@@ -172,7 +170,6 @@ export class UsuariosComponent implements OnInit {
               })
             )
             .subscribe((res: any) => {
-              console.log(res);
               
               loading(false)
               if (res.data !== null) { alertIsSuccess(true); this.formUser.reset() }

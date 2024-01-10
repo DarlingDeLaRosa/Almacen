@@ -33,7 +33,6 @@ export class TipoDeProductoModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.item)
     this.formEditTipoProducto.setValue({ nombre: `${this.item.nombre}`, idTipoArt: `${this.item.idTipoArt}` })
 
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });

@@ -211,7 +211,6 @@ export class ProductosComponent implements OnInit {
 
 
       loading(true)
-      console.log(JSON.stringify(this.formProducto.value));
 
       this.api.postProducto(this.url, this.formProducto.value, this.token)
         .pipe(
@@ -222,7 +221,6 @@ export class ProductosComponent implements OnInit {
           })
         )
         .subscribe((res: any) => {
-          console.log(res);
 
           loading(false)
           if (res.data != null) { alertIsSuccess(true); this.formProducto.reset() }

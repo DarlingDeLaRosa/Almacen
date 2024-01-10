@@ -75,8 +75,6 @@ export class ReporteEntradaComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
-        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -101,11 +99,9 @@ export class ReporteEntradaComponent implements OnInit {
       // if (this.filterReporteEntrada.get('desde') && this.filterReporteEntrada.get('hasta')) {
 
       //   let dates = this.getFormatteddesdeDate()
-      //   console.log(dates)
 
       //   this.api.getEntradaReport(this.url, this.token, this.pagina, dates.desde, dates.hasta, this.filterReporteEntrada.value.nombre)
       //     .subscribe((res: any) => {
-      //       console.log(res)
       //       this.noPage = res.cantPage
       //       this.dataFiltered = res.data
       //     })

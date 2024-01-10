@@ -109,8 +109,6 @@ export class AdminSalidasComponent implements OnInit {
       )    
       .subscribe((res: any) => {
           loading(false)
-          console.log(res);
-          
           if (res.data !== null) alertRemoveSuccess()
           else alertIsSuccess(false)
           this.getSalida()

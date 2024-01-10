@@ -1,12 +1,12 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Crear nueva entrada</h1>
-    <button *ngIf="idRol == 1 ; else supp" mat-stroked-button class="btnNavigate"
-      [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      <ng-template #supp>
+    <button mat-stroked-button class="btnNavigate"
+      [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button> <!--*ngIf="idRol == 1 ; else supp"-->
+      <!-- <ng-template #supp>
         <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/user-almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button>
-      </ng-template>
+      </ng-template> -->
   </div>
 
   <div class="form">

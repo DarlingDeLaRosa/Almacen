@@ -29,10 +29,10 @@
         <a class="item-menu" [routerLink]="['/almacen/administrar-proveedores']" routerLinkActive="active">
           <mat-icon>local_shipping</mat-icon>Proveeedores
         </a>
-        <a class="item-menu" [routerLink]="['/almacen/administrar-usuarios']" routerLinkActive="active">
+        <a class="item-menu" [routerLink]="['/almacen/administrar-usuarios']" routerLinkActive="active" *ngIf="rol == 1">
           <mat-icon>person</mat-icon>Usuarios
         </a>
-        <a class="item-menu" (click)="toggleSubmenu()"><mat-icon>summarize</mat-icon>Reportes</a>
+        <a class="item-menu" (click)="toggleSubmenu()" *ngIf="rol == 1"><mat-icon>summarize</mat-icon>Reportes</a>
         <div class="submenu" *ngIf="submenu else submenuClosed">
 
           <a class="item-submenu" (click)="toggleSubmenuEntrada()">Entradas</a>
@@ -58,7 +58,7 @@
         </div>
         <ng-template #submenuClosed></ng-template>
 
-        <a class="item-menu" (click)="toggleSubmenuConfig()"><mat-icon>settings</mat-icon>Configuraciones</a>
+        <a class="item-menu" (click)="toggleSubmenuConfig()"  *ngIf="rol == 1"><mat-icon>settings</mat-icon>Configuraciones</a>
         <div class="submenu" *ngIf="submenuConfig else submenuClosedConfig">
           <a class="item-submenu" [routerLink]="['/almacen/administrar-tipo-almacen']" routerLinkActive="active">Tipo de
             almacen</a>

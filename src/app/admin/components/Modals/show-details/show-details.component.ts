@@ -45,7 +45,6 @@ export class ShowDetailsComponent {
   getDetailsFromEntrada(){
     this.api.getDetalleEntrada(this.url, this.token, this.item)
     .subscribe((res: any)=>{
-      console.log(res)
       this.detallesList = res.data
       this.id = this.detallesList[0].idEntrada
       
