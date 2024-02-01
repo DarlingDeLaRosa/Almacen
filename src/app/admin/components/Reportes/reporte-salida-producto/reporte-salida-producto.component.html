@@ -59,7 +59,7 @@
           <td class="dataCell">{{salida.serial}}</td>
           <td class="dataCell">{{salida.condicion}}</td>
           <td class="dataCell">{{salida.cantidad}}</td>
-          <td class="dataCell">{{salida.subTotal}}</td>
+          <td class="dataCell">{{salida.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
         </tr>
         
       </tbody>

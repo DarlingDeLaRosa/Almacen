@@ -1,18 +1,13 @@
-.modal{
-    width: 950px;
-  }
-  
-  .modal-title{
-    margin: 0;
-    padding: 0;
-  }
-  
-  .fuctionContent{
-    align-items: center;
-    padding-right: 16px;
-  }
-  
-  .modal-content{
-    padding: 10px 24px;
-  }
-  
+.modal-title {
+  margin: 0;
+  padding: 0;
+}
+
+.fuctionContent {
+  align-items: center;
+  padding-right: 16px;
+}
+
+.modal-content {
+  padding: 10px 24px;
+}

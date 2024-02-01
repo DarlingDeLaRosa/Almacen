@@ -127,7 +127,7 @@ export class EditSalidasComponent {
           this.respuesta = res.data.detalles
           this.respuesta.map((detalle: any) => {
             this.idProductoList.filter((item: any) => {
-              if (item.nombre == detalle.producto.nombre && this.productoList.filter(pitem => pitem.nombre == item.nombre).length == 0) this.productoList.push(item)
+              if (item.descripcion == detalle.producto.descripcion && this.productoList.filter(pitem => pitem.descripcion == item.descripcion).length == 0) this.productoList.push(item)
             });
           })
 
@@ -173,7 +173,7 @@ export class EditSalidasComponent {
             res.data.detalles.map((detalle: any) => {
 
               this.formDetalleEditSalida.patchValue({
-                idProducto: detalle.producto.nombre,
+                idProducto: detalle.producto.descripcion,
                 existencia: detalle.producto.stock,
                 cantidad: detalle.cantidad,
                 idTipoAlm: detalle.producto.tipoAlmacen.nombre,
@@ -333,7 +333,7 @@ export class EditSalidasComponent {
   addDetail() {
 
     const exisProducto = this.productoList.some(producto => {
-      return producto.nombre === this.formDetalleEditSalida.value.idProducto;
+      return producto.descripcion === this.formDetalleEditSalida.value.idProducto;
     });
 
     if (this.formDetalleEditSalida.value.cantidad < 1) {
@@ -361,7 +361,7 @@ export class EditSalidasComponent {
 
           if (this.formDetalleEditSalida.value.idSalidaDet !== null) {
             let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
-              return productoEspecifico.producto.nombre == this.formDetalleEditSalida.value.idProducto
+              return productoEspecifico.producto.descripcion == this.formDetalleEditSalida.value.idProducto
             });
 
             this.ediExis = setValuesform[0].cantidad
@@ -401,7 +401,7 @@ export class EditSalidasComponent {
               });
 
               if (exisProducts && this.listadeProducto.length == 0) { //|| !exisProducts && this.detailGroup.length > 0
-                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleEditSalida.value.idProducto)
+                this.productoList = this.productoList.filter(detalle => detalle.descripcion != this.formDetalleEditSalida.value.idProducto)
               }
             }
             this.sumaTotal()
@@ -468,7 +468,7 @@ export class EditSalidasComponent {
     if (item.idSalidaDet != null) {
 
       let setValuesform = this.respuesta.filter((productoEspecifico: any) => {
-        return productoEspecifico.producto.nombre == item.idProducto
+        return productoEspecifico.producto.descripcion == item.idProducto
       });
 
       this.ediExis = setValuesform[0].cantidad
@@ -565,7 +565,7 @@ export class EditSalidasComponent {
     this.formDetalleEditSalida.patchValue({ idProducto: producto })
 
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
-      return productoEspecifico.nombre == producto
+      return productoEspecifico.descripcion == producto
     });
 
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
@@ -594,12 +594,12 @@ export class EditSalidasComponent {
               return producto.idProducto === this.formDetalleEditSalida.value.idProducto;
             });
 
-            if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.nombre != producto) {
+            if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.descripcion != producto) {
 
               let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null)
 
-              if (this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.nombre != producto) {
-                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.listadeProducto[0].producto.nombre)
+              if (this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.descripcion != producto) {
+                this.productoList = this.productoList.filter(detalle => detalle.descripcion != this.listadeProducto[0].producto.descripcion)
               }
               this.listadeProducto = res.data.productosLoteSerial
             }
@@ -713,7 +713,7 @@ export class EditSalidasComponent {
               //    }
               //  })
 
-              let idTipoProD = this.idProductoList.filter(item => item.nombre === detail.idProducto)
+              let idTipoProD = this.idProductoList.filter(item => item.descripcion === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm
               detail.idSalida = res.data.idSalida

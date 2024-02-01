@@ -26,7 +26,9 @@
           <th class="headerCell">Destino</th>
           <th class="headerCell">T.Salida</th>
           <th class="headerCell">Creado por</th>
-          <th class="headerCell">Valor</th>
+          <th class="headerCell">Sub-Total</th>
+          <th class="headerCell">ITBIS</th>
+          <th class="headerCell">Total</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th><!--*ngIf="idRol == 1; else remove"-->
@@ -42,6 +44,8 @@
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
           <td class="dataCell">{{item.creadoPorU.nombre}} {{item.creadoPorU.apellido}}</td>
           <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.itbis | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.totalGeneral | currency: '': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
           </td>
           <td class="dataCell" *ngIf="idRol == 1; else supp"><button

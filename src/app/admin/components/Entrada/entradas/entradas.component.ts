@@ -177,10 +177,8 @@ export class EntradasComponent implements OnInit {
 
           let options = res.data
           this.tipoEntradaList = []
+          options.forEach((item: any) => { this.tipoEntradaList.push(item) });
 
-          options.forEach((item: any) => {
-            this.tipoEntradaList.push(item)
-          });
         })
     } else {
       this.getTipoEntrada()
@@ -202,9 +200,7 @@ export class EntradasComponent implements OnInit {
           let options = res.data
           this.tipoEntregaList = []
 
-          options.forEach((item: any) => {
-            this.tipoEntregaList.push(item)
-          });
+          options.forEach((item: any) => { this.tipoEntregaList.push(item) });
         })
     } else {
       this.getTipoEntrega()
@@ -226,10 +222,7 @@ export class EntradasComponent implements OnInit {
           let options = res.data
           this.productoList = []
 
-          options.forEach((item: any) => {
-            this.productoList.push(item)
-          });
-
+          options.forEach((item: any) => { this.productoList.push(item) });
         })
     } else {
       this.getProducto()
@@ -268,7 +261,7 @@ export class EntradasComponent implements OnInit {
   setValueDetailsEntrada(producto: string) {
 
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
-      return productoEspecifico.nombre == producto
+      return productoEspecifico.descripcion == producto
     });
 
     //this.formDetalleEntrada.reset()
@@ -310,7 +303,7 @@ export class EntradasComponent implements OnInit {
 
   addDetail() {
     const exisProducto = this.productoList.some(producto => {
-      return producto.nombre === this.formDetalleEntrada.value.idProducto;
+      return producto.descripcion === this.formDetalleEntrada.value.idProducto;
     });
 
     if (this.formDetalleEntrada.value.cantidad < 1) {
@@ -401,7 +394,7 @@ export class EntradasComponent implements OnInit {
       //this.formDetalleEntrada.get('precio')?.reset
 
       let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
-        return productoEspecifico.nombre == producto.idProducto
+        return productoEspecifico.descripcion == producto.idProducto
       });
 
       this.detailGroup.splice(index, 1)
@@ -595,7 +588,7 @@ export class EntradasComponent implements OnInit {
 
               detail.idEntrada = res.data.idEntrada
 
-              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              let idTipoProD = this.productoList.filter(item => item.descripcion === detail.idProducto)
               detail.idProducto = idTipoProD[0].idProducto
 
               // if (detail.itbisProducto == "") {

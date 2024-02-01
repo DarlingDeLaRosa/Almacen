@@ -17,8 +17,8 @@
               <th class="headerCell">Serial</th>
               <th class="headerCell">Precio</th>
               <th class="headerCell">ITBIS</th>
-              <th class="headerCell">Total ITBIS</th>
-              <th class="headerCell">Subtotal</th>
+              <!-- <th class="headerCell">Total ITBIS</th> -->
+              <th class="headerCell">Sub-total</th>
               <th class="headerCell">Total</th>
             </tr>
           </thead>
@@ -31,7 +31,7 @@
               <td class="dataCell">{{detalles.modelo}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
               <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
-              <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td>
+              <!-- <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td> -->
               <td class="dataCell">{{detalles.itbisProducto * detalles.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2' }}</td>
               <td class="dataCell">{{detalles.subTotal + detalles.itbisProducto * detalles.cantidad | currency: '': 'symbol': '1.2-2' }}</td>

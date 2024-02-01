@@ -85,8 +85,8 @@
             (input)="findProductoByName()">
           <mat-autocomplete #pro='matAutocomplete' (optionSelected)="setValueFormProductoSalida($event.option.value)">
 
-            <mat-option *ngFor="let producto of productoList" [value]="producto.nombre">
-              {{producto.nombre}}
+            <mat-option *ngFor="let producto of productoList" [value]="producto.descripcion">
+              {{producto.descripcion}}
             </mat-option>
 
           </mat-autocomplete>
@@ -135,7 +135,7 @@
         </mat-form-field>&nbsp;
 
         <mat-form-field hideRequiredMarker appearance="fill">
-          <mat-label>Subtotal</mat-label>
+          <mat-label>Sub-total</mat-label>
           <input readonly type="number" matInput required formControlName="subTotal">
         </mat-form-field>&nbsp;
 

@@ -156,7 +156,7 @@ export class EditEntradasComponent {
             //this.setdetailGroup = true
 
             this.formEditDetalleEntrada.patchValue({
-              idProducto: detalle.producto.nombre,
+              idProducto: detalle.producto.descripcion,
               cantidad: detalle.cantidad,
               condicion: detalle.condicion,
               marca: detalle.marca,
@@ -376,7 +376,7 @@ export class EditEntradasComponent {
   setValueDetailsEntrada(producto: string) {
 
     let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
-      return productoEspecifico.nombre == producto
+      return productoEspecifico.descripcion == producto
     });
 
     if (this.generalITBIS) {
@@ -404,7 +404,7 @@ export class EditEntradasComponent {
   addDetail() {
 
     const exisProducto = this.productoList.some(producto => {
-      return producto.nombre === this.formEditDetalleEntrada.value.idProducto;
+      return producto.descripcion === this.formEditDetalleEntrada.value.idProducto;
     });
 
     if (this.formEditDetalleEntrada.value.cantidad < 1) {
@@ -492,7 +492,7 @@ export class EditEntradasComponent {
     if (!this.formEditDetalleEntrada.valid) {
 
       let setValuesform = this.productoList.filter((productoEspecifico: producto) => {
-        return productoEspecifico.nombre == detalle.idProducto
+        return productoEspecifico.descripcion == detalle.idProducto
       });
 
       this.detailGroup.splice(index, 1)
@@ -701,7 +701,7 @@ export class EditEntradasComponent {
               //  }
               //})
 
-              let idTipoProD = this.productoList.filter(item => item.nombre === detail.idProducto)
+              let idTipoProD = this.productoList.filter(item => item.descripcion === detail.idProducto)
 
               detail.idProducto = idTipoProD[0].idProducto
               detail.idTipoAlm = idTipoProD[0].tipoAlmacen.idTipoAlm

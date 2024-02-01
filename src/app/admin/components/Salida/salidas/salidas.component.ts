@@ -122,6 +122,8 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
 
         this.idProductoList = res.data
+        console.log(this.idProductoList);
+        
         res.data.map((producto: any) => {
           if (producto.stock !== 0) this.productoList.push(producto)
         })
@@ -225,7 +227,7 @@ export class SalidasComponent implements OnInit {
 
   addDetail() {
     const exisProducto = this.productoList.some(producto => {
-      return producto.nombre === this.formDetalleSalida.value.idProducto;
+      return producto.descripcion === this.formDetalleSalida.value.idProducto;
     });
 
     if (this.formDetalleSalida.value.cantidad < 1) {
@@ -279,7 +281,7 @@ export class SalidasComponent implements OnInit {
               });
 
               if (exisProducts && this.listadeProducto.length == 0) { //|| !exisProducts && this.detailGroup.length > 0
-                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.formDetalleSalida.value.idProducto)
+                this.productoList = this.productoList.filter(detalle => detalle.descripcion != this.formDetalleSalida.value.idProducto)
               }
             }
 
@@ -370,9 +372,9 @@ export class SalidasComponent implements OnInit {
     this.formDetalleSalida.patchValue({ idProducto: producto })
 
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
-      return productoEspecifico.nombre == producto
+      return productoEspecifico.descripcion == producto
     });
-
+    
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .pipe(
         catchError((error) => {
@@ -394,21 +396,23 @@ export class SalidasComponent implements OnInit {
 
           if (res.data.productosLoteSerial.length > 0) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
             this.isSerial = true
-
+            console.log(this.detailGroup);
+            
             const exisProducto = this.detailGroup.some(producto => {
               return producto.idProducto === this.formDetalleSalida.value.idProducto;
             });
-
-            if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.nombre != producto) {
+            console.log(this.listadeProducto);
+            
+            if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.descripcion != producto) {
 
               let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null)
 
-              if (this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.nombre != producto) {
-                this.productoList = this.productoList.filter(detalle => detalle.nombre != this.listadeProducto[0].producto.nombre)
+              if (this.listadeProducto.length > 0 && detailSerialExist.length > 0 && this.listadeProducto[0].producto.descripcion != producto) {
+                this.productoList = this.productoList.filter(detalle => detalle.descripcion != this.listadeProducto[0].producto.descripcion)
               }
               this.listadeProducto = res.data.productosLoteSerial
             }
-
+            
             this.formDetalleSalida.patchValue({
               existencia: this.listadeProducto[0].producto.stock,
               condicion: this.listadeProducto[0].condicion,
@@ -435,7 +439,7 @@ export class SalidasComponent implements OnInit {
             //     }
             //   })
             // }
-
+            
             this.formDetalleSalida.patchValue({
               existencia: res.data.productoLote.producto.stock,
               condicion: res.data.productoLote.condicion,
@@ -512,7 +516,7 @@ export class SalidasComponent implements OnInit {
 
             this.detailGroup.map((detail: detalleProductoSalida) => {
 
-              let idTipoProD = this.idProductoList.filter(item => item.nombre == detail.idProducto)
+              let idTipoProD = this.idProductoList.filter(item => item.descripcion == detail.idProducto)
               detail.idSalida = res.data.idSalida
               detail.idProducto = idTipoProD[0].idProducto
             })

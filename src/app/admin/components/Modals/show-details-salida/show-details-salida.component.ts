@@ -53,6 +53,8 @@ export class ShowDetailsSalidaComponent {
     )
     .subscribe((res: any)=>{
       this.detallesList = res.data
+      console.log(this.detallesList);
+      
       this.id = this.detallesList[0].idSalida
       this.tipoSalida = this.item.tipoSalida.nombre 
     })

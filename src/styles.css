@@ -145,7 +145,7 @@ table {
 
 .dataCell {
   border-top: 1px solid #ccc;
-  padding-left: 15px;
+  padding: 0 12px;
   max-width: 130px;
   white-space: nowrap; 
   overflow: hidden; 
@@ -290,7 +290,7 @@ table {
 }
 
 .modal {
-  width: 750px;
+  width: auto;
 }
 
 .modal-title {

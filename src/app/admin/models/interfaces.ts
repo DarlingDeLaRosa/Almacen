@@ -277,6 +277,8 @@ export interface salida {
   observacion: string,
   total: number,
   fechaModif: Date,
+  itbis: number,
+  totalGeneral: number
   detalles: [
     {
       idSalidaDet: number,
@@ -363,6 +365,8 @@ export interface detalleByIdSalida {
   condicion: string,
   serial: string,
   precio: number,
+  itbis:number
+  totalGeneral: number
   subTotal: number
 }
 /////////////////////////////////////////////////////////////////
