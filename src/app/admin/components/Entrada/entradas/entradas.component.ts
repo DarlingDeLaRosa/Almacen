@@ -36,6 +36,7 @@ export class EntradasComponent implements OnInit {
   detailGroup: detalleProductoEntrada[] = [];
   generalITBIS: boolean = true;
   isSerial: boolean = false;
+  cantidadItem: number = 0
 
   proveedorList: proveedor[] = []
   tipoEntradaList: tipoEntrada[] = []
@@ -525,13 +526,14 @@ export class EntradasComponent implements OnInit {
 
     this.totalResult = 0
     this.mostrarTotalItbis = 0
-
+    this.cantidadItem = 0
     //this.formDetalleEntrada.value.itbisProducto = this.formDetalleEntrada.value.itbisProducto * 0.01 * this.formDetalleEntrada.value.precio
     //this.mostrarTotalItbis = this.formEntrada.value.itbisGeneral     
 
     this.detailGroup.map((detalle: any) => {
       this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
       this.totalResult += detalle.subTotal
+      this.cantidadItem += detalle.cantidad
     })
 
     this.totalResult += this.mostrarTotalItbis

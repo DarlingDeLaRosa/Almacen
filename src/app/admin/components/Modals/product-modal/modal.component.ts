@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, MaxLengthValidator, Validators } f
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
-import { alertIsSuccess, alertNoValidForm, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertProductCodeNoFound, alertSameData, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeAlmacenService } from 'src/app/admin/Services/Configuracion/tipo-de-almacen.service';
 import { TipoDeMedidaService } from 'src/app/admin/Services/Configuracion/tipo-de-medida.service';
 import { TipoDeProductoService } from 'src/app/admin/Services/Configuracion/tipo-de-producto.service';
@@ -265,9 +265,9 @@ export class ModalComponent implements OnInit {
           )
           .subscribe((res: any) => {
             loading(false)
-
+            
             if (res.data !== null) { alertIsSuccess(true); this.closeModal(); }
-            else { alertIsSuccess(false); this.closeModal(); }
+            else { alertBackMessage(res.message); this.closeModal(); }
           })
 
       } else {

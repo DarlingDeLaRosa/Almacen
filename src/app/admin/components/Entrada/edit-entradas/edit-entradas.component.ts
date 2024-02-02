@@ -36,6 +36,7 @@ export class EditEntradasComponent {
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
   isSerial: boolean = false;
+  cantidadItem: number = 0
   //serial: boolean = true;
   respuesta!: any
 
@@ -648,10 +649,12 @@ export class EditEntradasComponent {
 
     this.totalResult = 0
     this.mostrarTotalItbis = 0
+    this.cantidadItem = 0
 
     this.detailGroup.map((detalle: any) => {
       this.mostrarTotalItbis += detalle.itbisProducto * detalle.cantidad
       this.totalResult += detalle.subTotal
+      this.cantidadItem += detalle.cantidad
     })
 
     this.totalResult += this.mostrarTotalItbis

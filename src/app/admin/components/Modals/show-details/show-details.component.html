@@ -10,6 +10,7 @@
           <thead class="headerTable">
             <tr class="headerRow">
               <th class="headerCell">Producto</th>
+              <th class="headerCell">Descripción</th>
               <th class="headerCell">Cantidad</th>
               <th class="headerCell">Condición</th>
               <th class="headerCell">Marca</th>
@@ -25,6 +26,7 @@
           <tbody>
             <tr class="dataRow" *ngFor="let detalles of detallesList">
               <td class="dataCell">{{detalles.producto.nombre}}</td>
+              <td class="dataCell">{{detalles.producto.descripcion}}</td>
               <td class="dataCell">{{detalles.cantidad}}</td>
               <td class="dataCell">{{detalles.condicion}}</td>
               <td class="dataCell">{{detalles.marca}}</td>
