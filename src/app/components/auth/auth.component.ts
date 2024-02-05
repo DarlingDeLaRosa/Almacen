@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { alerUserWrong, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -57,7 +57,7 @@ export class AuthComponent implements OnInit {
           catchError((error)=>{
             loading(false)
             alertServerDown()
-            return error
+            return throwError(error)
           })
         )  
         .subscribe((res: any) => {

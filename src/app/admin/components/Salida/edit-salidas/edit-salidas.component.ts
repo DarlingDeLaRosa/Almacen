@@ -31,6 +31,7 @@ export class EditSalidasComponent {
   listadeProducto: any[] = []
   idProductoList: any[] = []
   id: number = 0
+  cantidadItem: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -661,9 +662,11 @@ export class EditSalidasComponent {
 
   sumaTotal() {
     this.resultSubTotal = 0
+    this.cantidadItem = 0 
 
     this.detailGroup.map((detalle: any) => {
       this.resultSubTotal += detalle.subTotal
+    this.cantidadItem += detalle.cantidad 
     })
   }
 
@@ -765,8 +768,6 @@ export class EditSalidasComponent {
     } else {
       alertNoValidForm()
     }
-
   }
-
 }
 

@@ -131,7 +131,7 @@
             <tbody>
               <tr class="dataRow" *ngFor="let producto of dataFilteredP" (click)="getProductoAgotaminetoRecinto(producto.catalogo.id)">
                 <td class="dataCell">{{producto.catalogo.id}}</td>
-                <td class="dataCell">{{producto.nombre}}</td>
+                <td class="dataCell">{{producto.descripcion}}</td>
                 <td class="dataCell" style="color: red;">{{producto.stock}}</td>
                 <td class="dataCell">{{producto.stockMinimo}}</td>
               </tr>

@@ -254,7 +254,8 @@ export class ModalComponent implements OnInit {
         || this.formEditProducto.value.idTipoAlmacen !== this.item.tipoAlmacen.nombre
       ) {
         loading(true)
-
+        console.log(this.formEditProducto.value);
+        
         this.api.editProducto(this.url, JSON.stringify(this.formEditProducto.value), this.token)
           .pipe(
             catchError((error) => {
@@ -306,5 +307,4 @@ export class ModalComponent implements OnInit {
       alertNoValidForm()
     }
   }
-
 }

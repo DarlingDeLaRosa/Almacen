@@ -28,6 +28,7 @@ export class SalidasComponent implements OnInit {
   recintoActual: string = ''
   listadeProducto: any[] = []
   idProductoList: producto[] = []
+  cantidadItem: number = 0
 
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
@@ -123,7 +124,7 @@ export class SalidasComponent implements OnInit {
 
         this.idProductoList = res.data
         console.log(this.idProductoList);
-        
+
         res.data.map((producto: any) => {
           if (producto.stock !== 0) this.productoList.push(producto)
         })
@@ -374,7 +375,7 @@ export class SalidasComponent implements OnInit {
     let setValuesform = this.productoList.filter((productoEspecifico: any) => {
       return productoEspecifico.descripcion == producto
     });
-    
+
     this.api.findProductoById(this.url, this.token, setValuesform[0].idProducto)
       .pipe(
         catchError((error) => {
@@ -397,12 +398,12 @@ export class SalidasComponent implements OnInit {
           if (res.data.productosLoteSerial.length > 0) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
             this.isSerial = true
             console.log(this.detailGroup);
-            
+
             const exisProducto = this.detailGroup.some(producto => {
               return producto.idProducto === this.formDetalleSalida.value.idProducto;
             });
             console.log(this.listadeProducto);
-            
+
             if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.descripcion != producto) {
 
               let detailSerialExist = this.detailGroup.filter(detalle => detalle.serial != null)
@@ -412,7 +413,7 @@ export class SalidasComponent implements OnInit {
               }
               this.listadeProducto = res.data.productosLoteSerial
             }
-            
+
             this.formDetalleSalida.patchValue({
               existencia: this.listadeProducto[0].producto.stock,
               condicion: this.listadeProducto[0].condicion,
@@ -439,7 +440,7 @@ export class SalidasComponent implements OnInit {
             //     }
             //   })
             // }
-            
+
             this.formDetalleSalida.patchValue({
               existencia: res.data.productoLote.producto.stock,
               condicion: res.data.productoLote.condicion,
@@ -470,14 +471,18 @@ export class SalidasComponent implements OnInit {
 
   sumaTotal() {
     this.resultSubTotal = 0
+    this.cantidadItem = 0 
 
     this.detailGroup.map((detalle: any) => {
       this.resultSubTotal += detalle.subTotal
+      this.cantidadItem += detalle.cantidad 
+
     })
   }
 
   sendData() {
-
+    console.log(this.formSalida.value);
+    
     if (this.formSalida.valid && this.detailGroup.length > 0) {
 
       if (this.formDetalleSalida.valid) {
@@ -499,7 +504,6 @@ export class SalidasComponent implements OnInit {
       this.formSalida.value.idTipoSalida = idTipoSa[0].idTipoSalida
 
       this.formSalida.value.total = this.resultSubTotal
-
 
       loading(true)
 
