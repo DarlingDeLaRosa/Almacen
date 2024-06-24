@@ -51,7 +51,7 @@ export function alertSameSerial() {
 export function alertUnableToRemove() {
   Swal.fire({
     icon: 'error',
-    title: 'No puedes eliminar este producto',
+    title: 'Este producto no puede ser eliminado debido a que esta en uso.',
     showConfirmButton: true,
     confirmButtonColor: '#004b8d'
   })
@@ -133,7 +133,7 @@ export function alertRncNoFound() {
 export function alertProductCodeNoFound() {
   Swal.fire({
     icon: 'info',
-    title: 'No se encontro codigo de producto que coincida.',
+    title: 'No se encontro código de producto que coincida.',
     showConfirmButton: false,
     timer: 2500
   })
@@ -143,7 +143,7 @@ export function alertRemoveSure(): Promise<boolean> {
   return new Promise((resolve) => {
     Swal.fire({
       title: '¡Alerta!',
-      text: 'Estas seguro que deseas eliminar el tipo de salida.',
+      text: '¿Estas seguro que deseas eliminar este registro?',
       icon: 'warning',
       confirmButtonText: 'Aceptar',
       showCancelButton: true,
@@ -165,7 +165,7 @@ export function alertLogOut(): Promise<boolean> {
   return new Promise((resolve) => {
     Swal.fire({
       title: '¡Alerta!',
-      text: 'Estas seguro que deseas cerrar la sesion.',
+      text: '¿Estás seguro que deseas cerrar la sesión?',
       icon: 'warning',
       confirmButtonText: 'Aceptar',
       showCancelButton: true,
@@ -248,16 +248,17 @@ export function alertUnableSend() {
 
 
 export function loading(load: boolean) {
-  if(load){
+  if (load) {
     Swal.fire({
       width: '200px',
-      html: '<div class="loader"></div>',
+      padding: 0,
+      html: '<div class="loader"></div><h3 style="margin-bottom:7px">Cargando...</h3>',
       showConfirmButton: false,
       allowOutsideClick: false,
       allowEscapeKey: false,
     })
   }
-  else{
+  else {
     Swal.close();
   }
 }

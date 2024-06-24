@@ -19,7 +19,7 @@
         <tr class="headerRow">
           <th class="headerCell">Nombre</th>
           <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th>
+          <th class="fuctionCell"> <div *ngIf="loading" class="loader"></div></th>
         </tr>
       </thead>
       <tbody>
@@ -31,10 +31,6 @@
       </tbody>
 
     </table>
-
-    <div class="loadingRow" *ngIf="loading">
-      <div class="loader"></div>
-    </div>  
 
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
       <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>

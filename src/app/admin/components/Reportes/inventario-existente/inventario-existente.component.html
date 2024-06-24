@@ -30,12 +30,15 @@
 
   <div id="reportesInventario">
 
-    <h3 class="title">Reporte de Inventario</h3>
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reporte de Inventario</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <table>
       <thead class="headerTable">
         <tr class="headerRow">
-          <th class="headerCell">Codigo</th>
+          <th class="headerCell">Código</th>
           <th class="headerCell">Nombre</th>
           <th class="headerCell">Descripcion</th>
           <th class="headerCell">T. Almacen</th>
@@ -60,10 +63,7 @@
 
     </table>
   </div>
-  <div class="loadingRow" *ngIf="loading">
-    <div class="loader"></div>
-  </div>
-
+  
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
     <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
   </div>

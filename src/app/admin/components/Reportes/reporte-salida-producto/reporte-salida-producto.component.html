@@ -33,7 +33,10 @@
 
   <div id="reportesSalidasProducto">
 
-    <h3 class="title">Reportes de salidas por producto</h3>
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reportes de salidas por producto</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <table class="tableReporte">
       <thead class="headerTable">
@@ -59,15 +62,11 @@
           <td class="dataCell">{{salida.serial}}</td>
           <td class="dataCell">{{salida.condicion}}</td>
           <td class="dataCell">{{salida.cantidad}}</td>
-          <td class="dataCell">{{salida.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{salida.subTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
         </tr>
         
       </tbody>
     </table>
-
-    <div class="loadingRow" *ngIf="loading">
-      <div class="loader"></div>
-    </div>
 
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
       <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>

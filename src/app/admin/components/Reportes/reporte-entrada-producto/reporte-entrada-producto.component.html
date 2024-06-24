@@ -33,8 +33,11 @@
   </div>
 
   <div id="reportesEntradaProducto">
-
-  <h3 class="title">Reportes de entradas por producto</h3>
+    
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reportes de entradas por producto</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <table >
       <thead class="headerTable">
@@ -61,16 +64,12 @@
           <td class="dataCell">{{entradas.serial}}</td>
           <td class="dataCell">{{entradas.condicion}}</td>
           <td class="dataCell">{{entradas.cantidad}}</td>
-          <td class="dataCell">{{entradas.precio | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell">{{entradas.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{entradas.precio | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{entradas.subTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
         </tr>
       </tbody>
 
     </table>
-  </div>
-
-  <div class="loadingRow" *ngIf="loading">
-    <div class="loader"></div>
   </div>
 
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">

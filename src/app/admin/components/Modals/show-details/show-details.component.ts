@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertServerDown} from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { detalleByIdEntrada } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';

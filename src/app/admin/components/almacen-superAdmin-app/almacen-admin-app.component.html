@@ -14,9 +14,10 @@
         </a>
         <a class="item-menu" [routerLink]="['/almacen/administrar-entrada']"
           routerLinkActive="active"><mat-icon>add_box</mat-icon>Entradas</a>
+
         <a class="item-menu" [routerLink]="['/almacen/administrar-salida']" routerLinkActive="active">
-          <mat-icon>indeterminate_check_box</mat-icon>Salidas
-        </a>
+          <mat-icon>indeterminate_check_box</mat-icon>Salidas</a>
+          
         <a class="item-menu" [routerLink]="['/almacen/transferencia']" routerLinkActive="active">
           <mat-icon *ngIf="dataFiltered != 0 ; else noBadge" [matBadge]="dataFiltered"
             matBadgeColor="warn">compare_arrows</mat-icon>
@@ -92,7 +93,7 @@
               {{firstLetter | async}}
             </button>
             <mat-menu class="menuPanel" #menu="matMenu">
-              <div mat-menu-item class="profile">
+              <div mat-menu-item class="profile" style="padding-right: 5px;">
                 <mat-icon>person</mat-icon>
                 <span>{{userName$ | async }} {{userLastName$ | async}}</span>
                 <br>

@@ -36,7 +36,7 @@
       </mat-form-field>&nbsp;
 
       <mat-form-field hideRequiredMarker class="departamento" *ngIf="!isTransferencia; else tranferencia">
-        <mat-label>Tipo de departamento</mat-label>
+        <mat-label>Departamento</mat-label>
         <input matInput [matAutocomplete]="auto" appearance="fill" formControlName="idDepar"
           (input)="findTipoDepartamentoByName()">
         <mat-autocomplete #auto='matAutocomplete'>
@@ -74,7 +74,7 @@
       
       <span class="infoProductoAlert">
         <h4 style="margin: 0;">Informacion de producto</h4> 
-        <button class="questionMark" matTooltip="Los productos que contienen serial deben estar en secuencia(arreglar)" mat-stroked-button><mat-icon matSuffix style="margin-left: 5px;">question_mark</mat-icon></button>
+        <button class="questionMark" matTooltip="Los productos que contienen serial deben estar en secuencia si se refieren al mismo articulo." mat-stroked-button><mat-icon matSuffix style="margin-left: 5px;">question_mark</mat-icon></button>
       </span>
       
       <div>
@@ -172,8 +172,8 @@
             <td class="dataCell">{{item.marca}}</td>
             <td class="dataCell">{{item.modelo}}</td>
             <td class="dataCell">{{item.serial}}</td>
-            <td class="dataCell">{{item.precio | currency: '': 'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.precio | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             <td class="dataCell" *ngIf=" item.serial == null || item.serial.length == 0; else noEditSerial"> <button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell" *ngIf=" item.serial == null || item.serial.length == 0; else noEditSerial"> <button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button></td>
             <ng-template #noEditSerial><td class="dataCell"></td></ng-template>
@@ -189,7 +189,7 @@
             <td class="footerCell"></td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
-            <td class="footerCell">{{ resultSubTotal | currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="footerCell">{{ resultSubTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             <td class="footerCell"></td>
             <td class="footerCell"></td>
           </tr>

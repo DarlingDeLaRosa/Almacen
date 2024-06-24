@@ -1,7 +1,7 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <form class="filtrarContent" [formGroup]="filterRepProveedor" >
+    <form class="filtrarContent" [formGroup]="filterRepProveedor">
 
       <mat-form-field appearance="fill">
         <mat-label>Filtrar</mat-label>
@@ -25,15 +25,20 @@
     </form>
 
     <span style="display: flex; ">
-      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon
+          class="printIcon">description</mat-icon></button>&nbsp;
 
-      <button class="btnImprimir" mat-stroked-button printSectionId="reportesProveedor" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesProveedor" [useExistingCss]="true"
+        ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
   <div id="reportesProveedor">
 
-    <h3 class="title">Reportes de Proveedores</h3>
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reportes de Proveedores</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <table>
       <thead class="headerTable">
@@ -46,7 +51,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="dataRow" *ngFor="let proveedor of dataFiltered" >
+        <tr class="dataRow" *ngFor="let proveedor of dataFiltered">
           <td class="dataCell">{{proveedor.rnc}}</td>
           <td class="dataCell">{{proveedor.razonSocial}}</td>
           <td class="dataCell">{{proveedor.nombreComercial}}</td>
@@ -58,14 +63,10 @@
     </table>
   </div>
 
-  <div class="loadingRow" *ngIf="loading">
-    <div class="loader"></div>
-  </div>  
-
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
     <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
   </div>
-  
+
   <div class="pagination">
     <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
     <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>

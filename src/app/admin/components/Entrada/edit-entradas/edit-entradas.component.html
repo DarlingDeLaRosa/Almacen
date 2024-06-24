@@ -214,11 +214,11 @@
             <td class="dataCell">{{item.condicion}}</td>
             <td class="dataCell">{{item.marca}}</td>
             <td class="dataCell">{{item.modelo}}</td>
-            <td class="dataCell">{{item.precio | currency: '':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.precio | currency: 'DOP ':  'symbol': '1.2-2'}}</td>
             <td class="dataCell">{{item.serial}}</td>
-            <td class="dataCell">{{item.itbisProducto | currency: '':  'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.itbisProducto * item.cantidad | currency: '':  'symbol': '1.2-2'}}</td>
-            <td class="dataCell">{{item.subTotal + item.itbisProducto * item.cantidad| currency: '': 'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.itbisProducto | currency: 'DOP ':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.itbisProducto * item.cantidad | currency: 'DOP ':  'symbol': '1.2-2'}}</td>
+            <td class="dataCell">{{item.subTotal + item.itbisProducto * item.cantidad| currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             <td class="dataCell"><button class="fucEdit" (click)="editDetail(i, item)"><mat-icon>edit</mat-icon></button></td>
             <td class="dataCell"><button class="fucRem" (click)="removeDetail(i, item)"><mat-icon>delete</mat-icon></button>
             </td>

@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { entradaService } from 'src/app/admin/Services/entrada.service';
 import { Entrada } from 'src/app/admin/models/interfaces';
 import { ShowDetailsComponent } from '../../Modals/show-details/show-details.component';
@@ -51,18 +51,16 @@ export class AdminEntradasComponent implements OnInit {
 
   getEntrada() {
     this.loading = true
-    
+
     this.api.getEntrada(this.url, this.token, this.pagina, 15)
       .pipe(
         catchError((error) => {
           this.loading = false;
           alertServerDown();
-          return error;
+          return throwError(error);
         })
       )
       .subscribe((res: any) => {
-        console.log(res);
-        
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
@@ -71,15 +69,18 @@ export class AdminEntradasComponent implements OnInit {
 
   onInputFilterChange() {
     if (this.filterEntrada.value.filter.length >= 2) {
+      this.loading = true
 
       this.api.filterEntrada(this.url, this.token, this.pagina, this.filterEntrada.value.filter)
         .pipe(
           catchError((error) => {
+            this.loading = false;
             alertServerDown();
             return error;
           })
         )
         .subscribe((res: any) => {
+          this.loading = false;
           this.noPage = res.cantPage
           this.dataFiltered = res.data
         })
@@ -91,7 +92,7 @@ export class AdminEntradasComponent implements OnInit {
   openModal(detailId: number) {
     let dialogRef = this.dialog.open(ShowDetailsComponent, { data: detailId })
 
-    dialogRef.afterClosed().subscribe(() => {})
+    dialogRef.afterClosed().subscribe(() => { })
   }
 
   async removeAlert(item: number) {
@@ -109,8 +110,8 @@ export class AdminEntradasComponent implements OnInit {
         )
         .subscribe((res: any) => {
           loading(false)
-          if (res) { alertRemoveSuccess(); this.getEntrada() }
-          else alertIsSuccess(false)
+          if (res.data != null) { alertRemoveSuccess(); this.getEntrada() }
+          else alertBackMessage(res.message)
         })
     }
   }

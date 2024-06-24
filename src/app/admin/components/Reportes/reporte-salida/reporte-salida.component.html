@@ -39,10 +39,8 @@
 
     <div id="reporteHeader" *ngFor="let salidas of dataFiltered">
       <div class="entradaReporteTitle">
-        <h1>
-          Numero de Salida:
-          {{salidas.idSalida}}
-        </h1>
+        <h1>Numero de Salida: {{salidas.idSalida}}</h1>
+        <div *ngIf="loading" class="loader"></div>
       </div>
 
       <div class="entradaReporteSubtitle">
@@ -84,9 +82,9 @@
               <td class="dataCell">{{detalles.condicion}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
               <td class="dataCell">{{detalles.producto.stock}}</td>
-              <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.precio | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.cantidad}}</td>
-              <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.subTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
             </tr>
           </tbody>
 
@@ -94,10 +92,6 @@
       </div>
     </div>
 
-  </div>
-
-  <div class="loadingRow" *ngIf="loading">
-    <div class="loader"></div>
   </div>
 
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">

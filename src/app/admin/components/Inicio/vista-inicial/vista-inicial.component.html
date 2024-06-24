@@ -6,8 +6,9 @@
         <span>
           <h1>Estadisticas</h1>
         </span>
-        <mat-icon class="iconStock" routerLink="/almacen/reporteStock" *ngIf="itemEscasez > 0 && rol == 1 " [matBadge]="itemEscasez"
-          matBadgeColor="warn">category</mat-icon> <span class="cdk-visually-hidden">
+        <mat-icon matTooltip="Cantidad de productos en escasez." class="iconStock" routerLink="/almacen/reporteStock"
+          *ngIf="itemEscasez > 0 && rol == 1 " [matBadge]="itemEscasez" matBadgeColor="warn">category</mat-icon> <span
+          class="cdk-visually-hidden">
         </span>
       </div>
     </div>
@@ -72,7 +73,7 @@
             <mat-card-title>Ultimas Entradas</mat-card-title>
           </div>
           <table>
-            <thead class="headerTable">
+            <thead class="headerTable" style="padding-left: 20px !important;">
               <th class="headerCell">Fecha</th>
               <th class="headerCell">No. Contrato</th>
               <th class="headerCell">Proveedor</th>
@@ -83,7 +84,7 @@
                 <td class="dataCell">{{entrada.fechaCreacion | date:'dd/MM/yyyy'}}</td>
                 <td class="dataCell">{{entrada.numOrden}}</td>
                 <td class="dataCell">{{entrada.proveedor.razonSocial}}</td>
-                <td class="dataCell">{{entrada.total | currency: '': 'symbol': '1.2-2'}}</td>
+                <td class="dataCell">{{entrada.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
               </tr>
             </tbody>
 
@@ -108,7 +109,7 @@
                 <td class="dataCell">{{salida.fechaCreacion | date:'dd/MM/yyyy'}}</td>
                 <td class="dataCell">{{salida.tipoSalida.nombre}}</td>
                 <td class="dataCell">{{salida.creadoPorU.nombre}} {{salida.creadoPorU.apellido}}</td>
-                <td class="dataCell">{{salida.totalGeneral | currency: '': 'symbol': '1.2-2'}}</td>
+                <td class="dataCell">{{salida.totalGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
               </tr>
             </tbody>
 
@@ -123,38 +124,58 @@
           </div>
           <table>
             <thead class="headerTable">
-              <th class="headerCell">Codigo</th>
+              <th class="headerCell">Código</th>
               <th class="headerCell">Nombre</th>
               <th class="headerCell">Stock actual</th>
               <th class="headerCell">Stock Minimo</th>
             </thead>
             <tbody>
-              <tr class="dataRow" *ngFor="let producto of dataFilteredP" (click)="getProductoAgotaminetoRecinto(producto.catalogo.id)">
+              <tr class="dataRow" *ngFor="let producto of dataFilteredP"
+                (click)="getProductoAgotaminetoRecinto(producto.catalogo.id)">
                 <td class="dataCell">{{producto.catalogo.id}}</td>
                 <td class="dataCell">{{producto.descripcion}}</td>
                 <td class="dataCell" style="color: red;">{{producto.stock}}</td>
                 <td class="dataCell">{{producto.stockMinimo}}</td>
               </tr>
             </tbody>
-
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td >
+                  <span style="display: flex; align-items: center; justify-content: flex-end;" >
+                    <mat-icon class="btnPag" (click)="previousPage()">navigate_before</mat-icon>
+                    <h5 style="margin: 0;">{{pagina}} / {{noPage}}</h5>
+                    <mat-icon class="btnPag" (click)="nextPage()">navigate_next</mat-icon>
+                  </span>
+                </td> 
+              </tr>
+            </tfoot>
           </table>
         </div>
       </mat-card>
-
+      
       <div class="recintoExistencia" *ngIf="itemEscasez > 0 && rol == 1">
-
         <mat-card class="cardRecinto" *ngFor="let recinto of dataRecintoEscasez">
 
-            <div class="contentRecintoRec">
-              <div>
-                <mat-card-title>{{recinto.recinto.nombre}}:</mat-card-title>
-              </div>
-    
-              <div class="cardContent">
-                <mat-card-subtitle *ngIf="recinto.producto != null; else noStock"> <h1 class="numberOfRec"> {{recinto.producto.stock}}</h1></mat-card-subtitle><!-- /{{recinto.producto.stockMinimo}}-->
-                <ng-template #noStock><h1 class="numberOf">0</h1></ng-template>
-              </div>
+          <div class="contentRecintoRec">
+            <div>
+              <mat-card-title>{{recinto.recinto.nombre}}:</mat-card-title>
             </div>
+
+            <div class="cardContent">
+              <mat-card-subtitle *ngIf="recinto.producto != null; else noStock">
+                <h1 class="numberOfRec"> {{recinto.producto.stock}}</h1>
+              </mat-card-subtitle><!-- /{{recinto.producto.stockMinimo}}-->
+              <ng-template #noStock>
+                <h1 class="numberOf">0</h1>
+              </ng-template>
+            </div>
+          </div>
+          <div style="padding: 10px; text-align: justify;" *ngIf="recinto.producto != null;">
+            <h4 style="margin: 0;">{{ truncateText(recinto.producto.descripcion, 97)}}</h4>
+          </div>
         </mat-card>
 
       </div>

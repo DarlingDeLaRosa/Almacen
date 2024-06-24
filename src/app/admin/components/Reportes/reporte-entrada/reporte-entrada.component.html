@@ -27,22 +27,22 @@
     </form>
 
     <span style="display: flex; ">
-      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon
+          class="printIcon">description</mat-icon></button>&nbsp;
 
-      <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true" ngxPrint ><mat-icon class="printIcon">print</mat-icon></button>
+      <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true"
+        ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
-  <div id="reportesEntrada"> 
-
-  <h3 class="title">Reportes de Entradas</h3>
+  <div id="reportesEntrada" >
+    
+    <h3 class="title">Reportes de Entradas</h3>
 
     <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
       <div class="entradaReporteTitle">
-        <h1>
-          Numero de Entrada:
-          {{entradas.idEntrada}}
-        </h1>
+        <h1> Numero de Entrada: {{entradas.idEntrada}} </h1>
+        <div *ngIf="loading" class="loader"></div>
       </div>
 
       <div class="entradaReporteSubtitle">
@@ -55,7 +55,8 @@
         <span> <b class="itemReporte">Proveedor:</b> {{entradas.proveedor.razonSocial}} </span>
         <span> <b class="itemReporte">Tipo de entrada:</b> {{entradas.tipoEntrada.descripcion}} </span>
         <span> <b class="itemReporte">Tipo de Entrega:</b> {{entradas.tipoEntrega.nombre}} </span>
-        <span> <b class="itemReporte">Creado por:</b> {{entradas.creadoPor.nombre}} {{entradas.creadoPor.apellido}} ({{entradas.creadoPor.cargo}})</span>
+        <span> <b class="itemReporte">Creado por:</b> {{entradas.creadoPor.nombre}} {{entradas.creadoPor.apellido}}
+          ({{entradas.creadoPor.cargo}})</span>
         <span> <b class="itemReporte">Monto total:</b> {{entradas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
       </div>
 
@@ -86,22 +87,17 @@
               <td class="dataCell">{{detalles.condicion}}</td>
               <td class="dataCell">{{detalles.producto.unidadMe.descripcion}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
-              <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.precio | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
               <td class="dataCell">{{detalles.cantidad}}</td>
-              <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.subTotal | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
 
             </tr>
           </tbody>
 
         </table>
       </div>
-
     </div>
-
   </div>
-  <div class="loadingRow" *ngIf="loading">
-    <div class="loader"></div>
-  </div>  
 
   <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
     <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>

@@ -1,7 +1,8 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button> <!--*ngIf="idRol == 1; else sup"-->
+    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button>
+    <!--*ngIf="idRol == 1; else sup"-->
     <!-- <ng-template #sup>
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva entrada</button>
     </ng-template> -->
@@ -33,7 +34,9 @@
           <th class="headerCell">Total</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th> <!--*ngIf="idRol == 1; else remove"-->
-          <th class="fuctionCell"></th> <!--*ngIf="idRol == 1; else remove"-->
+          <th class="fuctionCell">
+            <div *ngIf="loading" class="loader"></div>
+          </th> <!--*ngIf="idRol == 1; else remove"-->
           <ng-template #remove></ng-template>
         </tr>
       </thead>
@@ -48,27 +51,32 @@
           <td class="dataCell">{{item.noFactura}}</td>
           <td class="dataCell">{{item.proveedor.razonSocial}}</td>
           <td class="dataCell">{{item.creadoPor.nombre}} {{item.creadoPor.apellido}}</td>
-          <td class="dataCell">{{item.total - item.itbisGeneral | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell">{{item.itbisGeneral | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"> <button class="fucDetails" (click)="openModal(item.idEntrada)"><mat-icon>list</mat-icon></button></td>
-          <td class="dataCell" *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else supp"> <button  [routerLink]="['/almacen/editar-entrada', item.idEntrada]" class="fucEdit">
-            <mat-icon>edit</mat-icon></button></td> <!--idRol == 1 && -->
-          <ng-template #supp><td class="dataCell"></td></ng-template>
+          <td class="dataCell">{{item.total - item.itbisGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.itbisGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell"> <button class="fucDetails"
+              (click)="openModal(item.idEntrada)"><mat-icon>list</mat-icon></button></td>
+          <td class="dataCell"
+            *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else supp"> <button
+              [routerLink]="['/almacen/editar-entrada', item.idEntrada]" class="fucEdit">
+              <mat-icon>edit</mat-icon></button></td> <!--idRol == 1 && -->
+          <ng-template #supp>
+            <td class="dataCell"></td>
+          </ng-template>
 
-          <td *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else btnremove" class="dataCell"> <button (click)="removeAlert(item.idEntrada)" class="fucRem"><mat-icon>delete</mat-icon></button></td>
-          <ng-template #btnremove><td class="dataCell"></td></ng-template> <!--idRol == 1 && -->
+          <td *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else btnremove"
+            class="dataCell"> <button (click)="removeAlert(item.idEntrada)"
+              class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <ng-template #btnremove>
+            <td class="dataCell"></td>
+          </ng-template> <!--idRol == 1 && -->
         </tr>
       </tbody>
-
     </table>
 
-    <div class="loadingRow" *ngIf="loading">
-      <div class="loader"></div>
-    </div>  
-
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
-      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+      <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon>
+      </h1>
     </div>
 
     <div class="pagination">
@@ -76,5 +84,6 @@
       <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}}</div>
       <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
+
   </div>
 </div>

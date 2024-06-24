@@ -31,7 +31,9 @@
           <th class="headerCell">Total</th>
           <th class="fuctionCell"></th>
           <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th><!--*ngIf="idRol == 1; else remove"-->
+          <th class="fuctionCell">
+            <div *ngIf="loading" class="loader"></div>
+          </th><!--*ngIf="idRol == 1; else remove"-->
           <ng-template #remove></ng-template>
         </tr>
       </thead>
@@ -43,9 +45,9 @@
           <td class="dataCell">{{item.departamento.nombre}}</td>
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
           <td class="dataCell">{{item.creadoPorU.nombre}} {{item.creadoPorU.apellido}}</td>
-          <td class="dataCell">{{item.total | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell">{{item.itbis | currency: '': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell">{{item.totalGeneral | currency: '': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.itbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+          <td class="dataCell">{{item.totalGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
           </td>
           <td class="dataCell" *ngIf="idRol == 1; else supp"><button
@@ -64,9 +66,6 @@
       </tbody>
 
     </table>
-    <div class="loadingRow" *ngIf="loading">
-      <div class="loader"></div>
-    </div>
 
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
       <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon>

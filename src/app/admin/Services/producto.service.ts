@@ -60,11 +60,11 @@ export class productoService {
 
   // Ezcases de Productos 
 
-  public getProductoEscazes(url: string, token: string, page: number) {
+  public getProductoEscazes(url: string, token: string, page: number, cantItems: number = 15) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const productoHeader = {headers: headers}
 
-    const getproductoEzcases = `${url}/Producto/getproductoreport${page}-${this.cantidadItems}`
+    const getproductoEzcases = `${url}/Producto/getproductoreport${page}-${cantItems}`
     return this.http.get(getproductoEzcases, productoHeader)
   }
 

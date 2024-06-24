@@ -32,11 +32,11 @@
               <td class="dataCell">{{detalles.marca}}</td>
               <td class="dataCell">{{detalles.modelo}}</td>
               <td class="dataCell">{{detalles.serial}}</td>
-              <td class="dataCell">{{detalles.precio | currency: '': 'symbol': '1.2-2'}}</td>
-              <!-- <td class="dataCell">{{detalles.itbisProducto | currency: '': 'symbol': '1.2-2'}}</td> -->
-              <td class="dataCell">{{detalles.itbisProducto * detalles.cantidad | currency: '': 'symbol': '1.2-2'}}</td>
-              <td class="dataCell">{{detalles.subTotal | currency: '': 'symbol': '1.2-2' }}</td>
-              <td class="dataCell">{{detalles.subTotal + detalles.itbisProducto * detalles.cantidad | currency: '': 'symbol': '1.2-2' }}</td>
+              <td class="dataCell">{{detalles.precio | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+              <!-- <td class="dataCell">{{detalles.itbisProducto | currency: 'DOP ': 'symbol': '1.2-2'}}</td> -->
+              <td class="dataCell">{{detalles.itbisProducto * detalles.cantidad | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
+              <td class="dataCell">{{detalles.subTotal | currency: 'DOP ': 'symbol': '1.2-2' }}</td>
+              <td class="dataCell">{{detalles.subTotal + detalles.itbisProducto * detalles.cantidad | currency: 'DOP ': 'symbol': '1.2-2' }}</td>
             </tr>
           </tbody>
 

@@ -19,6 +19,8 @@ export class VistaInicialComponent {
   url: string = ''
   token: string = ''
   loading: boolean = false;
+  pagina: number = 1;
+  noPage: number = 1;
   dataFiltered: Entrada[] = [];
   dataFilteredS: salida[] = [];
   dataFilteredP: producto[] = []
@@ -121,9 +123,7 @@ export class VistaInicialComponent {
   }
 
   getProductoAgotamineto() {
-    let lastFour = 0
-
-    this.api.getProductoEscazes(this.url, this.token, 1)
+    this.api.getProductoEscazes(this.url, this.token, this.pagina, 4)
       .pipe(
         catchError((error) => {
           alertServerDown();
@@ -131,17 +131,13 @@ export class VistaInicialComponent {
         })
       )
       .subscribe((res: any) => {
-        this.itemEscasez = res.data.length
+        this.noPage = res.cantPage
         
         if (res.data != null) {
           this.getProductoAgotaminetoRecinto(res.data[0].catalogo.id)
-
-          res.data.map((detalle: any) => {
-            if (lastFour < 4) this.dataFilteredP.push(detalle)
-            lastFour += 1
-          })
+          this.itemEscasez = res.data.length
+          this.dataFilteredP = res.data
         }
-
       });
   }
 
@@ -156,12 +152,34 @@ export class VistaInicialComponent {
       )
       .subscribe((res: any) => {
         this.dataRecintoEscasez = []
-
+        console.log(res.data);
+        
         res.data.map((recintos: any) => {
           if (this.recintoActual != recintos.recinto.nombre) {
             this.dataRecintoEscasez.push(recintos)
           }          
         })
       });
+  }
+
+  truncateText(text: string, maxLength: number): string {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+  
+  nextPage() {
+    if (this.pagina < this.noPage) {
+      this.pagina += 1
+      this.getProductoAgotamineto()
+    }
+  }
+
+  previousPage() {
+    if (this.pagina > 1) {
+      this.pagina -= 1
+      this.getProductoAgotamineto()
+    }
   }
 }

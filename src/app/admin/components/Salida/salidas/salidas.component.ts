@@ -244,7 +244,7 @@ export class SalidasComponent implements OnInit {
           if (this.detailGroup.length > 0 && this.isSerial) {
             if (this.detailGroup.some(producto => {
               if (producto.serial && this.formDetalleSalida.value.serial) {
-                return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase()
+                return producto.serial.toUpperCase() == this.formDetalleSalida.value.serial.toUpperCase() || this.formDetalleSalida.value.serial == "N/A"
               }
               return false
             }
@@ -481,8 +481,6 @@ export class SalidasComponent implements OnInit {
   }
 
   sendData() {
-    console.log(this.formSalida.value);
-    
     if (this.formSalida.valid && this.detailGroup.length > 0) {
 
       if (this.formDetalleSalida.valid) {
