@@ -123,7 +123,6 @@ export class SalidasComponent implements OnInit {
       .subscribe((res: any) => {
 
         this.idProductoList = res.data
-        console.log(this.idProductoList);
 
         res.data.map((producto: any) => {
           if (producto.stock !== 0) this.productoList.push(producto)
@@ -397,12 +396,10 @@ export class SalidasComponent implements OnInit {
 
           if (res.data.productosLoteSerial.length > 0) { //&& res.data.serial.length != 0 COMPLETAR ESTA LOGICA 
             this.isSerial = true
-            console.log(this.detailGroup);
 
             const exisProducto = this.detailGroup.some(producto => {
               return producto.idProducto === this.formDetalleSalida.value.idProducto;
             });
-            console.log(this.listadeProducto);
 
             if (this.listadeProducto.length == 0 && !exisProducto || this.listadeProducto[0].producto.descripcion != producto) {
 

@@ -64,7 +64,6 @@ export class AdminSalidasComponent implements OnInit {
         this.loading = false
         this.noPage = res.cantPage
         this.dataFiltered = res.data
-        console.log(this.dataFiltered);
       });
   }
 

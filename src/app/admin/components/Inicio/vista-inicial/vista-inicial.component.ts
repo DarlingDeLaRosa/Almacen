@@ -152,7 +152,6 @@ export class VistaInicialComponent {
       )
       .subscribe((res: any) => {
         this.dataRecintoEscasez = []
-        console.log(res.data);
         
         res.data.map((recintos: any) => {
           if (this.recintoActual != recintos.recinto.nombre) {

@@ -48,9 +48,7 @@ export class ShowDetailsComponent {
       this.detallesList = res.data
       this.id = this.detallesList[0].idEntrada
       
-      ,() => {
-        alertServerDown();
-      }
+      ,() => { alertServerDown();}
     })
   }
 

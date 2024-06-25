@@ -26,9 +26,9 @@
     </form>
 
     <span style="display: flex; ">
-      <button class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
+      <button matTooltip="Exportar a excel." class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon class="printIcon">description</mat-icon></button>&nbsp;
 
-      <button class="btnImprimir" mat-stroked-button printSectionId="reportesEntradaProducto" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+      <button matTooltip="Imprimir." class="btnImprimir" mat-stroked-button printSectionId="reportesEntradaProducto" [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
@@ -77,9 +77,15 @@
   </div>
 
   <div class="pagination">
-    <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-    <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}}</div>
-    <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+    <button class="btnPag">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      <h3 style="margin: 0; font-weight: 500;">Anterior</h3>
+    </button>
+    <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
+    <button class="btnPag">
+      <h3 style="margin: 0; font-weight: 500;">Siguiente</h3>
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
   </div>
 
 </div>

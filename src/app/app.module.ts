@@ -11,7 +11,6 @@ import { AuthComponent } from './components/auth/auth.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './store/reducer';
 import { AdminModule } from './admin/admin.module';
-import { UserModule } from './user/user.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
@@ -25,7 +24,6 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     HttpClientModule,
     BrowserModule,
     AdminModule,
-    UserModule,
     AppRoutingModule,
     MaterialModule ,
     BrowserAnimationsModule,

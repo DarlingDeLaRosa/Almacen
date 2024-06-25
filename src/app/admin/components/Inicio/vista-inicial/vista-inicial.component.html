@@ -145,9 +145,9 @@
                 <td></td>
                 <td >
                   <span style="display: flex; align-items: center; justify-content: flex-end;" >
-                    <mat-icon class="btnPag" (click)="previousPage()">navigate_before</mat-icon>
+                    <mat-icon class="" (click)="previousPage()">navigate_before</mat-icon>
                     <h5 style="margin: 0;">{{pagina}} / {{noPage}}</h5>
-                    <mat-icon class="btnPag" (click)="nextPage()">navigate_next</mat-icon>
+                    <mat-icon class="" (click)="nextPage()">navigate_next</mat-icon>
                   </span>
                 </td> 
               </tr>
@@ -174,7 +174,7 @@
             </div>
           </div>
           <div style="padding: 10px; text-align: justify;" *ngIf="recinto.producto != null;">
-            <h4 style="margin: 0;">{{ truncateText(recinto.producto.descripcion, 97)}}</h4>
+            <h4 style="margin: 0;">{{ truncateText(recinto.producto.descripcion, 70)}}</h4>
           </div>
         </mat-card>
 

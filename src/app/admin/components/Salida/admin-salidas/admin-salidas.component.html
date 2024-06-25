@@ -48,17 +48,19 @@
           <td class="dataCell">{{item.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.itbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.totalGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"><button class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
+          <td class="dataCell"><button  matTooltip="Listado de detalles de salida." class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
           </td>
-          <td class="dataCell" *ngIf="idRol == 1; else supp"><button
+          <!--*ngIf="idRol == 1; else supp"-->
+          <td class="dataCell" ><button
               *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
               [routerLink]="['/almacen/editar-salida', item.idSalida]"
-              class="fucEdit"><mat-icon>edit</mat-icon></button><!--idRol == 1 &&-->
+              class="fucEdit"  matTooltip="Editar salida."><mat-icon>edit</mat-icon></button><!--idRol == 1 &&-->
           </td>
           <ng-template #supp></ng-template>
-          <td class="dataCell" *ngIf="idRol == 1; else btnremove">
+          <!--*ngIf="idRol == 1; else btnremove"-->
+          <td class="dataCell" >
             <button *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
-              (click)="removeAlert(item.idSalida)" class="fucRem"><mat-icon>delete</mat-icon></button>
+              (click)="removeAlert(item.idSalida)" class="fucRem"  matTooltip="Eliminar salida."><mat-icon>delete</mat-icon></button>
             <!--idRol == 1 &&-->
           </td>
           <ng-template #btnremove></ng-template>
@@ -73,9 +75,15 @@
     </div>
 
     <div class="pagination">
-      <button class="btnPag"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-      <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}} </div>
-      <button class="btnPag"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+      <button class="btnPag">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
+      </button>
+      <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
+      <button class="btnPag">
+        <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
     </div>
   </div>
 

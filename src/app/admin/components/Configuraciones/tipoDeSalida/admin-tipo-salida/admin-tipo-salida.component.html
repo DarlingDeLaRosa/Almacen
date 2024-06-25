@@ -28,8 +28,8 @@
         <tr class="dataRow" *ngFor="let item of dataFiltered">
           <td class="dataCell">{{item.nombre}}</td>
           <td class="dataCell">{{item.descripcion}}</td>
-          <td class="dataCell" *ngIf="item.nombre !== 'Prestamo' && item.nombre !== 'Donación' ; else noRemove"> <button class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button> </td>
-          <td class="dataCell" *ngIf="item.nombre !== 'Prestamo' && item.nombre !== 'Donación' ; else noRemove"> <button class="fucRem"(click)="removeAlert(item.idTipoSalida)"><mat-icon>delete</mat-icon></button></td> </tr>
+          <td class="dataCell" *ngIf="item.nombre !== 'Prestamo' && item.nombre !== 'Donación' ; else noRemove"> <button matTooltip="Editar tipo de salida." class="fucEdit" (click)="openModal(item)"><mat-icon>edit</mat-icon></button> </td>
+          <td class="dataCell" *ngIf="item.nombre !== 'Prestamo' && item.nombre !== 'Donación' ; else noRemove"> <button matTooltip="Eliminar tipo de salida." class="fucRem"(click)="removeAlert(item.idTipoSalida)"><mat-icon>delete</mat-icon></button></td> </tr>
           
           <ng-template #noRemove> <td class="dataCell"></td> </ng-template>
         </tbody>
@@ -41,9 +41,15 @@
     </div>
     
     <div class="pagination">
-        <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-        <div style="display: grid; place-items: center;">{{pagina}}/{{noPage}}</div>
-        <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+      <button class="btnPag">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
+      </button>
+      <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
+      <button class="btnPag">
+        <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
     </div>
   </div>
 

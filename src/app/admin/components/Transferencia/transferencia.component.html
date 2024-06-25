@@ -36,20 +36,23 @@
                 </ng-template>
 
                 <h4>
-                    Enviado por {{transferencia.creadoPor.nombre}} {{transferencia.creadoPor.apellido}} ({{transferencia.creadoPor.recinto.nombre}})
+                    Enviado por {{transferencia.creadoPor.nombre}} {{transferencia.creadoPor.apellido}}
+                    ({{transferencia.creadoPor.recinto.nombre}})
                 </h4>
 
 
-                <Button class="fucDetails" (click)="openModal(transferencia.salida)"><mat-icon>list</mat-icon></Button>
+                <Button class="fucDetails" (click)="openModal(transferencia.salida)"
+                    matTooltip="Listado de detalles de transferencia."><mat-icon>list</mat-icon></Button>
 
                 <button
                     *ngIf="transferencia.recinto.nombre == recinto && transferencia.estado == 'EN PROCESO'; else recieve"
-                    class="acceptTrans" mat-mini-fab
-                    (click)="aceptarTransferencia(transferencia.id)"><mat-icon>done</mat-icon></button>
+                    class="acceptTrans" mat-mini-fab (click)="aceptarTransferencia(transferencia.id)"
+                    matTooltip="Aceptar transferencia."><mat-icon>done</mat-icon></button>
 
                 <ng-template #recieve>
                     <button *ngIf="transferencia.estado == 'EN PROCESO'" class="removeTrans" mat-mini-fab
-                        (click)="removeAlert(transferencia.salida.idSalida)"><mat-icon>close</mat-icon></button>
+                        (click)="removeAlert(transferencia.salida.idSalida)"
+                        matTooltip="Rechazar transferencia."><mat-icon>close</mat-icon></button>
                 </ng-template>
             </div>
 
@@ -75,14 +78,15 @@
                         <h4> Transferencia enviada al recinto {{transferenciaAccept.recinto.nombre}}</h4>
                     </ng-template>
 
-                    <h4 *ngIf="transferenciaAccept.recinto.nombre == recinto; else responsable">Aceptada por {{transferenciaAccept.creadoPor.nombre}} {{transferenciaAccept.creadoPor.apellido}}</h4>
+                    <h4 *ngIf="transferenciaAccept.recinto.nombre == recinto; else responsable">Aceptada por
+                        {{transferenciaAccept.creadoPor.nombre}} {{transferenciaAccept.creadoPor.apellido}}</h4>
 
                     <ng-template #responsable>
                         <h4></h4>
                     </ng-template>
 
-                    <Button class="fucDetails"
-                        (click)="openModal(transferenciaAccept.salida)"><mat-icon>list</mat-icon></Button>
+                    <Button class="fucDetails" (click)="openModal(transferenciaAccept.salida)"
+                        matTooltip="Listado de detalles de transferencia."><mat-icon>list</mat-icon></Button>
                 </div>
 
                 <div class="noDataRow" *ngIf="dataFilteredAccept.length == 0 && loading == false;">
@@ -110,14 +114,15 @@
                         <h4> Transferencia enviada al recinto {{transferenciaCancel.recinto.nombre}}</h4>
                     </ng-template>
 
-                    <h4 *ngIf="transferenciaCancel.recinto.nombre == recinto; else responsable">Cancelada por {{transferenciaCancel.creadoPor.nombre}} {{transferenciaCancel.creadoPor.apellido}}</h4>
+                    <h4 *ngIf="transferenciaCancel.recinto.nombre == recinto; else responsable">Cancelada por
+                        {{transferenciaCancel.creadoPor.nombre}} {{transferenciaCancel.creadoPor.apellido}}</h4>
 
                     <ng-template #responsable>
                         <h4></h4>
                     </ng-template>
 
-                    <Button class="fucDetails"
-                        (click)="openModal(transferenciaCancel.salida)"><mat-icon>list</mat-icon></Button>
+                    <Button class="fucDetails" (click)="openModal(transferenciaCancel.salida)"
+                        matTooltip="Listado de detalles de transferencia."><mat-icon>list</mat-icon></Button>
                 </div>
 
                 <div class="noDataRow" *ngIf="dataFilteredCancel.length == 0 && loading == false;">
@@ -132,9 +137,14 @@
         </div>
 
         <div class="pagination">
-            <button class="btnPag" (click)="previousPage()"> <mat-icon>keyboard_arrow_left</mat-icon> </button>
-            <div style="display: grid; place-items: center;">{{pagina}} / {{noPage}}</div>
-            <button class="btnPag" (click)="nextPage()"> <mat-icon>keyboard_arrow_right</mat-icon></button>
+            <button class="btnPag">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+                <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
+            </button>
+            <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
+            <button class="btnPag">
+                <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
         </div>
     </div>
-</div>

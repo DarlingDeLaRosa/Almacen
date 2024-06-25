@@ -14,11 +14,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./admin/superAdmin-routing.module').then((m) => m.AdminRoutingModule)
   },
-  {
-    path: 'user-almacen',
-    loadChildren: () =>
-      import('./user/user-routing.module').then((m) => m.UserRoutingModule)
-  },
+  
   { path: '', pathMatch: 'full', redirectTo: 'almacen/inicio' }, 
   { path: '**', redirectTo: '/login' },
 ];
