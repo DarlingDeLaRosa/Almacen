@@ -19,6 +19,14 @@ export class salidaService {
     return this.http.get(getSalida, salidaHeader)
   }
 
+  public getSalidaReport(url: string, token: string, page: number, itemsPorPage:number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const salidaHeader = {headers: headers}
+
+    const getSalida = `${url}/Salida/getallreport?page=${page}&CantItems=${itemsPorPage}`
+    return this.http.get(getSalida, salidaHeader)
+  }
+
   public getSalidaById(url: string, token: string, id:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}

@@ -127,3 +127,7 @@ table {
 .cardExistencia .contentLast table tbody .dataRow:hover{
   background-color: rgba(255, 112, 16, 0.144);
 }
+
+.dataRow {
+  height: 55px;
+}

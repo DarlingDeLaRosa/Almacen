@@ -53,7 +53,6 @@ export class ShowDetailsSalidaComponent {
     )
     .subscribe((res: any)=>{
       this.detallesList = res.data
-      
       this.id = this.detallesList[0].idSalida
       this.tipoSalida = this.item.tipoSalida.nombre 
     })

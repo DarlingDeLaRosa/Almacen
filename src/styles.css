@@ -74,7 +74,7 @@ h1 {
 
 .viewContent, .viewInitContent {
   display: grid;
-  grid-template-rows: 8vh auto;
+  grid-template-rows: 6vh auto;
   padding: 16px;
 }
 /* 
@@ -126,7 +126,7 @@ table {
 }
 
 .headerTable {
-  height: 6vh;
+  height: 50px;
 }
 
 .headerCell {
@@ -140,7 +140,8 @@ table {
 }
 
 .headerRepRow {
-  background-color: #ddd;
+  border-top: 1px solid #ccc;
+  background-color: #eee;
 }
 
 .dataCell {
@@ -153,7 +154,7 @@ table {
 }
 
 .dataRow {
-  height: 6vh;
+  height: 48px;
 }
 
 .dataRow:nth-child(even) {
@@ -217,7 +218,7 @@ table {
 }
 
 .footerCell {
-  height: 6vh;
+  height: 50px;
   border-top: 2px solid #004b8d2a;
   border-bottom: 2px solid #004b8d2a;
   padding-left: 15px;
@@ -230,7 +231,7 @@ table {
 
 #reporteHeader {
   display: grid;
-  grid-template-rows: 8vh 8vh 12vh auto;
+  grid-template-rows: 55px 50px 75px auto;
   min-height: 60px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -242,7 +243,7 @@ table {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #004b8d2a;
+  background-color: #3578b325;
   padding: 0px 16px;
 }
 
@@ -490,7 +491,7 @@ mat-sidenav {
 
 .processTranfer, .recieveTransfer, .sendTransfer{
   display: grid;
-  height: 8vh;
+  height: 65px;
   align-items: center;
   grid-template-columns: 50px 200px 1fr 1fr 50px ;
   border-radius: 5px;

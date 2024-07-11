@@ -29,35 +29,37 @@
     <span style="display: flex; ">
       <button matTooltip="Exportar a excel." class="btnImprimir" mat-stroked-button (click)="exportExcel()"><mat-icon
           class="printIcon">description</mat-icon></button>&nbsp;
-          
-      <button matTooltip="Imprimir." class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada" [useExistingCss]="true"
-        ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
+
+      <button matTooltip="Imprimir." class="btnImprimir" mat-stroked-button printSectionId="reportesEntrada"
+        [useExistingCss]="true" ngxPrint><mat-icon class="printIcon">print</mat-icon></button>
     </span>
   </div>
 
-  <div id="reportesEntrada" >
-    
-    <h3 class="title">Reportes de Entradas</h3>
+  <div id="reportesEntrada">
+
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reportes de Entradas</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <div id="reporteHeader" *ngFor="let entradas of dataFiltered">
       <div class="entradaReporteTitle">
         <h1> Numero de Entrada: {{entradas.idEntrada}} </h1>
-        <div *ngIf="loading" class="loader"></div>
       </div>
 
       <div class="entradaReporteSubtitle">
-        <h3> <b class="itemReporte">Fecha:</b> {{entradas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
-        <h3> <b class="itemReporte">Numero de Factura:</b> {{entradas.noFactura}}</h3>
-        <h3> <b class="itemReporte">Numero de Contrato:</b> {{entradas.numOrden}}</h3>
+        <h3> <b class="itemReporte">Fecha: </b> {{entradas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
+        <h3> <b class="itemReporte">Numero de Factura: </b> {{entradas.noFactura}}</h3>
+        <h3> <b class="itemReporte">Numero de Contrato: </b> {{entradas.numOrden}}</h3>
       </div>
       <div class="entradaReporteDetalle">
-        <span> <b class="itemReporte">Recinto:</b> {{entradas.recinto.nombre}} </span>
-        <span> <b class="itemReporte">Proveedor:</b> {{entradas.proveedor.razonSocial}} </span>
-        <span> <b class="itemReporte">Tipo de entrada:</b> {{entradas.tipoEntrada.descripcion}} </span>
-        <span> <b class="itemReporte">Tipo de Entrega:</b> {{entradas.tipoEntrega.nombre}} </span>
-        <span> <b class="itemReporte">Creado por:</b> {{entradas.creadoPor.nombre}} {{entradas.creadoPor.apellido}}
+        <span> <b class="itemReporte">Recinto: </b> {{entradas.recinto.nombre}} </span>
+        <span> <b class="itemReporte">Proveedor: </b> {{entradas.proveedor.razonSocial}} </span>
+        <span> <b class="itemReporte">Tipo de entrada: </b> {{entradas.tipoEntrada.descripcion}} </span>
+        <span> <b class="itemReporte">Tipo de Entrega: </b> {{entradas.tipoEntrega.nombre}} </span>
+        <span> <b class="itemReporte">Creado por: </b> {{entradas.creadoPor.nombre}} {{entradas.creadoPor.apellido}}
           ({{entradas.creadoPor.cargo}})</span>
-        <span> <b class="itemReporte">Monto total:</b> {{entradas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
+        <span> <b class="itemReporte">Monto total: </b> {{entradas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
       </div>
 
       <div class="observacionReporte">
@@ -104,15 +106,15 @@
   </div>
 
   <div class="pagination">
-    <button class="btnPag">
+    <button class="btnPag" (click)="previousPage()">
       <mat-icon>keyboard_arrow_left</mat-icon>
-      <h3 style="margin: 0; font-weight: 500;">Anterior</h3>
+      <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
     </button>
     <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
-    <button class="btnPag">
-      <h3 style="margin: 0; font-weight: 500;">Siguiente</h3>
+    <button class="btnPag" (click)="nextPage()">
+      <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
       <mat-icon>keyboard_arrow_right</mat-icon>
     </button>
-  </div >
+  </div>
 
 </div>

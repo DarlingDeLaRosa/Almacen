@@ -21,6 +21,14 @@ export class entradaService {
     return this.http.get(getEntrada, EntradaHeader)
   }
 
+  public getEntradaAllReport(url: string, token: string, page: number, itemPorPage: number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const EntradaHeader = {headers: headers}
+
+    const getEntrada = `${url}/Entrada/getAllReport?page=${page}&CantItems=${itemPorPage}`
+    return this.http.get(getEntrada, EntradaHeader)
+  }
+
   public getEntradaById(url: string, token: string, id:number) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}

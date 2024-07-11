@@ -55,7 +55,7 @@ export class ReporteSalidaComponent {
   getSalida() {
     this.loading = true
 
-    this.api.getSalida(this.url, this.token, this.pagina,10)
+    this.api.getSalidaReport(this.url, this.token, this.pagina,10)
     .pipe(
       catchError((error) => {
         this.loading = false
@@ -130,5 +130,4 @@ export class ReporteSalidaComponent {
       this.getSalida()
     }
   }
-
 }

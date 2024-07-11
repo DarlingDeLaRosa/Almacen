@@ -34,25 +34,27 @@
   </div>
 
   <div id="reportesSalidas">
-
-    <h3 class="title">Reportes de Salidas</h3>
+    
+    <div style="display: flex; justify-content: space-between;">
+      <h3 class="title" style="margin: 0;">Reportes de Salidas</h3>
+      <div *ngIf="loading" class="loader"></div>
+    </div>
 
     <div id="reporteHeader" *ngFor="let salidas of dataFiltered">
       <div class="entradaReporteTitle">
         <h1>Numero de Salida: {{salidas.idSalida}}</h1>
-        <div *ngIf="loading" class="loader"></div>
       </div>
 
       <div class="entradaReporteSubtitle">
-        <h3> <b class="itemReporte">Fecha:</b> {{salidas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
+        <h3> <b class="itemReporte">Fecha: </b> {{salidas.fechaCreacion | date: 'dd/MM/yyyy'}}</h3>
       </div>
       <div class="entradaReporteDetalle">
-        <span> <b class="itemReporte">Recinto:</b> {{salidas.recinto.nombre}} </span>
-        <span> <b class="itemReporte">Tipo de salida:</b> {{salidas.tipoSalida.nombre}} </span>
-        <span> <b class="itemReporte">Departamento:</b> {{salidas.departamento.nombre}} </span>
-        <span> <b class="itemReporte">Creado por:</b> {{salidas.creadoPorU.nombre}} {{salidas.creadoPorU.apellido}}
+        <span> <b class="itemReporte">Recinto: </b> {{salidas.recinto.nombre}} </span>
+        <span> <b class="itemReporte">Tipo de salida: </b> {{salidas.tipoSalida.nombre}} </span>
+        <span> <b class="itemReporte">Departamento: </b> {{salidas.departamento.nombre}} </span>
+        <span> <b class="itemReporte">Creado por: </b> {{salidas.creadoPorU.nombre}} {{salidas.creadoPorU.apellido}}
           ({{salidas.creadoPorU.cargo}})</span>
-        <span> <b class="itemReporte">Monto total:</b> {{salidas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
+        <span> <b class="itemReporte">Monto total: </b> {{salidas.total | currency: 'DOP ': 'symbol': '1.2-2'}} </span>
       </div>
 
       <div class="observacionReporte">
@@ -99,13 +101,13 @@
   </div>
 
   <div class="pagination">
-    <button class="btnPag">
+    <button class="btnPag" (click)="previousPage()">
       <mat-icon>keyboard_arrow_left</mat-icon>
-      <h3 style="margin: 0; font-weight: 500;">Anterior</h3>
+      <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
     </button>
     <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
-    <button class="btnPag">
-      <h3 style="margin: 0; font-weight: 500;">Siguiente</h3>
+    <button class="btnPag" (click)="nextPage()">
+      <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
       <mat-icon>keyboard_arrow_right</mat-icon>
     </button>
   </div>

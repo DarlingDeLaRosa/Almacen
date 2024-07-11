@@ -77,13 +77,13 @@
   </div>
 
   <div class="pagination">
-    <button class="btnPag">
+    <button class="btnPag" (click)="previousPage()">
       <mat-icon>keyboard_arrow_left</mat-icon>
-      <h3 style="margin: 0; font-weight: 500;">Anterior</h3>
+      <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
     </button>
     <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
-    <button class="btnPag">
-      <h3 style="margin: 0; font-weight: 500;">Siguiente</h3>
+    <button class="btnPag" (click)="nextPage()">
+      <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
       <mat-icon>keyboard_arrow_right</mat-icon>
     </button>
   </div>
