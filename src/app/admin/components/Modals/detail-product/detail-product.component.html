@@ -1,0 +1,49 @@
+<div class="modal">
+    <div class="modal-header">
+      <div>
+        <h1>{{item.nombre}} <span class="tag">{{item.codInstitucional}}</span></h1>
+        <p style="margin: 0;">{{item.descripcion}}</p>
+      </div>
+      <div class="price">RD{{item.precio | currency}}</div>
+    </div>
+
+    <div class="section">
+      <h3>Información de Inventario</h3>
+      <div class="grid">
+        <span class="infoContaSpan"> <h2 >Stock Disponible:</h2> {{item.stock}} </span>
+        <span class="infoContaSpan"> <h2>Stock Mínimo:</h2> {{item.stockMinimo}} </span>
+        <span class="infoContaSpan"> <h2>ITBIS:</h2> {{item.itbis}}% </span>
+        <span class="infoContaSpan"> <h2>Unidad de Medida:</h2> {{item.unidadMedida.descripcion}} </span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Información de Catálogo</h3>
+      <div class="grid">
+        <span class="infoContaSpan"> <h2>ID Catálogo:</h2> {{item.catalogo.id}} </span>
+        <span class="infoContaSpan"> <h2>Nombre Catálogo:</h2> {{item.catalogo.nombre}} </span>
+      </div>
+      
+      <h2>Definición:</h2>
+      <p class="definition">
+        {{item.catalogo.definicionProducto}}
+      </p>
+
+      <h2>Sinonimos:</h2>
+      <div class="tags"  >
+        <div *ngFor="let sim of item.catalogo.sinonimos.split(',')">{{sim}}</div>
+      </div>
+      <span class="infoContaSpan" style="margin-top: 5px;">
+          <h2>Auxiliar:</h2> {{item.catalogo.auxiliar.id}} - {{item.catalogo.auxiliar.denominacion}}
+      </span>
+    </div>
+
+    <div class="section footer">
+      <span class="infoContaSpan"> <h2>Tipo de Artículo: </h2>{{item.tipoArt.nombre}} </span>
+      <span class="infoContaSpan"> <h2>Tipo de Almacén:</h2> {{item.tipoAlmacen.nombre}} </span>
+    </div>
+
+    <div style="display: flex; justify-content: end;">
+        <button mat-stroked-button  (click)="closeModal()">Cerrar</button>
+    </div>
+  </div>

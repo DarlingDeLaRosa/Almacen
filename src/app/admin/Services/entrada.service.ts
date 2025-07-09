@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { detalleProductoEntrada, detallePutGroup, postEntrada, putEntrada } from '../models/interfaces';
 import { BehaviorSubject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class entradaService {
 
   constructor(private http: HttpClient) { }
 
-  public getEntrada(url: string, token: string, page: number, itemPorPage: number) {
+  public getEntrada(url: string, token: string, page: number, itemPorPage: number, recinto: number| null  = null) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const EntradaHeader = {headers: headers}
 
-    const getEntrada = `${url}/Entrada?page=${page}&CantItems=${itemPorPage}`
+    const getEntrada = `${url}/Entrada?page=${page}&CantItems=${itemPorPage}&idRecinto=${recinto}`
     return this.http.get(getEntrada, EntradaHeader)
   }
 
@@ -77,6 +78,14 @@ export class entradaService {
     return this.http.delete(removeEntrada, EntradaHeader)
   }
 
+  public authEntrada(idEntrada:number, url: string, token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const EntradaHeader = {headers: headers}
+    
+    const authEntrada = `${url}/Entrada/auth_edit/${idEntrada}`
+    return this.http.put(authEntrada, '', EntradaHeader)
+  }
+
   // Detalles de Entrada
 
   public getDetalleEntrada(url: string, token: string, id: number) {
@@ -122,6 +131,14 @@ export class entradaService {
 
     const postDetalleEntrada = `${url}/Entrada/addtrasferencia${id}`
     return this.http.post(postDetalleEntrada, '', detalleEntradaHeader)
+  }
+
+  public putTransferenciaAceptar(url: string, id: number, token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const postTransferenciaAceptarHeader = {headers: headers}
+
+    const postTransferenciaAceptar = `${url}/Salida/auth_trasferencia?idTransferencia=${id}`
+    return this.http.put(postTransferenciaAceptar, '' , postTransferenciaAceptarHeader)
   }
 
 }

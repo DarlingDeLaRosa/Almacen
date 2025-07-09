@@ -1,7 +1,7 @@
 <div class="viewContent">
   <div class="fuctionContent">
     <h1 class="title" mat-dialog-title>Editar entrada</h1>
-    <button  mat-stroked-button class="btnNavigate"
+    <button mat-stroked-button class="btnNavigate"
       [routerLink]="['/almacen/administrar-entrada']"><mat-icon>arrow_back</mat-icon>Volver</button> <!--*ngIf="idRol == 1 ; else supp"-->
       <!-- <ng-template #supp>
         <button mat-stroked-button class="btnNavigate"
@@ -83,7 +83,7 @@
 
       <mat-form-field class="comment" hideRequiredMarker appearance="fill">
         <mat-label>Observacion</mat-label>
-        <input matInput required formControlName="observacion">
+        <input matInput formControlName="observacion">
       </mat-form-field>&nbsp;
 
       <!-- <mat-form-field hideRequiredMarker appearance="fill" *ngIf="!generalITBIS; else generalItbis">
@@ -98,8 +98,9 @@
 
       <div class="fuctionContent newProduct">
         <h2>Informacion de producto</h2>
-        <button mat-stroked-button class="newPro" (click)="openModal()">Crear nuevo producto</button> <!--*ngIf="idRol == 1; else noNewPro" -->
-        <!-- <ng-template #noNewPro></ng-template> -->
+        <ng-container *ngIf="recinto$ | async as recinto">
+          <button *ngIf="idRol == 1 && recinto == 'RECTORIA'" mat-stroked-button class="newPro" (click)="openModal()">Crear nuevo producto</button>
+        </ng-container>
       </div>
 
       <div>

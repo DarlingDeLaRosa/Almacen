@@ -1,8 +1,9 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/salida']">Crear
-      nueva salida</button> <!--*ngIf="idRol == 1; else sup"-->
+    <button mat-stroked-button *ngIf="idRol == 4 || idRol == 2; else noCreate" class="btnNavigate"
+      [routerLink]="['/almacen/salida']">Crear nueva salida</button> <!--*ngIf="idRol == 1; else sup"-->
+    <ng-template #noCreate> <span></span></ng-template>
     <!-- <ng-template #sup>
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/salida']">Crear nueva salida</button>
     </ng-template> -->
@@ -14,6 +15,18 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </form>
+  </div>
+
+  <div *ngIf="recintoActual == 7 && idRol == 1 || recintoActual == 7 && idRol == 2">
+    <mat-button-toggle-group aria-label="Font Style" [(ngModel)]="recintoSelected" (ngModelChange)="getSalida()">
+      <mat-button-toggle [value]="7">Rectoria</mat-button-toggle>
+      <mat-button-toggle [value]="1">Félix Evaristo Mejía</mat-button-toggle>
+      <mat-button-toggle [value]="2">Juan Vicente Moscoso</mat-button-toggle>
+      <mat-button-toggle [value]="3">Luis Napoleon Nuñez Molina</mat-button-toggle>
+      <mat-button-toggle [value]="4">Emilio Prud'Homme</mat-button-toggle>
+      <mat-button-toggle [value]="5">Urania Montas</mat-button-toggle>
+      <mat-button-toggle [value]="6">Eugenio María de Hostos</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 
   <div>
@@ -29,18 +42,26 @@
           <th class="headerCell">Sub-Total</th>
           <th class="headerCell">ITBIS</th>
           <th class="headerCell">Total</th>
-          <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th>
+          <th class="fuctionCell"
+            *ngIf="recintoActual == 7 && idRol == 1 && recintoSelected == 7 || recintoActual == 7 && idRol == 2 && recintoSelected != 7">
+          </th>
           <th class="fuctionCell">
+            <div *ngIf="loading && idRol == 3" class="loader"></div>
+          </th>
+          <th class="fuctionCell" *ngIf="idRol != 3">
+            <div *ngIf="loading && idRol !== 2 && idRol !== 1" class="loader"></div>
+          </th>
+          <th class="fuctionCell"
+            *ngIf="recintoActual == 7 && idRol == 1 && recintoSelected == 7 || recintoActual == 7 && idRol == 2 && recintoSelected != 7">
             <div *ngIf="loading" class="loader"></div>
           </th><!--*ngIf="idRol == 1; else remove"-->
-          <ng-template #remove></ng-template>
+          <!-- <ng-template #remove></ng-template> -->
         </tr>
       </thead>
       <tbody>
         <tr class="dataRow" *ngFor="let item of dataFiltered">
           <td class="dataCell">{{item.fechaCreacion | date:'dd/MM/yyyy'}}</td>
-          <td class="dataCell">{{item.creadoPorU.recinto.nombre}}</td>
+          <td class="dataCell">{{item.recinto.nombre}}</td>
           <td class="dataCell">{{item.idSalida}}</td>
           <td class="dataCell">{{item.departamento.nombre}}</td>
           <td class="dataCell">{{item.tipoSalida.nombre}}</td>
@@ -48,25 +69,34 @@
           <td class="dataCell">{{item.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.itbis | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.totalGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"><button  matTooltip="Listado de detalles de salida." class="fucDetails" (click)="openModal(item)"> <mat-icon>list</mat-icon></button>
+          <td class="iconCell"
+            *ngIf="recintoActual == 7 && idRol == 1 && recintoSelected == 7 || recintoActual == 7 && idRol == 2 && recintoSelected != 7">
+            <mat-icon style="color: gray; cursor: pointer;" (click)="authSalida(item.idSalida)"
+              *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' && item.isEditable == false"
+              matTooltip="Habilitar edición.">lock</mat-icon>
+            <mat-icon style="color: gray;" *ngIf="item.isEditable" matTooltip="Edición Habilitada.">lock_open</mat-icon>
           </td>
-          <!--*ngIf="idRol == 1; else supp"-->
-          <td class="dataCell" ><button
-              *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
-              [routerLink]="['/almacen/editar-salida', item.idSalida]"
-              class="fucEdit"  matTooltip="Editar salida."><mat-icon>edit</mat-icon></button><!--idRol == 1 &&-->
+          <td class="iconCell">
+            <mat-icon (click)="openModal(item)" matTooltip="Listado de detalles de salida."
+              style="color: #004b8d;">list</mat-icon>
           </td>
-          <ng-template #supp></ng-template>
-          <!--*ngIf="idRol == 1; else btnremove"-->
-          <td class="dataCell" >
-            <button *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' else supp"
-              (click)="removeAlert(item.idSalida)" class="fucRem"  matTooltip="Eliminar salida."><mat-icon>delete</mat-icon></button>
-            <!--idRol == 1 &&-->
+          <td class="iconCell">
+            <mat-icon matTooltip="Editar salida." style="color: green;"
+              [routerLink]="['/almacen/editar-salida', item.idSalida]" *ngIf="
+              idRol != 3 && idRol != 1 &&
+              item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' &&
+              (item.isEditable && idRol == 4 || item.fechaCreacion.getMonth() == todayDate.getMonth() ) || 
+              (idRol == 1 && recintoSelected == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7)
+              ">edit</mat-icon>
           </td>
-          <ng-template #btnremove></ng-template>
+          <td class="iconCell"
+          *ngIf="idRol == 1 && recintoSelected == 7 && recintoActual == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7 ;">
+            <mat-icon
+              *ngIf="item.tipoSalida.nombre != 'Prestamo' && item.tipoSalida.nombre != 'Donación' && idRol == 1 || idRol == 2"
+              (click)="removeAlert(item.idSalida)" matTooltip="Eliminar salida." style="color: red">delete</mat-icon>
+          </td>
         </tr>
       </tbody>
-
     </table>
 
     <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
@@ -86,5 +116,4 @@
       </button>
     </div>
   </div>
-
 </div>

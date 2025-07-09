@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertAuthSuccess, alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertValidateSure, loading } from 'src/app/admin/Helpers/alertsFunctions';
 import { salida } from 'src/app/admin/models/interfaces';
 import { salidaService } from 'src/app/admin/Services/salida.service';
 import { ShowDetailsSalidaComponent } from '../../Modals/show-details-salida/show-details-salida.component';
@@ -24,6 +24,9 @@ export class AdminSalidasComponent implements OnInit {
   noPage: number = 1
   idRol: number = 0
   loading: boolean = false;
+  todayDate!: Date
+  recintoActual: number = 0
+  recintoSelected: number = 7
 
   constructor(
     public dialog: MatDialog,
@@ -38,12 +41,14 @@ export class AdminSalidasComponent implements OnInit {
     combineLatest([
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.recinto.idRecinto),
       this.store.select(state => state.app.user.role.idRol),
-    ]).subscribe(([tokenValue, pathValue, idRole]) => {
+    ]).subscribe(([tokenValue, pathValue, recinto, idRole]) => {
 
       this.url = pathValue;
       this.token = tokenValue;
-      this.idRol = idRole
+      this.idRol = idRole;
+      this.recintoActual = recinto
 
       this.getSalida()
     })
@@ -52,7 +57,7 @@ export class AdminSalidasComponent implements OnInit {
   getSalida() {
     this.loading = true
 
-    this.api.getSalida(this.url, this.token, this.pagina, 15)
+    this.api.getSalida(this.url, this.token, this.pagina, 15, this.recintoSelected)
       .pipe(
         catchError((error) => {
           this.loading = false
@@ -63,8 +68,36 @@ export class AdminSalidasComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading = false
         this.noPage = res.cantPage
+        this.todayDate = new Date(res.dateNow)
+
         this.dataFiltered = res.data
+
+        this.dataFiltered = res.data.map((item: any) => ({
+          ...item, fechaCreacion: new Date(item.fechaCreacion)
+        }));
       });
+  }
+
+  async authSalida(idSalida: number) {
+    let removeChoise: boolean = await alertValidateSure()
+
+    if (removeChoise) {
+      this.loading = true
+      this.api.authSalida(idSalida  , this.url, this.token)
+        .pipe(
+          catchError((error) => {
+            this.loading = false; alertServerDown();
+            return throwError(error);
+          })
+        )
+        .subscribe((res: any) => {
+          if (res.success) {
+            this.loading = false
+            alertAuthSuccess()
+            this.getSalida()
+          }
+        });
+    }
   }
 
   onInputFilterChange() {

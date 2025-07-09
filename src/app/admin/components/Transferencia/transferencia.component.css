@@ -19,12 +19,16 @@ h2{
     font-weight: 400;
 }
 
-.acceptTrans{
-    color: #49aa42;
-    background-color: white;
+.removeTrans, .acceptTrans{
+    color: red;
+    border: none;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: transparent;
 }
 
-.removeTrans{
-    color: red;
-    background-color: white;
+.acceptTrans{
+    color: #49aa42;
+    /* border-radius: 50px;
+    background-color: white; */
 }

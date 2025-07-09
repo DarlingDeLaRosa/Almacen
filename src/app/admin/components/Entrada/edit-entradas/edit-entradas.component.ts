@@ -10,7 +10,7 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { detalleEditProductoEntrada, detalleProductoEntrada, detallePutGroup, producto, proveedor, tipoAlmacen, tipoEntrada, tipoEntrega } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import { ModalComponent } from '../../Modals/product-modal/modal.component';
-import { alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, combineLatest } from 'rxjs';
 
@@ -32,6 +32,7 @@ export class EditEntradasComponent {
   idRol: number = 0
   setdetailGroup: boolean = false
   id: number = 0
+  recinto$ = this.store.select(state => state.app.user.recinto.nombre)
 
   detailGroup: detallePutGroup[] = [];
   generalITBIS!: boolean
@@ -66,7 +67,7 @@ export class EditEntradasComponent {
       idTipoEntrega: new FormControl('', Validators.required),
       numOrden: new FormControl('', Validators.required),
       noFactura: new FormControl('', Validators.required),
-      observacion: new FormControl('', Validators.required),
+      observacion: new FormControl(''),
       itbisGeneral: new FormControl(''),
       itbisGeneralEstado: new FormControl(''),
       total: new FormControl(''),
@@ -129,7 +130,11 @@ export class EditEntradasComponent {
         loading(false)
 
         this.respuesta = res.data.detalles
-
+        if (res.data.isEditable != true && this.idRol != 1 && this.idRol != 2 ) {
+          alertBackMessage('Los permisos para editar esta entrada aún no han sido confirmados.')
+          this.router.navigate(['/almacen/administrar-entrada'])
+        }
+        
         if (res.success && res.data !== null) {
 
           //if (res.data.itbisGeneralEstado) {
@@ -144,7 +149,7 @@ export class EditEntradasComponent {
             idTipoEntrega: res.data.tipoEntrega.nombre,
             numOrden: res.data.numOrden,
             noFactura: res.data.noFactura,
-            observacion: res.data.observacion,
+            observacion: res.data.observacion ? res.data.observacion : '',
             itbisGeneralEstado: res.data.itbisGeneralEstado,
             total: res.data.total,
             idEntrada: res.data.idEntrada
@@ -164,7 +169,7 @@ export class EditEntradasComponent {
               modelo: detalle.modelo,
               precio: detalle.precio,
               serial: detalle.serial,
-              observacion: detalle.observacion,
+              observacion: detalle.observacion ? detalle.observacion : '',
               subTotal: detalle.subTotal,
               //itbisProducto: detalle.itbisProducto,
               idTipoAlm: detalle.producto.tipoAlmacen.nombre,

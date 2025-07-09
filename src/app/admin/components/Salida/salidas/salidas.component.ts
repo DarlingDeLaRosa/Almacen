@@ -29,7 +29,8 @@ export class SalidasComponent implements OnInit {
   listadeProducto: any[] = []
   idProductoList: producto[] = []
   cantidadItem: number = 0
-
+  recinto$ = this.store.select(state => state.app.user.recinto.nombre)
+  
   detailGroup: detalleProductoSalida[] = [];
   generalITBIS: boolean = true;
 

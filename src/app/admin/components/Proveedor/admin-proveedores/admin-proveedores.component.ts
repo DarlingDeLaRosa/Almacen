@@ -7,7 +7,7 @@ import { proveedorService } from 'src/app/admin/Services/proveedor.service';
 import { AppState } from 'src/app/store/state';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest } from 'rxjs';
-import { alertBackMessage, alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertRemoveSuccess, alertRemoveSure, alertServerDown, loading } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-admin-proveedores',

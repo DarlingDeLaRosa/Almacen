@@ -66,6 +66,7 @@ export function alertSerial() {
   })
 }
 
+
 export function alertNoValidForm() {
   Swal.fire({
     icon: 'info',
@@ -183,6 +184,28 @@ export function alertLogOut(): Promise<boolean> {
   })
 }
 
+export function alertValidateSure(): Promise<boolean> {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title: '¡Alerta!',
+      text: '¿Estás seguro de habilitar los cambios para usuarios técnicos?',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#004b8d',
+      cancelButtonColor: '#aaa',
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    });
+  })
+}
+
 export function alertServerDown() {
   Swal.fire({
     icon: 'error',
@@ -205,6 +228,15 @@ export function alertRemoveSuccess() {
   Swal.fire({
     icon: 'success',
     title: 'Eliminado correctamente.',
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
+
+export function alertAuthSuccess() {
+  Swal.fire({
+    icon: 'success',
+    title: 'Autorización otorgada correctamente.',
     showConfirmButton: false,
     timer: 2000
   })

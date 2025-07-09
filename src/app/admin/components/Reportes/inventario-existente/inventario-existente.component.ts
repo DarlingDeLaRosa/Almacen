@@ -8,7 +8,6 @@ import { producto } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
 import * as XLSX from 'xlsx';
 
-
 @Component({
   selector: 'app-inventario-existente',
   templateUrl: './inventario-existente.component.html',

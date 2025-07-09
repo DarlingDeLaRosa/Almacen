@@ -48,7 +48,6 @@ export class AuthComponent implements OnInit {
   }
 
   logIn() {
-
     if (this.formUserLogIn.valid) {
       
       loading(true)
@@ -65,7 +64,7 @@ export class AuthComponent implements OnInit {
 
             let userResponse: GETUser = res
             let userData: User = res.data
-
+            
             if (userResponse.data !== null && userResponse.token !== null) {
 
               this.api.IsLoggedIn(true)
@@ -77,21 +76,21 @@ export class AuthComponent implements OnInit {
               this.store.dispatch(logIn({ user: userData }))
               this.store.dispatch(Token({ token: userResponse.token }))
 
-              if (userResponse.data.role.idRol === 1) {
-                this.router.navigate(['/almacen/inicio'])
-                // loading(false)
+              this.router.navigate(['/almacen/inicio'])
+              // if (userResponse.data.role.idRol === 1) {
+              //   loading(false)
 
-              } else if (userResponse.data.role.idRol === 2) {
-                //this.router.navigate(['/user-almacen/inicio'])
+              // } else if (userResponse.data.role.idRol === 2) {
+              //   this.router.navigate(['/user-almacen/inicio'])
 
-              } else if (userResponse.data.role.idRol === 3) {
-                // loading(false)
-                // this.router.navigate(['/user-almacen/inicio'])
-                this.router.navigate(['/almacen/inicio'])
+              // } else if (userResponse.data.role.idRol === 3) {
+              //   loading(false)
+              //   this.router.navigate(['/user-almacen/inicio'])
+              //   this.router.navigate(['/almacen/inicio'])
 
-              } else {
-                this.router.navigate(['/login'])
-              }
+              // } else {
+              //   this.router.navigate(['/login'])
+              // }
 
               this.formUserLogIn.reset()
             } else {

@@ -11,11 +11,11 @@ export class salidaService {
 
   constructor(private http: HttpClient) { }
 
-  public getSalida(url: string, token: string, page: number, itemsPorPage:number) {
+  public getSalida(url: string, token: string, page: number, itemsPorPage:number, recinto: number| null  = null) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
 
-    const getSalida = `${url}/Salida?page=${page}&CantItems=${itemsPorPage}`
+    const getSalida = `${url}/Salida?page=${page}&CantItems=${itemsPorPage}&idRecinto=${recinto}`
     return this.http.get(getSalida, salidaHeader)
   }
 
@@ -43,6 +43,14 @@ export class salidaService {
     return this.http.get(getSalida, salidaHeader)
   }
 
+  public getSalidaTransferenciaFilter(estado: string, url: string, token: string, page:number) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const salidaHeader = {headers: headers}
+
+    const getSalida = `${url}/Salida/gettrasferencias_filter/${estado}/${page}/${this.cantidadItems}`
+    return this.http.get(getSalida, salidaHeader)
+  }
+
   public filterSalida(url: string, token: string, page: number, data: string) {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const salidaHeader = {headers: headers}
@@ -65,6 +73,14 @@ export class salidaService {
 
     const editSalida = `${url}/Salida`
     return this.http.put(editSalida, data, salidaHeader)
+  }
+
+  public authSalida(idSalida:number, url: string, token: string) {
+    const headers: HttpHeaders = new HttpHeaders().set('token', token)
+    const salidaHeader = {headers: headers}
+
+    const authSalida = `${url}/Salida/auth_edit/${idSalida}`
+    return this.http.put(authSalida, '', salidaHeader)
   }
 
   public removeSalida(url: string, id: number, token: string) {

@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/state';
 import { catchError, combineLatest } from 'rxjs';
 import { alertBackMessage, alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, alertUnableToRemove, loading } from 'src/app/admin/Helpers/alertsFunctions';
+import { DetailProductComponent } from '../../Modals/detail-product/detail-product.component';
 
 @Component({
   selector: 'app-admin-productos',
@@ -22,7 +23,9 @@ export class AdminProductosComponent implements OnInit {
   noPage: number = 1
   token: string = ''
   pagina: number = 1
+  rol!: number
   loading: boolean = false;
+  recinto$ = this.store.select(state => state.app.user.recinto.nombre)
 
   constructor(
     public dialog: MatDialog,
@@ -38,9 +41,11 @@ export class AdminProductosComponent implements OnInit {
 
     combineLatest([
       this.store.select(state => state.app.token),
-      this.store.select(state => state.app.path)
-    ]).subscribe(([tokenValue, pathValue]) => {
+      this.store.select(state => state.app.path),
+      this.store.select(state => state.app.user.role.idRol)
+    ]).subscribe(([tokenValue, pathValue, rolValue]) => {
 
+      this.rol = rolValue;
       this.url = pathValue;
       this.token = tokenValue;
 
@@ -86,6 +91,12 @@ export class AdminProductosComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       this.getProducto()
+    })
+  }
+  
+  openDetailModal(item: producto) {
+    let dialogRef = this.dialog.open(DetailProductComponent, { data: item })
+    dialogRef.afterClosed().subscribe(() => {
     })
   }
 

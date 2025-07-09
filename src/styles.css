@@ -123,16 +123,17 @@ table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
+  box-sizing: border-box;
 }
 
 .headerTable {
-  height: 50px;
+  height: 40px;
 }
 
 .headerCell {
   text-align: start;
   font-weight: 500;
-  padding-left: 15px;
+  padding-left: 10px;
 }
 
 .headerRow {
@@ -144,13 +145,17 @@ table {
   background-color: #eee;
 }
 
-.dataCell {
+.dataCell, .iconCell {
   border-top: 1px solid #ccc;
-  padding: 0 12px;
+  padding: 0 10px;
   max-width: 160px; 
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis; 
+}
+
+.iconCell {
+  padding: 0;
 }
 
 .dataRow {
@@ -184,7 +189,7 @@ table {
 }
 
 .fuctionCell {
-  width: 60px;
+  width: 40px;
 }
 
 .NoItems {
@@ -489,9 +494,9 @@ mat-sidenav {
   color: white;
 }
 
-.processTranfer, .recieveTransfer, .sendTransfer{
+.processTranfer, .recieveTransfer, .sendTransfer, .validationTranfer{
   display: grid;
-  height: 65px;
+  height: 53px;
   align-items: center;
   grid-template-columns: 50px 200px 1fr 1fr 50px ;
   border-radius: 5px;
@@ -501,19 +506,28 @@ mat-sidenav {
   margin-bottom: 10px;
 }
 
+.validationTranfer {
+  grid-template-columns: 50px 200px 1fr  1fr 50px 50px 50px;
+  background-color: #F7D488  ;
+  border: 1px solid #bbb
+}
+
 .processTranfer {
   grid-template-columns: 50px 200px 1fr  1fr 50px 50px;
-  background-color: #dddddd88;
-  border: 1px solid #999
+  background-color: #0F4C75  ;
+  color: white;
+  border: 1px solid #bbb
 }
 
 .sendTransfer {
-  background-color: rgba(255, 0, 0, 0.26);
+  background-color: rgba(255, 0, 0, 0.575);
   border: 1px solid red
 }
 
 .recieveTransfer h4,
 .recieveTransfer h3,
+.validationTranfer h4,
+.validationTranfer h3,
 .sendTransfer h4,
 .sendTransfer h3,
 .processTranfer h3,
@@ -522,6 +536,7 @@ mat-sidenav {
 }
 
 .sendTransfer h3,
+.validationTranfer h3, 
 .recieveTransfer h3 {
   max-width: 98px;
   max-height: 48px;

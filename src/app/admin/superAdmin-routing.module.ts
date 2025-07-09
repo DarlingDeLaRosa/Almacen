@@ -33,11 +33,11 @@ import { EditSalidasComponent } from './components/Salida/edit-salidas/edit-sali
 import { VistaInicialComponent } from './components/Inicio/vista-inicial/vista-inicial.component';
 import { ReporteEntradaProductoComponent } from './components/Reportes/reporte-entrada-producto/reporte-entrada-producto.component';
 import { ReporteSalidaProductoComponent } from './components/Reportes/reporte-salida-producto/reporte-salida-producto.component';
-import { ReporteTransparenciaComponent } from './components/Reportes/reporte-transparencia/reporte-transparencia.component';
 import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
 import { TransferenciaComponent } from './components/Transferencia/transferencia.component';
 import { userPermissionGuard } from './guards/user-permission-guard';
 import { authGuard } from '../guards/auth-guard';
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 
 const routes: Routes = [
   {
@@ -48,67 +48,60 @@ const routes: Routes = [
       {
         path: 'inicio',
         component: VistaInicialComponent,
-
       },
 
       {
         path: 'entrada',
         component: EntradasComponent,
-
       },
       {
         path: 'administrar-entrada',
         component: AdminEntradasComponent,
-
       },
       {
         path: 'editar-entrada/:id',
         component: EditEntradasComponent,
-
       },
 
       {
         path: 'transferencia',
         component: TransferenciaComponent,
-
       },
 
       {
         path: 'salida',
         component: SalidasComponent,
-
       },
       {
         path: 'administrar-salida',
         component: AdminSalidasComponent,
-
       },
       {
         path: 'editar-salida/:id',
         component: EditSalidasComponent,
-
       },
 
       {
         path: 'productos',
         component: ProductosComponent,
-
+        canActivate: [userPermissionGuard]
       },
       {
         path: 'administrar-producto',
         component: AdminProductosComponent,
-
       },
 
       {
         path: 'proveedores',
         component: ProveedoresComponent,
-
       },
       {
         path: 'administrar-proveedores',
         component: AdminProveedoresComponent,
-
+      },
+      {
+        path: 'solicitudes',
+        component: SolicitudesComponent,
       },
       {
         path: 'usuarios',
@@ -184,37 +177,37 @@ const routes: Routes = [
       {
         path: 'reporteInventario',
         component: InventarioExistenteComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteEntrada',
         component: ReporteEntradaComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteSalida',
         component: ReporteSalidaComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteProveedor',
         component: ReporteProveedorComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteProductoEntrada',
         component: ReporteEntradaProductoComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteProductoSalida',
         component: ReporteSalidaProductoComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       {
         path: 'reporteStock',
         component: MinStockProductComponent,
-        canActivate: [userPermissionGuard]
+        // canActivate: [userPermissionGuard]
       },
       // { path: '**', redirectTo: '/almacen/inicio', pathMatch: 'full' },
     ]

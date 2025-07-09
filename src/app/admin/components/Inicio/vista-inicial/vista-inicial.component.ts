@@ -25,7 +25,7 @@ export class VistaInicialComponent {
   dataFilteredS: salida[] = [];
   dataFilteredP: producto[] = []
   dataRecintoEscasez: any[] = []
-  recintoActual: string = ''
+  recintoActual: number = 0
   rol: number = 0
 
   fechaActual = new Date()
@@ -48,7 +48,7 @@ export class VistaInicialComponent {
     combineLatest([
       this.store.select(state => state.app.token),
       this.store.select(state => state.app.path),
-      this.store.select(state => state.app.user.recinto.nombre),
+      this.store.select(state => state.app.user.recinto.idRecinto),
       this.store.select(state => state.app.user.role.idRol),
     ]).subscribe(([tokenValue, pathValue, recinto, rolActual]) => {
 
@@ -68,7 +68,7 @@ export class VistaInicialComponent {
     let lastFour = 0
 
 
-    this.apiEntrada.getEntrada(this.url, this.token, 1, 200)
+    this.apiEntrada.getEntrada(this.url, this.token, 1, 5, this.recintoActual)
       .pipe(
         catchError((error) => {
           this.loading = false;
@@ -97,7 +97,7 @@ export class VistaInicialComponent {
     this.loading = true
     let lastFour = 0
 
-    this.apiSalida.getSalida(this.url, this.token, 1, 200)
+    this.apiSalida.getSalida(this.url, this.token, 1, 5, this.recintoActual)
       .pipe(
         catchError((error) => {
           this.loading = false

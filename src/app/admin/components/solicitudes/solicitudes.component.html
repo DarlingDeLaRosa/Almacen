@@ -1,0 +1,72 @@
+<div class="viewContent">
+<!-- 
+    <div class="fuctionContent">
+      <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/proveedores']">Crear nuevo proveedor</button>
+  
+      <form [formGroup]="filterProveedor" class="filtrarContent">
+        <mat-form-field appearance="fill">
+          <mat-label>Filtrar</mat-label>
+          <input matInput formControlName="filter" (input)="dataFilter()">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </form>
+    </div> -->
+
+    <div class="alertNotifications">
+        <div class="fuctionContentInicial">
+            <h1>Solicitudes</h1>
+        </div>
+      </div>
+    
+    <div>
+      <table>
+        <thead class="headerTable">
+          <tr class="headerRow">
+            <th class="headerCell">Fecha</th>
+            <th class="headerCell">No. Requerimiento</th>
+            <th class="headerCell">Solicitante</th>
+            <th class="headerCell">Estado</th>
+            <th class="headerCell">Recinto</th>
+            <th class="headerCell">Tipo de articulo</th>
+            <th class="headerCell">Tipo de solicitud</th>
+            <th class="fuctionCell"></th>
+            <th class="fuctionCell"></th>
+            <th class="fuctionCell"><div *ngIf="loading" class="loader"></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="dataRow" *ngFor="let item of dataFiltered">
+            <td class="dataCell">{{item.fecha | date}}</td>
+            <td class="dataCell">{{item.noRequerimiento}}</td>
+            <td class="dataCell">{{item.solicitante}}</td>
+            <td class="dataCell">{{item.estadoObj.nombre}}</td>
+            <td class="dataCell">{{item.recintoObj.nombre}}</td>
+            <td class="dataCell">{{item.tipoArtiucloObj.nombre}}</td>
+            <td class="dataCell">{{item.tipoSolicitudObj.nombre}}</td>
+            <td class="iconCell"> <mat-icon style="color: #004b8d;" matTooltip="Ver detalle de solicitud." >list</mat-icon></td> <!--(click)="openDetailModal(item)"-->
+            <td class="dataCell"> <button class="fucEdit" matTooltip="Editar solicitud"><mat-icon>edit</mat-icon></button></td> <!-- (click)="openModal(item)"-->
+            <td class="dataCell"> <button matTooltip="Eliminar solicitud." class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          </tr>
+        </tbody>
+  
+      </table>
+  
+      <div class="noDataRow" *ngIf="dataFiltered.length == 0 && loading == false;">
+        <h1 class="msNoData"> No se encontraron datos para mostrar <mat-icon class="noDataIcon">info_outline</mat-icon></h1>
+      </div>
+      
+      <div class="pagination">
+        <button class="btnPag" (click)="previousPage()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+          <h3 style="margin: 0; font-weight: 300;">Anterior</h3>
+        </button>
+        <div style="display: grid; place-items: center; margin: 0 10px;">{{pagina}} / {{noPage}} </div>
+        <button class="btnPag" (click)="nextPage()">
+          <h3 style="margin: 0; font-weight: 300;">Siguiente</h3>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+    </div>
+  
+  </div>
+  

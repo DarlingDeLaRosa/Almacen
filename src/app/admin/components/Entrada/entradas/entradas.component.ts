@@ -30,6 +30,7 @@ export class EntradasComponent implements OnInit {
   disableItbis: boolean = false
   idRol: number = 0
   calculoItbis: number = 0
+  recinto$ = this.store.select(state => state.app.user.recinto.nombre)
   //serialToggle: FormGroup;
   //changeFromToggle: boolean = false
 

@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, combineLatest, throwError } from 'rxjs';
-import { alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
+import { alertBackMessage, alertCantExis, alertIsSuccess, alertNoValidForm, alertNumItems, alertRemoveSure, alertSameSerial, alertSerial, alertServerDown, alertUnableEdit, alertUnableSend, loading, noLessThanO, productNameNoExist } from 'src/app/admin/Helpers/alertsFunctions';
 import { TipoDeSalidaService } from 'src/app/admin/Services/Configuracion/tipo-de-salida.service';
 import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
 import { productoService } from 'src/app/admin/Services/producto.service';
@@ -122,8 +122,13 @@ export class EditSalidasComponent {
       )
       .subscribe((res: any) => {
         if (res.data != null) {
-
           loading(false)
+          console.log(res);
+          
+          if (res.data.isEditable != true && this.idRol != 1 && this.idRol != 2) {
+            alertBackMessage('Los permisos para editar esta salida aún no han sido confirmados.')
+            this.router.navigate(['/almacen/administrar-salida'])
+          }
 
           this.respuesta = res.data.detalles
           this.respuesta.map((detalle: any) => {
@@ -662,11 +667,11 @@ export class EditSalidasComponent {
 
   sumaTotal() {
     this.resultSubTotal = 0
-    this.cantidadItem = 0 
+    this.cantidadItem = 0
 
     this.detailGroup.map((detalle: any) => {
       this.resultSubTotal += detalle.subTotal
-    this.cantidadItem += detalle.cantidad 
+      this.cantidadItem += detalle.cantidad
     })
   }
 
@@ -736,7 +741,7 @@ export class EditSalidasComponent {
                   this.resultSubTotal = 0
                   this.formEditSalida.reset()
                   this.formDetalleEditSalida.reset()
-                  
+
                   return throwError(error);
                 })
               )

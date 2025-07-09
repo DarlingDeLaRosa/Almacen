@@ -15,10 +15,10 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
 
-    let dev = 'http://172.25.4.24:81'
+    let dev = 'http://172.25.4.24:3006'
     let pro = 'https://sigebi.isfodosu.edu.do/sigebiapi'
 
-    const path = pro
+    const path = dev
     
     const userData = localStorage.getItem('userData')
     const token = localStorage.getItem('token')

@@ -85,12 +85,7 @@ export class UsuarioModalComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res.data !== null) {
-          
-          res.data.map((rol:any)=>{
-            if (rol.idRol != 2) {
-              this.rolesList.push(rol)
-            }
-          })
+          this.rolesList = res.data
         }
       })
   }

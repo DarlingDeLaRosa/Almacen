@@ -8,6 +8,7 @@ import { alertIsSuccess, alertRemoveSuccess, alertRemoveSure, alertServerDown, l
 import { ShowDetailsSalidaComponent } from '../Modals/show-details-salida/show-details-salida.component';
 import { MatDialog } from '@angular/material/dialog';
 import { entradaService } from '../../Services/entrada.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-transferencia',
@@ -17,6 +18,7 @@ import { entradaService } from '../../Services/entrada.service';
 export class TransferenciaComponent implements OnInit {
 
   dataFiltered: salidaTrans[] = [];
+  dataFilteredPending: salidaTrans[] = [];
   dataFilteredAccept: salidaTrans[] = [];
   dataFilteredCancel: salidaTrans[] = [];
   url: string = ''
@@ -26,16 +28,24 @@ export class TransferenciaComponent implements OnInit {
   idRol: number = 0
   recinto: string = ''
   loading: boolean = false;
-  estado: string = 'EN PROCESO'
+  estado: string = 'PENDIENTE'
+  transferencia = { idTransferencia: 0}
+  transferenciaForm: FormGroup;
   
   // @Output() transferChange = new EventEmitter<void>()
 
   constructor(
+    public fb: FormBuilder,
     public dialog: MatDialog,
     private api: salidaService,
     private apiEntrada: entradaService,
     private store: Store<{ app: AppState }>
-  ) { }
+  ) {
+
+    this.transferenciaForm = this.fb.group({
+      idTransferencia: new FormControl('', Validators.required),
+    })
+   }
 
 
   ngOnInit(): void {
@@ -68,22 +78,26 @@ export class TransferenciaComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.loading = false
+
         this.noPage = res.cantPage
         this.dataFiltered = []
         this.dataFilteredAccept = []
+        this.dataFilteredPending = []
 
-
+        console.log(res);
+        
         res.data.map((estadoSalida: any) => {
-          if (estadoSalida.estado == 'EN PROCESO') {
-
+          
+          if (estadoSalida.estado == 'PENDIENTE' && estadoSalida.recinto.nombre !== this.recinto) {
+            this.dataFilteredPending.push(estadoSalida)
+          
+          }else if (estadoSalida.estado == 'EN PROCESO') {
             this.dataFiltered.push(estadoSalida)
 
           } else if (estadoSalida.estado == 'RECIBIDO') {
-
             this.dataFilteredAccept.push(estadoSalida)
 
           } else if (estadoSalida.estado == 'CANCELADO') {
-
             this.dataFilteredCancel.push(estadoSalida)
 
           }
@@ -105,12 +119,28 @@ export class TransferenciaComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-
         this.noPage = res.cantPage
         loading(false)
         alertIsSuccess(true)
         this.getSalidaTransferencia()
+      });
+  }
 
+  validarTransferencia(id: number) {
+    loading(true)
+    this.apiEntrada.putTransferenciaAceptar(this.url, id, this.token)
+      .pipe(
+        catchError((error) => {
+          loading(false)
+          alertServerDown();
+          return throwError(error);
+        })
+      )
+      .subscribe((res: any) => {
+        this.noPage = res.cantPage
+        loading(false)
+        alertIsSuccess(true)
+        this.getSalidaTransferencia()
       });
   }
 

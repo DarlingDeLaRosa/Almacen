@@ -1,7 +1,10 @@
 <div class="viewContent">
 
   <div class="fuctionContent">
-    <button mat-stroked-button class="btnNavigate" [routerLink]="['/almacen/entrada']">Crear nueva entrada</button>
+    <button mat-stroked-button *ngIf="idRol == 4 || idRol == 2; else noCreate" class="btnNavigate"
+      [routerLink]="['/almacen/entrada']">Crear nueva entrada</button>
+    <ng-template #noCreate> <span></span></ng-template>
+
     <!--*ngIf="idRol == 1; else sup"-->
     <!-- <ng-template #sup>
       <button mat-stroked-button class="btnNavigate" [routerLink]="['/user-almacen/entrada']">Crear nueva entrada</button>
@@ -14,6 +17,18 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </form>
+  </div>
+
+  <div *ngIf="recintoActual == 7 && idRol == 1 || recintoActual == 7 && idRol == 2">
+    <mat-button-toggle-group aria-label="Font Style" [(ngModel)]="recintoSelected" (ngModelChange)="getEntrada()">
+      <mat-button-toggle [value]="7">Rectoria</mat-button-toggle>
+      <mat-button-toggle [value]="1">Félix Evaristo Mejía</mat-button-toggle>
+      <mat-button-toggle [value]="2">Juan Vicente Moscoso</mat-button-toggle>
+      <mat-button-toggle [value]="3">Luis Napoleon Nuñez Molina</mat-button-toggle>
+      <mat-button-toggle [value]="4">Emilio Prud'Homme</mat-button-toggle>
+      <mat-button-toggle [value]="5">Urania Montas</mat-button-toggle>
+      <mat-button-toggle [value]="6">Eugenio María de Hostos</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 
   <div>
@@ -32,12 +47,16 @@
           <th class="headerCell">Sub-Total</th>
           <th class="headerCell">ITBIS</th>
           <th class="headerCell">Total</th>
-          <th class="fuctionCell"></th>
-          <th class="fuctionCell"></th> <!--*ngIf="idRol == 1; else remove"-->
+          <th class="fuctionCell" *ngIf="recintoActual == 7 && idRol == 1 && recintoSelected == 7 || recintoActual == 7 && idRol == 2 && recintoSelected != 7"></th>
           <th class="fuctionCell">
+            <div *ngIf="loading && idRol == 3" class="loader"></div>
+          </th>
+          <th class="fuctionCell" *ngIf="idRol != 3">
+            <div *ngIf="loading && idRol !== 2 && idRol !== 1" class="loader"></div>
+          </th>
+          <th class="fuctionCell" *ngIf="idRol == 1 && recintoSelected == 7 && recintoActual == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7">
             <div *ngIf="loading" class="loader"></div>
-          </th> <!--*ngIf="idRol == 1; else remove"-->
-          <ng-template #remove></ng-template>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -54,23 +73,43 @@
           <td class="dataCell">{{item.total - item.itbisGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.itbisGeneral | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
           <td class="dataCell">{{item.total | currency: 'DOP ': 'symbol': '1.2-2'}}</td>
-          <td class="dataCell"> 
-            <button class="fucDetails"  matTooltip="Listado de detalles de entrada." (click)="openModal(item.idEntrada)"><mat-icon>list</mat-icon></button></td>
-          <td class="dataCell" *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else supp"> 
-            <button
-              [routerLink]="['/almacen/editar-entrada', item.idEntrada]" class="fucEdit"  matTooltip="Editar entrada."> <mat-icon>edit</mat-icon>
-            </button>
-            </td> <!--idRol == 1 && -->
+          <td class="iconCell" *ngIf="idRol == 1 && recintoSelected == 7 && recintoActual == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7">
+            <mat-icon style="color: gray; cursor: pointer;" (click)="authEntrada(item.idEntrada)"
+              *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación' && item.isEditable == false"
+              matTooltip="Habilitar edición.">lock</mat-icon>
+            <mat-icon style="color: gray;" *ngIf="item.isEditable" matTooltip="Edición 
+            Habilitada.">lock_open</mat-icon>
+          </td>
+          <td class="iconCell">
+            <mat-icon style="color: #004b8d;" matTooltip="Listado de detalles de entrada."
+              (click)="openModal(item.idEntrada)">list</mat-icon>
+          </td>
+          <td class="iconCell" *ngIf="
+              idRol != 3 && idRol != 1 && item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación' 
+              && (item.isEditable && idRol == 4 || item.fechaCreacion.getMonth() == todayDate.getMonth())
+              || (idRol == 1 && recintoSelected == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7)
+            ; else supp">
+            <mat-icon style="color: green;" [routerLink]="['/almacen/editar-entrada', item.idEntrada]"
+              matTooltip="Editar entrada.">edit</mat-icon>
+          </td>
           <ng-template #supp>
-            <td class="dataCell"></td>
+            <td class="iconCell"></td>
           </ng-template>
 
-          <td *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'; else btnremove"
-            class="dataCell"> <button  matTooltip="Eliminar entrada." (click)="removeAlert(item.idEntrada)"
-              class="fucRem"><mat-icon>delete</mat-icon></button></td>
+          <td
+            *ngIf="
+            idRol == 1 && recintoSelected == 7 && recintoActual == 7 || idRol == 2 && recintoSelected != 7 && recintoActual == 7 ; 
+            else btnremove"
+            class="iconCell">
+            <mat-icon
+            *ngIf="item.tipoEntrada.nombre != 'Prestamo' && item.tipoEntrada.nombre != 'Donación'"
+            style="color: red;" matTooltip="Eliminar entrada."
+              (click)="removeAlert(item.idEntrada)">delete</mat-icon>
+          </td>
+
           <ng-template #btnremove>
-            <td class="dataCell"></td>
-          </ng-template> <!--idRol == 1 && -->
+            <td class="iconCell"></td>
+          </ng-template>
         </tr>
       </tbody>
     </table>
@@ -92,6 +131,6 @@
       </button>
     </div>
 
-    
+
   </div>
 </div>

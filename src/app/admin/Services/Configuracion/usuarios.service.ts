@@ -17,6 +17,8 @@ export class UserService {
     const headers: HttpHeaders = new HttpHeaders().set('token', token)
     const personHeader = {headers: headers}
 
+    console.log( personHeader);
+    
     const getPerson = `${url}/Persona/${page}/${cantItem}`
     return this.http.get(getPerson, personHeader)
   }

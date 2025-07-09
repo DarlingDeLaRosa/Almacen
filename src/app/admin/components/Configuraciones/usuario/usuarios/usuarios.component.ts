@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
-import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertServerDown, loading, unableEmail, unablePasswordLength } from 'src/app/admin/Helpers/alertsFunctions';
-import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
-import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
 import { AppState } from 'src/app/store/state';
+import { Component, OnInit } from '@angular/core';
+import { GET, persona, recinto, rol } from 'src/app/admin/models/interfaces';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/admin/Services/Configuracion/usuarios.service';
+import { alertBackMessage, alertIsSuccess, alertNoValidForm, alertServerDown, loading, unableEmail, unablePasswordLength } from 'src/app/admin/Helpers/alertsFunctions';
 
 @Component({
   selector: 'app-usuarios',
@@ -36,7 +36,7 @@ export class UsuariosComponent implements OnInit {
       nombre: new FormControl('', Validators.required),
       apellido: new FormControl('', Validators.required),
       cargo: new FormControl('', Validators.required),
-      supervisorInmediato: new FormControl('', Validators.required),
+      supervisorInmediato: new FormControl('N/A'),
       correo: new FormControl('', [Validators.required, Validators.email]),
       contrasena: new FormControl('', [Validators.required, Validators.minLength(6)]),
       cedula: new FormControl('', Validators.required),
@@ -49,10 +49,9 @@ export class UsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
-
     this.getRol();
     this.getRecinto();
-    this.getPersona()
+    // this.getPersona()
   }
 
   itbisOption(event: any) {
@@ -69,12 +68,7 @@ export class UsuariosComponent implements OnInit {
       )
       .subscribe((res: any) => {
         if (res.data !== null) {
-          
-          res.data.map((rol:any)=>{
-            if (rol.idRol != 2) {
-              this.rolesList.push(rol)
-            }
-          })
+          this.rolesList = res.data
         }
       })
   }
@@ -94,26 +88,26 @@ export class UsuariosComponent implements OnInit {
       })
   }
 
-  getPersona() {
-    this.api.getPerson(this.url, this.token, 1, 400)
-      .pipe(
-        catchError((error) => {
-          alertServerDown();
-          return throwError(error);
-        })
-      )
-      .subscribe((res: any) => {
-        if (res !== null) {
-          let options = res.data
+  // getPersona() {
+  //   this.api.getPerson(this.url, this.token, 1, 400)
+  //     .pipe(
+  //       catchError((error) => {
+  //         alertServerDown();
+  //         return throwError(error);
+  //       })
+  //     )
+  //     .subscribe((res: any) => {
+  //       if (res !== null) {
+  //         let options = res.data
+  //         console.log(res);
+  //         options.forEach((item: any) => {
+  //           this.supInmediatoList.push(item)
+  //           this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
+  //         });
 
-          options.forEach((item: any) => {
-            this.supInmediatoList.push(item)
-            this.supervisorIdMap[`${item.nombre} ${item.apellido}`] = item.id;
-          });
-
-        }
-      })
-  }
+  //       }
+  //     })
+  // }
 
   // findSupInmediatoByName() {
   //   if (this.formUser.value.supervisorInmediato.length >= 4) {
@@ -126,7 +120,7 @@ export class UsuariosComponent implements OnInit {
   //         })
   //       )
   //       .subscribe((res: any) => {
-          
+
   //         let options = res.data
   //         this.supInmediatoList = []
 
@@ -153,9 +147,9 @@ export class UsuariosComponent implements OnInit {
 
           let id = this.rolesList.filter(item => item.descripcion === this.formUser.value.idRol)
           let recinto = this.recintoList.filter(item => item.nombre === this.formUser.value.idRecinto)
-          let selectedId = this.supervisorIdMap[this.formUser.value.supervisorInmediato];
+          // let selectedId = this.supervisorIdMap[this.formUser.value.supervisorInmediato];
 
-          this.formUser.value.supervisorInmediato = selectedId
+          this.formUser.value.supervisorInmediato = 2
           this.formUser.value.idRecinto = recinto[0].idRecinto
           this.formUser.value.idRol = id[0].idRol
 
@@ -170,10 +164,10 @@ export class UsuariosComponent implements OnInit {
               })
             )
             .subscribe((res: any) => {
-              
+
               loading(false)
               if (res.data !== null) { alertIsSuccess(true); this.formUser.reset() }
-              else if(res.message == 'Este email ya existe.'){alertBackMessage(res.message)}
+              else if (res.message == 'Este email ya existe.') { alertBackMessage(res.message) }
               else alertIsSuccess(false)
             })
 

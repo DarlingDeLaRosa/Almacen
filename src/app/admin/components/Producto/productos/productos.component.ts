@@ -20,9 +20,11 @@ export class ProductosComponent implements OnInit {
   formProducto: FormGroup;
   url!: string;
   token!: string
+  rol!: number
   unidadMedidaList: tipoMedida[] = []
   tipoProductoList: tipoProducto[] = []
   tipoAlmacenList: tipoAlmacen[] = []
+  recinto$ = this.store.select(state => state.app.user.recinto.nombre)
 
   constructor(
     public fb: FormBuilder,
@@ -50,6 +52,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.store.select(state => state.app.path).subscribe((path: string) => { this.url = path; });
     this.store.select(state => state.app.token).subscribe((token: string) => { this.token = token; });
+    this.store.select(state => state.app.user.role.idRol).subscribe((rol: number) => { this.rol = rol; });
 
     this.getTipoProducto();
     this.getUnidadMedida();

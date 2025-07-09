@@ -59,7 +59,7 @@
 
       <mat-form-field hideRequiredMarker>
         <mat-label>Tipo de Entrega</mat-label>
-        <input matInput required [matAutocomplete]="Tetg" appearance="fill" formControlName="idTipoEntrega"
+        <input matInput [matAutocomplete]="Tetg" appearance="fill" formControlName="idTipoEntrega"
           (input)="findTipoEntregaByName()">
         <mat-autocomplete #Tetg='matAutocomplete'>
 
@@ -99,8 +99,10 @@
 
     <div class="fuctionContent newProduct">
       <h2>Informacion de producto</h2>
-      <button *ngIf="idRol == 1; else noNewPro" mat-stroked-button class="newPro" (click)="openModal()">Crear nuevo producto</button>
-      <ng-template #noNewPro></ng-template>
+      <ng-container *ngIf="recinto$ | async as recinto">
+        <button *ngIf="idRol == 2 && recinto == 'RECTORIA'" mat-stroked-button class="newPro" (click)="openModal()">Crear nuevo producto</button>
+        <!-- <ng-template #noNewPro></ng-template> -->
+      </ng-container>
     </div>
 
     <div>

@@ -53,6 +53,8 @@ import { ShowDetailsComponent } from './components/Modals/show-details/show-deta
 import { ShowDetailsSalidaComponent } from './components/Modals/show-details-salida/show-details-salida.component';
 import { MinStockProductComponent } from './components/Reportes/min-stock-product/min-stock-product.component';
 import { TransferenciaComponent } from './components/Transferencia/transferencia.component';
+import { DetailProductComponent } from './components/Modals/detail-product/detail-product.component';
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 
 
 @NgModule({
@@ -104,6 +106,8 @@ import { TransferenciaComponent } from './components/Transferencia/transferencia
     ShowDetailsSalidaComponent,
     MinStockProductComponent,
     TransferenciaComponent,
+    DetailProductComponent,
+    SolicitudesComponent,
   ],
   imports: [
     CommonModule,
@@ -129,8 +133,5 @@ import { TransferenciaComponent } from './components/Transferencia/transferencia
     DatePipe, 
   ]
 })
-export class AdminModule implements OnInit{
-
-  ngOnInit(): void {
-  }
+export class AdminModule{
 }

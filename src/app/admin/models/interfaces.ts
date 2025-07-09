@@ -45,6 +45,7 @@ export interface Entrada {
     apellido: string,
     cargo: string
   },
+  isEditable: boolean
   detalles: [
     {
       idEntradaDet: number,
@@ -61,8 +62,8 @@ export interface Entrada {
         stock: number,
         stockMinimo: number,
         unidadMe: {
-          descripcion :string
-          idUnidadMe:number
+          descripcion: string
+          idUnidadMe: number
         },
         idTipoArt: number,
         idTipoAlmacen: number
@@ -279,6 +280,7 @@ export interface salida {
   fechaModif: Date,
   itbis: number,
   totalGeneral: number
+  isEditable: boolean,
   detalles: [
     {
       idSalidaDet: number,
@@ -316,6 +318,15 @@ export interface salidaTrans {
     idUsuario: number
     nombre: string
     recinto: { idRecinto: number, nombre: string }
+  }
+  verificadoPor: {
+    nombre: string,
+    apellido: string,
+    cargo: null,
+    recinto: {
+      idRecinto: number,
+      nombre: string
+    }
   }
   estado: string
   fecha: Date
@@ -365,7 +376,7 @@ export interface detalleByIdSalida {
   condicion: string,
   serial: string,
   precio: number,
-  itbis:number
+  itbis: number
   totalGeneral: number
   subTotal: number
 }
@@ -498,7 +509,7 @@ export interface postTipoMedida {
 export interface postUser {
   idRol: number,
   idRecinto: number,
-  usuario1: string,
+  usuarionumber: string,
   nombre: string,
   apellido: string,
   cargo: string,
@@ -535,6 +546,80 @@ export interface postProveedor {
   representante: string,
   telRepresentante: string
 }
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+
+export interface detallesSolicitud {
+  id: 1,
+  noRequerimiento: string,
+  idRecinto: number,
+  recintoObj: recinto,
+  idTipoArticulo: number,
+  tipoArtiucloObj: any,
+  idTipoSolicitud: number,
+  tipoSolicitudObj: any,
+  fecha: string,
+  solicitante: string,
+  cargoSolicitante: string,
+  unidadOrganizativa: string,
+  observaciones: string,
+  idEstado: number,
+  estadoObj: any,
+  detallesSolicitud: detSolicitud[]
+}
+
+export interface detSolicitud {
+  id: 1,
+  idProducto: 193,
+  productoObj: null,
+  cantidadSolicitada: 2
+}
+
+export interface tipoSolicitudObj {
+  id: number,
+  codigo: string,
+  nombre: string,
+  vers: number,
+  unidadResponsable: string,
+  fechaCreacion: string,
+  fechaRevision: string
+}
+
+export interface tipoArtiucloObj {
+  idTipoArt: number,
+  nombre: string
+}
+
+export interface recinto {
+  idRecinto: number,
+  nombre: string
+}
+
+export interface solicitudes {
+  id: number,
+  noRequerimiento: string,
+  idRecinto: number,
+  recintoObj: recinto
+  idTipoArticulo: number,
+  tipoArtiucloObj: tipoArtiucloObj
+  idTipoSolicitud: number,
+  tipoSolicitudObj: tipoSolicitudObj 
+  fecha: string,
+  solicitante: string,
+  cargoSolicitante: string,
+  unidadOrganizativa: string,
+  observaciones: string,
+  idEstado: number,
+  estadoObj: any,
+  detallesSolicitud: detallesSolicitud[]
+}
+
+
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
